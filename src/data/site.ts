@@ -1,0 +1,285 @@
+export const CONTACT = {
+  phone: "+91 88280 01700",
+  phoneHref: "tel:+918828001700",
+  whatsapp: "918828001700",
+  whatsappLink: "https://wa.me/918828001700",
+  email: "growthcs17@gmail.com",
+  address:
+    "CCTV Towers, Andheri-Ghatkopar Rd, Bhatwadi, Kaju Pada, Barve Nagar, Ghatkopar West, Mumbai 400084",
+  hours: "Monday to Saturday · 10:00 AM – 6:00 PM",
+  cities: ["Mumbai", "Thane", "Navi Mumbai", "Pune"],
+};
+
+export const NAV_LINKS = [
+  { to: "/", label: "Home" },
+  { to: "/about", label: "About Us" },
+  { to: "/services", label: "Our Services", hasDropdown: true },
+  { to: "/tools", label: "Tools", hasDropdown: true },
+  { to: "/bank-partners", label: "Bank Partners" },
+  { to: "/faqs", label: "FAQs" },
+  { to: "/contact", label: "Contact Us" },
+] as const;
+
+export type Service = {
+  id: string;
+  title: string;
+  tagline: string;
+  description: string;
+  highlights: string[];
+};
+
+export const SERVICES: Service[] = [
+  {
+    id: "home-loan",
+    title: "Home Loan",
+    tagline: "Buy, build or refinance",
+    description:
+      "Competitive rates from leading banks and NBFCs, with end-to-end support from sanction to disbursal.",
+    highlights: [
+      "Top-up & Balance Transfer for better terms",
+      "Tax benefits under Section 80C & 24(b)",
+      "Smart Saver / Max Gain overdraft facility",
+      "Zero to nominal processing fees",
+    ],
+  },
+  {
+    id: "loan-against-property",
+    title: "Loan Against Property",
+    tagline: "Unlock the value you already own",
+    description:
+      "Raise large-ticket funding against residential, commercial or industrial property at mortgage rates.",
+    highlights: [
+      "High tenure of up to 20 years",
+      "LTV from 60% up to 100% of property value",
+      "Lease rental discounting options",
+      "Income and banking programme cases accepted",
+    ],
+  },
+  {
+    id: "business-loan",
+    title: "Business Loan & Working Capital",
+    tagline: "Fuel day-to-day growth",
+    description:
+      "Secured and unsecured business funding structured around your cash-flow cycle.",
+    highlights: [
+      "Cash Credit & Overdraft facility",
+      "Unsecured business loans up to ₹75 lakh",
+      "Bank limit enhancement & takeover",
+      "GST / banking / balance-sheet programmes",
+    ],
+  },
+  {
+    id: "personal-loan",
+    title: "Personal Loan",
+    tagline: "Funds when timing matters",
+    description:
+      "Collateral-free personal finance with quick approvals and minimal documentation.",
+    highlights: [
+      "Disbursal in as little as 48 hours",
+      "Tenure up to 6 years",
+      "Balance transfer at lower rates",
+      "Salaried & self-employed profiles",
+    ],
+  },
+  {
+    id: "car-loan",
+    title: "Car Loan",
+    tagline: "New, used and refinance",
+    description:
+      "On-road funding for new and pre-owned vehicles, plus loans against your existing car.",
+    highlights: [
+      "Up to 100% on-road funding",
+      "Used-car and refinance options",
+      "Attractive rates for salaried profiles",
+      "Fast dealer coordination",
+    ],
+  },
+  {
+    id: "education-loan",
+    title: "Education Loan",
+    tagline: "Study in India or abroad",
+    description:
+      "Secured and unsecured education funding covering tuition, living costs and travel.",
+    highlights: [
+      "Tax benefits under Section 80E",
+      "Moratorium during the course period",
+      "Collateral & non-collateral options",
+      "Support with university documentation",
+    ],
+  },
+  {
+    id: "balance-transfer",
+    title: "Balance Transfer",
+    tagline: "Lower your cost, upgrade your loan",
+    description:
+      "Move your existing loan to a lower rate with a structured top-up where eligible.",
+    highlights: [
+      "Rate reduction on home, LAP and business loans",
+      "Top-up at mortgage pricing",
+      "Tenure or EMI reduction, your choice",
+      "End-to-end coordination with existing lender",
+    ],
+  },
+  {
+    id: "working-capital",
+    title: "Working Capital Loans",
+    tagline: "Keep operations liquid",
+    description:
+      "Cash credit, overdraft and bill discounting facilities sized to your operating cycle.",
+    highlights: [
+      "Cash Credit & Overdraft facility",
+      "Limit enhancement and takeover",
+      "Stock and debtor statement handling",
+      "Consortium and multiple-banking arrangements",
+    ],
+  },
+  {
+    id: "overdraft-facility",
+    title: "Overdraft Facility",
+    tagline: "Flexible credit line",
+    description:
+      "A sanctioned limit against property or banking that lets you draw and repay as needed.",
+    highlights: [
+      "Interest only on utilized amount",
+      "Secured and unsecured options",
+      "Annual renewal with limit review",
+      "Ideal for seasonal cash needs",
+    ],
+  },
+  {
+    id: "cash-credit",
+    title: "Cash Credit",
+    tagline: "Revolving business funding",
+    description:
+      "A revolving limit secured against stock and receivables, drawn and repaid as often as your cycle demands.",
+    highlights: [
+      "Drawing power reviewed monthly",
+      "Interest charged only on drawn balance",
+      "Renewable annually with enhancement",
+      "Works alongside term loans and trade facilities",
+    ],
+  },
+];
+
+export type BankPartner = {
+  name: string;
+  logo: string;
+};
+
+export const BANK_PARTNERS: BankPartner[] = [
+  { name: "HDFC Bank", logo: "https://logo.clearbit.com/hdfcbank.com" },
+  { name: "ICICI Bank", logo: "https://logo.clearbit.com/icicibank.com" },
+  { name: "SBI", logo: "https://logo.clearbit.com/sbi.co.in" },
+  { name: "Axis Bank", logo: "https://logo.clearbit.com/axisbank.com" },
+  { name: "Bank of India", logo: "https://logo.clearbit.com/bankofindia.co.in" },
+  { name: "Kotak Mahindra", logo: "https://logo.clearbit.com/kotak.com" },
+  { name: "Yes Bank", logo: "https://logo.clearbit.com/yesbank.in" },
+  { name: "Bajaj Finserv", logo: "https://logo.clearbit.com/bajajfinserv.in" },
+  { name: "Tata Capital", logo: "https://logo.clearbit.com/tatacapital.com" },
+  { name: "Standard Chartered", logo: "https://logo.clearbit.com/sc.com" },
+  { name: "HSBC", logo: "https://logo.clearbit.com/hsbc.co.in" },
+  { name: "IDBI Bank", logo: "https://logo.clearbit.com/idbibank.in" },
+  { name: "IDFC First Bank", logo: "https://logo.clearbit.com/idfcfirstbank.com" },
+  { name: "L&T Finance", logo: "https://logo.clearbit.com/ltfs.com" },
+  { name: "PNB Housing", logo: "https://logo.clearbit.com/pnbhousing.com" },
+  { name: "Federal Bank", logo: "https://logo.clearbit.com/federalbank.co.in" },
+  { name: "Union Bank", logo: "https://logo.clearbit.com/unionbankofindia.co.in" },
+  { name: "Aditya Birla Capital", logo: "https://logo.clearbit.com/adityabirlacapital.com" },
+  { name: "Bandhan Bank", logo: "https://logo.clearbit.com/bandhanbank.com" },
+  { name: "Bank of Baroda", logo: "https://logo.clearbit.com/bankofbaroda.in" },
+  { name: "AU Small Finance", logo: "https://logo.clearbit.com/aubank.in" },
+  { name: "Axis Finance", logo: "https://logo.clearbit.com/axisfinance.in" },
+  { name: "Bajaj Housing", logo: "https://logo.clearbit.com/bajajhousingfinance.in" },
+  { name: "Cholamandalam", logo: "https://logo.clearbit.com/cholamandalam.com" },
+  { name: "Deutsche Bank", logo: "https://logo.clearbit.com/db.com" },
+  { name: "DCB Bank", logo: "https://logo.clearbit.com/dcbbank.com" },
+  { name: "Edelweiss", logo: "https://logo.clearbit.com/edelweissfin.com" },
+  { name: "Fullerton India", logo: "https://logo.clearbit.com/fullertonindia.com" },
+  { name: "Godrej Capital", logo: "https://logo.clearbit.com/godrejcapital.com" },
+  { name: "HDB Financial", logo: "https://logo.clearbit.com/hdbfs.com" },
+  { name: "HDFC Sales", logo: "https://logo.clearbit.com/hdfcsales.com" },
+  { name: "Hero FinCorp", logo: "https://logo.clearbit.com/herofincorp.com" },
+  { name: "ICICI Home Finance", logo: "https://logo.clearbit.com/icicihfc.com" },
+  { name: "IIFL Finance", logo: "https://logo.clearbit.com/iifl.com" },
+  { name: "Indiabulls Housing", logo: "https://logo.clearbit.com/indiabullshomeloans.com" },
+  { name: "IndusInd Bank", logo: "https://logo.clearbit.com/indusind.com" },
+  { name: "LIC HFL", logo: "https://logo.clearbit.com/lichousing.com" },
+  { name: "Mahindra Finance", logo: "https://logo.clearbit.com/mahindrafinance.com" },
+  { name: "Piramal Finance", logo: "https://logo.clearbit.com/piramal.com" },
+  { name: "Poonawalla Fincorp", logo: "https://logo.clearbit.com/poonawallafincorp.com" },
+  { name: "Profectus Capital", logo: "https://logo.clearbit.com/profectuscapital.com" },
+  { name: "SBI Home Loans", logo: "https://logo.clearbit.com/sbihomeloans.com" },
+  { name: "Shriram Finance", logo: "https://logo.clearbit.com/shriramfinance.in" },
+  { name: "Central Bank of India", logo: "https://logo.clearbit.com/centralbankofindia.co.in" },
+  { name: "Aadhar Housing", logo: "https://logo.clearbit.com/aadharhousing.com" },
+];
+
+export const BANK_NAMES = BANK_PARTNERS.map((b) => b.name);
+
+export const PAIN_POINTS = [
+  {
+    question: "How do I select the right bank or lender?",
+    answer:
+      "We compare live policies, rates and turnaround times across our network and shortlist the two or three lenders that actually fit your profile.",
+  },
+  {
+    question: "Can I transfer my home loan for better terms?",
+    answer:
+      "Yes. We run a savings comparison on your outstanding loan and manage the full balance transfer, including a top-up where eligible.",
+  },
+  {
+    question: "How much loan do I actually qualify for?",
+    answer:
+      "We structure eligibility using income, obligations, co-applicants and lender-specific programmes to maximise your sanction amount.",
+  },
+  {
+    question: "How does my credit score affect approval and rates?",
+    answer:
+      "We review your bureau report upfront, flag issues that can be corrected, and place your file with lenders suited to your score band.",
+  },
+  {
+    question: "How do I avoid hidden charges?",
+    answer:
+      "Every quote we share lists processing fees, legal and technical charges, insurance and foreclosure terms in writing before you sign.",
+  },
+  {
+    question: "How is prompt disbursal ensured?",
+    answer:
+      "A dedicated relationship manager tracks your file daily through login, sanction, legal, technical and disbursal stages.",
+  },
+];
+
+export const FAQS = [
+  {
+    q: "What documents are required to start a loan application?",
+    a: "Typically KYC (PAN, Aadhaar), income proof (salary slips or ITR with financials), 6-12 months bank statements and property papers where applicable. We share a precise checklist for your specific case.",
+  },
+  {
+    q: "Do you charge customers a fee for your services?",
+    a: "Our advisory is free for customers. We are compensated by the lender on successful disbursal, so our interest is in getting your file approved on the best terms.",
+  },
+  {
+    q: "How long does a home loan sanction take?",
+    a: "Salaried files are usually sanctioned in 3-7 working days once documents are complete. Self-employed and property-backed files typically take 7-15 working days.",
+  },
+  {
+    q: "What is the Smart Saver / Max Gain facility?",
+    a: "It links an overdraft account to your home loan. Surplus money parked in that account reduces daily interest while remaining fully withdrawable.",
+  },
+  {
+    q: "Can I get a loan with a low CIBIL score?",
+    a: "Often yes. Several NBFCs in our network consider profiles below 700 with adjusted pricing. We also guide you on steps to improve your score first where that saves you more.",
+  },
+  {
+    q: "Which locations do you serve?",
+    a: "Mumbai, Thane, Navi Mumbai and Pune, with digital documentation support across Maharashtra.",
+  },
+  {
+    q: "What is a balance transfer with top-up?",
+    a: "You move your existing loan to a lender offering a lower rate and simultaneously borrow additional funds against the same property, usually at home-loan pricing.",
+  },
+  {
+    q: "How do pre-payment and foreclosure charges work?",
+    a: "Floating-rate loans to individuals generally carry no foreclosure charges. Fixed-rate and business loans may attract 2-4%. We confirm the exact terms of your lender before sanction.",
+  },
+];
