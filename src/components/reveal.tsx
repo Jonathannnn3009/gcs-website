@@ -37,8 +37,10 @@ export function Reveal({
   return (
     <div
       ref={ref}
+      // Children can react to the reveal via `group-data-[shown=true]/reveal:*`
+      data-shown={shown}
       style={{ transitionDelay: `${delay}ms` }}
-      className={`transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+      className={`group/reveal transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
         shown ? "translate-y-0 opacity-100 blur-0" : "translate-y-6 opacity-0 blur-[2px]"
       } ${className}`}
     >

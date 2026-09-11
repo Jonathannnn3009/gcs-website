@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { Menu, Phone, X, ChevronDown, ArrowRight } from "lucide-react";
-import logo from "@/assets/gcs-logo.jpg.asset.json";
 import { CONTACT } from "@/data/site";
+import { BrandLogo } from "@/components/brand-logo";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 
 const NAV = [
@@ -56,25 +56,15 @@ export function SiteHeader() {
           : "border-transparent bg-white/80 backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link to="/" className="flex min-w-0 items-center gap-3" onClick={() => setMobileOpen(false)}>
-          <div className="relative h-11 w-11 shrink-0">
-            <img
-              src={logo.url}
-              alt="Growth Capital Services logo"
-              className="h-11 w-11 rounded-lg object-cover ring-1 ring-gold/20"
-            />
-            <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-gold"></div>
-          </div>
-          <span className="min-w-0">
-            <span className="block truncate text-sm font-extrabold tracking-tight text-foreground sm:text-base">
-              Growth Capital Services
-            </span>
-            <span className="hidden text-[10px] font-semibold tracking-[0.16em] text-gold uppercase sm:block">
-              Your Dreams, Our Funding Expertise
-            </span>
-          </span>
+        <Link
+          to="/"
+          aria-label="Growth Capital Services — Home"
+          className="shrink-0 justify-self-start"
+          onClick={() => setMobileOpen(false)}
+        >
+          <BrandLogo size="sm" />
         </Link>
 
         {/* Right side */}
@@ -114,31 +104,27 @@ export function SiteHeader() {
                         <div className="w-[720px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
                           <div className="grid grid-cols-[220px_1fr]">
                             {/* Left panel */}
-                            <div className="bg-gradient-to-b from-navy to-navy-soft p-5 text-white">
-                              <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">Loan Products</p>
+                            <div className="panel-light p-5">
+                              <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Loan Products</p>
                               <p className="mt-2 text-base font-extrabold leading-tight">
-                                Twenty-plus instruments,<br />one private desk.
+                                Loans for every<br />plan you make.
                               </p>
                               <p className="mt-2 text-xs leading-relaxed opacity-70">
-                                Curated lending — placed across India's leading banks & NBFCs.
+                                Matched with the right lender from our network of leading Banks & NBFCs.
                               </p>
                               <Link
                                 to="/services"
                                 onClick={() => setActiveDropdown(null)}
                                 className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-gold transition-colors hover:text-gold-light"
                               >
-                                View all services <ArrowRight className="h-3 w-3" />
+                                Browse the full list <ArrowRight className="h-3 w-3" />
                               </Link>
-                              <div className="mt-5 border-t border-white/10 pt-4">
-                                <span className="text-2xl font-extrabold text-gold">₹500 Cr+</span>
-                                <span className="mt-0.5 block text-[10px] opacity-60">Disbursed to date</span>
-                              </div>
                             </div>
                             {/* Right panel — products */}
                             <div className="max-h-[400px] overflow-y-auto p-4">
                               {productsByGroup.map((group) => (
                                 <div key={group.name} className="mb-3 last:mb-0">
-                                  <p className="mb-1.5 text-[10px] font-bold tracking-[0.18em] text-gold uppercase">
+                                  <p className="mb-1.5 text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
                                     {group.name}
                                   </p>
                                   <div className="grid grid-cols-2 gap-1">
@@ -150,8 +136,8 @@ export function SiteHeader() {
                                         onClick={() => setActiveDropdown(null)}
                                         className="group/item flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs transition-colors hover:bg-gold/5"
                                       >
-                                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-secondary text-gold transition-colors group-hover/item:bg-gold/10">
-                                          <span className="text-sm font-bold">{product.code.charAt(0)}</span>
+                                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-gold-pale/50 text-gold-dark transition-colors duration-300 group-hover/item:animate-[gcs-wiggle_600ms_ease-in-out] group-hover/item:bg-gold group-hover/item:text-navy">
+                                          <product.icon className="h-3.5 w-3.5" />
                                         </span>
                                         <span className="min-w-0">
                                           <span className="block truncate font-semibold text-foreground">{product.title}</span>
@@ -174,7 +160,7 @@ export function SiteHeader() {
                         style={{ animation: "gcs-scale-in 200ms ease both" }}
                       >
                         <div className="w-[320px] overflow-hidden rounded-xl border border-gold/10 bg-white p-3 shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
-                          <p className="mb-2 px-2 text-[10px] font-bold tracking-[0.2em] text-gold uppercase">Calculators</p>
+                          <p className="mb-2 px-2 text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Calculators</p>
                           {TOOL_ITEMS.map((tool) => (
                             <Link
                               key={tool.hash}

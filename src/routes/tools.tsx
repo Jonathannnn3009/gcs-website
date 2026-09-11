@@ -16,7 +16,8 @@ export const Route = createFileRoute("/tools")({
       { property: "og:title", content: "Loan Calculators & Tools" },
       {
         property: "og:description",
-        content: "Plan first. Apply with clarity. Free EMI and eligibility calculators.",
+        content:
+          "Know your numbers, then apply with confidence. Free EMI and eligibility calculators.",
       },
     ],
   }),
@@ -158,32 +159,32 @@ function EligibilityCalculator() {
 
         {/* Result */}
         <div className="flex flex-col items-center justify-center">
-          <div className="relative w-full overflow-hidden rounded-2xl border border-gold/20 bg-gradient-to-b from-navy to-navy-soft p-8 text-center text-white">
+          <div className="relative w-full overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-[50px]"></div>
-            <p className="relative text-xs font-bold tracking-[0.2em] text-gold uppercase">
+            <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
               Maximum Loan Amount
             </p>
             <p
-              className="relative mt-3 text-4xl font-extrabold text-white sm:text-5xl"
+              className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl"
               style={{ animation: "gcs-count-up 500ms ease both" }}
               key={result.maxLoan}
             >
               {formatCurrency(result.maxLoan)}
             </p>
-            <div className="relative mt-5 h-px w-full bg-white/10"></div>
+            <div className="relative mt-5 h-px w-full bg-gold/20"></div>
             <div className="relative mt-5 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-[10px] font-bold tracking-wider text-white/50 uppercase">Max EMI</p>
+                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">Max EMI</p>
                 <p className="mt-1 text-lg font-extrabold text-gold">
                   {formatCurrency(result.maxEmi)}
                 </p>
               </div>
               <div>
-                <p className="text-[10px] font-bold tracking-wider text-white/50 uppercase">FOIR Used</p>
+                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">FOIR Used</p>
                 <p className="mt-1 text-lg font-extrabold text-gold">50%</p>
               </div>
             </div>
-            <p className="relative mt-5 text-[11px] text-white/40">
+            <p className="relative mt-5 text-[11px] text-muted-foreground">
               Based on 50% Fixed Obligation to Income Ratio. Actual eligibility may vary.
             </p>
           </div>
@@ -197,15 +198,15 @@ function ToolsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy via-navy-soft to-navy py-16 sm:py-20">
+      <section className="relative overflow-hidden hero-light border-b border-gold/15 py-16 sm:py-20">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="eyebrow">Calculators</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-white sm:text-5xl">
-              Plan First. <span className="gold-text">Apply with Clarity.</span>
+            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl">
+              Know Your Numbers. <span className="gold-text">Then Apply with Confidence.</span>
             </h1>
-            <p className="mt-4 max-w-2xl text-base text-white/70">
+            <p className="mt-4 max-w-2xl text-base text-muted-foreground">
               Use our free calculators to estimate EMI, eligibility, and plan your loan
               before you apply. No signup required.
             </p>

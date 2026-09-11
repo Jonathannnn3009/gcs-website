@@ -1,7 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Target,
-  Eye,
   ShieldCheck,
   Timer,
   Compass,
@@ -17,6 +15,7 @@ import {
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
+import { MissionVision } from "@/components/mission-vision";
 import { CONTACT } from "@/data/site";
 
 export const Route = createFileRoute("/about")({
@@ -88,19 +87,19 @@ function AboutPage() {
   return (
     <>
       {/* Hero banner */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy via-navy-soft to-navy py-16 sm:py-24">
+      <section className="relative overflow-hidden hero-light border-b border-gold/15 py-16 sm:py-24">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]"></div>
         <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-gold/5 blur-[80px]"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="eyebrow">About Us</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-white sm:text-5xl">
+            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl">
               Leading with <span className="gold-text">Integrity.</span>
             </h1>
             <p className="mt-2 text-xl font-semibold text-gold">
               Your Most Ethical Financial Partner!
             </p>
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/75">
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
               Our experienced professionals lead the way, ensuring the utmost ethical and
               transparent financial services. As Authorized Business Associates with top Banks
               and NBFCs, we're committed to your financial well-being.
@@ -144,7 +143,7 @@ function AboutPage() {
               {[
                 { value: "2017", label: "Year Established", icon: Building2 },
                 { value: "45+", label: "Banking Partners", icon: Building2 },
-                { value: "₹500Cr+", label: "Disbursed", icon: Sparkles },
+                { value: "4", label: "Cities Served", icon: MapPin },
                 { value: "₹0", label: "Advisory Fee", icon: Heart },
               ].map((stat) => (
                 <div
@@ -190,34 +189,10 @@ function AboutPage() {
 
       {/* Mission & Vision */}
       <Section>
-        <div className="grid gap-5 lg:grid-cols-2">
-          <Reveal>
-            <div className="relative h-full overflow-hidden rounded-2xl bg-gradient-to-br from-navy via-navy-soft to-navy p-8 text-white">
-              <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-gold/10 blur-[60px]"></div>
-              <Target className="relative h-8 w-8 text-gold" />
-              <h3 className="relative mt-4 text-2xl font-extrabold">Our Mission</h3>
-              <p className="relative mt-3 text-sm leading-relaxed text-white/80">
-                We are driven by a mission to foster lasting relationships with each client,
-                aiming to deliver excellent service for years to come. Unlike many large
-                national mortgage firms, we prioritize the security and privacy of your
-                information, ensuring a trustworthy partnership.
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={100}>
-            <div className="relative h-full overflow-hidden rounded-2xl border border-gold/15 bg-white p-8">
-              <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-gold/5 blur-[50px]"></div>
-              <Eye className="relative h-8 w-8 text-gold" />
-              <h3 className="relative mt-4 text-2xl font-extrabold">Our Vision</h3>
-              <p className="relative mt-3 text-sm leading-relaxed text-muted-foreground">
-                Dreaming of a future without barriers, our vision is to transform
-                financial experiences for everyone. We strive to play a crucial role in
-                enhancing financial experience with innovation, trust and inspiration.
-                We aim to lead and reshape the financial landscape in India.
-              </p>
-            </div>
-          </Reveal>
-        </div>
+        <MissionVision
+          mission="We are driven by a mission to foster lasting relationships with each client, aiming to deliver excellent service for years to come. Unlike many large national mortgage firms, we prioritize the security and privacy of your information, ensuring a trustworthy partnership."
+          vision="Dreaming of a future without barriers, our vision is to transform financial experiences for everyone. We strive to play a crucial role in enhancing financial experience with innovation, trust and inspiration. We aim to lead and reshape the financial landscape in India."
+        />
       </Section>
 
       {/* Values */}
@@ -249,10 +224,10 @@ function AboutPage() {
         <Reveal>
           <div className="glass-card overflow-hidden">
             <div className="grid lg:grid-cols-2">
-              <div className="bg-gradient-to-br from-navy to-navy-soft p-8 text-white sm:p-10">
+              <div className="panel-light p-8 sm:p-10">
                 <MapPin className="h-7 w-7 text-gold" />
                 <h3 className="mt-4 text-2xl font-extrabold">Where We Serve</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/75">
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                   Trusted by our customers, we serve across major cities in Maharashtra
                   with digital documentation support state-wide. Our dedicated team continually
                   enhances the speed and accuracy of our services.
@@ -279,12 +254,12 @@ function AboutPage() {
       {/* CTA */}
       <Section className="pt-0">
         <Reveal>
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-navy via-navy-soft to-navy p-8 sm:p-12 text-center">
+          <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 sm:p-12 text-center">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
-            <h3 className="relative text-2xl font-extrabold text-white sm:text-3xl">
+            <h3 className="relative text-2xl font-extrabold text-navy sm:text-3xl">
               Let's structure the right loan <span className="gold-text">for you</span>
             </h3>
-            <p className="relative mt-3 text-sm text-white/70">
+            <p className="relative mt-3 text-sm text-muted-foreground">
               Call {CONTACT.phone} · {CONTACT.hours}
             </p>
             <div className="relative mt-6 flex flex-wrap justify-center gap-3">
@@ -295,7 +270,7 @@ function AboutPage() {
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-white/20 px-6 py-3.5 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-[#25D366]/50"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 px-6 py-3.5 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-[#25D366]/50"
               >
                 Chat on WhatsApp
               </a>

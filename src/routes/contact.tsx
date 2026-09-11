@@ -35,15 +35,15 @@ function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy via-navy-soft to-navy py-16 sm:py-20">
+      <section className="relative overflow-hidden hero-light border-b border-gold/15 py-16 sm:py-20">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="eyebrow">Contact Us</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-white sm:text-5xl">
+            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl">
               Let's structure the right loan <span className="gold-text">for you</span>
             </h1>
-            <p className="mt-4 max-w-2xl text-base text-white/70">
+            <p className="mt-4 max-w-2xl text-base text-muted-foreground">
               Share your requirement and an advisor will respond with matched lender options,
               indicative rates and a clear document checklist.
             </p>
@@ -64,7 +64,7 @@ function ContactPage() {
                       <d.icon className="h-5 w-5" />
                     </span>
                     <div className="min-w-0">
-                      <p className="text-[10px] font-bold tracking-[0.18em] text-gold uppercase">
+                      <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
                         {d.label}
                       </p>
                       {d.href ? (

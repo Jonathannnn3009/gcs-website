@@ -53,74 +53,163 @@
 :root {
   --radius: 0.75rem;
 
-  /* Deep navy backgrounds */
-  --background: oklch(0.98 0.003 250);
-  --foreground: oklch(0.13 0.04 265);
+  /* ── Brand palette ──
+     Navy #0B1849 · Navy Deep #071230 · Navy Soft #102B55
+     Gold #E4B028 · Gold Light #D6B56A · Gold Pale #F3E3B8
+     BG Light #F7F8FA · Ink #111827 · White #FFFFFF */
+  --navy: #0b1849;
+  --navy-deep: #071230;
+  --navy-soft: #102b55;
+  --navy-light: #1c3a6b;
+  --gold: #e4b028;
+  --gold-light: #d6b56a;
+  --gold-pale: #f3e3b8;
+  /* Darker shade of Gold, for small gold text on light backgrounds */
+  --gold-dark: #9c7410;
+  --bg-light: #f7f8fa;
+  --ink: #111827;
 
-  /* Cards */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.13 0.04 265);
+  /* Light theme */
+  --background: var(--bg-light);
+  --foreground: var(--ink);
 
-  /* Popovers */
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.13 0.04 265);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
 
-  /* Primary — deep navy */
-  --primary: oklch(0.15 0.04 264);
-  --primary-foreground: oklch(0.99 0.003 80);
+  --popover: #ffffff;
+  --popover-foreground: var(--ink);
 
-  /* Secondary */
-  --secondary: oklch(0.96 0.008 250);
-  --secondary-foreground: oklch(0.15 0.04 264);
+  --primary: var(--navy);
+  --primary-foreground: #ffffff;
 
-  /* Muted */
-  --muted: oklch(0.96 0.006 250);
-  --muted-foreground: oklch(0.48 0.03 260);
+  --secondary: #eef1f6;
+  --secondary-foreground: var(--navy);
 
-  /* Accent — rich gold */
-  --accent: oklch(0.75 0.14 75);
-  --accent-foreground: oklch(0.13 0.04 265);
+  --muted: #eef1f6;
+  --muted-foreground: #525c72;
 
-  /* Gold palette */
-  --gold: oklch(0.75 0.14 75);
-  --gold-light: oklch(0.85 0.1 75);
-  --gold-dark: oklch(0.60 0.14 70);
+  --accent: var(--gold);
+  --accent-foreground: var(--navy);
 
-  /* Navy palette */
-  --navy: oklch(0.15 0.04 264);
-  --navy-soft: oklch(0.22 0.045 262);
-  --navy-light: oklch(0.30 0.05 260);
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
 
-  /* Destructive */
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
+  --border: #e3e6ee;
+  --input: #e3e6ee;
+  --ring: var(--gold);
 
-  /* Borders */
-  --border: oklch(0.91 0.012 255);
-  --input: oklch(0.91 0.012 255);
-  --ring: oklch(0.75 0.14 75);
-
-  /* Sidebar */
-  --sidebar: oklch(0.13 0.04 264);
-  --sidebar-foreground: oklch(0.92 0.01 80);
-  --sidebar-primary: oklch(0.75 0.14 75);
-  --sidebar-primary-foreground: oklch(0.13 0.04 264);
-  --sidebar-accent: oklch(0.20 0.04 264);
-  --sidebar-accent-foreground: oklch(0.92 0.01 80);
-  --sidebar-border: oklch(0.22 0.04 264);
-  --sidebar-ring: oklch(0.75 0.14 75);
+  --sidebar: #ffffff;
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--navy);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--bg-light);
+  --sidebar-accent-foreground: var(--navy);
+  --sidebar-border: #e3e6ee;
+  --sidebar-ring: var(--gold);
 
   /* Gradients */
-  --gradient-navy: linear-gradient(140deg, oklch(0.11 0.04 264), oklch(0.20 0.05 258));
-  --gradient-gold: linear-gradient(135deg, oklch(0.70 0.14 68), oklch(0.82 0.12 80), oklch(0.70 0.14 68));
-  --gradient-gold-text: linear-gradient(100deg, oklch(0.82 0.12 80), oklch(0.70 0.14 68), oklch(0.82 0.12 80));
-  --gradient-hero: linear-gradient(160deg, oklch(0.10 0.04 264) 0%, oklch(0.16 0.05 260) 50%, oklch(0.12 0.04 264) 100%);
+  --gradient-navy: linear-gradient(140deg, var(--navy-deep), var(--navy-soft));
+  --gradient-gold: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+  --gradient-gold-text: linear-gradient(100deg, var(--gold-dark), #c99a1e, var(--gold-dark));
+  --gradient-hero:
+    radial-gradient(ellipse 60% 70% at 100% 0%, rgb(243 227 184 / 0.7), transparent 70%),
+    radial-gradient(ellipse 50% 60% at 0% 100%, rgb(11 24 73 / 0.05), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, var(--bg-light) 100%);
+  --gradient-panel: linear-gradient(135deg, #ffffff 0%, rgb(243 227 184 / 0.45) 100%);
 
   /* Shadows */
-  --shadow-card: 0 1px 3px oklch(0.13 0.04 265 / 0.06), 0 8px 24px -12px oklch(0.13 0.04 265 / 0.18);
-  --shadow-lift: 0 4px 6px oklch(0.13 0.04 265 / 0.08), 0 20px 40px -16px oklch(0.13 0.04 265 / 0.25);
-  --shadow-gold: 0 0 20px oklch(0.75 0.14 75 / 0.15), 0 0 60px oklch(0.75 0.14 75 / 0.08);
-  --shadow-gold-lg: 0 0 30px oklch(0.75 0.14 75 / 0.25), 0 0 80px oklch(0.75 0.14 75 / 0.12);
+  --shadow-card: 0 1px 3px rgb(11 24 73 / 0.06), 0 8px 24px -12px rgb(11 24 73 / 0.16);
+  --shadow-lift: 0 4px 6px rgb(11 24 73 / 0.07), 0 20px 40px -16px rgb(11 24 73 / 0.22);
+  --shadow-gold: 0 0 20px rgb(228 176 40 / 0.18), 0 0 60px rgb(228 176 40 / 0.08);
+  --shadow-gold-lg: 0 0 30px rgb(228 176 40 / 0.28), 0 0 80px rgb(228 176 40 / 0.12);
+}
+
+@theme inline {
+  --color-navy-deep: var(--navy-deep);
+  --color-gold-pale: var(--gold-pale);
+  --color-bg-light: var(--bg-light);
+  --color-ink: var(--ink);
+  /* Serif display face for headings; Cinzel echoes the logo's wordmark */
+  --font-heading: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-brand: "Cinzel", "Trajan Pro", Georgia, serif;
+}
+
+@layer base {
+  h1,
+  h2 {
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* ─── Playful motion ───────────────────────────────── */
+
+@keyframes gcs-wiggle {
+  0%,
+  100% {
+    transform: rotate(0) scale(1);
+  }
+  25% {
+    transform: rotate(-10deg) scale(1.08);
+  }
+  60% {
+    transform: rotate(8deg) scale(1.08);
+  }
+}
+
+@keyframes gcs-word-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.55em) rotate(3deg);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes gcs-drift {
+  from {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.1) translate3d(-2%, -1.5%, 0);
+  }
+}
+
+/* Hero headline words */
+@utility word-rise {
+  display: inline-block;
+  animation: gcs-word-rise 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Slow Ken Burns drift for background illustrations */
+@utility drift {
+  animation: gcs-drift 18s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Light surfaces replacing the old navy blocks */
+@utility hero-light {
+  background-image: var(--gradient-hero);
+  color: var(--ink);
+}
+
+@utility panel-light {
+  background-image: var(--gradient-panel);
+  color: var(--ink);
 }
 
 /* ─── Base ─────────────────────────────────────────── */
@@ -213,7 +302,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--color-gold-dark);
 }
 
 @utility gold-text {
@@ -433,6 +522,22 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* ─── Select — no native dropdown arrow ────────────── */
+
+select {
+  -moz-appearance: none;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+/* ─── Toast ────────────────────────────────────────── */
+
+@utility toast-pop {
+  animation: gcs-whatsapp-pop 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* ─── Range slider styling ─────────────────────────── */
