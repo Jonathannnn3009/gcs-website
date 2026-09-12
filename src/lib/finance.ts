@@ -26,6 +26,20 @@ export function tenureFromEmi(principal: number, monthlyEmi: number, annualRateP
   return -Math.log(1 - ratio) / Math.log(1 + r);
 }
 
+// Outstanding balance after `monthsElapsed` payments of `monthlyEmi` on `principal` at `annualRatePct`.
+export function remainingBalance(
+  principal: number,
+  annualRatePct: number,
+  monthlyEmi: number,
+  monthsElapsed: number,
+): number {
+  const r = annualRatePct / 12 / 100;
+  if (r === 0) return Math.max(principal - monthlyEmi * monthsElapsed, 0);
+  const factor = Math.pow(1 + r, monthsElapsed);
+  const balance = principal * factor - (monthlyEmi * (factor - 1)) / r;
+  return Math.max(balance, 0);
+}
+
 export function formatCurrency(n: number): string {
   if (!isFinite(n) || isNaN(n)) return "—";
   if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`;

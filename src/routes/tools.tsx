@@ -1,4 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import {
+  IndianRupee,
+  ShieldCheck,
+  FileText,
+  TrendingDown,
+  ArrowLeftRight,
+  GitCompare,
+  Building2,
+  Landmark,
+  Home,
+  ChevronDown,
+  type LucideIcon,
+} from "lucide-react";
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { EmiCalculator } from "@/components/emi-calculator";
@@ -8,6 +22,9 @@ import { PrepaymentCalculator } from "@/components/prepayment-calculator";
 import { BalanceTransferCalculator } from "@/components/balance-transfer-calculator";
 import { LoanComparisonCalculator } from "@/components/loan-comparison-calculator";
 import { WorkingCapitalCalculator } from "@/components/working-capital-calculator";
+import { CgtmseCalculator } from "@/components/cgtmse-calculator";
+import { LapLtvCalculator } from "@/components/lap-ltv-calculator";
+import { RentVsBuyCalculator } from "@/components/rent-vs-buy-calculator";
 
 export const Route = createFileRoute("/tools")({
   head: () => ({
@@ -16,30 +33,75 @@ export const Route = createFileRoute("/tools")({
       {
         name: "description",
         content:
-          "Free EMI, eligibility, stamp duty, prepayment, balance transfer, loan comparison and working capital calculators. Estimate your numbers before you apply.",
+          "Ten free calculators — EMI, eligibility, stamp duty, prepayment, balance transfer, loan comparison, working capital, CGTMSE fee, LAP eligibility and rent vs. buy.",
       },
       { property: "og:title", content: "Loan Calculators & Tools" },
       {
         property: "og:description",
-        content:
-          "Know your numbers, then apply with confidence. Seven free calculators covering every loan on our desk.",
+        content: "Know your numbers, then apply with confidence. Ten free calculators covering every loan on our desk.",
       },
     ],
   }),
   component: ToolsPage,
 });
 
-const CALCULATORS = [
-  { id: "emi", label: "EMI" },
-  { id: "eligibility", label: "Eligibility" },
-  { id: "stamp-duty", label: "Stamp Duty" },
-  { id: "prepayment", label: "Prepayment" },
-  { id: "balance-transfer", label: "Balance Transfer" },
-  { id: "loan-comparison", label: "Loan Comparison" },
-  { id: "working-capital", label: "Working Capital" },
+type Tool = {
+  id: string;
+  icon: LucideIcon;
+  label: string;
+  sub: string;
+  render: () => React.ReactNode;
+};
+
+const TOOLS: Tool[] = [
+  { id: "emi", icon: IndianRupee, label: "EMI Calculator", sub: "Estimate your monthly EMI", render: () => <EmiCalculator /> },
+  { id: "eligibility", icon: ShieldCheck, label: "Eligibility Calculator", sub: "Find your maximum loan amount", render: () => <EligibilityCalculator /> },
+  { id: "stamp-duty", icon: FileText, label: "Stamp Duty Calculator", sub: "State-wise registration costs", render: () => <StampDutyCalculator /> },
+  { id: "prepayment", icon: TrendingDown, label: "Prepayment Calculator", sub: "Tenure & interest you'll save", render: () => <PrepaymentCalculator /> },
+  { id: "balance-transfer", icon: ArrowLeftRight, label: "Balance Transfer Calculator", sub: "Is switching lenders worth it", render: () => <BalanceTransferCalculator /> },
+  { id: "loan-comparison", icon: GitCompare, label: "Loan Comparison", sub: "Compare offers side by side", render: () => <LoanComparisonCalculator /> },
+  { id: "working-capital", icon: Building2, label: "Working Capital Estimator", sub: "MSME limit — exclusive to GCS", render: () => <WorkingCapitalCalculator /> },
+  { id: "cgtmse", icon: Landmark, label: "CGTMSE Guarantee Fee", sub: "Fee on a collateral-free business loan", render: () => <CgtmseCalculator /> },
+  { id: "lap-ltv", icon: FileText, label: "Loan Against Property LTV", sub: "What your property can unlock", render: () => <LapLtvCalculator /> },
+  { id: "rent-vs-buy", icon: Home, label: "Rent vs. Buy", sub: "Which costs less over time", render: () => <RentVsBuyCalculator /> },
 ];
 
+const TOOL_IDS = TOOLS.map((t) => t.id);
+
+function useHashAccordion(defaultId: string) {
+  const [openId, setOpenId] = useState<string | null>(() => {
+    if (typeof window === "undefined") return defaultId;
+    const h = window.location.hash.replace("#", "");
+    return TOOL_IDS.includes(h) ? h : defaultId;
+  });
+
+  useEffect(() => {
+    const openAndScroll = (id: string) => {
+      setOpenId(id);
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    };
+    const onHashChange = () => {
+      const h = window.location.hash.replace("#", "");
+      if (TOOL_IDS.includes(h)) openAndScroll(h);
+    };
+    window.addEventListener("hashchange", onHashChange);
+    if (window.location.hash) onHashChange();
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  const toggle = (id: string) => {
+    setOpenId((prev) => (prev === id ? null : id));
+    if (typeof window !== "undefined") window.history.replaceState(null, "", `#${id}`);
+  };
+
+  return [openId, toggle] as const;
+}
+
 function ToolsPage() {
+  const [openId, toggle] = useHashAccordion("emi");
+
   return (
     <>
       {/* Hero */}
@@ -52,65 +114,57 @@ function ToolsPage() {
               Know Your Numbers. <span className="gold-text">Then Apply with Confidence.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Seven free calculators to plan EMI, eligibility, registration costs, prepayment,
-              balance transfer, lender comparison and business working capital. No signup required.
+              Ten free calculators covering every loan on our desk — from EMI and eligibility to
+              CGTMSE fees and a rent-vs-buy comparison. Tap one to open it. No signup required.
             </p>
-          </Reveal>
-
-          <Reveal delay={100} className="mt-8 flex flex-wrap gap-2.5">
-            {CALCULATORS.map((c) => (
-              <a
-                key={c.id}
-                href={`#${c.id}`}
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold text-navy transition-colors hover:border-gold/40"
-              >
-                {c.label}
-              </a>
-            ))}
           </Reveal>
         </div>
       </section>
 
-      <Section id="emi">
-        <Reveal>
-          <EmiCalculator />
-        </Reveal>
-      </Section>
-
-      <Section className="pt-0" id="eligibility">
-        <Reveal>
-          <EligibilityCalculator />
-        </Reveal>
-      </Section>
-
-      <Section className="pt-0">
-        <Reveal>
-          <StampDutyCalculator />
-        </Reveal>
-      </Section>
-
-      <Section className="pt-0">
-        <Reveal>
-          <PrepaymentCalculator />
-        </Reveal>
-      </Section>
-
-      <Section className="pt-0">
-        <Reveal>
-          <BalanceTransferCalculator />
-        </Reveal>
-      </Section>
-
-      <Section className="pt-0">
-        <Reveal>
-          <LoanComparisonCalculator />
-        </Reveal>
-      </Section>
-
-      <Section className="pt-0">
-        <Reveal>
-          <WorkingCapitalCalculator />
-        </Reveal>
+      {/* Accordion */}
+      <Section>
+        <div className="space-y-3">
+          {TOOLS.map((t, i) => {
+            const isOpen = openId === t.id;
+            return (
+              <Reveal key={t.id} delay={Math.min(i * 40, 240)}>
+                <div
+                  id={t.id}
+                  className={`scroll-mt-24 overflow-hidden rounded-2xl border transition-colors duration-300 ${
+                    isOpen ? "border-gold/30" : "border-border"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggle(t.id)}
+                    aria-expanded={isOpen}
+                    className="flex w-full items-center gap-4 bg-white px-5 py-4 text-left transition-colors hover:bg-gold/5 sm:px-6 sm:py-5"
+                  >
+                    <span
+                      className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-colors ${
+                        isOpen ? "bg-navy text-gold-light" : "bg-gold-pale/60 text-gold-dark"
+                      }`}
+                    >
+                      <t.icon className="h-5 w-5" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-base font-bold text-navy">{t.label}</span>
+                      <span className="block text-xs text-muted-foreground">{t.sub}</span>
+                    </span>
+                    <ChevronDown
+                      className={`h-5 w-5 shrink-0 text-gold transition-transform duration-300 ${
+                        isOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {isOpen && (
+                    <div className="border-t border-border bg-bg-light p-3 sm:p-5">{t.render()}</div>
+                  )}
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
       </Section>
 
       {/* Info cards */}

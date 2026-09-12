@@ -23,6 +23,9 @@ const TOOL_ITEMS = [
   { label: "Balance Transfer Calculator", desc: "Is switching lenders worth it", hash: "balance-transfer" },
   { label: "Loan Comparison", desc: "Compare offers side by side", hash: "loan-comparison" },
   { label: "Working Capital Estimator", desc: "MSME limit, GCS exclusive", hash: "working-capital" },
+  { label: "CGTMSE Guarantee Fee", desc: "Fee on a collateral-free loan", hash: "cgtmse" },
+  { label: "Loan Against Property LTV", desc: "What your property can unlock", hash: "lap-ltv" },
+  { label: "Rent vs. Buy", desc: "Which costs less over time", hash: "rent-vs-buy" },
 ];
 
 export function SiteHeader() {
