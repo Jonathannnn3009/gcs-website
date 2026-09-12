@@ -135,138 +135,134 @@ function ProductDetailPage() {
         </div>
       </section>
 
-      {/* About */}
+      {/* About + Key Features + Eligibility/Documents + Promise, beside a sticky Apply card */}
       <Section>
-        <Reveal>
-          <SectionHeading
-            eyebrow="About This Product"
-            title={`Why clients choose Growth Capital Services for ${product.title}.`}
-            description={product.about}
-          />
-        </Reveal>
-      </Section>
+        <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
+          {/* LEFT: content stack */}
+          <div className="space-y-12">
+            <Reveal>
+              <p className="eyebrow">About This Product</p>
+              <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl">
+                Why clients choose Growth Capital Services for {product.title}.
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">{product.about}</p>
+            </Reveal>
 
-      {/* What We Offer — each feature its own card */}
-      <Section className="pt-0">
-        <Reveal>
-          <p className="eyebrow">What We Offer</p>
-          <h3 className="mt-2 text-2xl font-extrabold text-navy">Key features</h3>
-        </Reveal>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {product.features.map((item, i) => (
-            <Reveal key={item} delay={i * 60}>
-              <div className="flex items-start gap-3 rounded-xl border border-border bg-white p-5">
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold-pale/60 text-gold-dark">
-                  <Check className="h-4 w-4" />
-                </span>
-                <span className="pt-1 text-sm leading-relaxed text-foreground">{item}</span>
+            <div>
+              <Reveal>
+                <p className="eyebrow">What We Offer</p>
+                <h3 className="mt-2 text-2xl font-extrabold text-navy">Key features</h3>
+              </Reveal>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {product.features.map((item, i) => (
+                  <Reveal key={item} delay={i * 60}>
+                    <div className="flex items-start gap-3 rounded-xl border border-border bg-white p-5">
+                      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold-pale/60 text-gold-dark">
+                        <Check className="h-4 w-4" />
+                      </span>
+                      <span className="pt-1 text-sm leading-relaxed text-foreground">{item}</span>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Reveal>
+                <div className="h-full rounded-2xl border border-border bg-white p-7">
+                  <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Who Can Apply</p>
+                  <h3 className="mt-2 text-lg font-extrabold text-navy">Basic eligibility</h3>
+                  <ul className="mt-4 space-y-2.5">
+                    {product.eligibility.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+              <Reveal delay={80}>
+                <div className="navy-panel h-full rounded-2xl p-7">
+                  <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">Keep Ready</p>
+                  <h3 className="mt-2 text-lg font-extrabold text-white">Documents required</h3>
+                  <ul className="mt-4 space-y-2.5">
+                    {product.documents.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            </div>
+
+            <Reveal>
+              <div className="panel-light rounded-2xl border border-gold/15 p-8 text-center">
+                <p className="eyebrow">A Working Promise</p>
+                <p className="mx-auto mt-4 max-w-2xl font-heading text-xl italic text-navy">
+                  "Structured to be approved — not just submitted."
+                </p>
               </div>
             </Reveal>
-          ))}
-        </div>
-      </Section>
-
-      {/* Eligibility (light) + Documents (navy) side by side */}
-      <Section className="pt-0">
-        <div className="grid gap-5 lg:grid-cols-2">
-          <Reveal>
-            <div className="h-full rounded-2xl border border-border bg-white p-7">
-              <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Who Can Apply</p>
-              <h3 className="mt-2 text-lg font-extrabold text-navy">Basic eligibility</h3>
-              <ul className="mt-4 space-y-2.5">
-                {product.eligibility.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-          <Reveal delay={80}>
-            <div className="navy-panel h-full rounded-2xl p-7">
-              <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">Keep Ready</p>
-              <h3 className="mt-2 text-lg font-extrabold text-white">Documents required</h3>
-              <ul className="mt-4 space-y-2.5">
-                {product.documents.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-      </Section>
-
-      {/* Working promise */}
-      <Section className="pt-0">
-        <Reveal>
-          <div className="panel-light rounded-2xl border border-gold/15 p-8 text-center sm:p-10">
-            <p className="eyebrow">A Working Promise</p>
-            <p className="mx-auto mt-4 max-w-2xl font-heading text-xl italic text-navy sm:text-2xl">
-              "Structured to be approved — not just submitted."
-            </p>
           </div>
-        </Reveal>
-      </Section>
 
-      {/* Begin your application */}
-      <Section className="pt-0">
-        <Reveal>
-          <div className="grid overflow-hidden rounded-2xl border border-gold/15 lg:grid-cols-2">
-            <div className="navy-panel p-8 sm:p-10">
-              <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">Begin Your Application</p>
-              <h3 className="mt-3 text-2xl font-extrabold text-white sm:text-3xl">
-                Apply for {product.title}.
+          {/* RIGHT: sticky apply card */}
+          <Reveal delay={100} className="lg:sticky lg:top-28">
+            <div className="rounded-2xl border border-gold/15 panel-light p-7">
+              <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">Begin Your Application</p>
+              <h3 className="mt-3 font-heading text-2xl font-bold text-navy">
+                Apply for <span className="italic text-gold-dark">{product.title}.</span>
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/65">
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 A senior advisor will call back within one business day with an indicative offer.
               </p>
-            </div>
-            <div className="flex flex-col justify-center gap-3 p-8 sm:p-10">
-              <a href={CONTACT.phoneHref} className="group flex items-center gap-4 rounded-xl border border-border p-4 transition-colors hover:border-gold/40">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
-                  <Phone className="h-5 w-5" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Call Us</span>
-                  <span className="block truncate text-sm font-bold text-navy">{CONTACT.phone}</span>
-                </span>
-                <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
-              </a>
-              <a href={CONTACT.whatsappLink} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 rounded-xl border border-border p-4 transition-colors hover:border-gold/40">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
-                  <MessageCircle className="h-5 w-5" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">WhatsApp</span>
-                  <span className="block truncate text-sm font-bold text-navy">Message us now</span>
-                </span>
-                <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
-              </a>
-              <a href={`mailto:${CONTACT.email}`} className="group flex items-center gap-4 rounded-xl border border-border p-4 transition-colors hover:border-gold/40">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
-                  <Mail className="h-5 w-5" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Email</span>
-                  <span className="block truncate text-sm font-bold text-navy">{CONTACT.email}</span>
-                </span>
-                <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
-              </a>
-              <Link to="/contact" className="mt-1 flex items-center justify-center rounded-xl bg-navy py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-soft">
+
+              <div className="mt-6 space-y-3">
+                <a href={CONTACT.phoneHref} className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                    <Phone className="h-4 w-4" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Call Us</span>
+                    <span className="block truncate text-sm font-bold text-navy">{CONTACT.phone}</span>
+                  </span>
+                  <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
+                </a>
+                <a href={CONTACT.whatsappLink} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                    <MessageCircle className="h-4 w-4" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">WhatsApp</span>
+                    <span className="block truncate text-sm font-bold text-navy">Message us now</span>
+                  </span>
+                  <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
+                </a>
+                <a href={`mailto:${CONTACT.email}`} className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                    <Mail className="h-4 w-4" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Email</span>
+                    <span className="block truncate text-sm font-bold text-navy">{CONTACT.email}</span>
+                  </span>
+                  <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
+                </a>
+              </div>
+
+              <Link to="/contact" className="mt-4 flex items-center justify-center rounded-xl bg-navy py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-soft">
                 Full application form <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-              <div className="mt-1 flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+              <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
                 <span>✓ Confidential</span>
                 <span>✓ No upfront fees</span>
                 <span>✓ 24-hr callback</span>
               </div>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
       </Section>
 
       {/* Process */}
