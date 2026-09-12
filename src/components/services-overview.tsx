@@ -11,7 +11,7 @@ export function ServicesOverview() {
         <div>
           <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">Loan Products</p>
           <h2 className="mt-3 text-2xl font-extrabold leading-tight text-white sm:text-3xl">
-            Twenty-three instruments, one private desk.
+            Twenty-five instruments, one private desk.
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-white/65">
             Curated lending — placed across India's leading Banks &amp; NBFCs.

@@ -27,7 +27,7 @@ export const Route = createFileRoute("/about")({
 const STATS = [
   { value: "2017", label: "Established" },
   { value: "45+", label: "Bank & NBFC Partners" },
-  { value: "23+", label: "Loan Products" },
+  { value: "25+", label: "Loan Products" },
   { value: "100%", label: "Transparent Process" },
 ];
 
@@ -227,7 +227,7 @@ function AboutPage() {
               <div>
                 <p className="eyebrow">Our Services</p>
                 <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
-                  Tailored across <span className="gold-text-static italic">twenty-three loan categories.</span>
+                  Tailored across <span className="gold-text-static italic">twenty-five loan categories.</span>
                 </h2>
               </div>
               <Link
