@@ -164,11 +164,11 @@ function ContactPage() {
           <Reveal>
             <p className="eyebrow">Visit Our Office</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
-              In the heart of <span className="gold-text-static italic">Ghatkopar West.</span>
+              Our Office in <span className="gold-text-static italic">Ghatkopar West.</span>
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Our advisory team works out of CCTV Towers on the Andheri-Ghatkopar Road — an easy stop for
-              anyone in the western suburbs. Drop in by appointment for a structured file review.
+              Our advisory team is based at CCTV Towers on the Andheri-Ghatkopar Road, accessible to
+              clients across the western suburbs. Visit by appointment for a structured file review.
             </p>
 
             <div className="mt-6 space-y-4">
