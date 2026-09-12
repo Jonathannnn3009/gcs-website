@@ -18,6 +18,11 @@ const NAV = [
 const TOOL_ITEMS = [
   { label: "EMI Calculator", desc: "Estimate your monthly EMI", hash: "emi" },
   { label: "Eligibility Calculator", desc: "Find your max loan amount", hash: "eligibility" },
+  { label: "Stamp Duty Calculator", desc: "State-wise registration costs", hash: "stamp-duty" },
+  { label: "Prepayment Calculator", desc: "Tenure & interest you'll save", hash: "prepayment" },
+  { label: "Balance Transfer Calculator", desc: "Is switching lenders worth it", hash: "balance-transfer" },
+  { label: "Loan Comparison", desc: "Compare offers side by side", hash: "loan-comparison" },
+  { label: "Working Capital Estimator", desc: "MSME limit, GCS exclusive", hash: "working-capital" },
 ];
 
 export function SiteHeader() {
@@ -145,28 +150,37 @@ export function SiteHeader() {
                         className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
                         style={{ animation: "gcs-scale-in 200ms ease both" }}
                       >
-                        <div className="w-[320px] overflow-hidden rounded-xl border border-gold/10 bg-white p-3 shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
+                        <div className="w-[560px] overflow-hidden rounded-xl border border-gold/10 bg-white p-3 shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
                           <p className="mb-2 px-2 text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Calculators</p>
-                          {TOOL_ITEMS.map((tool) => (
-                            <Link
-                              key={tool.hash}
-                              to="/tools"
-                              hash={tool.hash}
-                              onClick={() => setActiveDropdown(null)}
-                              className="group/tool flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gold/5"
-                            >
-                              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-secondary text-gold transition-colors group-hover/tool:bg-gold/10">
-                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                                  <rect x="4" y="4" width="16" height="16" rx="2" />
-                                  <path d="M8 9h8M8 13h5M8 17h3" />
-                                </svg>
-                              </span>
-                              <span>
-                                <span className="block text-sm font-semibold text-foreground">{tool.label}</span>
-                                <span className="block text-[11px] text-muted-foreground">{tool.desc}</span>
-                              </span>
-                            </Link>
-                          ))}
+                          <div className="grid grid-cols-2 gap-1">
+                            {TOOL_ITEMS.map((tool) => (
+                              <Link
+                                key={tool.hash}
+                                to="/tools"
+                                hash={tool.hash}
+                                onClick={() => setActiveDropdown(null)}
+                                className="group/tool flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gold/5"
+                              >
+                                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-secondary text-gold transition-colors group-hover/tool:bg-gold/10">
+                                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                                    <rect x="4" y="4" width="16" height="16" rx="2" />
+                                    <path d="M8 9h8M8 13h5M8 17h3" />
+                                  </svg>
+                                </span>
+                                <span className="min-w-0">
+                                  <span className="block truncate text-sm font-semibold text-foreground">{tool.label}</span>
+                                  <span className="block truncate text-[11px] text-muted-foreground">{tool.desc}</span>
+                                </span>
+                              </Link>
+                            ))}
+                          </div>
+                          <Link
+                            to="/tools"
+                            onClick={() => setActiveDropdown(null)}
+                            className="mt-1 flex items-center gap-1.5 rounded-lg px-3 py-2.5 text-xs font-bold text-gold transition-colors hover:bg-gold/5 hover:text-gold-light"
+                          >
+                            View all calculators <ArrowRight className="h-3 w-3" />
+                          </Link>
                         </div>
                       </div>
                     )}
