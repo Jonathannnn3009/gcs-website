@@ -95,12 +95,12 @@ export function SiteHeader() {
                         className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
                         style={{ animation: "gcs-scale-in 200ms ease both" }}
                       >
-                        <div className="w-[860px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
+                        <div className="w-[960px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
                           <div className="grid grid-cols-[220px_1fr]">
                             {/* Left panel */}
                             <div className="panel-light p-5 flex flex-col justify-center">
                               <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Loan Products</p>
-                              <p className="mt-2 text-base font-extrabold leading-tight">
+                              <p className="mt-2 text-lg font-extrabold leading-tight">
                                 Loans for every<br />plan you make.
                               </p>
                               <p className="mt-2 text-xs leading-relaxed opacity-70">
@@ -115,21 +115,21 @@ export function SiteHeader() {
                               </Link>
                             </div>
                             {/* Right panel — every product, flat, together */}
-                            <div className="grid grid-cols-3 gap-1 p-4">
+                            <div className="grid grid-cols-3 gap-1.5 p-5">
                               {PRODUCTS.map((product) => (
                                 <Link
                                   key={product.slug}
                                   to="/services"
                                   hash={product.slug}
                                   onClick={() => setActiveDropdown(null)}
-                                  className="group/item flex items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-gold/5"
+                                  className="group/item flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gold/5"
                                 >
-                                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-gold-pale/50 text-gold-dark transition-colors duration-300 group-hover/item:animate-[gcs-wiggle_600ms_ease-in-out] group-hover/item:bg-gold group-hover/item:text-navy">
-                                    <product.icon className="h-3.5 w-3.5" />
+                                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-gold-pale/50 text-gold-dark transition-colors duration-300 group-hover/item:animate-[gcs-wiggle_600ms_ease-in-out] group-hover/item:bg-gold group-hover/item:text-navy">
+                                    <product.icon className="h-4 w-4" />
                                   </span>
                                   <span className="min-w-0">
-                                    <span className="block truncate text-xs font-semibold text-foreground">{product.title}</span>
-                                    <span className="block truncate text-[11px] text-muted-foreground">{product.tagline}</span>
+                                    <span className="block truncate text-sm font-semibold text-foreground">{product.title}</span>
+                                    <span className="block truncate text-xs text-muted-foreground">{product.tagline}</span>
                                   </span>
                                 </Link>
                               ))}

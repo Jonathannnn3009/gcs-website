@@ -3,7 +3,6 @@ import { Check, ArrowRight, Calculator } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { LoanGoals } from "@/components/loan-goals";
-import { ServicesOverview } from "@/components/services-overview";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { CONTACT } from "@/data/site";
 
@@ -44,13 +43,6 @@ function ServicesPage() {
           </Reveal>
         </div>
       </section>
-
-      {/* Full directory, at a glance */}
-      <Section>
-        <Reveal>
-          <ServicesOverview />
-        </Reveal>
-      </Section>
 
       {/* Start with a goal */}
       <Section>
