@@ -119,8 +119,8 @@ export function SiteHeader() {
                               {PRODUCTS.map((product) => (
                                 <Link
                                   key={product.slug}
-                                  to="/services"
-                                  hash={product.slug}
+                                  to="/services/$slug"
+                                  params={{ slug: product.slug }}
                                   onClick={() => setActiveDropdown(null)}
                                   className="group/item flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gold/5"
                                 >

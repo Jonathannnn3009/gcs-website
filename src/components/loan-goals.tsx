@@ -160,8 +160,8 @@ function GoalCard({ goal: g, index }: { goal: Goal; index: number }) {
             Check eligibility
           </Link>
           <Link
-            to="/services"
-            hash={g.slug}
+            to="/services/$slug"
+            params={{ slug: g.slug }}
             className="group/link inline-flex items-center gap-1 text-xs font-bold text-navy transition-colors hover:text-gold-dark"
           >
             {g.product} details

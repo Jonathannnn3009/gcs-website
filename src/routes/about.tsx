@@ -243,8 +243,8 @@ function AboutPage() {
             {PRODUCTS.map((p, i) => (
               <Reveal key={p.slug} delay={(i % 8) * 40}>
                 <Link
-                  to="/services"
-                  hash={p.slug}
+                  to="/services/$slug"
+                  params={{ slug: p.slug }}
                   className="group flex h-full items-start justify-between gap-3 rounded-xl border border-border bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-gold/30 hover:shadow-[var(--shadow-card)]"
                 >
                   <span>
