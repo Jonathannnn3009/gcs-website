@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Clock, Mail, MapPin, Phone, ArrowRight } from "lucide-react";
-import { Section, SectionHeading } from "@/components/section";
+import { useState } from "react";
+import { ArrowRight, ChevronDown, Clock, Mail, MapPin, MessageCircle, Navigation, Phone } from "lucide-react";
+import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { LeadForm } from "@/components/lead-form";
 import { CONTACT } from "@/data/site";
@@ -24,109 +25,219 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
-const DETAILS = [
-  { icon: Phone, label: "Phone", value: CONTACT.phone, href: CONTACT.phoneHref },
-  { icon: Mail, label: "Email", value: CONTACT.email, href: `mailto:${CONTACT.email}` },
-  { icon: MapPin, label: "Office", value: CONTACT.address },
-  { icon: Clock, label: "Working Hours", value: CONTACT.hours },
+const BENEFITS = [
+  "Callback from a senior advisor within one business day",
+  "Indicative offer & lender shortlist within 48 hours",
+  "Zero upfront fees — we're paid only on disbursal",
+  "Full confidentiality on profile, file and amount",
 ];
+
+const REACH_METHODS = [
+  { icon: Phone, label: "Phone", value: CONTACT.phone, sub: CONTACT.hours, href: CONTACT.phoneHref },
+  { icon: MessageCircle, label: "WhatsApp", value: "Message us on WhatsApp", sub: "Usually within 15 minutes", href: CONTACT.whatsappLink },
+  { icon: Mail, label: "Email", value: CONTACT.email, sub: "For documents & structured queries", href: `mailto:${CONTACT.email}` },
+];
+
+const CONTACT_FAQS = [
+  { q: "How long until I hear back?", a: "A senior advisor typically calls back within one business day, with an indicative offer following shortly after." },
+  { q: "Are there any upfront charges?", a: "No advisory fee for customers — we're paid by the lender only on successful disbursal." },
+  { q: "Can you help if my application was rejected elsewhere?", a: "Often, yes. We review why it was declined and place the file with a lender better suited to the profile." },
+  { q: "Do you offer in-person consultations?", a: "Yes, by appointment at our Ghatkopar West office, Monday to Saturday." },
+];
+
+function FaqAccordion() {
+  const [open, setOpen] = useState<number | null>(0);
+  return (
+    <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-white">
+      {CONTACT_FAQS.map((f, i) => (
+        <div key={f.q}>
+          <button
+            onClick={() => setOpen(open === i ? null : i)}
+            className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+          >
+            <span className="text-sm font-bold text-navy">{f.q}</span>
+            <ChevronDown className={`h-4 w-4 shrink-0 text-gold transition-transform duration-300 ${open === i ? "rotate-180" : ""}`} />
+          </button>
+          {open === i && (
+            <p className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function ContactPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden hero-light border-b border-gold/15 py-16 sm:py-20">
-        <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]"></div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Reveal>
-            <p className="eyebrow">Contact Us</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl">
-              Let's structure the right loan <span className="gold-text">for you</span>
-            </h1>
-            <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Share your requirement and an advisor will respond with matched lender options,
-              indicative rates and a clear document checklist.
-            </p>
-          </Reveal>
+      {/* Split hero: navy intro + form */}
+      <section className="bg-bg-light py-10 sm:py-14">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-5 lg:grid-cols-2">
+            <Reveal>
+              <div className="navy-panel relative flex h-full flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
+                <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
+                <p className="relative text-xs font-bold tracking-[0.2em] text-gold uppercase">Get In Touch</p>
+                <h1 className="relative mt-3 font-heading text-3xl font-bold text-white sm:text-4xl">
+                  Let's structure <span className="italic text-gold-light">your file.</span>
+                </h1>
+                <p className="relative mt-4 text-sm leading-relaxed text-white/65">
+                  Tell us what you're trying to do — refinance, expand, unlock value from a property, or
+                  push a file another bank has rejected. We'll come back with an indicative number and a
+                  pre-approval check.
+                </p>
+
+                <ul className="relative mt-6 space-y-2.5">
+                  {BENEFITS.map((b) => (
+                    <li key={b} className="flex items-start gap-2.5 text-sm text-white/75">
+                      <span className="mt-0.5 text-gold-light">✓</span>
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="relative mt-7 flex flex-wrap items-center gap-5">
+                  <a href={CONTACT.phoneHref} className="gold-btn py-3">
+                    <Phone className="h-4 w-4" /> {CONTACT.phone}
+                  </a>
+                  <a
+                    href={CONTACT.whatsappLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm font-bold text-white/70 transition-colors hover:text-white"
+                  >
+                    or message us on WhatsApp <ArrowRight className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+
+                <div className="relative mt-auto pt-8">
+                  <p className="font-heading text-base italic leading-relaxed text-white/80">
+                    "We don't hand your file to a call centre. A senior advisor reads it, structures it,
+                    and stays with it until disbursal."
+                  </p>
+                  <p className="mt-2 text-[11px] font-bold tracking-[0.18em] text-gold-light uppercase">
+                    — The Growth Capital Services Team
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={100}>
+              <LeadForm />
+            </Reveal>
+          </div>
         </div>
       </section>
 
+      {/* Reach us directly */}
       <Section>
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
-          {/* Contact details */}
-          <div className="space-y-4">
-            {DETAILS.map((d, i) => (
-              <Reveal key={d.label} delay={i * 70}>
-                <div className="group relative overflow-hidden rounded-2xl border border-border bg-white p-5 transition-all duration-400 hover:-translate-y-1 hover:border-gold/25 hover:shadow-[var(--shadow-gold)]">
-                  <div className="absolute top-0 right-0 h-16 w-16 rounded-full bg-gold/5 blur-[20px] transition-all group-hover:bg-gold/10"></div>
-                  <div className="relative flex items-start gap-4">
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-navy to-navy-soft text-gold shadow-md transition-all duration-400 group-hover:scale-110">
-                      <d.icon className="h-5 w-5" />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
-                        {d.label}
-                      </p>
-                      {d.href ? (
-                        <a
-                          href={d.href}
-                          className="mt-1 block text-sm font-semibold transition-colors hover:text-gold"
-                        >
-                          {d.value}
-                        </a>
-                      ) : (
-                        <p className="mt-1 text-sm font-semibold">{d.value}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
+        <Reveal>
+          <p className="eyebrow text-center">Reach Us Directly</p>
+          <h2 className="mt-2 text-center text-2xl font-extrabold text-navy sm:text-3xl">
+            Three ways to start a conversation.
+          </h2>
+        </Reveal>
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          {REACH_METHODS.map((m, i) => (
+            <Reveal key={m.label} delay={i * 80}>
+              <a
+                href={m.href}
+                target={m.label === "Phone" ? undefined : "_blank"}
+                rel={m.label === "Phone" ? undefined : "noopener noreferrer"}
+                className="group flex h-full flex-col rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-gold)]"
+              >
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark">
+                  <m.icon className="h-5 w-5" />
+                </span>
+                <p className="mt-4 text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">{m.label}</p>
+                <p className="mt-1 text-sm font-bold text-navy">{m.value}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{m.sub}</p>
+              </a>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
 
-            {/* WhatsApp CTA */}
-            <Reveal delay={300}>
+      {/* Visit our office */}
+      <Section className="pt-0">
+        <div className="grid items-center gap-8 lg:grid-cols-2">
+          <Reveal>
+            <p className="eyebrow">Visit Our Office</p>
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
+              In the heart of <span className="gold-text-static italic">Ghatkopar West.</span>
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              Our advisory team works out of CCTV Towers on the Andheri-Ghatkopar Road — an easy stop for
+              anyone in the western suburbs. Drop in by appointment for a structured file review.
+            </p>
+
+            <div className="mt-6 space-y-4">
+              <div className="flex items-start gap-3">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg navy-panel text-gold-light">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">Address</p>
+                  <p className="mt-0.5 text-sm font-semibold text-navy">{CONTACT.address}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg navy-panel text-gold-light">
+                  <Clock className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">Hours</p>
+                  <p className="mt-0.5 text-sm font-semibold text-navy">{CONTACT.hours}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a
+                href="https://maps.google.com/?q=CCTV+Towers+Andheri+Ghatkopar+Road+Ghatkopar+West+Mumbai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md bg-navy px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-navy-soft"
+              >
+                <Navigation className="h-4 w-4" /> Get directions
+              </a>
               <a
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-4 rounded-2xl border border-[#25D366]/20 bg-[#25D366]/5 p-5 transition-all duration-400 hover:-translate-y-1 hover:border-[#25D366]/40 hover:shadow-[0_0_20px_rgba(37,211,102,0.15)]"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 px-5 py-3 text-sm font-bold text-navy transition-colors hover:border-gold/40"
               >
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#25D366] text-white shadow-md transition-transform duration-400 group-hover:scale-110">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.04 2A10 10 0 0 0 2 12.04a9.94 9.94 0 0 0 1.34 4.99L2 22l5.13-1.34A9.95 9.95 0 0 0 12.04 22 10 10 0 0 0 22 12.04 10 10 0 0 0 12.04 2zm5.82 14.12c-.24.67-1.42 1.24-1.96 1.32-.5.07-1.14.1-1.84-.12a16.84 16.84 0 0 1-1.67-.62c-2.93-1.27-4.84-4.23-4.99-4.43-.15-.2-1.2-1.6-1.2-3.06 0-1.45.76-2.17 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.02.9 2.17.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.13.99 2.09 1.3 2.39 1.44.3.15.47.13.64-.07.17-.21.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z"/></svg>
-                </span>
-                <div>
-                  <p className="text-[10px] font-bold tracking-[0.18em] text-[#25D366] uppercase">
-                    WhatsApp
-                  </p>
-                  <p className="mt-1 text-sm font-semibold">Chat with us instantly</p>
-                </div>
-                <ArrowRight className="ml-auto h-4 w-4 text-[#25D366] transition-transform duration-300 group-hover:translate-x-1" />
+                Book an appointment
               </a>
-            </Reveal>
+            </div>
+          </Reveal>
 
-            {/* Map */}
-            <Reveal delay={350}>
-              <div className="overflow-hidden rounded-2xl border border-border">
-                <iframe
-                  title="Growth Capital Services Office Location"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.753!2d72.9127!3d19.0867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sGhatkopar%20West%2C%20Mumbai!5e0!3m2!1sen!2sin!4v1631000000000!5m2!1sen!2sin"
-                  width="100%"
-                  height="200"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="grayscale transition-all duration-400 hover:grayscale-0"
-                />
-              </div>
-            </Reveal>
-          </div>
-
-          {/* Lead form */}
           <Reveal delay={120}>
-            <LeadForm />
+            <div className="overflow-hidden rounded-2xl border border-border">
+              <iframe
+                title="Growth Capital Services Office Location"
+                src="https://www.google.com/maps?q=CCTV+Towers+Andheri+Ghatkopar+Road+Ghatkopar+West+Mumbai&output=embed"
+                width="100%"
+                height="360"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </Reveal>
         </div>
+      </Section>
+
+      {/* FAQ */}
+      <Section className="pt-0">
+        <Reveal>
+          <p className="eyebrow text-center">Before You Write</p>
+          <h2 className="mt-2 text-center text-2xl font-extrabold text-navy sm:text-3xl">Quick answers.</h2>
+        </Reveal>
+        <Reveal delay={100} className="mx-auto mt-8 max-w-2xl">
+          <FaqAccordion />
+        </Reveal>
       </Section>
     </>
   );
