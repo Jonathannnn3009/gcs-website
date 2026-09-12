@@ -56,7 +56,7 @@ export function SiteHeader() {
           : "border-transparent bg-white/80 backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-6 px-5 py-5 sm:px-8 lg:px-10">
         {/* Logo */}
         <Link
           to="/"
@@ -64,13 +64,13 @@ export function SiteHeader() {
           className="shrink-0 justify-self-start"
           onClick={() => setMobileOpen(false)}
         >
-          <BrandLogo size="sm" />
+          <BrandLogo size="md" layout="horizontal" />
         </Link>
 
         {/* Right side */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-6">
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-0.5 lg:flex">
+          <nav className="hidden items-center gap-1.5 lg:flex">
             {NAV.map((link) => {
               if (link.dropdown) {
                 return (
@@ -85,7 +85,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold transition-colors hover:text-foreground"
+                      className="group relative flex items-center gap-1 rounded-md px-4 py-2.5 text-[15px] font-semibold transition-colors hover:text-foreground"
                     >
                       {link.label}
                       <ChevronDown
@@ -195,33 +195,13 @@ export function SiteHeader() {
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
-                  className="relative rounded-md px-3 py-2 text-sm font-semibold transition-colors after:absolute after:bottom-0.5 after:left-3 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-1.5rem)]"
+                  className="relative rounded-md px-4 py-2.5 text-[15px] font-semibold transition-colors after:absolute after:bottom-0.5 after:left-4 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-2rem)]"
                 >
                   {link.label}
                 </Link>
               );
             })}
           </nav>
-
-          {/* Phone */}
-          <a
-            href={CONTACT.phoneHref}
-            className="hidden items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:text-gold xl:inline-flex"
-          >
-            <Phone className="h-4 w-4 shrink-0 text-gold" />
-            {CONTACT.phone}
-          </a>
-
-          {/* WhatsApp */}
-          <a
-            href={CONTACT.whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden h-9 w-9 items-center justify-center rounded-lg bg-[#25D366]/10 text-[#25D366] transition-colors hover:bg-[#25D366]/20 xl:inline-flex"
-            aria-label="WhatsApp"
-          >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.04 2A10 10 0 0 0 2 12.04a9.94 9.94 0 0 0 1.34 4.99L2 22l5.13-1.34A9.95 9.95 0 0 0 12.04 22 10 10 0 0 0 22 12.04 10 10 0 0 0 12.04 2zm5.82 14.12c-.24.67-1.42 1.24-1.96 1.32-.5.07-1.14.1-1.84-.12a16.84 16.84 0 0 1-1.67-.62c-2.93-1.27-4.84-4.23-4.99-4.43-.15-.2-1.2-1.6-1.2-3.06 0-1.45.76-2.17 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.02.9 2.17.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.13.99 2.09 1.3 2.39 1.44.3.15.47.13.64-.07.17-.21.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z"/></svg>
-          </a>
 
           {/* Apply CTA */}
           <Link
