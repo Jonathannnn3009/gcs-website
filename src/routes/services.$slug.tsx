@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, Mail, MessageCircle, Phone } from "lucide-react";
+import { ArrowRight, Check, FileCheck2, FileText, Landmark, Mail, MessageCircle, Phone } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { PRODUCTS, getProduct } from "@/data/products";
@@ -36,10 +36,10 @@ function NotFoundBlock() {
 }
 
 const PROCESS = [
-  { num: "01", title: "Consultation", body: "Tell us your goal — a senior advisor reads your profile end to end." },
-  { num: "02", title: "Bank Matchmaking", body: "We match you to the lender most likely to approve your case." },
-  { num: "03", title: "Documentation", body: "We structure the paperwork the way underwriters actually underwrite." },
-  { num: "04", title: "Sanction & Support", body: "Funds reach your account, with support continuing after disbursal." },
+  { num: "01", icon: FileText, title: "Consultation", body: "Tell us your goal — a senior advisor reads your profile end to end." },
+  { num: "02", icon: Landmark, title: "Bank Matchmaking", body: "We match you to the lender most likely to approve your case." },
+  { num: "03", icon: FileCheck2, title: "Documentation", body: "We structure the paperwork the way underwriters actually underwrite." },
+  { num: "04", icon: Check, title: "Sanction & Support", body: "Funds reach your account, with support continuing after disbursal." },
 ];
 
 function productCode(title: string): string {
@@ -146,29 +146,57 @@ function ProductDetailPage() {
         </Reveal>
       </Section>
 
-      {/* Features / Eligibility / Documents */}
+      {/* What We Offer — each feature its own card */}
       <Section className="pt-0">
-        <div className="grid gap-5 lg:grid-cols-3">
-          {[
-            { eyebrow: "What We Offer", title: "Key features", items: product.features },
-            { eyebrow: "Who Can Apply", title: "Basic eligibility", items: product.eligibility },
-            { eyebrow: "Keep Ready", title: "Documents required", items: product.documents },
-          ].map((block, i) => (
-            <Reveal key={block.title} delay={i * 80}>
-              <div className="h-full rounded-2xl border border-border bg-white p-7">
-                <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">{block.eyebrow}</p>
-                <h3 className="mt-2 text-lg font-extrabold text-navy">{block.title}</h3>
-                <ul className="mt-4 space-y-2.5">
-                  {block.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+        <Reveal>
+          <p className="eyebrow">What We Offer</p>
+          <h3 className="mt-2 text-2xl font-extrabold text-navy">Key features</h3>
+        </Reveal>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {product.features.map((item, i) => (
+            <Reveal key={item} delay={i * 60}>
+              <div className="flex items-start gap-3 rounded-xl border border-border bg-white p-5">
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold-pale/60 text-gold-dark">
+                  <Check className="h-4 w-4" />
+                </span>
+                <span className="pt-1 text-sm leading-relaxed text-foreground">{item}</span>
               </div>
             </Reveal>
           ))}
+        </div>
+      </Section>
+
+      {/* Eligibility (light) + Documents (navy) side by side */}
+      <Section className="pt-0">
+        <div className="grid gap-5 lg:grid-cols-2">
+          <Reveal>
+            <div className="h-full rounded-2xl border border-border bg-white p-7">
+              <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Who Can Apply</p>
+              <h3 className="mt-2 text-lg font-extrabold text-navy">Basic eligibility</h3>
+              <ul className="mt-4 space-y-2.5">
+                {product.eligibility.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+          <Reveal delay={80}>
+            <div className="navy-panel h-full rounded-2xl p-7">
+              <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">Keep Ready</p>
+              <h3 className="mt-2 text-lg font-extrabold text-white">Documents required</h3>
+              <ul className="mt-4 space-y-2.5">
+                {product.documents.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
         </div>
       </Section>
 
@@ -196,28 +224,46 @@ function ProductDetailPage() {
               <p className="mt-3 text-sm leading-relaxed text-white/65">
                 A senior advisor will call back within one business day with an indicative offer.
               </p>
-              <div className="mt-6 flex flex-wrap gap-4 text-xs text-white/50">
+            </div>
+            <div className="flex flex-col justify-center gap-3 p-8 sm:p-10">
+              <a href={CONTACT.phoneHref} className="group flex items-center gap-4 rounded-xl border border-border p-4 transition-colors hover:border-gold/40">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                  <Phone className="h-5 w-5" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Call Us</span>
+                  <span className="block truncate text-sm font-bold text-navy">{CONTACT.phone}</span>
+                </span>
+                <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
+              </a>
+              <a href={CONTACT.whatsappLink} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 rounded-xl border border-border p-4 transition-colors hover:border-gold/40">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                  <MessageCircle className="h-5 w-5" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">WhatsApp</span>
+                  <span className="block truncate text-sm font-bold text-navy">Message us now</span>
+                </span>
+                <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
+              </a>
+              <a href={`mailto:${CONTACT.email}`} className="group flex items-center gap-4 rounded-xl border border-border p-4 transition-colors hover:border-gold/40">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                  <Mail className="h-5 w-5" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Email</span>
+                  <span className="block truncate text-sm font-bold text-navy">{CONTACT.email}</span>
+                </span>
+                <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
+              </a>
+              <Link to="/contact" className="mt-1 flex items-center justify-center rounded-xl bg-navy py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-soft">
+                Full application form <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+              <div className="mt-1 flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
                 <span>✓ Confidential</span>
                 <span>✓ No upfront fees</span>
                 <span>✓ 24-hr callback</span>
               </div>
-            </div>
-            <div className="grid grid-cols-1 gap-4 p-8 sm:grid-cols-3 sm:p-10">
-              <a href={CONTACT.phoneHref} className="flex flex-col items-center gap-2 rounded-xl border border-border p-5 text-center transition-colors hover:border-gold/40">
-                <Phone className="h-5 w-5 text-gold" />
-                <span className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Call Us</span>
-                <span className="text-sm font-bold text-navy">{CONTACT.phone}</span>
-              </a>
-              <a href={CONTACT.whatsappLink} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 rounded-xl border border-border p-5 text-center transition-colors hover:border-gold/40">
-                <MessageCircle className="h-5 w-5 text-gold" />
-                <span className="text-xs font-bold uppercase tracking-wide text-muted-foreground">WhatsApp</span>
-                <span className="text-sm font-bold text-navy">Message us now</span>
-              </a>
-              <a href={`mailto:${CONTACT.email}`} className="flex flex-col items-center gap-2 rounded-xl border border-border p-5 text-center transition-colors hover:border-gold/40">
-                <Mail className="h-5 w-5 text-gold" />
-                <span className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Email</span>
-                <span className="truncate text-sm font-bold text-navy">{CONTACT.email}</span>
-              </a>
             </div>
           </div>
         </Reveal>
@@ -228,17 +274,27 @@ function ProductDetailPage() {
         <Reveal>
           <SectionHeading eyebrow="Our Process" title="From first conversation to disbursal." align="center" />
         </Reveal>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="relative mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {PROCESS.map((step, i) => (
-            <Reveal key={step.num} delay={i * 80}>
-              <div className="h-full rounded-2xl border border-border bg-white p-6">
-                <span className="grid h-10 w-10 place-items-center rounded-full bg-navy text-sm font-bold text-white">
-                  {step.num}
+            <div key={step.num} className="relative">
+              <Reveal delay={i * 80}>
+                <div className="h-full rounded-2xl border border-border bg-white p-6">
+                  <div className="flex items-start justify-between">
+                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark">
+                      <step.icon className="h-5 w-5" />
+                    </span>
+                    <span className="font-heading text-lg italic text-gold-dark">{step.num}</span>
+                  </div>
+                  <h4 className="mt-4 text-base font-extrabold text-navy">{step.title}</h4>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+                </div>
+              </Reveal>
+              {i < PROCESS.length - 1 && (
+                <span className="absolute -right-5 top-11 z-10 hidden h-8 w-8 place-items-center rounded-full border border-gold/25 bg-white text-gold lg:grid">
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </span>
-                <h4 className="mt-4 text-base font-extrabold text-navy">{step.title}</h4>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
-              </div>
-            </Reveal>
+              )}
+            </div>
           ))}
         </div>
       </Section>
@@ -256,13 +312,14 @@ function ProductDetailPage() {
                 params={{ slug: p.slug }}
                 className="group flex h-full flex-col rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]"
               >
-                <span className="grid h-10 w-10 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                <span className="font-heading text-lg italic text-gold-dark">{String(i + 2).padStart(2, "0")}</span>
+                <span className="mt-3 grid h-10 w-10 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
                   <p.icon className="h-5 w-5" />
                 </span>
                 <h4 className="mt-4 text-base font-extrabold text-navy">{p.title}</h4>
                 <p className="mt-1.5 text-sm text-muted-foreground">{p.tagline}</p>
                 <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-gold-dark">
-                  Explore {p.title} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  Explore {productCode(p.title)} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>
             </Reveal>
