@@ -10,7 +10,6 @@ const NAV = [
   { to: "/about", label: "About Us" },
   { to: "/services", label: "Our Services", dropdown: "services" },
   { to: "/tools", label: "Tools", dropdown: "tools" },
-  { to: "/bank-partners", label: "Bank Partners" },
   { to: "/faqs", label: "FAQs" },
   { to: "/contact", label: "Contact Us" },
 ] as const;

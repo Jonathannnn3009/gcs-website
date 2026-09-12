@@ -355,15 +355,6 @@ function HomePage() {
             <BankMarquee />
           </div>
         </Reveal>
-        <div className="mt-8 text-center">
-          <Link
-            to="/bank-partners"
-            className="group inline-flex items-center gap-2 text-sm font-bold text-gold-dark transition-colors hover:text-navy"
-          >
-            See all 45+ partners
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
-        </div>
       </Section>
 
       {/* ─── EMI CALCULATOR ───────────────────────────── */}

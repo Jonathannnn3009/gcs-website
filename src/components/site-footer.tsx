@@ -63,7 +63,6 @@ export function SiteFooter() {
                 { to: "/about", label: "About Us" },
                 { to: "/services", label: "Our Services" },
                 { to: "/tools", label: "EMI Calculator" },
-                { to: "/bank-partners", label: "Bank Partners" },
                 { to: "/faqs", label: "FAQs" },
                 { to: "/contact", label: "Contact Us" },
               ].map((l) => (

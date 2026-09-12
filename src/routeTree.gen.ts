@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as BankPartnersRouteImport } from './routes/bank-partners'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqsRouteImport } from './routes/faqs'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -28,11 +27,6 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BankPartnersRoute = BankPartnersRouteImport.update({
-  id: '/bank-partners',
-  path: '/bank-partners',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -74,7 +68,6 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/bank-partners': typeof BankPartnersRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
   '/services': typeof ServicesRouteWithChildren
@@ -86,7 +79,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/bank-partners': typeof BankPartnersRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
   '/tools': typeof ToolsRoute
@@ -98,7 +90,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/bank-partners': typeof BankPartnersRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
   '/services': typeof ServicesRouteWithChildren
@@ -112,7 +103,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/bank-partners'
     | '/contact'
     | '/faqs'
     | '/services'
@@ -124,7 +114,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/bank-partners'
     | '/contact'
     | '/faqs'
     | '/tools'
@@ -135,7 +124,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
-    | '/bank-partners'
     | '/contact'
     | '/faqs'
     | '/services'
@@ -148,7 +136,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  BankPartnersRoute: typeof BankPartnersRoute
   ContactRoute: typeof ContactRoute
   FaqsRoute: typeof FaqsRoute
   ServicesRoute: typeof ServicesRouteWithChildren
@@ -170,13 +157,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bank-partners': {
-      id: '/bank-partners'
-      path: '/bank-partners'
-      fullPath: '/bank-partners'
-      preLoaderRoute: typeof BankPartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -248,7 +228,6 @@ const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  BankPartnersRoute: BankPartnersRoute,
   ContactRoute: ContactRoute,
   FaqsRoute: FaqsRoute,
   ServicesRoute: ServicesRouteWithChildren,
