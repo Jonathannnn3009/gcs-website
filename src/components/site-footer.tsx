@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Clock, Mail, MapPin, Phone, ArrowRight } from "lucide-react";
-import logo from "@/assets/gcs-logo.jpg.asset.json";
 import { CONTACT, SERVICES } from "@/data/site";
 import { PRODUCT_GROUPS } from "@/data/products";
 
@@ -10,20 +9,19 @@ export function SiteFooter() {
       {/* Gold accent line */}
       <div className="h-1 w-full bg-gradient-to-r from-transparent via-gold to-transparent"></div>
 
-      <div className="navy-panel">
+      <div className="bg-white">
         {/* Main footer grid */}
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr] lg:px-8">
           {/* Brand column */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3">
-              <img
-                src={logo.url}
-                alt="Growth Capital Services logo"
-                className="h-12 w-12 shrink-0 rounded-lg object-cover ring-1 ring-gold/30"
-              />
-              <span className="text-base font-extrabold text-white">Growth Capital Services</span>
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-white/70">
+            <img
+              src="/brand/gcs-logo.png"
+              alt="Growth Capital Services — Your growth, our financial expertise"
+              width={870}
+              height={595}
+              className="h-28 w-auto object-contain mix-blend-multiply"
+            />
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               Established in 2017. Tailored loan solutions from leading Banks and NBFCs across
               Mumbai, Thane, Navi Mumbai and Pune. Your dreams, our funding expertise.
             </p>
@@ -56,7 +54,9 @@ export function SiteFooter() {
 
           {/* Explore */}
           <div>
-            <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">Explore</h3>
+            <h3 className="text-xs font-bold tracking-[0.18em] text-gold-dark uppercase">
+              Explore
+            </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               {[
                 { to: "/", label: "Home" },
@@ -68,7 +68,7 @@ export function SiteFooter() {
                 { to: "/contact", label: "Contact Us" },
               ].map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="text-white/70 transition-colors hover:text-gold">
+                  <Link to={l.to} className="text-muted-foreground transition-colors hover:text-gold">
                     {l.label}
                   </Link>
                 </li>
@@ -78,14 +78,16 @@ export function SiteFooter() {
 
           {/* Loan Products */}
           <div>
-            <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">Loan Products</h3>
+            <h3 className="text-xs font-bold tracking-[0.18em] text-gold-dark uppercase">
+              Loan Products
+            </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               {SERVICES.slice(0, 8).map((s) => (
                 <li key={s.id}>
                   <Link
                     to="/services"
                     hash={s.id}
-                    className="text-white/70 transition-colors hover:text-gold"
+                    className="text-muted-foreground transition-colors hover:text-gold"
                   >
                     {s.title}
                   </Link>
@@ -96,27 +98,29 @@ export function SiteFooter() {
 
           {/* Reach Us */}
           <div>
-            <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">Reach Us</h3>
+            <h3 className="text-xs font-bold tracking-[0.18em] text-gold-dark uppercase">
+              Reach Us
+            </h3>
             <ul className="mt-4 space-y-4 text-sm">
               <li className="flex gap-3">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                <a href={CONTACT.phoneHref} className="text-white/80 transition-colors hover:text-gold">
+                <a href={CONTACT.phoneHref} className="text-ink/80 transition-colors hover:text-gold">
                   {CONTACT.phone}
                 </a>
               </li>
               <li className="flex gap-3">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                <a href={`mailto:${CONTACT.email}`} className="text-white/80 transition-colors hover:text-gold">
+                <a href={`mailto:${CONTACT.email}`} className="text-ink/80 transition-colors hover:text-gold">
                   {CONTACT.email}
                 </a>
               </li>
               <li className="flex gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                <span className="text-white/70">{CONTACT.address}</span>
+                <span className="text-muted-foreground">{CONTACT.address}</span>
               </li>
               <li className="flex gap-3">
                 <Clock className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                <span className="text-white/70">{CONTACT.hours}</span>
+                <span className="text-muted-foreground">{CONTACT.hours}</span>
               </li>
             </ul>
 
@@ -132,8 +136,8 @@ export function SiteFooter() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/10">
-          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-white/50 sm:flex-row sm:px-6 lg:px-8">
+        <div className="border-t border-gold/15">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
             <span>© {new Date().getFullYear()} Growth Capital Services. All rights reserved.</span>
             <span className="flex items-center gap-1.5">
               Serving

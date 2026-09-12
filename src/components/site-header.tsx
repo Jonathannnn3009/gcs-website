@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { Menu, Phone, X, ChevronDown, ArrowRight } from "lucide-react";
-import logo from "@/assets/gcs-logo.jpg.asset.json";
 import { CONTACT } from "@/data/site";
+import { BrandLogo } from "@/components/brand-logo";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 
 const NAV = [
@@ -56,31 +56,21 @@ export function SiteHeader() {
           : "border-transparent bg-white/80 backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-6 px-5 py-5 sm:px-8 lg:px-10">
         {/* Logo */}
-        <Link to="/" className="flex min-w-0 items-center gap-3" onClick={() => setMobileOpen(false)}>
-          <div className="relative h-11 w-11 shrink-0">
-            <img
-              src={logo.url}
-              alt="Growth Capital Services logo"
-              className="h-11 w-11 rounded-lg object-cover ring-1 ring-gold/20"
-            />
-            <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-gold"></div>
-          </div>
-          <span className="min-w-0">
-            <span className="block truncate text-sm font-extrabold tracking-tight text-foreground sm:text-base">
-              Growth Capital Services
-            </span>
-            <span className="hidden text-[10px] font-semibold tracking-[0.16em] text-gold uppercase sm:block">
-              Your Dreams, Our Funding Expertise
-            </span>
-          </span>
+        <Link
+          to="/"
+          aria-label="Growth Capital Services — Home"
+          className="shrink-0 justify-self-start"
+          onClick={() => setMobileOpen(false)}
+        >
+          <BrandLogo size="md" layout="horizontal" />
         </Link>
 
         {/* Right side */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-6">
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-0.5 lg:flex">
+          <nav className="hidden items-center gap-1.5 lg:flex">
             {NAV.map((link) => {
               if (link.dropdown) {
                 return (
@@ -95,7 +85,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold transition-colors hover:text-foreground"
+                      className="group relative flex items-center gap-1 rounded-md px-4 py-2.5 text-[15px] font-semibold transition-colors hover:text-foreground"
                     >
                       {link.label}
                       <ChevronDown
@@ -114,31 +104,27 @@ export function SiteHeader() {
                         <div className="w-[720px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
                           <div className="grid grid-cols-[220px_1fr]">
                             {/* Left panel */}
-                            <div className="bg-gradient-to-b from-navy to-navy-soft p-5 text-white">
-                              <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">Loan Products</p>
+                            <div className="panel-light p-5">
+                              <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Loan Products</p>
                               <p className="mt-2 text-base font-extrabold leading-tight">
-                                Twenty-plus instruments,<br />one private desk.
+                                Loans for every<br />plan you make.
                               </p>
                               <p className="mt-2 text-xs leading-relaxed opacity-70">
-                                Curated lending — placed across India's leading banks & NBFCs.
+                                Matched with the right lender from our network of leading Banks & NBFCs.
                               </p>
                               <Link
                                 to="/services"
                                 onClick={() => setActiveDropdown(null)}
                                 className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-gold transition-colors hover:text-gold-light"
                               >
-                                View all services <ArrowRight className="h-3 w-3" />
+                                Browse the full list <ArrowRight className="h-3 w-3" />
                               </Link>
-                              <div className="mt-5 border-t border-white/10 pt-4">
-                                <span className="text-2xl font-extrabold text-gold">₹500 Cr+</span>
-                                <span className="mt-0.5 block text-[10px] opacity-60">Disbursed to date</span>
-                              </div>
                             </div>
                             {/* Right panel — products */}
                             <div className="max-h-[400px] overflow-y-auto p-4">
                               {productsByGroup.map((group) => (
                                 <div key={group.name} className="mb-3 last:mb-0">
-                                  <p className="mb-1.5 text-[10px] font-bold tracking-[0.18em] text-gold uppercase">
+                                  <p className="mb-1.5 text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
                                     {group.name}
                                   </p>
                                   <div className="grid grid-cols-2 gap-1">
@@ -150,8 +136,8 @@ export function SiteHeader() {
                                         onClick={() => setActiveDropdown(null)}
                                         className="group/item flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs transition-colors hover:bg-gold/5"
                                       >
-                                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-secondary text-gold transition-colors group-hover/item:bg-gold/10">
-                                          <span className="text-sm font-bold">{product.code.charAt(0)}</span>
+                                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-gold-pale/50 text-gold-dark transition-colors duration-300 group-hover/item:animate-[gcs-wiggle_600ms_ease-in-out] group-hover/item:bg-gold group-hover/item:text-navy">
+                                          <product.icon className="h-3.5 w-3.5" />
                                         </span>
                                         <span className="min-w-0">
                                           <span className="block truncate font-semibold text-foreground">{product.title}</span>
@@ -174,7 +160,7 @@ export function SiteHeader() {
                         style={{ animation: "gcs-scale-in 200ms ease both" }}
                       >
                         <div className="w-[320px] overflow-hidden rounded-xl border border-gold/10 bg-white p-3 shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
-                          <p className="mb-2 px-2 text-[10px] font-bold tracking-[0.2em] text-gold uppercase">Calculators</p>
+                          <p className="mb-2 px-2 text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Calculators</p>
                           {TOOL_ITEMS.map((tool) => (
                             <Link
                               key={tool.hash}
@@ -209,33 +195,13 @@ export function SiteHeader() {
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
-                  className="relative rounded-md px-3 py-2 text-sm font-semibold transition-colors after:absolute after:bottom-0.5 after:left-3 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-1.5rem)]"
+                  className="relative rounded-md px-4 py-2.5 text-[15px] font-semibold transition-colors after:absolute after:bottom-0.5 after:left-4 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-2rem)]"
                 >
                   {link.label}
                 </Link>
               );
             })}
           </nav>
-
-          {/* Phone */}
-          <a
-            href={CONTACT.phoneHref}
-            className="hidden items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:text-gold xl:inline-flex"
-          >
-            <Phone className="h-4 w-4 shrink-0 text-gold" />
-            {CONTACT.phone}
-          </a>
-
-          {/* WhatsApp */}
-          <a
-            href={CONTACT.whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden h-9 w-9 items-center justify-center rounded-lg bg-[#25D366]/10 text-[#25D366] transition-colors hover:bg-[#25D366]/20 xl:inline-flex"
-            aria-label="WhatsApp"
-          >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.04 2A10 10 0 0 0 2 12.04a9.94 9.94 0 0 0 1.34 4.99L2 22l5.13-1.34A9.95 9.95 0 0 0 12.04 22 10 10 0 0 0 22 12.04 10 10 0 0 0 12.04 2zm5.82 14.12c-.24.67-1.42 1.24-1.96 1.32-.5.07-1.14.1-1.84-.12a16.84 16.84 0 0 1-1.67-.62c-2.93-1.27-4.84-4.23-4.99-4.43-.15-.2-1.2-1.6-1.2-3.06 0-1.45.76-2.17 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.02.9 2.17.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.13.99 2.09 1.3 2.39 1.44.3.15.47.13.64-.07.17-.21.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z"/></svg>
-          </a>
 
           {/* Apply CTA */}
           <Link

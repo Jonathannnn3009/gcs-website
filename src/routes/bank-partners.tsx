@@ -29,27 +29,22 @@ function PartnersPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy via-navy-soft to-navy py-16 sm:py-20">
+      <section className="relative overflow-hidden hero-light border-b border-gold/15 py-16 sm:py-20">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="eyebrow">Our Network</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-white sm:text-5xl">
+            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl">
               Banks in Our <span className="gold-text">Network</span>
             </h1>
-            <p className="mt-4 max-w-2xl text-base text-white/70">
+            <p className="mt-4 max-w-2xl text-base text-muted-foreground">
               We partner with major Banks and NBFCs to ensure you secure the best deals
               effortlessly. Enjoy a seamless loan process with zero hassle — guaranteed.
             </p>
             <div className="mt-6 flex items-center gap-6">
               <div>
                 <span className="text-3xl font-extrabold text-gold">45+</span>
-                <span className="ml-2 text-sm text-white/50">Banking Partners</span>
-              </div>
-              <div className="h-8 w-px bg-white/15"></div>
-              <div>
-                <span className="text-3xl font-extrabold text-gold">₹500 Cr+</span>
-                <span className="ml-2 text-sm text-white/50">Disbursed</span>
+                <span className="ml-2 text-sm text-muted-foreground">Banking Partners</span>
               </div>
             </div>
           </Reveal>
@@ -92,14 +87,14 @@ function PartnersPage() {
       {/* CTA */}
       <Section className="pt-0">
         <Reveal>
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-navy via-navy-soft to-navy p-8 sm:p-10">
+          <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 sm:p-10">
             <div className="absolute top-0 right-0 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
             <div className="relative flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="text-2xl font-extrabold text-white">
+                <h3 className="text-2xl font-extrabold text-navy">
                   Not sure which lender <span className="gold-text">fits you?</span>
                 </h3>
-                <p className="mt-2 text-sm text-white/70">
+                <p className="mt-2 text-sm text-muted-foreground">
                   We shortlist the two or three that suit your profile and pricing.
                 </p>
               </div>

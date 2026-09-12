@@ -1,16 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Compass,
-  Eye,
   ShieldCheck,
   Sparkles,
-  Target,
   Timer,
   ArrowRight,
   CheckCircle2,
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
+import { MissionVision } from "@/components/mission-vision";
 import { PAIN_POINTS, CONTACT } from "@/data/site";
 
 export const Route = createFileRoute("/why-us")({
@@ -68,15 +67,15 @@ function WhyUsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy via-navy-soft to-navy py-16 sm:py-20">
+      <section className="relative overflow-hidden hero-light border-b border-gold/15 py-16 sm:py-20">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="eyebrow">Why Choose Us</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-white sm:text-5xl">
+            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl">
               Experience Financial Freedom <span className="gold-text">With Us</span>
             </h1>
-            <p className="mt-4 max-w-2xl text-base text-white/70">
+            <p className="mt-4 max-w-2xl text-base text-muted-foreground">
               Unlike banks, we prioritize your needs and secure better deals by leveraging our
               vast network with Banks and NBFCs. Trusted by our customers, we aim to become the
               largest firm in India, serving Mumbai, Thane, Navi Mumbai and Pune.
@@ -116,12 +115,12 @@ function WhyUsPage() {
         <Reveal>
           <div className="glass-card overflow-hidden">
             <div className="grid lg:grid-cols-2">
-              <div className="bg-gradient-to-br from-navy to-navy-soft p-8 text-white sm:p-10">
+              <div className="panel-light p-8 sm:p-10">
                 <p className="eyebrow">The Difference</p>
                 <h3 className="mt-3 text-2xl font-extrabold">
                   Why Growth Capital <span className="text-gold">over going direct?</span>
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/75">
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                   Our dedicated team continually enhances the speed and accuracy of our services,
                   exploring innovative and attractive new loan schemes to better serve you.
                 </p>
@@ -164,43 +163,21 @@ function WhyUsPage() {
 
       {/* Mission & Vision */}
       <Section className="pt-0">
-        <div className="grid gap-5 lg:grid-cols-2">
-          <Reveal>
-            <div className="relative h-full overflow-hidden rounded-2xl bg-gradient-to-br from-navy via-navy-soft to-navy p-8 text-white">
-              <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-gold/10 blur-[60px]"></div>
-              <Target className="relative h-8 w-8 text-gold" />
-              <h3 className="relative mt-4 text-2xl font-extrabold">Our Mission</h3>
-              <p className="relative mt-3 text-sm leading-relaxed text-white/80">
-                To foster lasting relationships with each client and deliver excellent service for
-                years to come. Unlike many large national mortgage firms, we prioritise the security
-                and privacy of your information, ensuring a trustworthy partnership.
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={100}>
-            <div className="relative h-full overflow-hidden rounded-2xl border border-gold/15 bg-white p-8">
-              <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-gold/5 blur-[50px]"></div>
-              <Eye className="relative h-8 w-8 text-gold" />
-              <h3 className="relative mt-4 text-2xl font-extrabold">Our Vision</h3>
-              <p className="relative mt-3 text-sm leading-relaxed text-muted-foreground">
-                A future where everyone's dreams can come true without obstacles. We aim to introduce
-                innovative ideas, foster trust, and reshape the landscape of financial solutions in
-                India.
-              </p>
-            </div>
-          </Reveal>
-        </div>
+        <MissionVision
+          mission="To foster lasting relationships with each client and deliver excellent service for years to come. Unlike many large national mortgage firms, we prioritise the security and privacy of your information, ensuring a trustworthy partnership."
+          vision="A future where everyone's dreams can come true without obstacles. We aim to introduce innovative ideas, foster trust, and reshape the landscape of financial solutions in India."
+        />
       </Section>
 
       {/* CTA */}
       <Section className="pt-0">
         <Reveal>
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-navy via-navy-soft to-navy p-8 sm:p-12 text-center">
+          <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 sm:p-12 text-center">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
-            <h3 className="relative text-2xl font-extrabold text-white sm:text-3xl">
+            <h3 className="relative text-2xl font-extrabold text-navy sm:text-3xl">
               Ready to experience the <span className="gold-text">difference?</span>
             </h3>
-            <p className="relative mt-3 text-sm text-white/70">
+            <p className="relative mt-3 text-sm text-muted-foreground">
               Call {CONTACT.phone} · {CONTACT.hours}
             </p>
             <Link to="/contact" className="gold-btn relative mt-6 py-3.5 text-base">

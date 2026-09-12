@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, Calculator } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
-import { ServiceTabs } from "@/components/service-tabs";
+import { LoanGoals } from "@/components/loan-goals";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { CONTACT } from "@/data/site";
 
@@ -29,46 +29,36 @@ function ServicesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy via-navy-soft to-navy py-16 sm:py-20">
-        <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]"></div>
-        <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-gold/5 blur-[80px]"></div>
+      <section className="relative overflow-hidden hero-light border-b border-gold/15 py-16 sm:py-20">
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="eyebrow">Loan Products</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-white sm:text-5xl">
-              Twenty-plus instruments, <span className="gold-text">one private desk.</span>
+            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl">
+              The right loan for <span className="gold-text">whatever&apos;s next.</span>
             </h1>
-            <p className="mt-4 max-w-2xl text-base text-white/70">
-              Curated lending — placed across India's leading banks & NBFCs. Select a product to see
-              how we structure it, what it can save you and which lenders fit your profile.
+            <p className="mt-4 max-w-2xl text-base text-muted-foreground">
+              Home, property, business, personal and vehicle finance — {PRODUCTS.length} options,
+              each matched to the lender that suits your profile best.
             </p>
-            <div className="mt-6 flex items-center gap-6">
-              <div>
-                <span className="text-3xl font-extrabold text-gold">₹500 Cr+</span>
-                <span className="ml-2 text-sm text-white/50">Disbursed to date</span>
-              </div>
-            </div>
           </Reveal>
         </div>
       </section>
 
-      {/* Quick Tabs */}
+      {/* Start with a goal */}
       <Section>
         <Reveal>
           <SectionHeading
-            eyebrow="Quick View"
-            title="Explore by product"
-            description="Select a product to see highlights and key features at a glance."
+            eyebrow="Start With Your Goal"
+            title="What are you planning?"
+            description="Pick a goal to jump straight to the right loan."
           />
         </Reveal>
-        <Reveal delay={80}>
-          <ServiceTabs />
-        </Reveal>
+        <LoanGoals />
       </Section>
 
-      {/* All Products by Group */}
-      {PRODUCT_GROUPS.map((group, gi) => (
-        <Section key={group.name} className={gi === 0 ? "pt-0" : ""}>
+      {/* All products by group */}
+      {PRODUCT_GROUPS.map((group) => (
+        <Section key={group.name} className="pt-0">
           <Reveal>
             <SectionHeading
               eyebrow={group.name}
@@ -79,41 +69,42 @@ function ServicesPage() {
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
             {PRODUCTS.filter((p) => p.group === group.name).map((product, i) => (
               <Reveal key={product.slug} delay={i * 60}>
-                <div
+                <article
                   id={product.slug}
-                  className="group relative h-full scroll-mt-28 overflow-hidden rounded-2xl border border-border bg-white p-7 transition-all duration-400 hover:-translate-y-1 hover:border-gold/25 hover:shadow-[var(--shadow-gold)]"
+                  className="group relative h-full scroll-mt-28 overflow-hidden rounded-2xl border border-border bg-white p-7 transition-all duration-500 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]"
                 >
-                  {/* Gold accent corner */}
-                  <div className="absolute top-0 right-0 h-20 w-20 rounded-full bg-gold/5 blur-[30px] transition-all group-hover:bg-gold/10"></div>
+                  {/* Brand bar that sweeps in on hover */}
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-navy via-navy-soft to-gold transition-transform duration-500 group-hover:scale-x-100"
+                  />
 
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start gap-4">
+                    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:animate-[gcs-wiggle_700ms_ease-in-out] group-hover:bg-gold group-hover:text-navy">
+                      <product.icon className="h-6 w-6" />
+                    </span>
                     <div>
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/20 bg-gold/5 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-gold uppercase">
-                        {product.code}
-                      </span>
-                      <h3 className="mt-2 text-xl font-extrabold">{product.title}</h3>
-                      <p className="mt-1 text-sm text-gold font-semibold">{product.tagline}</p>
+                      <h3 className="text-xl font-extrabold text-navy">{product.title}</h3>
+                      <p className="mt-1 text-sm font-semibold text-gold-dark">{product.tagline}</p>
                     </div>
                   </div>
 
-                  {/* Facts */}
-                  <div className="mt-4 flex flex-wrap gap-3">
+                  <div className="mt-5 flex flex-wrap gap-2.5">
                     {product.facts.map((fact) => (
                       <div
                         key={fact.label}
-                        className="rounded-lg border border-gold/10 bg-gold/[0.03] px-3 py-1.5"
+                        className="rounded-lg border border-border bg-bg-light px-3 py-1.5"
                       >
-                        <span className="block text-[10px] font-bold text-muted-foreground uppercase">
+                        <span className="block text-[10px] font-bold tracking-wide text-muted-foreground uppercase">
                           {fact.label}
                         </span>
-                        <span className="block text-sm font-bold text-foreground">{fact.value}</span>
+                        <span className="block text-sm font-bold text-navy">{fact.value}</span>
                       </div>
                     ))}
                   </div>
 
                   <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{product.about}</p>
 
-                  {/* Features */}
                   <ul className="mt-4 space-y-2">
                     {product.features.slice(0, 4).map((f) => (
                       <li key={f} className="flex items-start gap-2.5 text-sm">
@@ -123,13 +114,24 @@ function ServicesPage() {
                     ))}
                   </ul>
 
-                  <Link
-                    to="/contact"
-                    className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-gold transition-all duration-300 hover:gap-3"
-                  >
-                    Enquire about {product.title} <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
+                  <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
+                    <Link
+                      to="/contact"
+                      className="group/link inline-flex items-center gap-2 text-sm font-bold text-navy transition-colors hover:text-gold-dark"
+                    >
+                      Talk to us about this
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-1" />
+                    </Link>
+                    <Link
+                      to="/tools"
+                      hash="eligibility"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-navy"
+                    >
+                      <Calculator className="h-3.5 w-3.5" />
+                      Check eligibility
+                    </Link>
+                  </div>
+                </article>
               </Reveal>
             ))}
           </div>
@@ -139,23 +141,24 @@ function ServicesPage() {
       {/* CTA */}
       <Section className="pt-0">
         <Reveal>
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-navy via-navy-soft to-navy p-8 sm:p-12 text-center">
+          <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
-            <h3 className="relative text-2xl font-extrabold text-white sm:text-3xl">
-              Not sure which product fits? <span className="gold-text">Let's talk.</span>
+            <h3 className="relative font-heading text-2xl font-bold text-navy sm:text-3xl">
+              Not sure which one fits? <span className="gold-text">Let&apos;s talk.</span>
             </h3>
-            <p className="relative mt-3 text-sm text-white/70">
+            <p className="relative mt-3 text-sm text-muted-foreground">
               Call {CONTACT.phone} · {CONTACT.hours}
             </p>
             <div className="relative mt-6 flex flex-wrap justify-center gap-3">
-              <Link to="/contact" className="gold-btn py-3.5 text-base">
-                Get Free Consultation <ArrowRight className="h-4 w-4" />
+              <Link to="/contact" className="gold-btn group py-3.5 text-base">
+                Get Free Consultation
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
               <a
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-white/20 px-6 py-3.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"
               >
                 WhatsApp Us
               </a>
