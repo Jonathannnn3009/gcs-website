@@ -42,59 +42,94 @@ const PROCESS = [
   { num: "04", title: "Sanction & Support", body: "Funds reach your account, with support continuing after disbursal." },
 ];
 
+function productCode(title: string): string {
+  const skip = new Set(["against", "and", "for", "of", "the", "on"]);
+  return title
+    .split(/\s+/)
+    .filter((w) => !skip.has(w.toLowerCase()))
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 4);
+}
+
 function ProductDetailPage() {
   const { slug } = Route.useParams();
   const product = getProduct(slug);
   if (!product) return <NotFoundBlock />;
   const related = PRODUCTS.filter((p) => p.group === product.group && p.slug !== product.slug).slice(0, 3);
   const fallbackRelated = related.length > 0 ? related : PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
+  const code = productCode(product.title);
 
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden hero-light border-b border-gold/15 py-14 sm:py-20">
-        <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-bg-light py-10 sm:py-14">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-              <Link to="/" className="hover:text-navy">Home</Link>
-              <span className="text-gold">/</span>
-              <Link to="/services" className="hover:text-navy">Services</Link>
-              <span className="text-gold">/</span>
-              <span className="text-navy">{product.title}</span>
-            </p>
+            <div className="grid gap-0 overflow-hidden rounded-3xl lg:grid-cols-[1.4fr_1fr]">
+              {/* Navy card */}
+              <div className="navy-panel relative overflow-hidden p-8 sm:p-12">
+                <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
+                <p className="relative flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/50 uppercase">
+                  <Link to="/" className="hover:text-white">Home</Link>
+                  <span className="text-gold">/</span>
+                  <Link to="/services" className="hover:text-white">Services</Link>
+                  <span className="text-gold">/</span>
+                  <span className="text-white">{product.title}</span>
+                </p>
 
-            <div className="mt-5 flex items-start gap-4">
-              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25">
-                <product.icon className="h-7 w-7" />
-              </span>
-              <div>
-                <h1 className="text-3xl font-extrabold text-navy sm:text-5xl">{product.title}</h1>
-                <p className="mt-1.5 text-base font-semibold text-gold-dark">{product.tagline}</p>
-              </div>
-            </div>
-
-            <div className="mt-7 flex flex-wrap gap-3">
-              {product.facts.map((fact) => (
-                <div key={fact.label} className="rounded-xl border border-gold/15 bg-white px-4 py-2.5">
-                  <span className="block text-[10px] font-bold tracking-wide text-muted-foreground uppercase">{fact.label}</span>
-                  <span className="block text-sm font-bold text-navy">{fact.value}</span>
+                <div className="relative mt-6 flex items-center gap-3">
+                  <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-gold/30 text-gold-light">
+                    <product.icon className="h-7 w-7" />
+                  </span>
+                  <span className="rounded-full border border-gold/30 px-3 py-1 text-xs font-bold tracking-wide text-gold-light">
+                    {code}
+                  </span>
                 </div>
-              ))}
-            </div>
 
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link to="/contact" className="gold-btn py-3.5 text-base">
-                Apply for {product.title} <ArrowRight className="h-4 w-4" />
-              </Link>
-              <a
-                href={CONTACT.whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"
-              >
-                <MessageCircle className="h-4 w-4" /> Message on WhatsApp
-              </a>
+                <h1 className="relative mt-5 font-heading text-4xl font-bold text-white sm:text-5xl">{product.title}</h1>
+                <p className="relative mt-2 font-heading text-lg italic text-gold-light">{product.tagline}</p>
+
+                <div className="relative mt-8 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/10 pt-6">
+                  {product.facts.map((fact) => (
+                    <div key={fact.label}>
+                      <span className="block text-[10px] font-bold tracking-wide text-white/40 uppercase">{fact.label}</span>
+                      <span className="block text-sm font-bold text-gold-light">{fact.value}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="relative mt-8 flex flex-wrap items-center gap-5">
+                  <Link to="/contact" className="gold-btn py-3.5 text-base">
+                    Apply for {code} <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <a
+                    href={CONTACT.whatsappLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm font-bold text-white/70 transition-colors hover:text-white"
+                  >
+                    or message on WhatsApp <ArrowRight className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Decorative side panel */}
+              <div className="relative hidden items-center justify-center overflow-hidden bg-gold-pale/40 lg:flex">
+                <div className="absolute h-72 w-72 rounded-full border border-gold/20" />
+                <div className="absolute h-52 w-52 rounded-full border border-gold/25" />
+                <div className="relative flex flex-col items-center gap-4 text-center">
+                  <span className="font-heading text-sm italic text-gold-dark">01</span>
+                  <span className="grid h-20 w-20 place-items-center rounded-2xl navy-panel text-gold-light shadow-lg">
+                    <product.icon className="h-9 w-9" />
+                  </span>
+                  <div>
+                    <p className="font-heading text-lg font-bold text-navy">{product.title}</p>
+                    <p className="text-xs font-bold tracking-wide text-gold-dark">{code}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </Reveal>
         </div>
