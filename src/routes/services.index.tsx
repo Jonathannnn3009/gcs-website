@@ -25,21 +25,66 @@ export const Route = createFileRoute("/services/")({
   component: ServicesPage,
 });
 
+const SERVICE_STATS = [
+  { value: `${PRODUCTS.length}+`, label: "Loan Products" },
+  { value: "45+", label: "Bank & NBFC Partners" },
+  { value: "100%", label: "Transparent Process" },
+  { value: "Since 2017", label: "Active DSA" },
+];
+
 function ServicesPage() {
+  const groupsWithCounts = PRODUCT_GROUPS.map((g) => ({
+    ...g,
+    count: PRODUCTS.filter((p) => p.group === g.name).length,
+  }));
+
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden hero-light border-b border-gold/15 py-16 sm:py-20">
+      <section className="relative overflow-hidden bg-bg-light py-14 sm:py-20">
+        <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Reveal>
-            <p className="eyebrow">Loan Products</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl">
-              The right loan for <span className="gold-text">whatever&apos;s next.</span>
-            </h1>
-            <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Home, property, business, personal and vehicle finance — {PRODUCTS.length} options,
-              each matched to the lender that suits your profile best.
+          <Reveal className="text-center">
+            <p className="flex items-center justify-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+              <Link to="/" className="hover:text-navy">Home</Link>
+              <span className="text-gold">/</span>
+              <span className="text-navy">Services</span>
             </p>
+            <p className="eyebrow mt-5">Our Loan Suite</p>
+            <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl">
+              {PRODUCTS.length}-plus instruments —<br />
+              <span className="gold-text-static italic">one private desk.</span>
+            </h1>
+            <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
+              Curated across 45+ banks and NBFCs — matched to your profile by a senior advisor,
+              not a call-centre script.
+            </p>
+          </Reveal>
+
+          {/* Category pills */}
+          <Reveal delay={100} className="mt-8 flex flex-wrap justify-center gap-2.5">
+            {groupsWithCounts.map((g) => (
+              <a
+                key={g.name}
+                href={`#${g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold text-navy transition-colors hover:border-gold/40"
+              >
+                {g.name}
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-gold-pale/70 text-[11px] font-bold text-gold-dark">
+                  {g.count}
+                </span>
+              </a>
+            ))}
+          </Reveal>
+
+          {/* Stats */}
+          <Reveal delay={180} className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-4">
+            {SERVICE_STATS.map((s) => (
+              <div key={s.label} className="rounded-2xl border border-gold/15 bg-white p-6 text-center">
+                <p className="font-heading text-2xl font-bold text-navy sm:text-3xl">{s.value}</p>
+                <p className="mt-1 text-xs font-bold tracking-wide text-gold-dark uppercase">{s.label}</p>
+              </div>
+            ))}
           </Reveal>
         </div>
       </section>
@@ -58,7 +103,11 @@ function ServicesPage() {
 
       {/* All products by group */}
       {PRODUCT_GROUPS.map((group) => (
-        <Section key={group.name} className="pt-0">
+        <Section
+          key={group.name}
+          id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
+          className="pt-0 scroll-mt-24"
+        >
           <Reveal>
             <SectionHeading
               eyebrow={group.name}
