@@ -95,10 +95,10 @@ export function SiteHeader() {
                         className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
                         style={{ animation: "gcs-scale-in 200ms ease both" }}
                       >
-                        <div className="w-[720px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
+                        <div className="w-[860px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
                           <div className="grid grid-cols-[220px_1fr]">
                             {/* Left panel */}
-                            <div className="panel-light p-5">
+                            <div className="panel-light p-5 flex flex-col justify-center">
                               <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Loan Products</p>
                               <p className="mt-2 text-base font-extrabold leading-tight">
                                 Loans for every<br />plan you make.
@@ -115,7 +115,7 @@ export function SiteHeader() {
                               </Link>
                             </div>
                             {/* Right panel — every product, flat, together */}
-                            <div className="grid max-h-[420px] grid-cols-2 gap-1 overflow-y-auto p-4">
+                            <div className="grid grid-cols-3 gap-1 p-4">
                               {PRODUCTS.map((product) => (
                                 <Link
                                   key={product.slug}
