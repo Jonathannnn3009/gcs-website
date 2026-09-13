@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Calculator, MapPin, TrendingUp } from "lucide-react";
+import { ArrowRight, Calculator, MapPin } from "lucide-react";
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { CASE_STUDIES, getCaseStudy } from "@/data/case-studies";
@@ -55,8 +55,9 @@ function CaseStudyDetailPage() {
   if (!study) return <NotFoundBlock />;
 
   const product = getProduct(study.productSlug);
-  const index = CASE_STUDIES.findIndex((c) => c.slug === slug);
-  const next = CASE_STUDIES[(index + 1) % CASE_STUDIES.length] ?? study;
+  const similar = CASE_STUDIES.filter(
+    (c) => c.group === study.group && c.slug !== study.slug,
+  ).slice(0, 3);
 
   return (
     <>
@@ -207,29 +208,43 @@ function CaseStudyDetailPage() {
         </div>
       </Section>
 
-      {/* Next case study */}
-      <Section className="pt-0">
-        <Reveal>
-          <Link
-            to="/case-studies/$slug"
-            params={{ slug: next.slug }}
-            className="group flex items-center justify-between gap-4 rounded-2xl border border-border bg-white p-6 transition-all hover:border-gold/40 hover:shadow-[var(--shadow-lift)]"
-          >
-            <div className="flex items-center gap-4">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark">
-                <TrendingUp className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
-                  Next case study
-                </p>
-                <p className="mt-0.5 font-heading text-base font-bold text-navy">{next.headline}</p>
-              </div>
-            </div>
-            <ArrowRight className="h-5 w-5 shrink-0 text-gold-dark transition-transform group-hover:translate-x-1.5" />
-          </Link>
-        </Reveal>
-      </Section>
+      {/* Similar case studies */}
+      {similar.length > 0 && (
+        <Section className="pt-0">
+          <Reveal>
+            <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
+              Similar Case Studies
+            </p>
+          </Reveal>
+          <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {similar.map((c, i) => (
+              <Reveal key={c.slug} delay={i * 60} className="h-full">
+                <Link
+                  to="/case-studies/$slug"
+                  params={{ slug: c.slug }}
+                  className="group flex h-full flex-col gap-3 rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]"
+                >
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
+                    <c.icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
+                      {c.category}
+                    </p>
+                    <p className="mt-1.5 font-heading text-base leading-snug font-bold text-navy">
+                      {c.headline}
+                    </p>
+                  </div>
+                  <span className="mt-auto inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark">
+                    Read the case
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
+                  </span>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </Section>
+      )}
     </>
   );
 }

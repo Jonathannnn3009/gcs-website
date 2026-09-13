@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Calculator } from "lucide-react";
 import { Reveal } from "@/components/reveal";
-import { CASE_STUDIES, CASE_STUDY_GROUPS } from "@/data/case-studies";
+import { CASE_STUDIES, CASE_STUDY_GROUPS, type CaseStudyGroup } from "@/data/case-studies";
 import { CONTACT } from "@/data/site";
+
+const groupId = (group: CaseStudyGroup) => group.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
 export const Route = createFileRoute("/case-studies/")({
   head: () => ({
@@ -49,6 +51,22 @@ function CaseStudiesPage() {
               situations across our network of banks and NBFCs.
             </p>
           </Reveal>
+
+          <Reveal delay={80} className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
+            {CASE_STUDY_GROUPS.map((group) => {
+              const count = CASE_STUDIES.filter((c) => c.group === group).length;
+              return (
+                <a
+                  key={group}
+                  href={`#${groupId(group)}`}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-gold/25 bg-white px-4 py-2 text-xs font-bold text-navy transition-all hover:-translate-y-0.5 hover:border-gold hover:bg-gold-pale/30"
+                >
+                  {group}
+                  <span className="text-gold-dark">{count}</span>
+                </a>
+              );
+            })}
+          </Reveal>
         </div>
       </section>
 
@@ -58,7 +76,7 @@ function CaseStudiesPage() {
           {CASE_STUDY_GROUPS.map((group, gi) => {
             const cases = CASE_STUDIES.filter((c) => c.group === group);
             return (
-              <div key={group}>
+              <div key={group} id={groupId(group)} className="scroll-mt-24">
                 <Reveal delay={gi * 80}>
                   <div className="flex items-center gap-3">
                     <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
