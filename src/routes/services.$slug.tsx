@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, Download, FileCheck2, FileText, Landmark, Mail, MessageCircle, Phone } from "lucide-react";
+import { ArrowRight, Check, FileCheck2, FileText, Landmark, Mail, MessageCircle, Phone } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
+import { ChecklistGate } from "@/components/checklist-gate";
 import { PRODUCTS, getProduct } from "@/data/products";
 import { CONTACT } from "@/data/site";
 
@@ -202,13 +203,7 @@ function ProductDetailPage() {
                     ))}
                   </ul>
                   {CHECKLIST_PDF[product.slug] && (
-                    <a
-                      href={CHECKLIST_PDF[product.slug]}
-                      download
-                      className="mt-5 flex items-center justify-center gap-2 rounded-lg border border-gold/30 py-3 text-sm font-bold text-gold-light transition-colors hover:bg-white/5"
-                    >
-                      <Download className="h-4 w-4" /> Download Checklist (PDF)
-                    </a>
+                    <ChecklistGate pdfHref={CHECKLIST_PDF[product.slug]} productTitle={product.title} />
                   )}
                 </div>
               </Reveal>
