@@ -68,7 +68,7 @@ export const PRODUCTS: Product[] = [
       "Whether it's a ready flat, an under-construction project, a self-build or a plot purchase, we shortlist the lender likely to sanction fastest for your profile — and push a stalled or declined file to someone better placed to say yes.",
     features: [
       "Choice of floating or fixed-rate options",
-      "Pre-approved sanctions so you can close a deal fast",
+      "Pre-approved offers checked where your bank runs such a programme",
       "Balance transfer with top-up if a better rate appears later",
       "Home-loan-linked overdraft (offset account) to trim interest",
       "Joint-applicant structuring for tax breaks under 80C and 24(b)",

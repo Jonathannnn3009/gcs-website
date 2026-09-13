@@ -346,7 +346,7 @@ function HomePage() {
           <SectionHeading
             eyebrow="Our Network"
             title="Banks in our network"
-            description="We work with major Banks and NBFCs so you get the best deal without the legwork."
+            description="We compare offers across major Banks and NBFCs so you can choose with confidence, without the legwork."
             align="center"
           />
         </Reveal>

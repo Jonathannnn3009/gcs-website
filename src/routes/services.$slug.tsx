@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, FileCheck2, FileText, Landmark, Mail, MessageCircle, Phone } from "lucide-react";
+import { ArrowRight, Check, Download, FileCheck2, FileText, Landmark, Mail, MessageCircle, Phone } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { PRODUCTS, getProduct } from "@/data/products";
@@ -41,6 +41,13 @@ const PROCESS = [
   { num: "03", icon: FileCheck2, title: "Documentation", body: "We structure the paperwork the way underwriters actually underwrite." },
   { num: "04", icon: Check, title: "Sanction & Support", body: "Funds reach your account, with support continuing after disbursal." },
 ];
+
+const CHECKLIST_PDF: Record<string, string> = {
+  "home-loan": "/checklists/home-loan-checklist.pdf",
+  "loan-against-property": "/checklists/loan-against-property-checklist.pdf",
+  "business-loan": "/checklists/business-loan-checklist.pdf",
+  "personal-loan": "/checklists/personal-loan-checklist.pdf",
+};
 
 function productCode(title: string): string {
   const skip = new Set(["against", "and", "for", "of", "the", "on"]);
@@ -194,6 +201,15 @@ function ProductDetailPage() {
                       </li>
                     ))}
                   </ul>
+                  {CHECKLIST_PDF[product.slug] && (
+                    <a
+                      href={CHECKLIST_PDF[product.slug]}
+                      download
+                      className="mt-5 flex items-center justify-center gap-2 rounded-lg border border-gold/30 py-3 text-sm font-bold text-gold-light transition-colors hover:bg-white/5"
+                    >
+                      <Download className="h-4 w-4" /> Download Checklist (PDF)
+                    </a>
+                  )}
                 </div>
               </Reveal>
             </div>
