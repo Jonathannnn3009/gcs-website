@@ -10,6 +10,7 @@ import {
   Building2,
   Landmark,
   Home,
+  Gauge,
   ChevronDown,
   type LucideIcon,
 } from "lucide-react";
@@ -25,6 +26,7 @@ import { WorkingCapitalCalculator } from "@/components/working-capital-calculato
 import { CgtmseCalculator } from "@/components/cgtmse-calculator";
 import { LapLtvCalculator } from "@/components/lap-ltv-calculator";
 import { RentVsBuyCalculator } from "@/components/rent-vs-buy-calculator";
+import { CreditScoreEstimator } from "@/components/credit-score-estimator";
 
 export const Route = createFileRoute("/tools")({
   head: () => ({
@@ -33,12 +35,12 @@ export const Route = createFileRoute("/tools")({
       {
         name: "description",
         content:
-          "Ten free calculators — EMI, eligibility, stamp duty, prepayment, balance transfer, loan comparison, working capital, CGTMSE fee, LAP eligibility and rent vs. buy.",
+          "Eleven free calculators — EMI, eligibility, stamp duty, prepayment, balance transfer, loan comparison, working capital, CGTMSE fee, LAP eligibility, rent vs. buy and a credit score estimator.",
       },
       { property: "og:title", content: "Loan Calculators & Tools" },
       {
         property: "og:description",
-        content: "Know your numbers, then apply with confidence. Ten free calculators covering every loan on our desk.",
+        content: "Know your numbers, then apply with confidence. Eleven free calculators covering every loan on our desk.",
       },
     ],
   }),
@@ -64,6 +66,7 @@ const TOOLS: Tool[] = [
   { id: "cgtmse", icon: Landmark, label: "CGTMSE Guarantee Fee", sub: "Fee on a collateral-free business loan", render: () => <CgtmseCalculator /> },
   { id: "lap-ltv", icon: FileText, label: "Loan Against Property LTV", sub: "What your property can unlock", render: () => <LapLtvCalculator /> },
   { id: "rent-vs-buy", icon: Home, label: "Rent vs. Buy", sub: "Which costs less over time", render: () => <RentVsBuyCalculator /> },
+  { id: "credit-score", icon: Gauge, label: "Credit Score Estimator", sub: "Indicative range, not a bureau pull", render: () => <CreditScoreEstimator /> },
 ];
 
 const TOOL_IDS = TOOLS.map((t) => t.id);
@@ -114,8 +117,8 @@ function ToolsPage() {
               Know Your Numbers. <span className="gold-text">Then Apply with Confidence.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Ten free calculators covering every loan on our desk — from EMI and eligibility to
-              CGTMSE fees and a rent-vs-buy comparison. Tap one to open it. No signup required.
+              Eleven free calculators covering every loan on our desk — from EMI and eligibility to
+              CGTMSE fees, rent-vs-buy and a credit score estimator. Tap one to open it. No signup required.
             </p>
           </Reveal>
         </div>

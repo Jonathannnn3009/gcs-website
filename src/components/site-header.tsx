@@ -25,6 +25,7 @@ const TOOL_ITEMS = [
   { label: "CGTMSE Guarantee Fee", desc: "Fee on a collateral-free loan", hash: "cgtmse" },
   { label: "Loan Against Property LTV", desc: "What your property can unlock", hash: "lap-ltv" },
   { label: "Rent vs. Buy", desc: "Which costs less over time", hash: "rent-vs-buy" },
+  { label: "Credit Score Estimator", desc: "Indicative range, not a bureau pull", hash: "credit-score" },
 ];
 
 export function SiteHeader() {
