@@ -153,7 +153,7 @@ function HomePage() {
         {/* Auto-toggling illustration backdrop, faded straight into the page background */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 hidden w-[62%] [mask-image:radial-gradient(ellipse_68%_70%_at_62%_50%,black_45%,transparent_88%)] lg:block"
+          className="pointer-events-none absolute inset-y-0 right-0 hidden w-[62%] [mask-image:radial-gradient(ellipse_55%_62%_at_34%_46%,black_40%,transparent_85%)] lg:block"
         >
           <ConsultationBackdrop className="opacity-90" />
         </div>
