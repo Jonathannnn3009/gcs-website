@@ -15,7 +15,7 @@ export const LOCATIONS: LocationContent[] = [
     city: "Mumbai",
     metaTitle: "Loan Consultant in Mumbai | Home, Business & Property Loans | Growth Capital Services",
     metaDescription:
-      "Growth Capital Services is based in Ghatkopar West, Mumbai — home loans, business loans, loan against property and more, arranged across 45+ Banks and NBFCs.",
+      "Growth Capital Services is based in Ghatkopar West, Mumbai — home loans, business loans, loan against property and more, arranged across 75+ Banks and NBFCs.",
     intro:
       "Our advisory office sits on the Andheri-Ghatkopar Road in Ghatkopar West, in the middle of Mumbai's western suburbs. If you're anywhere from Andheri to Mulund, Bandra to Chembur, a senior advisor is a short trip away — or a phone call, if that's easier.",
     hasOffice: true,
@@ -41,7 +41,7 @@ export const LOCATIONS: LocationContent[] = [
     city: "Thane",
     metaTitle: "Loan Consultant in Thane | Home, Business & Property Loans | Growth Capital Services",
     metaDescription:
-      "Home loans, business loans, loan against property and more for Thane residents and businesses — arranged across 45+ Banks and NBFCs, with digital documentation and doorstep support.",
+      "Home loans, business loans, loan against property and more for Thane residents and businesses — arranged across 75+ Banks and NBFCs, with digital documentation and doorstep support.",
     intro:
       "We don't have a branch counter in Thane — most of our Thane clients never needed one. Your file moves through us digitally from wherever you are, with a senior advisor on call throughout.",
     hasOffice: false,
@@ -58,7 +58,7 @@ export const LOCATIONS: LocationContent[] = [
       },
       {
         q: "Which lenders do you work with for Thane customers?",
-        a: "The same 45+ Bank and NBFC network we use everywhere — lender fit depends on your profile and loan type, not your address.",
+        a: "The same 75+ Bank and NBFC network we use everywhere — lender fit depends on your profile and loan type, not your address.",
       },
     ],
   },
@@ -67,7 +67,7 @@ export const LOCATIONS: LocationContent[] = [
     city: "Navi Mumbai",
     metaTitle: "Loan Consultant in Navi Mumbai | Home, Business & Property Loans | Growth Capital Services",
     metaDescription:
-      "Home loans, business loans, loan against property and more for Navi Mumbai residents and businesses — arranged across 45+ Banks and NBFCs, with digital documentation and doorstep support.",
+      "Home loans, business loans, loan against property and more for Navi Mumbai residents and businesses — arranged across 75+ Banks and NBFCs, with digital documentation and doorstep support.",
     intro:
       "From Vashi to Kharghar to Panvel, we handle Navi Mumbai files the same way we handle everything else — digitally, with a named advisor who stays on the case start to finish.",
     hasOffice: false,
@@ -93,7 +93,7 @@ export const LOCATIONS: LocationContent[] = [
     city: "Pune",
     metaTitle: "Loan Consultant in Pune | Home, Business & Property Loans | Growth Capital Services",
     metaDescription:
-      "Home loans, business loans, loan against property and more for Pune residents and businesses — arranged across 45+ Banks and NBFCs, with digital documentation and doorstep support.",
+      "Home loans, business loans, loan against property and more for Pune residents and businesses — arranged across 75+ Banks and NBFCs, with digital documentation and doorstep support.",
     intro:
       "Pune is the farthest city we actively serve, and it works because almost nothing in the process needs you to be in the same room as us — documents, discussion and disbursal all move digitally.",
     hasOffice: false,

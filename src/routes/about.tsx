@@ -26,7 +26,7 @@ export const Route = createFileRoute("/about")({
 
 const STATS = [
   { value: "2017", label: "Established" },
-  { value: "45+", label: "Bank & NBFC Partners" },
+  { value: "75+", label: "Bank & NBFC Partners" },
   { value: "25+", label: "Loan Products" },
   { value: "100%", label: "Transparent Process" },
 ];

@@ -60,7 +60,7 @@ const HERO_POINTS = [
 ];
 
 const TRUST = [
-  { icon: Landmark, label: "45+ Banking Partners" },
+  { icon: Landmark, label: "75+ Banking Partners" },
   { icon: Timer, label: "Faster Sanctions" },
   { icon: TrendingUp, label: "High-Ticket Expertise" },
   { icon: Sparkles, label: "Custom-built Loans" },

@@ -27,7 +27,7 @@ export const Route = createFileRoute("/services/")({
 
 const SERVICE_STATS = [
   { value: `${PRODUCTS.length}+`, label: "Loan Products" },
-  { value: "45+", label: "Bank & NBFC Partners" },
+  { value: "75+", label: "Bank & NBFC Partners" },
   { value: "100%", label: "Transparent Process" },
   { value: "Since 2017", label: "Active DSA" },
 ];
@@ -56,7 +56,7 @@ function ServicesPage() {
               <span className="gold-text-static italic">one private desk.</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-              Curated across 45+ banks and NBFCs — matched to your profile by a senior advisor,
+              Curated across 75+ banks and NBFCs — matched to your profile by a senior advisor,
               not a call-centre script.
             </p>
           </Reveal>

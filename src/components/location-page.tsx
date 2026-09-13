@@ -142,7 +142,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
         <Reveal>
           <SectionHeading
             eyebrow={`Loans We Arrange in ${location.city}`}
-            title="The same 45+ lender network, wherever you're based."
+            title="The same 75+ lender network, wherever you're based."
             description={`Every product below is available to ${location.city} clients through the same process — profile review, lender matching, documentation and disbursal.`}
           />
         </Reveal>

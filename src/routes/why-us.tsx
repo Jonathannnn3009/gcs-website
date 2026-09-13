@@ -55,7 +55,7 @@ const PILLARS = [
 ];
 
 const ADVANTAGES = [
-  "We compare live policies across 45+ lenders",
+  "We compare live policies across 75+ lenders",
   "Zero advisory fee — we're paid by the lender",
   "Daily file tracking from login to disbursal",
   "Complex profiles handled that banks return",
