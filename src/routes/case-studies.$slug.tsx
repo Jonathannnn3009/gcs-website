@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Calculator, MapPin, ShieldCheck, TrendingUp } from "lucide-react";
+import { ArrowRight, Calculator, MapPin, TrendingUp } from "lucide-react";
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { CASE_STUDIES, getCaseStudy } from "@/data/case-studies";
@@ -132,7 +132,7 @@ function CaseStudyDetailPage() {
             {STAGES.map((stage, i) => (
               <Reveal key={stage.key} delay={i * 80}>
                 <div className="flex gap-5">
-                  <span className="font-heading shrink-0 text-3xl font-extrabold text-gold-pale">
+                  <span className="font-heading shrink-0 text-3xl font-extrabold text-gold-dark">
                     {stage.num}
                   </span>
                   <div>
@@ -158,15 +158,6 @@ function CaseStudyDetailPage() {
               </div>
             </Reveal>
 
-            <div className="flex items-start gap-2.5 rounded-xl border border-border bg-secondary/40 p-4 text-xs leading-relaxed text-muted-foreground">
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
-              <span>
-                This is an illustrative scenario based on situations we commonly structure, not a
-                verbatim client record. Loan approval, amount and terms are subject to the
-                respective lender's eligibility criteria, policies, documentation and final credit
-                assessment.
-              </span>
-            </div>
           </div>
 
           {/* RIGHT: sticky CTA card */}

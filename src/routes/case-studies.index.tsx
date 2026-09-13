@@ -45,8 +45,8 @@ function CaseStudiesPage() {
               <span className="gold-text-static italic">and how we routed it.</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-              Nine lending scenarios GCS has structured across our Bank &amp; NBFC network: the
-              challenge, how it was routed, and where it landed.
+              From a first rejection to a sanctioned loan — how we've structured real lending
+              situations across our network of banks and NBFCs.
             </p>
           </Reveal>
         </div>
@@ -78,7 +78,7 @@ function CaseStudiesPage() {
                         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent to-gold-pale/50 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
                         <div className="relative flex items-start justify-between gap-3">
-                          <span className="font-heading text-3xl font-extrabold text-gold-pale">
+                          <span className="font-heading text-3xl font-extrabold text-gold-dark">
                             {String(i + 1).padStart(2, "0")}
                           </span>
                           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out]">
@@ -110,14 +110,6 @@ function CaseStudiesPage() {
           })}
         </div>
 
-        <Reveal delay={CASE_STUDY_GROUPS.length * 80}>
-          <div className="mt-10 rounded-xl border border-gold/15 bg-gold-pale/20 px-5 py-4 text-center text-xs text-muted-foreground sm:text-left">
-            These scenarios are illustrative, based on situations we commonly structure — not
-            verbatim client records. Loan approval, amount and terms are always subject to the
-            respective lender's eligibility criteria, policies, documentation and final credit
-            assessment.
-          </div>
-        </Reveal>
       </section>
 
       {/* CTA */}
