@@ -55,7 +55,7 @@ function productCode(title: string): string {
   return title
     .split(/\s+/)
     .filter((w) => !skip.has(w.toLowerCase()))
-    .map((w) => w[0])
+    .map((w) => w.match(/[A-Za-z]/)?.[0] ?? "")
     .join("")
     .toUpperCase()
     .slice(0, 4);
@@ -65,7 +65,7 @@ function ProductDetailPage() {
   const { slug } = Route.useParams();
   const product = getProduct(slug);
   if (!product) return <NotFoundBlock />;
-  const related = PRODUCTS.filter((p) => p.group === product.group && p.slug !== product.slug).slice(0, 3);
+  const related = PRODUCTS.filter((p) => p.group === product.group && p.slug !== product.slug);
   const fallbackRelated = related.length > 0 ? related : PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
   const code = productCode(product.title);
 
@@ -309,7 +309,11 @@ function ProductDetailPage() {
       {/* Related products */}
       <Section className="pt-0">
         <Reveal>
-          <SectionHeading eyebrow="You Might Also Need" title="Related products" />
+          <SectionHeading
+            eyebrow="You Might Also Need"
+            title={`More in ${product.group}`}
+            description={`Every product Growth Capital Services arranges under ${product.group}, so you can see the full picture before you choose.`}
+          />
         </Reveal>
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           {fallbackRelated.map((p, i) => (
