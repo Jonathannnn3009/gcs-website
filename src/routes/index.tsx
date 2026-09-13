@@ -150,16 +150,20 @@ function HomePage() {
     <>
       {/* ─── HERO ─────────────────────────────────────── */}
       <section className="relative isolate overflow-hidden border-b border-gold/15 bg-background">
-        {/* Auto-toggling illustration backdrop, faded straight into the page background */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 hidden w-[62%] [mask-image:radial-gradient(ellipse_55%_62%_at_34%_46%,black_40%,transparent_85%)] lg:block"
-        >
-          <ConsultationBackdrop className="opacity-90" />
-        </div>
+        <div className="relative mx-auto grid max-w-[90rem] items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-16 lg:px-8 lg:py-20">
+          <div className="relative">
+            {/* Auto-toggling illustration backdrop. The scenes are square (400x400,
+                preserveAspectRatio="slice"), so this stays a square box sized to the
+                real empty gap right of the text — never wide/tall enough to reach the
+                text or the form, at any width from xl up. Hidden below xl, where that
+                gap gets too tight for a legible square crop. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-1/2 right-0 hidden aspect-square w-[clamp(140px,calc(100vw_-_1160px),280px)] -translate-y-1/2 [mask-image:radial-gradient(ellipse_58%_58%_at_50%_50%,black_55%,transparent_92%)] xl:block"
+            >
+              <ConsultationBackdrop className="opacity-90" />
+            </div>
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-16 lg:px-8 lg:py-20">
-          <div>
             <Reveal>
               <img
                 src="/brand/gcs-lockup.png"
