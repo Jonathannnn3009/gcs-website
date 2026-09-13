@@ -13,7 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqsRouteImport } from './routes/faqs'
+import { Route as MumbaiRouteImport } from './routes/mumbai'
+import { Route as NaviMumbaiRouteImport } from './routes/navi-mumbai'
+import { Route as PartnerRouteImport } from './routes/partner'
+import { Route as PuneRouteImport } from './routes/pune'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ThaneRouteImport } from './routes/thane'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as WhyUsRouteImport } from './routes/why-us'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
@@ -39,9 +44,34 @@ const FaqsRoute = FaqsRouteImport.update({
   path: '/faqs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MumbaiRoute = MumbaiRouteImport.update({
+  id: '/mumbai',
+  path: '/mumbai',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NaviMumbaiRoute = NaviMumbaiRouteImport.update({
+  id: '/navi-mumbai',
+  path: '/navi-mumbai',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnerRoute = PartnerRouteImport.update({
+  id: '/partner',
+  path: '/partner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PuneRoute = PuneRouteImport.update({
+  id: '/pune',
+  path: '/pune',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThaneRoute = ThaneRouteImport.update({
+  id: '/thane',
+  path: '/thane',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToolsRoute = ToolsRouteImport.update({
@@ -70,7 +100,12 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/mumbai': typeof MumbaiRoute
+  '/navi-mumbai': typeof NaviMumbaiRoute
+  '/partner': typeof PartnerRoute
+  '/pune': typeof PuneRoute
   '/services': typeof ServicesRouteWithChildren
+  '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/why-us': typeof WhyUsRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -81,6 +116,11 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/mumbai': typeof MumbaiRoute
+  '/navi-mumbai': typeof NaviMumbaiRoute
+  '/partner': typeof PartnerRoute
+  '/pune': typeof PuneRoute
+  '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/why-us': typeof WhyUsRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -92,7 +132,12 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/mumbai': typeof MumbaiRoute
+  '/navi-mumbai': typeof NaviMumbaiRoute
+  '/partner': typeof PartnerRoute
+  '/pune': typeof PuneRoute
   '/services': typeof ServicesRouteWithChildren
+  '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/why-us': typeof WhyUsRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -105,7 +150,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/faqs'
+    | '/mumbai'
+    | '/navi-mumbai'
+    | '/partner'
+    | '/pune'
     | '/services'
+    | '/thane'
     | '/tools'
     | '/why-us'
     | '/services/$slug'
@@ -116,6 +166,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/faqs'
+    | '/mumbai'
+    | '/navi-mumbai'
+    | '/partner'
+    | '/pune'
+    | '/thane'
     | '/tools'
     | '/why-us'
     | '/services/$slug'
@@ -126,7 +181,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/faqs'
+    | '/mumbai'
+    | '/navi-mumbai'
+    | '/partner'
+    | '/pune'
     | '/services'
+    | '/thane'
     | '/tools'
     | '/why-us'
     | '/services/$slug'
@@ -138,7 +198,12 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   FaqsRoute: typeof FaqsRoute
+  MumbaiRoute: typeof MumbaiRoute
+  NaviMumbaiRoute: typeof NaviMumbaiRoute
+  PartnerRoute: typeof PartnerRoute
+  PuneRoute: typeof PuneRoute
   ServicesRoute: typeof ServicesRouteWithChildren
+  ThaneRoute: typeof ThaneRoute
   ToolsRoute: typeof ToolsRoute
   WhyUsRoute: typeof WhyUsRoute
 }
@@ -173,11 +238,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mumbai': {
+      id: '/mumbai'
+      path: '/mumbai'
+      fullPath: '/mumbai'
+      preLoaderRoute: typeof MumbaiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/navi-mumbai': {
+      id: '/navi-mumbai'
+      path: '/navi-mumbai'
+      fullPath: '/navi-mumbai'
+      preLoaderRoute: typeof NaviMumbaiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partner': {
+      id: '/partner'
+      path: '/partner'
+      fullPath: '/partner'
+      preLoaderRoute: typeof PartnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pune': {
+      id: '/pune'
+      path: '/pune'
+      fullPath: '/pune'
+      preLoaderRoute: typeof PuneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/thane': {
+      id: '/thane'
+      path: '/thane'
+      fullPath: '/thane'
+      preLoaderRoute: typeof ThaneRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tools': {
@@ -230,7 +330,12 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   FaqsRoute: FaqsRoute,
+  MumbaiRoute: MumbaiRoute,
+  NaviMumbaiRoute: NaviMumbaiRoute,
+  PartnerRoute: PartnerRoute,
+  PuneRoute: PuneRoute,
   ServicesRoute: ServicesRouteWithChildren,
+  ThaneRoute: ThaneRoute,
   ToolsRoute: ToolsRoute,
   WhyUsRoute: WhyUsRoute,
 }

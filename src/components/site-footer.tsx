@@ -64,6 +64,7 @@ export function SiteFooter() {
                 { to: "/services", label: "Our Services" },
                 { to: "/tools", label: "EMI Calculator" },
                 { to: "/faqs", label: "FAQs" },
+                { to: "/partner", label: "Partner With Us" },
                 { to: "/contact", label: "Contact Us" },
               ].map((l) => (
                 <li key={l.to}>
@@ -138,11 +139,16 @@ export function SiteFooter() {
         <div className="border-t border-gold/15">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
             <span>© {new Date().getFullYear()} Growth Capital Services. All rights reserved.</span>
-            <span className="flex items-center gap-1.5">
+            <span className="flex flex-wrap items-center justify-center gap-1.5">
               Serving
               {CONTACT.cities.map((city, i) => (
                 <span key={city}>
-                  <span className="text-gold/80">{city}</span>
+                  <Link
+                    to={`/${city.toLowerCase().replace(/\s+/g, "-")}`}
+                    className="text-gold/80 transition-colors hover:text-gold"
+                  >
+                    {city}
+                  </Link>
                   {i < CONTACT.cities.length - 1 && " · "}
                 </span>
               ))}

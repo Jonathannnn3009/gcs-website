@@ -10,16 +10,6 @@ export const CONTACT = {
   cities: ["Mumbai", "Thane", "Navi Mumbai", "Pune"],
 };
 
-export const NAV_LINKS = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About Us" },
-  { to: "/services", label: "Our Services", hasDropdown: true },
-  { to: "/tools", label: "Tools", hasDropdown: true },
-  { to: "/bank-partners", label: "Bank Partners" },
-  { to: "/faqs", label: "FAQs" },
-  { to: "/contact", label: "Contact Us" },
-] as const;
-
 export type Service = {
   id: string;
   title: string;
