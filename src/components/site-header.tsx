@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { Menu, Phone, X, ChevronDown, ArrowRight } from "lucide-react";
 import { CONTACT } from "@/data/site";
 import { BrandLogo } from "@/components/brand-logo";
-import { PRODUCTS } from "@/data/products";
+import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -103,45 +103,48 @@ export function SiteHeader() {
                         className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
                         style={{ animation: "gcs-scale-in 200ms ease both" }}
                       >
-                        <div className="w-[960px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
-                          <div className="grid grid-cols-[220px_1fr]">
-                            {/* Left panel */}
-                            <div className="panel-light p-5 flex flex-col justify-center">
-                              <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Loan Products</p>
-                              <p className="mt-2 text-lg font-extrabold leading-tight">
-                                Loans for every<br />plan you make.
-                              </p>
-                              <p className="mt-2 text-xs leading-relaxed opacity-70">
-                                Matched with the right lender from our network of leading Banks & NBFCs.
-                              </p>
-                              <Link
-                                to="/services"
-                                onClick={() => setActiveDropdown(null)}
-                                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-gold transition-colors hover:text-gold-light"
-                              >
-                                Browse the full list <ArrowRight className="h-3 w-3" />
-                              </Link>
-                            </div>
-                            {/* Right panel — every product, flat, together */}
-                            <div className="grid grid-cols-3 gap-1.5 p-5">
-                              {PRODUCTS.map((product) => (
-                                <Link
-                                  key={product.slug}
-                                  to="/services/$slug"
-                                  params={{ slug: product.slug }}
-                                  onClick={() => setActiveDropdown(null)}
-                                  className="group/item flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gold/5"
-                                >
-                                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-gold-pale/50 text-gold-dark transition-colors duration-300 group-hover/item:animate-[gcs-wiggle_600ms_ease-in-out] group-hover/item:bg-gold group-hover/item:text-navy">
-                                    <product.icon className="h-4 w-4" />
-                                  </span>
-                                  <span className="min-w-0">
-                                    <span className="block truncate text-sm font-semibold text-foreground">{product.title}</span>
-                                    <span className="block truncate text-xs text-muted-foreground">{product.tagline}</span>
-                                  </span>
-                                </Link>
-                              ))}
-                            </div>
+                        <div className="w-[1180px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
+                          <div className="flex items-center justify-between border-b border-border px-6 py-3.5">
+                            <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+                              {PRODUCTS.length} Loan Products, By Category
+                            </p>
+                            <Link
+                              to="/services"
+                              onClick={() => setActiveDropdown(null)}
+                              className="inline-flex items-center gap-1.5 text-xs font-bold text-gold transition-colors hover:text-gold-light"
+                            >
+                              Browse the full list <ArrowRight className="h-3 w-3" />
+                            </Link>
+                          </div>
+                          {/* Every product, segregated by category */}
+                          <div className="grid grid-cols-5 gap-4 p-5">
+                            {PRODUCT_GROUPS.map((group) => (
+                              <div key={group.name}>
+                                <p className="border-b border-gold/20 pb-2 text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
+                                  {group.name}
+                                </p>
+                                <div className="mt-2 space-y-0.5">
+                                  {PRODUCTS.filter((p) => p.group === group.name).map((product) => (
+                                    <Link
+                                      key={product.slug}
+                                      to="/services/$slug"
+                                      params={{ slug: product.slug }}
+                                      onClick={() => setActiveDropdown(null)}
+                                      className="group/item flex items-start gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-gold/5"
+                                    >
+                                      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-gold-pale/50 text-gold-dark transition-colors duration-300 group-hover/item:animate-[gcs-wiggle_600ms_ease-in-out] group-hover/item:bg-gold group-hover/item:text-navy">
+                                        <product.icon className="h-3.5 w-3.5" />
+                                      </span>
+                                      <span className="min-w-0 pt-0.5">
+                                        <span className="block text-[13px] leading-snug font-semibold text-foreground">
+                                          {product.title}
+                                        </span>
+                                      </span>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       </div>
