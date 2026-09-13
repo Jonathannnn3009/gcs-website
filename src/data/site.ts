@@ -49,8 +49,7 @@ export const SERVICES: Service[] = [
     id: "business-loan",
     title: "Business Loan & Working Capital",
     tagline: "Fuel day-to-day growth",
-    description:
-      "Secured and unsecured business funding structured around your cash-flow cycle.",
+    description: "Secured and unsecured business funding structured around your cash-flow cycle.",
     highlights: [
       "Cash Credit & Overdraft facility",
       "Unsecured business loans up to ₹75 lakh",
@@ -62,8 +61,7 @@ export const SERVICES: Service[] = [
     id: "personal-loan",
     title: "Personal Loan",
     tagline: "Funds when timing matters",
-    description:
-      "Collateral-free personal finance with quick approvals and minimal documentation.",
+    description: "Collateral-free personal finance with quick approvals and minimal documentation.",
     highlights: [
       "Disbursal in as little as 48 hours",
       "Tenure up to 6 years",
@@ -101,8 +99,7 @@ export const SERVICES: Service[] = [
     id: "balance-transfer",
     title: "Balance Transfer",
     tagline: "Same loan, smaller bill",
-    description:
-      "Move your existing loan to a lower rate with a structured top-up where eligible.",
+    description: "Move your existing loan to a lower rate with a structured top-up where eligible.",
     highlights: [
       "Rate reduction on home, LAP and business loans",
       "Top-up at mortgage pricing",
@@ -237,40 +234,5 @@ export const PAIN_POINTS = [
     question: "How is prompt disbursal ensured?",
     answer:
       "A dedicated relationship manager tracks your file daily through login, sanction, legal, technical and disbursal stages.",
-  },
-];
-
-export const FAQS = [
-  {
-    q: "What documents are required to start a loan application?",
-    a: "Typically KYC (PAN, Aadhaar), income proof (salary slips or ITR with financials), 6-12 months bank statements and property papers where applicable. We share a precise checklist for your specific case.",
-  },
-  {
-    q: "Do you charge customers a fee for your services?",
-    a: "Our advisory is free for customers. We are compensated by the lender on successful disbursal, so our interest is in getting your file approved on the best terms.",
-  },
-  {
-    q: "How long does a home loan sanction take?",
-    a: "Salaried files are usually sanctioned in 3-7 working days once documents are complete. Self-employed and property-backed files typically take 7-15 working days.",
-  },
-  {
-    q: "What is the Smart Saver / Max Gain facility?",
-    a: "It links an overdraft account to your home loan. Surplus money parked in that account reduces daily interest while remaining fully withdrawable.",
-  },
-  {
-    q: "Can I get a loan with a low CIBIL score?",
-    a: "Often yes. Several NBFCs in our network consider profiles below 700 with adjusted pricing. We also guide you on steps to improve your score first where that saves you more.",
-  },
-  {
-    q: "Which locations do you serve?",
-    a: "Mumbai, Thane, Navi Mumbai and Pune, with digital documentation support across Maharashtra.",
-  },
-  {
-    q: "What is a balance transfer with top-up?",
-    a: "You move your existing loan to a lender offering a lower rate and simultaneously borrow additional funds against the same property, usually at home-loan pricing.",
-  },
-  {
-    q: "How do pre-payment and foreclosure charges work?",
-    a: "Floating-rate loans to individuals generally carry no foreclosure charges. Fixed-rate and business loans may attract 2-4%. We confirm the exact terms of your lender before sanction.",
   },
 ];
