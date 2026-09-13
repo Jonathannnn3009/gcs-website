@@ -150,20 +150,19 @@ function HomePage() {
     <>
       {/* ─── HERO ─────────────────────────────────────── */}
       <section className="relative isolate overflow-hidden border-b border-gold/15 bg-background">
+        {/* Auto-toggling illustration wash — spans the full hero at low opacity so it
+            can be large and clearly present without ever competing with the text or
+            the form for space; legibility comes from contrast, not from carving out
+            empty room for it. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hidden opacity-[0.24] lg:block [mask-image:radial-gradient(ellipse_80%_85%_at_58%_45%,black_35%,transparent_88%)]"
+        >
+          <ConsultationBackdrop />
+        </div>
+
         <div className="relative mx-auto grid max-w-[90rem] items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-16 lg:px-8 lg:py-20">
           <div className="relative">
-            {/* Auto-toggling illustration backdrop. The scenes are square (400x400,
-                preserveAspectRatio="slice"), so this stays a square box sized to the
-                real empty gap right of the text — never wide/tall enough to reach the
-                text or the form, at any width from xl up. Hidden below xl, where that
-                gap gets too tight for a legible square crop. */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-1/2 right-0 hidden aspect-square w-[clamp(140px,calc(100vw_-_1160px),280px)] -translate-y-1/2 [mask-image:radial-gradient(ellipse_58%_58%_at_50%_50%,black_55%,transparent_92%)] xl:block"
-            >
-              <ConsultationBackdrop className="opacity-90" />
-            </div>
-
             <Reveal>
               <img
                 src="/brand/gcs-lockup.png"
