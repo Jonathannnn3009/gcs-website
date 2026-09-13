@@ -23,6 +23,7 @@ import { LoanGoals } from "@/components/loan-goals";
 import { ConcernCards } from "@/components/concern-cards";
 import { BankMarquee } from "@/components/bank-marquee";
 import { LeadForm } from "@/components/lead-form";
+import { ConsultationBackdrop } from "@/components/consultation-backdrop";
 import { EmiCalculator } from "@/components/emi-calculator";
 import { CONTACT } from "@/data/site";
 
@@ -149,16 +150,12 @@ function HomePage() {
     <>
       {/* ─── HERO ─────────────────────────────────────── */}
       <section className="relative isolate overflow-hidden border-b border-gold/15 bg-background">
-        {/* City illustration, faded straight into the page background */}
+        {/* Auto-toggling illustration backdrop, faded straight into the page background */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 hidden w-[60%] [mask-image:radial-gradient(ellipse_60%_62%_at_60%_52%,black_25%,transparent_78%)] lg:block"
+          className="pointer-events-none absolute inset-y-0 right-0 hidden w-[62%] [mask-image:radial-gradient(ellipse_68%_70%_at_62%_50%,black_45%,transparent_88%)] lg:block"
         >
-          <img
-            src="/brand/hero-city.jpg"
-            alt=""
-            className="drift h-full w-full object-cover object-bottom opacity-40"
-          />
+          <ConsultationBackdrop className="opacity-90" />
         </div>
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-16 lg:px-8 lg:py-20">

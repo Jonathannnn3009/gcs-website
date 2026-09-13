@@ -61,9 +61,9 @@ export function LeadForm() {
     const next: Partial<Fields> = {};
     if (values.name.trim().length < 2) next.name = "Please enter your full name";
     if (!PHONE_RE.test(values.phone.replace(/[\s-]/g, "")))
-      next.phone = "That number doesn't look right — please correct the phone format";
+      next.phone = "Please match the requested format — a 10-digit mobile number";
     if (!EMAIL_RE.test(values.email.trim()))
-      next.email = "That email doesn't look right — please correct the format";
+      next.email = "Please match the requested format — name@example.com";
     if (!values.loanType) next.loanType = "Select a loan type";
     if (!values.city) next.city = "Select your city";
     setErrors(next);
