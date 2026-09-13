@@ -21,6 +21,8 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ThaneRouteImport } from './routes/thane'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as WhyUsRouteImport } from './routes/why-us'
+import { Route as CaLegalServicesIndexRouteImport } from './routes/ca-legal-services.index'
+import { Route as CaLegalServicesSlugRouteImport } from './routes/ca-legal-services.$slug'
 import { Route as CaseStudiesIndexRouteImport } from './routes/case-studies.index'
 import { Route as CaseStudiesSlugRouteImport } from './routes/case-studies.$slug'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
@@ -86,6 +88,16 @@ const WhyUsRoute = WhyUsRouteImport.update({
   path: '/why-us',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaLegalServicesIndexRoute = CaLegalServicesIndexRouteImport.update({
+  id: '/ca-legal-services/',
+  path: '/ca-legal-services/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaLegalServicesSlugRoute = CaLegalServicesSlugRouteImport.update({
+  id: '/ca-legal-services/$slug',
+  path: '/ca-legal-services/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CaseStudiesIndexRoute = CaseStudiesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -120,8 +132,10 @@ export interface FileRoutesByFullPath {
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/why-us': typeof WhyUsRoute
+  '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/ca-legal-services/': typeof CaLegalServicesIndexRoute
   '/case-studies/': typeof CaseStudiesIndexRoute
   '/services/': typeof ServicesIndexRoute
 }
@@ -136,8 +150,10 @@ export interface FileRoutesByTo {
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/why-us': typeof WhyUsRoute
+  '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/ca-legal-services': typeof CaLegalServicesIndexRoute
   '/case-studies': typeof CaseStudiesIndexRoute
   '/services': typeof ServicesIndexRoute
 }
@@ -155,8 +171,10 @@ export interface FileRoutesById {
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/why-us': typeof WhyUsRoute
+  '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/ca-legal-services/': typeof CaLegalServicesIndexRoute
   '/case-studies/': typeof CaseStudiesIndexRoute
   '/services/': typeof ServicesIndexRoute
 }
@@ -175,8 +193,10 @@ export interface FileRouteTypes {
     | '/thane'
     | '/tools'
     | '/why-us'
+    | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/services/$slug'
+    | '/ca-legal-services/'
     | '/case-studies/'
     | '/services/'
   fileRoutesByTo: FileRoutesByTo
@@ -191,8 +211,10 @@ export interface FileRouteTypes {
     | '/thane'
     | '/tools'
     | '/why-us'
+    | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/services/$slug'
+    | '/ca-legal-services'
     | '/case-studies'
     | '/services'
   id:
@@ -209,8 +231,10 @@ export interface FileRouteTypes {
     | '/thane'
     | '/tools'
     | '/why-us'
+    | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/services/$slug'
+    | '/ca-legal-services/'
     | '/case-studies/'
     | '/services/'
   fileRoutesById: FileRoutesById
@@ -228,6 +252,8 @@ export interface RootRouteChildren {
   ThaneRoute: typeof ThaneRoute
   ToolsRoute: typeof ToolsRoute
   WhyUsRoute: typeof WhyUsRoute
+  CaLegalServicesSlugRoute: typeof CaLegalServicesSlugRoute
+  CaLegalServicesIndexRoute: typeof CaLegalServicesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -316,6 +342,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WhyUsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ca-legal-services/': {
+      id: '/ca-legal-services/'
+      path: '/ca-legal-services'
+      fullPath: '/ca-legal-services/'
+      preLoaderRoute: typeof CaLegalServicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ca-legal-services/$slug': {
+      id: '/ca-legal-services/$slug'
+      path: '/ca-legal-services/$slug'
+      fullPath: '/ca-legal-services/$slug'
+      preLoaderRoute: typeof CaLegalServicesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/case-studies/': {
       id: '/case-studies/'
       path: '/'
@@ -388,6 +428,8 @@ const rootRouteChildren: RootRouteChildren = {
   ThaneRoute: ThaneRoute,
   ToolsRoute: ToolsRoute,
   WhyUsRoute: WhyUsRoute,
+  CaLegalServicesSlugRoute: CaLegalServicesSlugRoute,
+  CaLegalServicesIndexRoute: CaLegalServicesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -66,6 +66,7 @@ export function SiteFooter() {
                 { to: "/services", label: "Our Services" },
                 { to: "/tools", label: "EMI Calculator" },
                 { to: "/case-studies", label: "Case Studies" },
+                { to: "/ca-legal-services", label: "CA & Legal Services" },
                 { to: "/partner", label: "Partner With Us" },
                 { to: "/contact", label: "Contact Us" },
               ].map((l) => (

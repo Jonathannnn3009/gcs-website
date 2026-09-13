@@ -11,6 +11,7 @@ const NAV = [
   { to: "/services", label: "Our Services", dropdown: "services" },
   { to: "/tools", label: "Tools", dropdown: "tools" },
   { to: "/case-studies", label: "Case Studies" },
+  { to: "/ca-legal-services", label: "CA & Legal Services" },
   { to: "/contact", label: "Contact Us" },
 ] as const;
 
