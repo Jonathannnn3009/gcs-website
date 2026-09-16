@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Calculator, MapPin } from "lucide-react";
+import { useState } from "react";
+import { AlertTriangle, ArrowRight, Calculator, Compass, MapPin, Trophy } from "lucide-react";
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
-import { CASE_STUDIES, getCaseStudy } from "@/data/case-studies";
+import { CASE_STUDIES, getCaseStudy, type CaseStudy } from "@/data/case-studies";
 import { getProduct } from "@/data/products";
-import { CONTACT } from "@/data/site";
+import { waLink } from "@/data/site";
 
 export const Route = createFileRoute("/case-studies/$slug")({
   head: ({ params }) => {
@@ -41,13 +42,90 @@ function NotFoundBlock() {
 const STAGES = [
   {
     key: "challenge" as const,
-    num: "01",
+    icon: AlertTriangle,
     label: "The Challenge",
     eyebrow: "What stood in the way",
   },
-  { key: "structuring" as const, num: "02", label: "The Structuring", eyebrow: "How we routed it" },
-  { key: "outcome" as const, num: "03", label: "The Outcome", eyebrow: "Where it landed" },
+  {
+    key: "structuring" as const,
+    icon: Compass,
+    label: "The Structuring",
+    eyebrow: "How we routed it",
+  },
+  { key: "outcome" as const, icon: Trophy, label: "The Outcome", eyebrow: "Where it landed" },
 ];
+
+/** Click-through stepper replacing a plain read-down list — same three facts, revealed on demand. */
+function NarrativeStepper({ study }: { study: CaseStudy }) {
+  const [active, setActive] = useState(0);
+  const stage = STAGES[active] ?? STAGES[0]!;
+
+  return (
+    <div>
+      <div className="flex gap-2 rounded-2xl border border-border bg-white p-1.5 shadow-[var(--shadow-card)]">
+        {STAGES.map((s, i) => {
+          const isActive = i === active;
+          return (
+            <button
+              key={s.key}
+              type="button"
+              onClick={() => setActive(i)}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-xs font-bold transition-all duration-300 sm:text-sm ${
+                isActive
+                  ? "bg-navy text-white shadow-[var(--shadow-card)]"
+                  : "text-muted-foreground hover:bg-secondary/60 hover:text-navy"
+              }`}
+            >
+              <s.icon className={`h-4 w-4 ${isActive ? "text-gold-light" : "text-gold-dark"}`} />
+              <span className="hidden sm:inline">{s.label}</span>
+              <span className="sm:hidden">{i + 1}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div
+        key={active}
+        className="rise-in mt-6 rounded-2xl border border-gold/15 bg-white p-7 shadow-[var(--shadow-card)] sm:p-8"
+      >
+        <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+          {stage.eyebrow}
+        </p>
+        <h2 className="mt-1 text-xl font-extrabold text-navy">{stage.label}</h2>
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground">{study[stage.key]}</p>
+
+        <div className="mt-6 flex items-center justify-between border-t border-border pt-5">
+          <button
+            type="button"
+            disabled={active === 0}
+            onClick={() => setActive((v) => Math.max(0, v - 1))}
+            className="text-xs font-bold text-navy transition-colors disabled:pointer-events-none disabled:opacity-30"
+          >
+            ← Back
+          </button>
+          <div className="flex gap-1.5">
+            {STAGES.map((s, i) => (
+              <span
+                key={s.key}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === active ? "w-6 bg-gold" : "w-1.5 bg-border"
+                }`}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            disabled={active === STAGES.length - 1}
+            onClick={() => setActive((v) => Math.min(STAGES.length - 1, v + 1))}
+            className="text-xs font-bold text-navy transition-colors disabled:pointer-events-none disabled:opacity-30"
+          >
+            Next →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function CaseStudyDetailPage() {
   const { slug } = Route.useParams();
@@ -68,47 +146,45 @@ function CaseStudyDetailPage() {
             <div className="overflow-hidden rounded-3xl navy-panel relative p-8 sm:p-12">
               <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
 
-              <p className="relative flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/50 uppercase">
-                <Link to="/" className="hover:text-white">
-                  Home
-                </Link>
-                <span className="text-gold">/</span>
-                <Link to="/case-studies" className="hover:text-white">
-                  Case Studies
-                </Link>
-                <span className="text-gold">/</span>
-                <span className="text-white">{study.productLabel}</span>
-              </p>
+              <div className="relative flex flex-wrap items-start justify-between gap-6">
+                <div className="min-w-0">
+                  <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/50 uppercase">
+                    <Link to="/" className="hover:text-white">
+                      Home
+                    </Link>
+                    <span className="text-gold">/</span>
+                    <Link to="/case-studies" className="hover:text-white">
+                      Case Studies
+                    </Link>
+                    <span className="text-gold">/</span>
+                    <span className="text-white">{study.productLabel}</span>
+                  </p>
 
-              <div className="relative mt-6 flex items-center gap-3">
-                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-gold/30 text-gold-light">
-                  <study.icon className="h-7 w-7" />
-                </span>
-                <span className="rounded-full border border-gold/30 px-3 py-1 text-xs font-bold tracking-wide text-gold-light">
-                  {study.category}
-                </span>
-              </div>
+                  <div className="mt-6 flex items-center gap-3">
+                    <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-gold/30 text-gold-light">
+                      <study.icon className="h-7 w-7" />
+                    </span>
+                    <span className="rounded-full border border-gold/30 px-3 py-1 text-xs font-bold tracking-wide text-gold-light">
+                      {study.category}
+                    </span>
+                  </div>
 
-              <h1 className="relative mt-5 max-w-3xl font-heading text-3xl font-bold text-white sm:text-4xl">
-                {study.headline}
-              </h1>
-
-              <div className="relative mt-8 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/10 pt-6">
-                <div>
-                  <span className="block text-[10px] font-bold tracking-wide text-white/40 uppercase">
-                    Amount
-                  </span>
-                  <span className="block text-sm font-bold text-gold-light">
-                    {study.amountLabel}
-                  </span>
+                  <h1 className="mt-5 max-w-2xl font-heading text-3xl font-bold text-white sm:text-4xl">
+                    {study.headline}
+                  </h1>
                 </div>
-                <div>
-                  <span className="block text-[10px] font-bold tracking-wide text-white/40 uppercase">
-                    Product
-                  </span>
-                  <span className="block text-sm font-bold text-gold-light">
+
+                {/* Amount as a standalone receipt-style chip instead of an inline stat row */}
+                <div className="shrink-0 rounded-2xl border border-gold/25 bg-white/5 px-6 py-4 text-center backdrop-blur-sm">
+                  <p className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase">
+                    Sanctioned
+                  </p>
+                  <p className="mt-1 font-heading text-2xl font-bold text-gold-light">
+                    {study.amountLabel}
+                  </p>
+                  <p className="mt-1 text-[11px] font-semibold text-white/60">
                     {study.productLabel}
-                  </span>
+                  </p>
                 </div>
               </div>
             </div>
@@ -116,11 +192,11 @@ function CaseStudyDetailPage() {
         </div>
       </section>
 
-      {/* Client profile + 3-part narrative */}
+      {/* Client profile + interactive narrative stepper */}
       <Section className="pt-10">
         <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
           {/* LEFT: narrative */}
-          <div className="space-y-10">
+          <div className="space-y-8">
             <Reveal>
               <p className="eyebrow flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5" /> Client Profile
@@ -130,35 +206,26 @@ function CaseStudyDetailPage() {
               </p>
             </Reveal>
 
-            {STAGES.map((stage, i) => (
-              <Reveal key={stage.key} delay={i * 80}>
-                <div className="flex gap-5">
-                  <span className="font-heading shrink-0 text-3xl font-extrabold text-gold-dark">
-                    {stage.num}
-                  </span>
-                  <div>
-                    <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
-                      {stage.eyebrow}
-                    </p>
-                    <h2 className="mt-1 text-xl font-extrabold text-navy">{stage.label}</h2>
-                    <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-                      {study[stage.key]}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-
-            <Reveal>
-              <div className="panel-light rounded-2xl border border-gold/15 p-8 text-center">
-                <p className="eyebrow">A Working Promise</p>
-                <p className="mx-auto mt-4 max-w-2xl font-heading text-xl italic text-navy">
-                  "One advisor reviews your file, matches you with the lender most likely to fit
-                  your profile, and stays with your case through to disbursal."
-                </p>
-              </div>
+            <Reveal delay={60}>
+              <NarrativeStepper study={study} />
             </Reveal>
 
+            <Reveal>
+              <div className="flex items-start gap-4 rounded-2xl border border-gold/20 bg-gradient-to-br from-gold-pale/40 via-white to-white p-6 sm:p-7">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-navy text-gold-light">
+                  <Compass className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+                    A Working Promise
+                  </p>
+                  <p className="mt-2 font-heading text-lg leading-snug italic text-navy">
+                    "One advisor reviews your file, matches you with the lender most likely to fit
+                    your profile, and stays with your case through to disbursal."
+                  </p>
+                </div>
+              </div>
+            </Reveal>
           </div>
 
           {/* RIGHT: sticky CTA card */}
@@ -192,7 +259,9 @@ function CaseStudyDetailPage() {
                   <Calculator className="h-4 w-4" /> Check Your Eligibility
                 </Link>
                 <a
-                  href={CONTACT.whatsappLink}
+                  href={waLink(
+                    `Hi, I have a situation similar to "${study.headline}" — could you help me explore ${study.productLabel} options?`,
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-md bg-[#25D366] px-6 py-3.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5"

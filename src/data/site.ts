@@ -1,8 +1,17 @@
+const WHATSAPP_NUMBER = "918828001700";
+
+/** Builds a wa.me link pre-filled with a ready-to-send message, so visitors don't land on a blank chat. */
+export function waLink(message?: string): string {
+  const defaultMessage =
+    "Hi Growth Capital Services, I'd like to know more about your loan options.";
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message ?? defaultMessage)}`;
+}
+
 export const CONTACT = {
   phone: "+91 88280 01700",
   phoneHref: "tel:+918828001700",
-  whatsapp: "918828001700",
-  whatsappLink: "https://wa.me/918828001700",
+  whatsapp: WHATSAPP_NUMBER,
+  whatsappLink: waLink(),
   email: "growthcs17@gmail.com",
   address:
     "CCTV Towers, Andheri-Ghatkopar Rd, Bhatwadi, Kaju Pada, Barve Nagar, Ghatkopar West, Mumbai 400084",

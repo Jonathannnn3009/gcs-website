@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   ArrowRight,
   BadgeCheck,
@@ -68,49 +69,47 @@ const TRUST = [
   { icon: Globe, label: "PAN India Service" },
 ];
 
-const WHO_WE_HELP = [
+/** Each persona pairs one "who we help" story with one "why us" differentiator. */
+const PERSONAS = [
   {
     icon: Users,
     title: "Salaried & Self-Employed",
     body: "Home, personal and education loans shaped around your income.",
+    why: {
+      icon: ShieldCheck,
+      title: "Trust & Transparency",
+      body: "Rate, fees and foreclosure terms — all in writing, upfront.",
+    },
   },
   {
     icon: Briefcase,
     title: "Entrepreneurs & SMEs",
     body: "Business, working-capital and collateral-free funding that fits your cycle.",
+    why: {
+      icon: Zap,
+      title: "Quick, Paperless Process",
+      body: "Digital documents and daily updates, from login to disbursal.",
+    },
   },
   {
     icon: TrendingDown,
     title: "Lower-EMI Seekers",
     body: "Move an existing loan to a better rate — top-up included.",
+    why: {
+      icon: Target,
+      title: "End-to-End Guidance",
+      body: "One advisor from picking the product to after the money lands.",
+    },
   },
   {
     icon: Landmark,
     title: "Property Owners",
     body: "Turn residential or commercial property into ready capital.",
-  },
-];
-
-const WHY_US = [
-  {
-    icon: ShieldCheck,
-    title: "Trust & Transparency",
-    body: "Rate, fees and foreclosure terms — all in writing, upfront.",
-  },
-  {
-    icon: Zap,
-    title: "Quick, Paperless Process",
-    body: "Digital documents and daily updates, from login to disbursal.",
-  },
-  {
-    icon: Target,
-    title: "End-to-End Guidance",
-    body: "One advisor from picking the product to after the money lands.",
-  },
-  {
-    icon: BadgeCheck,
-    title: "Better Deals Than Direct",
-    body: "Our volume with lenders gets you pricing you'd rarely get alone.",
+    why: {
+      icon: BadgeCheck,
+      title: "Better Deals Than Direct",
+      body: "Our volume with lenders gets you pricing you'd rarely get alone.",
+    },
   },
 ];
 
@@ -145,15 +144,166 @@ function WhatsAppIcon() {
   );
 }
 
+/** Persona selector: replaces two separate "who we help" / "why us" grids with one interactive panel. */
+function PersonaPanel() {
+  const [active, setActive] = useState(0);
+  const persona = PERSONAS[active] ?? PERSONAS[0]!;
+
+  return (
+    <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+      {/* Left: persona picker list */}
+      <div className="space-y-2.5">
+        {PERSONAS.map((p, i) => {
+          const isActive = i === active;
+          return (
+            <button
+              key={p.title}
+              type="button"
+              onClick={() => setActive(i)}
+              className={`group flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-300 ${
+                isActive
+                  ? "border-gold bg-navy shadow-[var(--shadow-lift)]"
+                  : "border-border bg-white hover:border-gold/40"
+              }`}
+            >
+              <span
+                className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-colors duration-300 ${
+                  isActive ? "bg-gold text-navy" : "bg-gold-pale/70 text-gold-dark"
+                }`}
+              >
+                <p.icon className="h-5 w-5" />
+              </span>
+              <span className="min-w-0">
+                <span
+                  className={`block text-sm font-extrabold ${isActive ? "text-white" : "text-navy"}`}
+                >
+                  {p.title}
+                </span>
+                <span
+                  className={`block truncate text-xs ${isActive ? "text-white/60" : "text-muted-foreground"}`}
+                >
+                  {p.body}
+                </span>
+              </span>
+              <ArrowRight
+                className={`ml-auto h-4 w-4 shrink-0 transition-all duration-300 ${
+                  isActive
+                    ? "translate-x-0 text-gold"
+                    : "-translate-x-1 text-transparent group-hover:translate-x-0 group-hover:text-gold-dark"
+                }`}
+              />
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Right: detail panel for the selected persona */}
+      <div
+        key={active}
+        className="rise-in relative overflow-hidden rounded-2xl border border-gold/20 bg-gradient-to-br from-gold-pale/40 via-white to-white p-7 sm:p-9"
+      >
+        <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-gold/10 blur-[60px]" />
+        <span className="relative grid h-14 w-14 place-items-center rounded-2xl bg-navy text-gold-light shadow-md">
+          <persona.icon className="h-6 w-6" />
+        </span>
+        <h3 className="relative mt-5 font-heading text-2xl font-bold text-navy">{persona.title}</h3>
+        <p className="relative mt-2 text-base leading-relaxed text-muted-foreground">
+          {persona.body}
+        </p>
+
+        <div className="relative mt-6 flex items-start gap-3 rounded-xl border border-gold/15 bg-white/70 p-4">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gold-pale/70 text-gold-dark">
+            <persona.why.icon className="h-4 w-4" />
+          </span>
+          <div>
+            <p className="text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
+              Why clients like this choose us
+            </p>
+            <p className="mt-1 text-sm font-bold text-navy">{persona.why.title}</p>
+            <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
+              {persona.why.body}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Click-through process stepper: one big active panel instead of four static columns. */
+function ProcessStepper() {
+  const [active, setActive] = useState(0);
+  const step = STEPS[active] ?? STEPS[0]!;
+
+  return (
+    <div>
+      <div className="relative flex items-center justify-between">
+        <span
+          aria-hidden
+          className="absolute top-6 right-6 left-6 h-0.5 -translate-y-1/2 bg-border sm:top-7"
+        />
+        {STEPS.map((s, i) => {
+          const isActive = i === active;
+          const isDone = i < active;
+          return (
+            <button
+              key={s.title}
+              type="button"
+              onClick={() => setActive(i)}
+              className="group relative z-10 flex flex-col items-center gap-2"
+            >
+              <span
+                className={`grid h-12 w-12 place-items-center rounded-full border-2 text-sm font-bold transition-all duration-400 sm:h-14 sm:w-14 ${
+                  isActive
+                    ? "-translate-y-1 border-gold bg-gold text-navy shadow-[var(--shadow-gold)]"
+                    : isDone
+                      ? "border-gold/60 bg-white text-gold-dark"
+                      : "border-border bg-white text-muted-foreground group-hover:border-gold/40"
+                }`}
+              >
+                {i + 1}
+              </span>
+              <span
+                className={`hidden text-[11px] font-bold sm:block ${isActive ? "text-navy" : "text-muted-foreground"}`}
+              >
+                {s.title}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div
+        key={active}
+        className="rise-in mt-8 flex flex-col items-center gap-5 rounded-2xl border border-gold/15 bg-white p-8 text-center shadow-[var(--shadow-card)] sm:flex-row sm:text-left"
+      >
+        <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-navy to-navy-soft text-gold shadow-md">
+          <step.icon className="h-7 w-7" />
+        </span>
+        <div>
+          <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+            Step {active + 1} of {STEPS.length}
+          </p>
+          <h3 className="mt-1 font-heading text-xl font-bold text-navy">{step.title}</h3>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setActive((v) => (v + 1) % STEPS.length)}
+          className="mt-2 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-navy/15 px-4 py-2 text-xs font-bold text-navy transition-colors hover:border-gold/50 sm:mt-0 sm:ml-auto"
+        >
+          Next step <ArrowRight className="h-3.5 w-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function HomePage() {
   return (
     <>
       {/* ─── HERO ─────────────────────────────────────── */}
       <section className="relative isolate overflow-hidden border-b border-gold/15 bg-background">
-        {/* Auto-toggling illustration wash — spans the full hero at low opacity so it
-            can be large and clearly present without ever competing with the text or
-            the form for space; legibility comes from contrast, not from carving out
-            empty room for it. */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 hidden opacity-[0.24] lg:block [mask-image:radial-gradient(ellipse_80%_85%_at_58%_45%,black_35%,transparent_88%)]"
@@ -163,6 +313,8 @@ function HomePage() {
 
         <div className="relative mx-auto grid max-w-[90rem] items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-16 lg:px-8 lg:py-20">
           <div className="relative">
+            {/* Full-size lockup, given its own line and generous clearance below so it
+                reads as a deliberate opening statement rather than a cramped corner mark. */}
             <Reveal>
               <img
                 src="/brand/gcs-lockup.png"
@@ -174,12 +326,12 @@ function HomePage() {
             </Reveal>
 
             <Reveal delay={60}>
-              <p className="mt-8 text-xs font-bold tracking-[0.3em] text-gold-dark uppercase">
+              <p className="mt-8 flex items-center gap-2 text-xs font-bold tracking-[0.3em] text-gold-dark uppercase">
+                <span className="h-px w-8 bg-gold" />
                 Trusted Loan Advisors — Since 2017
               </p>
             </Reveal>
 
-            {/* Headline rises in word by word */}
             <h1 className="mt-5 text-[2.5rem] leading-[1.08] font-bold text-navy sm:text-5xl lg:text-[3.5rem]">
               {["Your", "Dreams,"].map((w, i) => (
                 <span
@@ -248,8 +400,12 @@ function HomePage() {
             </Reveal>
           </div>
 
-          {/* Consultation form */}
-          <Reveal delay={200} className="mx-auto w-full max-w-[420px] lg:mr-0">
+          {/* Consultation form, with a floating trust badge tucked at its top corner */}
+          <Reveal delay={200} className="relative mx-auto w-full max-w-[420px] lg:mr-0">
+            <div className="absolute -top-4 -left-4 z-10 hidden items-center gap-1.5 rounded-xl border border-gold/25 bg-navy px-3.5 py-2 shadow-[var(--shadow-lift)] sm:flex">
+              <Landmark className="h-3.5 w-3.5 text-gold-light" />
+              <span className="text-[11px] font-bold text-white">75+ Banks & NBFCs</span>
+            </div>
             <LeadForm />
           </Reveal>
         </div>
@@ -272,70 +428,8 @@ function HomePage() {
         </ul>
       </section>
 
-      {/* ─── WHO WE HELP ──────────────────────────────── */}
+      {/* ─── BANK PARTNERS (moved up as an immediate trust signal) ──── */}
       <Section>
-        <Reveal>
-          <SectionHeading
-            eyebrow="Who We Serve"
-            title="Real people. Real plans. The right loan."
-            description="A first home, a growing business or a lighter EMI — tell us the plan and we'll shape the loan around it."
-          />
-        </Reveal>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {WHO_WE_HELP.map((item, i) => (
-            <Reveal key={item.title} delay={i * 80}>
-              <div className="surface-card group h-full p-6">
-                <span className="grid h-12 w-12 place-items-center rounded-xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/20 transition-colors duration-300 group-hover:animate-[gcs-wiggle_700ms_ease-in-out] group-hover:bg-gold group-hover:text-navy">
-                  <item.icon className="h-5 w-5" />
-                </span>
-                <h3 className="mt-4 text-base font-extrabold text-navy">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
-
-      {/* ─── SERVICES ─────────────────────────────────── */}
-      <Section className="pt-0">
-        <Reveal>
-          <SectionHeading
-            eyebrow="Our Services"
-            title="So, what are you planning?"
-            description="Pick a goal — we'll point you to the loan that gets you there."
-          />
-        </Reveal>
-        <LoanGoals />
-      </Section>
-
-      {/* ─── WHY US ───────────────────────────────────── */}
-      <Section className="pt-0">
-        <Reveal>
-          <SectionHeading
-            eyebrow="Why Growth Capital"
-            title="Experience financial freedom with us"
-            description="Unlike banks, we put your needs first — and use our network of Banks and NBFCs to win you a better deal."
-          />
-        </Reveal>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {WHY_US.map((item, i) => (
-            <Reveal key={item.title} delay={i * 70}>
-              <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-white p-6 transition-all duration-500 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]">
-                <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-navy to-navy-soft text-gold shadow-md transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6">
-                  <item.icon className="h-5 w-5" />
-                </span>
-                <h3 className="mt-4 text-base font-extrabold text-navy">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
-                {/* Gold underline that sweeps across on hover */}
-                <span className="absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-gold to-gold-light transition-transform duration-500 group-hover:scale-x-100" />
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
-
-      {/* ─── BANK PARTNERS ────────────────────────────── */}
-      <Section className="pt-0">
         <Reveal>
           <SectionHeading
             eyebrow="Our Network"
@@ -351,6 +445,32 @@ function HomePage() {
         </Reveal>
       </Section>
 
+      {/* ─── SERVICES ─────────────────────────────────── */}
+      <Section className="pt-0">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Our Services"
+            title="So, what are you planning?"
+            description="Pick a goal — we'll point you to the loan that gets you there."
+          />
+        </Reveal>
+        <LoanGoals />
+      </Section>
+
+      {/* ─── PERSONA + WHY US (merged, interactive) ───── */}
+      <Section className="pt-0">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Who We Serve"
+            title="Real people. Real plans. The right loan."
+            description="Pick your situation — see the loan we'd shape for you, and the reason clients like you choose Growth Capital."
+          />
+        </Reveal>
+        <Reveal delay={80} className="mt-10">
+          <PersonaPanel />
+        </Reveal>
+      </Section>
+
       {/* ─── EMI CALCULATOR ───────────────────────────── */}
       <Section className="pt-0">
         <Reveal>
@@ -358,7 +478,7 @@ function HomePage() {
         </Reveal>
       </Section>
 
-      {/* ─── HOW IT WORKS ─────────────────────────────── */}
+      {/* ─── HOW IT WORKS (click-through stepper) ─────── */}
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
@@ -367,30 +487,8 @@ function HomePage() {
             align="center"
           />
         </Reveal>
-        <Reveal delay={80}>
-          <ol className="relative mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            {/* Connector line that draws itself in once the steps are in view */}
-            <span
-              aria-hidden
-              className="absolute top-7 right-[12.5%] left-[12.5%] hidden h-0.5 overflow-hidden rounded-full bg-gold/20 lg:block"
-            >
-              <span className="block h-full origin-left scale-x-0 bg-gradient-to-r from-gold to-gold-light transition-transform delay-300 duration-[1600ms] ease-out group-data-[shown=true]/reveal:scale-x-100" />
-            </span>
-            {STEPS.map((s, i) => (
-              <li key={s.title} className="group relative text-center">
-                <span className="relative mx-auto grid h-14 w-14 place-items-center rounded-full border-2 border-gold bg-white text-gold-dark shadow-[var(--shadow-card)] transition-all duration-500 group-hover:-translate-y-1 group-hover:bg-gold group-hover:text-navy">
-                  <s.icon className="h-6 w-6" />
-                  <span className="absolute -top-1.5 -right-1.5 grid h-6 w-6 place-items-center rounded-full bg-navy text-[11px] font-bold text-white">
-                    {i + 1}
-                  </span>
-                </span>
-                <h3 className="mt-5 text-base font-extrabold text-navy">{s.title}</h3>
-                <p className="mx-auto mt-2 max-w-[16rem] text-sm leading-relaxed text-muted-foreground">
-                  {s.body}
-                </p>
-              </li>
-            ))}
-          </ol>
+        <Reveal delay={80} className="mt-12">
+          <ProcessStepper />
         </Reveal>
       </Section>
 

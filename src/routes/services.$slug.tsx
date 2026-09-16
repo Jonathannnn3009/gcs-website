@@ -1,10 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, FileCheck2, FileText, Landmark, Mail, MessageCircle, Phone } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  FileCheck2,
+  FileText,
+  Landmark,
+  Mail,
+  MessageCircle,
+  Phone,
+} from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { ChecklistGate } from "@/components/checklist-gate";
 import { PRODUCTS, getProduct } from "@/data/products";
-import { CONTACT } from "@/data/site";
+import { CONTACT, waLink } from "@/data/site";
 
 export const Route = createFileRoute("/services/$slug")({
   head: ({ params }) => {
@@ -28,7 +37,9 @@ function NotFoundBlock() {
     <Section className="text-center">
       <p className="eyebrow">Not Found</p>
       <h1 className="mt-3 text-3xl font-extrabold text-navy">That product doesn't exist.</h1>
-      <p className="mt-3 text-muted-foreground">It may have moved — browse the full list instead.</p>
+      <p className="mt-3 text-muted-foreground">
+        It may have moved — browse the full list instead.
+      </p>
       <Link to="/services" className="gold-btn mt-6 inline-flex py-3">
         View all services <ArrowRight className="h-4 w-4" />
       </Link>
@@ -37,10 +48,30 @@ function NotFoundBlock() {
 }
 
 const PROCESS = [
-  { num: "01", icon: FileText, title: "Tell Us What You Need", body: "A quick conversation about your goal and situation — no forms yet." },
-  { num: "02", icon: Landmark, title: "Lender Shortlist", body: "Your profile checked against our network to find who's actually likely to say yes." },
-  { num: "03", icon: FileCheck2, title: "Paperwork, Handled", body: "We prep the file the way this lender's underwriting desk expects to see it." },
-  { num: "04", icon: Check, title: "Funds, Then Follow-Up", body: "Money lands in your account — and we stay reachable well after that." },
+  {
+    num: "01",
+    icon: FileText,
+    title: "Tell Us What You Need",
+    body: "A quick conversation about your goal and situation — no forms yet.",
+  },
+  {
+    num: "02",
+    icon: Landmark,
+    title: "Lender Shortlist",
+    body: "Your profile checked against our network to find who's actually likely to say yes.",
+  },
+  {
+    num: "03",
+    icon: FileCheck2,
+    title: "Paperwork, Handled",
+    body: "We prep the file the way this lender's underwriting desk expects to see it.",
+  },
+  {
+    num: "04",
+    icon: Check,
+    title: "Funds, Then Follow-Up",
+    body: "Money lands in your account — and we stay reachable well after that.",
+  },
 ];
 
 const CHECKLIST_PDF: Record<string, string> = {
@@ -66,7 +97,8 @@ function ProductDetailPage() {
   const product = getProduct(slug);
   if (!product) return <NotFoundBlock />;
   const related = PRODUCTS.filter((p) => p.group === product.group && p.slug !== product.slug);
-  const fallbackRelated = related.length > 0 ? related : PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
+  const fallbackRelated =
+    related.length > 0 ? related : PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
   const code = productCode(product.title);
 
   return (
@@ -80,9 +112,13 @@ function ProductDetailPage() {
               <div className="navy-panel relative overflow-hidden p-8 sm:p-12">
                 <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
                 <p className="relative flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/50 uppercase">
-                  <Link to="/" className="hover:text-white">Home</Link>
+                  <Link to="/" className="hover:text-white">
+                    Home
+                  </Link>
                   <span className="text-gold">/</span>
-                  <Link to="/services" className="hover:text-white">Services</Link>
+                  <Link to="/services" className="hover:text-white">
+                    Services
+                  </Link>
                   <span className="text-gold">/</span>
                   <span className="text-white">{product.title}</span>
                 </p>
@@ -96,13 +132,19 @@ function ProductDetailPage() {
                   </span>
                 </div>
 
-                <h1 className="relative mt-5 font-heading text-4xl font-bold text-white sm:text-5xl">{product.title}</h1>
-                <p className="relative mt-2 font-heading text-lg italic text-gold-light">{product.tagline}</p>
+                <h1 className="relative mt-5 font-heading text-4xl font-bold text-white sm:text-5xl">
+                  {product.title}
+                </h1>
+                <p className="relative mt-2 font-heading text-lg italic text-gold-light">
+                  {product.tagline}
+                </p>
 
                 <div className="relative mt-8 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/10 pt-6">
                   {product.facts.map((fact) => (
                     <div key={fact.label}>
-                      <span className="block text-[10px] font-bold tracking-wide text-white/40 uppercase">{fact.label}</span>
+                      <span className="block text-[10px] font-bold tracking-wide text-white/40 uppercase">
+                        {fact.label}
+                      </span>
                       <span className="block text-sm font-bold text-gold-light">{fact.value}</span>
                     </div>
                   ))}
@@ -113,7 +155,7 @@ function ProductDetailPage() {
                     Apply for {code} <ArrowRight className="h-4 w-4" />
                   </Link>
                   <a
-                    href={CONTACT.whatsappLink}
+                    href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-sm font-bold text-white/70 transition-colors hover:text-white"
@@ -208,7 +250,10 @@ function ProductDetailPage() {
                     ))}
                   </ul>
                   {CHECKLIST_PDF[product.slug] && (
-                    <ChecklistGate pdfHref={CHECKLIST_PDF[product.slug]} productTitle={product.title} />
+                    <ChecklistGate
+                      pdfHref={CHECKLIST_PDF[product.slug]}
+                      productTitle={product.title}
+                    />
                   )}
                 </div>
               </div>
@@ -218,7 +263,9 @@ function ProductDetailPage() {
           {/* RIGHT: sticky apply card */}
           <Reveal delay={100} className="lg:sticky lg:top-28">
             <div className="rounded-2xl border border-gold/15 panel-light p-7">
-              <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">Start Your File</p>
+              <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
+                Start Your File
+              </p>
               <h3 className="mt-3 font-heading text-2xl font-bold text-navy">
                 Apply for <span className="italic text-gold-dark">{product.title}.</span>
               </h3>
@@ -227,39 +274,65 @@ function ProductDetailPage() {
               </p>
 
               <div className="mt-6 space-y-3">
-                <a href={CONTACT.phoneHref} className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40">
+                <a
+                  href={CONTACT.phoneHref}
+                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40"
+                >
                   <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
                     <Phone className="h-4 w-4" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Call Us</span>
-                    <span className="block truncate text-sm font-bold text-navy">{CONTACT.phone}</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                      Call Us
+                    </span>
+                    <span className="block truncate text-sm font-bold text-navy">
+                      {CONTACT.phone}
+                    </span>
                   </span>
                   <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
                 </a>
-                <a href={CONTACT.whatsappLink} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40">
+                <a
+                  href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40"
+                >
                   <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
                     <MessageCircle className="h-4 w-4" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">WhatsApp</span>
-                    <span className="block truncate text-sm font-bold text-navy">Message us now</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                      WhatsApp
+                    </span>
+                    <span className="block truncate text-sm font-bold text-navy">
+                      Message us now
+                    </span>
                   </span>
                   <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
                 </a>
-                <a href={`mailto:${CONTACT.email}`} className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40">
+                <a
+                  href={`mailto:${CONTACT.email}`}
+                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40"
+                >
                   <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
                     <Mail className="h-4 w-4" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Email</span>
-                    <span className="block truncate text-sm font-bold text-navy">{CONTACT.email}</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                      Email
+                    </span>
+                    <span className="block truncate text-sm font-bold text-navy">
+                      {CONTACT.email}
+                    </span>
                   </span>
                   <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
                 </a>
               </div>
 
-              <Link to="/contact" className="mt-4 flex items-center justify-center rounded-xl bg-navy py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-soft">
+              <Link
+                to="/contact"
+                className="mt-4 flex items-center justify-center rounded-xl bg-navy py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-soft"
+              >
                 Full application form <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
@@ -275,7 +348,11 @@ function ProductDetailPage() {
       {/* Process */}
       <Section className="pt-0">
         <Reveal>
-          <SectionHeading eyebrow="Our Process" title="From first conversation to disbursal." align="center" />
+          <SectionHeading
+            eyebrow="Our Process"
+            title="From first conversation to disbursal."
+            align="center"
+          />
         </Reveal>
         <div className="relative mt-14">
           <span
@@ -330,7 +407,10 @@ function ProductDetailPage() {
           ))}
         </div>
         <Reveal delay={200} className="mt-6 text-center">
-          <Link to="/services" className="inline-flex items-center gap-2 text-sm font-bold text-navy hover:text-gold-dark">
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 text-sm font-bold text-navy hover:text-gold-dark"
+          >
             View all services <ArrowRight className="h-4 w-4" />
           </Link>
         </Reveal>
@@ -352,7 +432,7 @@ function ProductDetailPage() {
                 Get Free Consultation <ArrowRight className="h-4 w-4" />
               </Link>
               <a
-                href={CONTACT.whatsappLink}
+                href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"

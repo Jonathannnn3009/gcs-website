@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Calculator } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ArrowRight, Calculator, LayoutGrid } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { CASE_STUDIES, CASE_STUDY_GROUPS, type CaseStudyGroup } from "@/data/case-studies";
 import { CONTACT } from "@/data/site";
-
-const groupId = (group: CaseStudyGroup) => group.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
 export const Route = createFileRoute("/case-studies/")({
   head: () => ({
@@ -26,108 +25,141 @@ export const Route = createFileRoute("/case-studies/")({
   component: CaseStudiesPage,
 });
 
+type Filter = "All" | CaseStudyGroup;
+
 function CaseStudiesPage() {
+  const [filter, setFilter] = useState<Filter>("All");
+
+  const visible = useMemo(
+    () => (filter === "All" ? CASE_STUDIES : CASE_STUDIES.filter((c) => c.group === filter)),
+    [filter],
+  );
+
   return (
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-bg-light py-14 sm:py-20">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Reveal className="text-center">
-            <p className="flex items-center justify-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-              <Link to="/" className="hover:text-navy">
-                Home
-              </Link>
-              <span className="text-gold">/</span>
-              <span className="text-navy">Case Studies</span>
-            </p>
-            <p className="eyebrow mt-5">Real Scenarios</p>
-            <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl">
-              What stood in the way —<br />
-              <span className="gold-text-static italic">and how we routed it.</span>
-            </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-              From a first rejection to a sanctioned loan — how we've structured real lending
-              situations across our network of banks and NBFCs.
-            </p>
-          </Reveal>
+          <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-end">
+            <Reveal>
+              <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                <Link to="/" className="hover:text-navy">
+                  Home
+                </Link>
+                <span className="text-gold">/</span>
+                <span className="text-navy">Case Studies</span>
+              </p>
+              <p className="eyebrow mt-5">Real Scenarios</p>
+              <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl">
+                What stood in the way —<br />
+                <span className="gold-text-static italic">and how we routed it.</span>
+              </h1>
+              <p className="mt-4 max-w-xl text-base text-muted-foreground">
+                From a first rejection to a sanctioned loan — how we've structured real lending
+                situations across our network of banks and NBFCs.
+              </p>
+            </Reveal>
 
-          <Reveal delay={80} className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
-            {CASE_STUDY_GROUPS.map((group) => {
-              const count = CASE_STUDIES.filter((c) => c.group === group).length;
-              return (
-                <a
-                  key={group}
-                  href={`#${groupId(group)}`}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-gold/25 bg-white px-4 py-2 text-xs font-bold text-navy transition-all hover:-translate-y-0.5 hover:border-gold hover:bg-gold-pale/30"
-                >
-                  {group}
-                  <span className="text-gold-dark">{count}</span>
-                </a>
-              );
-            })}
-          </Reveal>
+            {/* Tally card instead of a plain paragraph stat */}
+            <Reveal delay={100}>
+              <div className="grid grid-cols-3 gap-3 rounded-2xl border border-gold/15 bg-white p-5 shadow-[var(--shadow-card)]">
+                {CASE_STUDY_GROUPS.map((group) => (
+                  <div key={group} className="text-center">
+                    <p className="font-heading text-3xl font-bold text-navy">
+                      {CASE_STUDIES.filter((c) => c.group === group).length}
+                    </p>
+                    <p className="mt-1 text-[10px] leading-tight font-bold tracking-[0.08em] text-gold-dark uppercase">
+                      {group}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* Case study groups */}
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-        <div className="space-y-12">
-          {CASE_STUDY_GROUPS.map((group, gi) => {
-            const cases = CASE_STUDIES.filter((c) => c.group === group);
+      {/* Filter tabs — a real switch, not anchor jumps */}
+      <section className="sticky top-[73px] z-30 border-b border-gold/10 bg-white/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-4 sm:px-6 lg:px-8">
+          <button
+            type="button"
+            onClick={() => setFilter("All")}
+            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold whitespace-nowrap transition-all duration-300 ${
+              filter === "All"
+                ? "border-navy bg-navy text-white shadow-[var(--shadow-card)]"
+                : "border-border bg-white text-navy hover:border-gold/40"
+            }`}
+          >
+            <LayoutGrid className="h-3.5 w-3.5" />
+            All Cases
+            <span className={filter === "All" ? "text-gold-light" : "text-gold-dark"}>
+              {CASE_STUDIES.length}
+            </span>
+          </button>
+          {CASE_STUDY_GROUPS.map((group) => {
+            const count = CASE_STUDIES.filter((c) => c.group === group).length;
+            const active = filter === group;
             return (
-              <div key={group} id={groupId(group)} className="scroll-mt-24">
-                <Reveal delay={gi * 80}>
-                  <div className="flex items-center gap-3">
-                    <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-                      {group}
-                    </p>
-                    <div className="h-px flex-1 origin-left scale-x-0 bg-border transition-transform delay-200 duration-700 ease-out group-data-[shown=true]/reveal:scale-x-100" />
-                  </div>
-                </Reveal>
-                <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                  {cases.map((c, i) => (
-                    <Reveal key={c.slug} delay={i * 60} className="h-full">
-                      <Link
-                        to="/case-studies/$slug"
-                        params={{ slug: c.slug }}
-                        className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white p-6 transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-[var(--shadow-lift)]"
-                      >
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent to-gold-pale/50 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-                        <div className="relative flex items-start justify-between gap-3">
-                          <span className="font-heading text-3xl font-extrabold text-gold-dark">
-                            {String(i + 1).padStart(2, "0")}
-                          </span>
-                          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out]">
-                            <c.icon className="h-5 w-5" />
-                          </span>
-                        </div>
-
-                        <p className="relative mt-4 text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
-                          {c.category}
-                        </p>
-                        <h3 className="relative mt-2 font-heading text-lg leading-snug font-bold text-navy">
-                          {c.headline}
-                        </h3>
-                        <p className="relative mt-2 text-sm leading-relaxed text-muted-foreground">
-                          {c.clientProfile}
-                        </p>
-
-                        <span className="relative mt-4 inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark">
-                          Read the case
-                          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
-                          <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gold-dark transition-all duration-300 group-hover:w-[calc(100%-4.75rem)]" />
-                        </span>
-                      </Link>
-                    </Reveal>
-                  ))}
-                </div>
-              </div>
+              <button
+                key={group}
+                type="button"
+                onClick={() => setFilter(group)}
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-bold whitespace-nowrap transition-all duration-300 ${
+                  active
+                    ? "border-navy bg-navy text-white shadow-[var(--shadow-card)]"
+                    : "border-border bg-white text-navy hover:border-gold/40"
+                }`}
+              >
+                {group}
+                <span className={active ? "text-gold-light" : "text-gold-dark"}>{count}</span>
+              </button>
             );
           })}
         </div>
+      </section>
 
+      {/* Case study grid — stat-forward cards, no index numerals */}
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+        <div key={filter} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {visible.map((c, i) => (
+            <Reveal key={c.slug} delay={i * 50} className="h-full">
+              <Link
+                to="/case-studies/$slug"
+                params={{ slug: c.slug }}
+                className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white p-6 transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-[var(--shadow-lift)]"
+              >
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent to-gold-pale/50 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+                <div className="relative flex items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out]">
+                      <c.icon className="h-4 w-4" />
+                    </span>
+                    {c.group}
+                  </span>
+                  <span className="shrink-0 rounded-lg bg-navy px-2.5 py-1 font-heading text-sm font-bold text-gold-light">
+                    {c.amountLabel}
+                  </span>
+                </div>
+
+                <h3 className="relative mt-4 font-heading text-lg leading-snug font-bold text-navy">
+                  {c.headline}
+                </h3>
+                <p className="relative mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {c.clientProfile}
+                </p>
+
+                <span className="relative mt-4 inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark">
+                  Read the case
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
+                  <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gold-dark transition-all duration-300 group-hover:w-[calc(100%-4.75rem)]" />
+                </span>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
       </section>
 
       {/* CTA */}
