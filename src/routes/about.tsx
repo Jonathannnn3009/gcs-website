@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, Quote } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { BankMarquee } from "@/components/bank-marquee";
 import { CONTACT } from "@/data/site";
-import { PRODUCTS } from "@/data/products";
+import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -34,28 +34,28 @@ const STATS = [
 const WHY_CHOOSE = [
   {
     num: "01",
-    title: "Wide Lender Network",
-    body: "Partnerships across leading Banks and NBFCs, for real choice — not one option.",
+    title: "Real Choice, Not One Bank",
+    body: "75+ banks and NBFCs in our network, so your file gets more than one shot at approval.",
   },
   {
     num: "02",
-    title: "Senior-Level Expertise",
-    body: "A team of experienced advisors guiding you at every step, end to end.",
+    title: "Senior Advisors, Not a Call Centre",
+    body: "The same experienced advisor stays with your file from the first call to disbursal.",
   },
   {
     num: "03",
-    title: "Fast Processing",
-    body: "Streamlined documentation and structuring for quicker approvals.",
+    title: "Built For Speed",
+    body: "Documentation and structuring done right the first time, so approvals don't stall.",
   },
   {
     num: "04",
-    title: "Full Transparency",
-    body: "Honest communication, with no hidden charges — ever.",
+    title: "Nothing Hidden",
+    body: "Rate, fees and terms — all in writing, before you sign anything.",
   },
   {
     num: "05",
-    title: "Tailored Structuring",
-    body: "Loan packages structured to your unique financial requirement.",
+    title: "Structured Around You",
+    body: "Your loan packaged around your actual profile, not squeezed into a lender's template.",
   },
 ];
 
@@ -79,13 +79,24 @@ function AboutPage() {
             </p>
             <p className="eyebrow mt-4">About Growth Capital Services</p>
             <h1 className="mt-3 max-w-3xl text-3xl font-extrabold text-navy sm:text-5xl">
-              Your trusted loan facilitation partner.
+              The desk that gets your file to "yes."
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Since {2017}, Growth Capital Services has become a leading Direct Selling Agent
-              specialising in loan facilitation — simplifying the borrowing process and connecting
-              clients with financing solutions actually structured around them.
+              Growth Capital Services has spent since {2017} doing one job well: reading a
+              borrower's actual file — the irregular income, the awkward timing, the bank that
+              already said no — and finding the lender in our network who'll say yes to it.
             </p>
+          </Reveal>
+
+          <Reveal delay={100} className="mt-10 flex flex-wrap gap-x-10 gap-y-4 border-t border-border pt-8">
+            {STATS.map((s) => (
+              <div key={s.label} className="border-l-2 border-gold/40 pl-4">
+                <p className="font-heading text-3xl font-bold text-navy sm:text-4xl">{s.value}</p>
+                <p className="mt-1 text-xs font-semibold tracking-wide text-gold-dark uppercase">
+                  {s.label}
+                </p>
+              </div>
+            ))}
           </Reveal>
         </div>
       </section>
@@ -93,106 +104,86 @@ function AboutPage() {
       {/* Our Story */}
       <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-start lg:gap-16">
             <Reveal>
-              <p className="eyebrow">Our Story</p>
-              <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
-                Built to close the gap between borrower and bank.
-              </h2>
-              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Since our establishment in 2017, <strong className="text-foreground">Growth
-                Capital Services</strong> has become a trusted Direct Selling Agent specialising
-                in loan facilitation. Our mission is to simplify the borrowing process by
-                connecting clients with customised financial solutions — ensuring transparency,
-                efficiency and customer satisfaction at every step.
-              </p>
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                We're committed to empowering individuals and businesses to achieve their
-                financial aspirations. Whether it's a dream home, a growing enterprise, or
-                unlocking liquidity from a property already owned, we structure files that win
-                approvals — even when other intermediaries pass.
-              </p>
-              <Link
-                to="/services"
-                className="mt-7 inline-flex items-center gap-2 rounded-md border border-navy/20 px-6 py-3 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50"
-              >
-                Explore our services <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Reveal>
-
-            <Reveal delay={100} className="relative">
-              <div className="overflow-hidden rounded-3xl border border-gold/15">
+              <div className="overflow-hidden rounded-3xl">
                 <img
                   src="/brand/about-illustration.png"
                   alt="Growth Capital Services — turning aspirations into approvals"
                   className="w-full object-cover"
                 />
               </div>
-              <div className="absolute -bottom-6 left-6 right-6 rounded-2xl border border-gold/15 bg-white p-5 shadow-[var(--shadow-lift)] sm:left-10 sm:right-10">
-                <p className="font-heading text-lg italic text-navy">
-                  "Structured to be approved — not just submitted."
-                </p>
-                <p className="mt-1.5 text-xs text-muted-foreground">
-                  A working philosophy behind every file we take on.
-                </p>
-              </div>
+              <p className="mt-6 font-heading text-2xl leading-snug italic text-navy sm:text-3xl">
+                "We read the file behind the file."
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                The question we ask before any other: what will get this approved?
+              </p>
+            </Reveal>
+
+            <Reveal delay={100} className="lg:pt-4">
+              <p className="eyebrow">How It Started</p>
+              <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
+                Too many good files were getting rejected for the wrong reasons.
+              </h2>
+              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+                <strong className="text-foreground">Growth Capital Services</strong> opened in
+                2017 as a Direct Selling Agent, built around a simple idea: a borrower's paperwork
+                shouldn't decide their financial future — the right advisor, matching them to the
+                right lender, should. That's still the job today.
+              </p>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                A first home, a business that's outgrown its funding, or equity sitting locked
+                inside a property already owned — we've structured all three, often for clients
+                another advisor had already turned away.
+              </p>
+              <Link
+                to="/services"
+                className="mt-7 inline-flex items-center gap-2 rounded-md border border-navy/20 px-6 py-3 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50"
+              >
+                See our loan products <ArrowRight className="h-4 w-4" />
+              </Link>
             </Reveal>
           </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="pb-16 pt-10 sm:pb-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Reveal>
-            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-              {STATS.map((s) => (
-                <div
-                  key={s.label}
-                  className="rounded-2xl border border-gold/15 bg-white p-6 text-center transition-all duration-400 hover:-translate-y-1 hover:border-gold/30 hover:shadow-[var(--shadow-gold)]"
-                >
-                  <p className="font-heading text-3xl font-bold text-navy sm:text-4xl">{s.value}</p>
-                  <p className="mt-1.5 text-xs font-semibold tracking-wide text-gold-dark uppercase">
-                    {s.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </Reveal>
         </div>
       </section>
 
       {/* Mission & Vision */}
       <section className="pb-16 sm:pb-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-5 lg:grid-cols-2">
-            <Reveal>
-              <article className="navy-panel relative h-full overflow-hidden rounded-3xl p-8 sm:p-10">
-                <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">Our Mission</p>
-                <h3 className="mt-3 text-2xl font-extrabold text-white sm:text-3xl">
-                  Bridge the gap between ambition and approval.
-                </h3>
-                <p className="mt-4 text-[15px] leading-relaxed text-white/70">
-                  To connect every client with the financing solution that actually fits their
-                  profile — not the bank's default template — so ambition doesn't stall at the
-                  application stage.
-                </p>
-              </article>
-            </Reveal>
-            <Reveal delay={100}>
-              <article className="relative h-full overflow-hidden rounded-3xl border border-border bg-white p-8 sm:p-10">
-                <Quote className="absolute right-8 top-8 h-14 w-14 text-gold-pale" fill="currentColor" strokeWidth={0} />
-                <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">Our Vision</p>
-                <h3 className="relative mt-3 max-w-sm text-2xl font-extrabold text-navy sm:text-3xl">
-                  The most trusted name in financial facilitation.
-                </h3>
-                <p className="relative mt-4 max-w-sm text-[15px] leading-relaxed text-muted-foreground">
-                  To become the most trusted financial facilitation partner across our markets —
-                  known for integrity, structuring expertise, and always putting the client first.
-                </p>
-              </article>
-            </Reveal>
-          </div>
+          <Reveal>
+            <div className="navy-panel relative overflow-hidden rounded-3xl p-8 sm:p-14">
+              <div className="absolute top-0 right-1/4 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
+              <div className="relative grid gap-10 lg:grid-cols-2 lg:divide-x lg:divide-white/10">
+                <div className="lg:pr-10">
+                  <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">
+                    Our Mission
+                  </p>
+                  <h3 className="mt-3 text-2xl font-extrabold text-white sm:text-3xl">
+                    Match the file to the lender who actually wants it.
+                  </h3>
+                  <p className="mt-4 text-[15px] leading-relaxed text-white/70">
+                    Every profile fits somewhere — irregular income, a thin credit file, an
+                    unconventional business. Our job is finding which of our partner lenders is
+                    the right fit, instead of forcing your file into a template it was never going
+                    to clear.
+                  </p>
+                </div>
+                <div className="lg:pl-10">
+                  <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">
+                    Our Vision
+                  </p>
+                  <h3 className="mt-3 text-2xl font-extrabold text-white sm:text-3xl">
+                    The advisor people call before they call a bank.
+                  </h3>
+                  <p className="mt-4 text-[15px] leading-relaxed text-white/70">
+                    To be the first call a borrower makes across our markets — because they
+                    already trust we'll route them honestly, and to the lender that actually fits.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -202,16 +193,22 @@ function AboutPage() {
           <Reveal>
             <p className="eyebrow">Why Choose Growth Capital Services</p>
             <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
-              Five reasons clients <span className="gold-text-static italic">come back to us.</span>
+              What clients mention <span className="gold-text-static italic">when they refer us.</span>
             </h2>
           </Reveal>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-12 border-t border-border">
             {WHY_CHOOSE.map((w, i) => (
               <Reveal key={w.num} delay={i * 70}>
-                <div className="h-full rounded-2xl border border-border bg-white p-6 transition-all duration-400 hover:-translate-y-1 hover:border-gold/30 hover:shadow-[var(--shadow-card)]">
-                  <p className="font-heading text-lg italic text-gold-dark">№ {w.num}</p>
-                  <h3 className="mt-3 text-base font-extrabold text-navy">{w.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{w.body}</p>
+                <div className="flex flex-col gap-2 border-b border-border py-6 sm:flex-row sm:items-baseline sm:gap-10 sm:py-7">
+                  <span className="font-heading shrink-0 text-2xl italic text-gold-dark sm:w-16">
+                    № {w.num}
+                  </span>
+                  <div>
+                    <h3 className="text-lg font-extrabold text-navy">{w.title}</h3>
+                    <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                      {w.body}
+                    </p>
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -227,7 +224,7 @@ function AboutPage() {
               <div>
                 <p className="eyebrow">Our Services</p>
                 <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
-                  Tailored across <span className="gold-text-static italic">twenty-five loan categories.</span>
+                  25 products, <span className="gold-text-static italic">one advisor who knows all of them.</span>
                 </h2>
               </div>
               <Link
@@ -239,20 +236,28 @@ function AboutPage() {
             </div>
           </Reveal>
 
-          <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {PRODUCTS.map((p, i) => (
-              <Reveal key={p.slug} delay={(i % 8) * 40}>
-                <Link
-                  to="/services/$slug"
-                  params={{ slug: p.slug }}
-                  className="group flex h-full items-start justify-between gap-3 rounded-xl border border-border bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-gold/30 hover:shadow-[var(--shadow-card)]"
-                >
-                  <span>
-                    <span className="block text-[15px] font-bold text-foreground">{p.title}</span>
-                    <span className="mt-1 block text-[13px] leading-snug text-muted-foreground">{p.tagline}</span>
-                  </span>
-                  <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-gold/60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gold" />
-                </Link>
+          <div className="mt-12 space-y-10">
+            {PRODUCT_GROUPS.map((group, gi) => (
+              <Reveal key={group.name} delay={gi * 60}>
+                <div className="flex items-center gap-3">
+                  <p className="shrink-0 text-xs font-bold tracking-[0.14em] text-gold-dark uppercase">
+                    {group.name}
+                  </p>
+                  <div className="h-px flex-1 bg-border" />
+                </div>
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {PRODUCTS.filter((p) => p.group === group.name).map((p) => (
+                    <Link
+                      key={p.slug}
+                      to="/services/$slug"
+                      params={{ slug: p.slug }}
+                      className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-[var(--shadow-card)]"
+                    >
+                      <span className="text-[14px] font-bold text-foreground">{p.title}</span>
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-gold/60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gold" />
+                    </Link>
+                  ))}
+                </div>
               </Reveal>
             ))}
           </div>
@@ -288,64 +293,45 @@ function AboutPage() {
               </h2>
             </div>
           </Reveal>
-          <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-            {PROCESS.map((step, i) => (
-              <Reveal key={step.num} delay={i * 80}>
-                <div className="relative h-full rounded-2xl border border-border bg-white p-6">
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-navy text-sm font-bold text-white">
-                    {step.num}
-                  </span>
-                  <h3 className="mt-4 text-base font-extrabold text-navy">{step.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
-                  {i < PROCESS.length - 1 && (
-                    <ArrowRight className="absolute -right-3 top-9 hidden h-4 w-4 text-gold/50 lg:block" />
-                  )}
-                </div>
-              </Reveal>
-            ))}
+          <div className="relative mt-14">
+            <span
+              aria-hidden
+              className="absolute top-5 right-[10%] left-[10%] hidden h-0.5 bg-gold/20 lg:block"
+            />
+            <ol className="relative grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5">
+              {PROCESS.map((step, i) => (
+                <Reveal key={step.num} delay={i * 80}>
+                  <li className="text-center">
+                    <span className="relative z-10 mx-auto grid h-10 w-10 place-items-center rounded-full border-2 border-gold bg-white text-sm font-bold text-gold-dark">
+                      {step.num}
+                    </span>
+                    <h3 className="mt-4 text-base font-extrabold text-navy">{step.title}</h3>
+                    <p className="mx-auto mt-1.5 max-w-[14rem] text-sm leading-relaxed text-muted-foreground">
+                      {step.body}
+                    </p>
+                  </li>
+                </Reveal>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
 
-      {/* A Promise */}
-      <section className="bg-gradient-to-b from-background via-gold/[0.03] to-background py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-          <Reveal>
-            <p className="eyebrow">A Promise</p>
-            <p className="mx-auto mt-5 max-w-xl font-heading text-2xl italic text-navy sm:text-3xl">
-              "Let Growth Capital Services help turn your financial goals into reality."
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <a href={CONTACT.whatsappLink} target="_blank" rel="noopener noreferrer" className="gold-btn py-3">
-                Talk to an advisor <ArrowRight className="h-4 w-4" />
-              </a>
-              <Link
-                to="/services"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 px-6 py-3 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50"
-              >
-                Browse services
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Final CTA */}
+      {/* Closing */}
       <section className="pb-16 sm:pb-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <div className="navy-panel relative overflow-hidden rounded-3xl p-8 sm:p-10">
+            <div className="navy-panel relative overflow-hidden rounded-3xl p-8 text-center sm:p-14">
               <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
-              <div className="relative flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
-                <div>
-                  <h3 className="text-2xl font-extrabold text-white sm:text-3xl">
-                    Ready to find the right funding solution?
-                  </h3>
-                  <p className="mt-2 text-sm text-white/60">
-                    Free consultation. Check your eligibility in 2 minutes.
-                  </p>
-                </div>
-                <div className="flex shrink-0 flex-wrap gap-3">
+              <div className="relative">
+                <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">A Promise</p>
+                <p className="mx-auto mt-5 max-w-xl font-heading text-2xl italic text-white sm:text-3xl">
+                  "Let Growth Capital Services help turn your financial goals into reality."
+                </p>
+                <p className="mt-4 text-sm text-white/60">
+                  No cost, no obligation — just a straight answer on what you qualify for.
+                </p>
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                   <Link to="/contact" className="gold-btn py-3.5 text-base">
                     Apply Now <ArrowRight className="h-4 w-4" />
                   </Link>

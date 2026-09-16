@@ -742,31 +742,31 @@ export const PRODUCT_GROUPS: {
     name: "Property Finance",
     heading: "Make your property work for you.",
     description:
-      "Home loans, loans against property, rental discounting, balance transfers and property-backed overdrafts.",
+      "Everything from a first home purchase to unlocking equity already sitting in a property you own.",
   },
   {
     name: "Business Growth",
     heading: "Funding that keeps pace with your business.",
     description:
-      "Term loans, collateral-free CGTMSE cover, overdrafts and project finance for businesses on the move.",
+      "Whether it's working capital fast or collateral-free funding to scale, structured for businesses actually moving.",
   },
   {
     name: "Cash Flow & Trade",
     heading: "Money moving, operations humming.",
     description:
-      "Cash credit, overdrafts, bank guarantees, letters of credit and term loans that steady your working capital.",
+      "The day-to-day financial plumbing — credit lines, guarantees and limits that keep operations from stalling.",
   },
   {
     name: "Personal & Education",
     heading: "For life's big moments.",
     description:
-      "Personal loans, loans against your investments and education funding for India or abroad.",
+      "For the moments that don't wait — a medical bill, a degree abroad, or funds against what you've already invested.",
   },
   {
     name: "Vehicles & Special Cases",
     heading: "Wheels, bridges and urgent deadlines.",
     description:
-      "New and used car loans, car refinance and fast private funding when time is short.",
+      "A new car, a better rate on the one you're driving, or funding when a deadline won't wait.",
   },
 ];
 

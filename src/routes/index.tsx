@@ -54,15 +54,15 @@ const WA_PATH =
   "M12.04 2A10 10 0 0 0 2 12.04a9.94 9.94 0 0 0 1.34 4.99L2 22l5.13-1.34A9.95 9.95 0 0 0 12.04 22 10 10 0 0 0 22 12.04 10 10 0 0 0 12.04 2zm5.82 14.12c-.24.67-1.42 1.24-1.96 1.32-.5.07-1.14.1-1.84-.12a16.84 16.84 0 0 1-1.67-.62c-2.93-1.27-4.84-4.23-4.99-4.43-.15-.2-1.2-1.6-1.2-3.06 0-1.45.76-2.17 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.02.9 2.17.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.13.99 2.09 1.3 2.39 1.44.3.15.47.13.64-.07.17-.21.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z";
 
 const HERO_POINTS = [
-  { icon: BadgeCheck, title: "Home, Business &", sub: "Personal Loans" },
-  { icon: Timer, title: "Fast Approvals", sub: "& Disbursal" },
-  { icon: Landmark, title: "Leading Bank &", sub: "NBFC Partners" },
+  { icon: BadgeCheck, title: "Every Loan Type,", sub: "Under One Roof" },
+  { icon: Timer, title: "Days, Not Weeks,", sub: "To Sanction" },
+  { icon: Landmark, title: "75+ Lenders,", sub: "Compared For You" },
 ];
 
 const TRUST = [
   { icon: Landmark, label: "75+ Banking Partners" },
-  { icon: Timer, label: "Faster Sanctions" },
-  { icon: TrendingUp, label: "High-Ticket Expertise" },
+  { icon: Timer, label: "Speed to Sanction" },
+  { icon: TrendingUp, label: "Large-Ticket Specialists" },
   { icon: Sparkles, label: "Custom-built Loans" },
   { icon: BadgeCheck, label: "Zero Advisory Fee" },
   { icon: Globe, label: "PAN India Service" },
@@ -202,10 +202,6 @@ function HomePage() {
               ))}
             </h1>
 
-            <Reveal delay={150}>
-              <div className="mt-7 h-[3px] w-16 rounded-full bg-gold"></div>
-            </Reveal>
-
             <Reveal delay={200}>
               <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
                 Leading with integrity — your most ethical financial partner. As Authorized Business
@@ -215,10 +211,10 @@ function HomePage() {
             </Reveal>
 
             <Reveal delay={250}>
-              <div className="mt-9 flex flex-wrap gap-3">
+              <div className="mt-9 flex flex-wrap items-center gap-4">
                 <Link
                   to="/services"
-                  className="group inline-flex items-center gap-2 rounded-md bg-navy px-7 py-3.5 text-sm font-bold text-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-soft"
+                  className="group inline-flex items-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-bold text-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-soft"
                 >
                   Explore Loan Products
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -227,27 +223,25 @@ function HomePage() {
                   href={CONTACT.whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 rounded-md bg-gold px-7 py-3.5 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold-light"
+                  className="group inline-flex items-center gap-2.5 text-sm font-bold text-navy transition-colors duration-300 hover:text-gold-dark"
                 >
-                  Talk to an Advisor
-                  <span className="transition-transform duration-300 group-hover:rotate-12">
+                  <span className="grid h-11 w-11 place-items-center rounded-full border-2 border-navy/15 text-navy transition-all duration-300 group-hover:border-gold group-hover:bg-gold group-hover:text-navy">
                     <WhatsAppIcon />
                   </span>
+                  Talk to an Advisor
                 </a>
               </div>
             </Reveal>
 
             <Reveal delay={300}>
-              <ul className="mt-12 grid max-w-xl gap-5 border-t border-border pt-8 sm:grid-cols-3">
+              <ul className="mt-12 flex max-w-xl flex-wrap items-stretch gap-x-6 gap-y-3 border-t border-border pt-8">
                 {HERO_POINTS.map((p) => (
-                  <li key={p.title} className="group flex items-center gap-3">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:animate-[gcs-wiggle_700ms_ease-in-out] group-hover:bg-gold group-hover:text-navy">
-                      <p.icon className="h-5 w-5" />
-                    </span>
-                    <span className="text-sm leading-snug">
-                      <span className="block font-bold text-navy">{p.title}</span>
-                      <span className="text-muted-foreground">{p.sub}</span>
-                    </span>
+                  <li
+                    key={p.title}
+                    className="flex flex-col justify-center border-l-2 border-gold/40 pl-3 text-sm leading-snug"
+                  >
+                    <span className="font-bold text-navy">{p.title}</span>
+                    <span className="text-muted-foreground">{p.sub}</span>
                   </li>
                 ))}
               </ul>

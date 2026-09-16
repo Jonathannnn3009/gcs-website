@@ -1,5 +1,5 @@
 import { useId, useState, type ReactNode } from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
 import { Toast } from "@/components/toast";
 
@@ -116,7 +116,7 @@ export function LeadForm() {
                 onChange={set("phone")}
                 maxLength={15}
                 inputMode="tel"
-                placeholder="10-digit mobile"
+                placeholder="Your mobile number"
               />
             </Field>
 
@@ -177,16 +177,9 @@ export function LeadForm() {
             </span>
           </button>
 
-          <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[11px] text-muted-foreground">
-            {["100% confidential", "Callback within 24 hrs", "Zero advisory fee"].map((item) => (
-              <li key={item} className="flex items-center gap-1.5">
-                <span className="grid h-4 w-4 place-items-center rounded-full bg-gold-pale text-gold-dark">
-                  <Check className="h-2.5 w-2.5" strokeWidth={3} />
-                </span>
-                {item}
-              </li>
-            ))}
-          </ul>
+          <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground italic">
+            Kept confidential, called back within a day — and it never costs you a rupee.
+          </p>
         </div>
       </form>
 

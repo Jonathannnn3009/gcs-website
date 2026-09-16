@@ -37,10 +37,10 @@ function NotFoundBlock() {
 }
 
 const PROCESS = [
-  { num: "01", icon: FileText, title: "Consultation", body: "Tell us your goal — a senior advisor reads your profile end to end." },
-  { num: "02", icon: Landmark, title: "Bank Matchmaking", body: "We match you to the lender most likely to approve your case." },
-  { num: "03", icon: FileCheck2, title: "Documentation", body: "We structure the paperwork the way underwriters actually underwrite." },
-  { num: "04", icon: Check, title: "Sanction & Support", body: "Funds reach your account, with support continuing after disbursal." },
+  { num: "01", icon: FileText, title: "Tell Us What You Need", body: "A quick conversation about your goal and situation — no forms yet." },
+  { num: "02", icon: Landmark, title: "Lender Shortlist", body: "Your profile checked against our network to find who's actually likely to say yes." },
+  { num: "03", icon: FileCheck2, title: "Paperwork, Handled", body: "We prep the file the way this lender's underwriting desk expects to see it." },
+  { num: "04", icon: Check, title: "Funds, Then Follow-Up", body: "Money lands in your account — and we stay reachable well after that." },
 ];
 
 const CHECKLIST_PDF: Record<string, string> = {
@@ -123,80 +123,85 @@ function ProductDetailPage() {
                 </div>
               </div>
 
-              {/* Decorative side panel */}
-              <div className="relative hidden items-center justify-center overflow-hidden bg-gold-pale/40 lg:flex">
-                <div className="absolute h-72 w-72 rounded-full border border-gold/20" />
-                <div className="absolute h-52 w-52 rounded-full border border-gold/25" />
-                <div className="relative flex flex-col items-center gap-4 text-center">
-                  <span className="font-heading text-sm italic text-gold-dark">01</span>
-                  <span className="grid h-20 w-20 place-items-center rounded-2xl navy-panel text-gold-light shadow-lg">
-                    <product.icon className="h-9 w-9" />
-                  </span>
-                  <div>
-                    <p className="font-heading text-lg font-bold text-navy">{product.title}</p>
-                    <p className="text-xs font-bold tracking-wide text-gold-dark">{code}</p>
-                  </div>
-                </div>
+              {/* At-a-glance eligibility snapshot */}
+              <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-8 lg:flex">
+                <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+                  At A Glance
+                </p>
+                <ul className="space-y-4">
+                  {product.eligibility.slice(0, 3).map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                      <span className="text-sm leading-snug text-foreground">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* About + Key Features + Eligibility/Documents + Promise, beside a sticky Apply card */}
+      {/* The file — one continuous dossier panel instead of several stacked cards */}
       <Section>
         <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
-          {/* LEFT: content stack */}
-          <div className="space-y-12">
-            <Reveal>
-              <p className="eyebrow">About This Product</p>
-              <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl">
-                Why clients choose Growth Capital Services for {product.title}.
-              </h2>
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground">{product.about}</p>
-            </Reveal>
-
-            <div>
-              <Reveal>
-                <p className="eyebrow">What We Offer</p>
-                <h3 className="mt-2 text-2xl font-extrabold text-navy">Key features</h3>
-              </Reveal>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                {product.features.map((item, i) => (
-                  <Reveal key={item} delay={i * 60}>
-                    <div className="flex items-start gap-3 rounded-xl border border-border bg-white p-5">
-                      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold-pale/60 text-gold-dark">
-                        <Check className="h-4 w-4" />
-                      </span>
-                      <span className="pt-1 text-sm leading-relaxed text-foreground">{item}</span>
-                    </div>
-                  </Reveal>
-                ))}
+          {/* LEFT: the dossier */}
+          <Reveal>
+            <div className="overflow-hidden rounded-2xl border border-gold/15 bg-white">
+              <div className="p-7 sm:p-9">
+                <p className="eyebrow">The Short Version</p>
+                <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl">
+                  What {product.title} actually does for you.
+                </h2>
+                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                  {product.about}
+                </p>
               </div>
-            </div>
 
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Reveal>
-                <div className="h-full rounded-2xl border border-border bg-white p-7">
-                  <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">Who Can Apply</p>
-                  <h3 className="mt-2 text-lg font-extrabold text-navy">Basic eligibility</h3>
-                  <ul className="mt-4 space-y-2.5">
+              <div className="border-t border-dashed border-border" />
+
+              <div className="p-7 sm:p-9">
+                <p className="eyebrow">What's Included</p>
+                <ul className="mt-5 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+                  {product.features.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-2.5 text-sm leading-relaxed text-foreground"
+                    >
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="border-t border-dashed border-border" />
+
+              <div className="grid sm:grid-cols-2 sm:divide-x sm:divide-border">
+                <div className="p-7 sm:p-9">
+                  <p className="eyebrow">Do You Qualify</p>
+                  <ul className="mt-5 space-y-2.5">
                     {product.eligibility.map((item) => (
-                      <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground">
+                      <li
+                        key={item}
+                        className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground"
+                      >
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                         <span>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-              </Reveal>
-              <Reveal delay={80}>
-                <div className="navy-panel h-full rounded-2xl p-7">
-                  <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">Keep Ready</p>
-                  <h3 className="mt-2 text-lg font-extrabold text-white">Documents required</h3>
-                  <ul className="mt-4 space-y-2.5">
+                <div className="navy-panel p-7 sm:p-9">
+                  <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
+                    Paperwork You'll Need
+                  </p>
+                  <ul className="mt-5 space-y-2.5">
                     {product.documents.map((item) => (
-                      <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70">
+                      <li
+                        key={item}
+                        className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70"
+                      >
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" />
                         <span>{item}</span>
                       </li>
@@ -206,23 +211,14 @@ function ProductDetailPage() {
                     <ChecklistGate pdfHref={CHECKLIST_PDF[product.slug]} productTitle={product.title} />
                   )}
                 </div>
-              </Reveal>
-            </div>
-
-            <Reveal>
-              <div className="panel-light rounded-2xl border border-gold/15 p-8 text-center">
-                <p className="eyebrow">A Working Promise</p>
-                <p className="mx-auto mt-4 max-w-2xl font-heading text-xl italic text-navy">
-                  "Structured to be approved — not just submitted."
-                </p>
               </div>
-            </Reveal>
-          </div>
+            </div>
+          </Reveal>
 
           {/* RIGHT: sticky apply card */}
           <Reveal delay={100} className="lg:sticky lg:top-28">
             <div className="rounded-2xl border border-gold/15 panel-light p-7">
-              <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">Begin Your Application</p>
+              <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">Start Your File</p>
               <h3 className="mt-3 font-heading text-2xl font-bold text-navy">
                 Apply for <span className="italic text-gold-dark">{product.title}.</span>
               </h3>
@@ -281,28 +277,26 @@ function ProductDetailPage() {
         <Reveal>
           <SectionHeading eyebrow="Our Process" title="From first conversation to disbursal." align="center" />
         </Reveal>
-        <div className="relative mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {PROCESS.map((step, i) => (
-            <div key={step.num} className="relative">
-              <Reveal delay={i * 80}>
-                <div className="h-full rounded-2xl border border-border bg-white p-6">
-                  <div className="flex items-start justify-between">
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark">
-                      <step.icon className="h-5 w-5" />
-                    </span>
-                    <span className="font-heading text-lg italic text-gold-dark">{step.num}</span>
-                  </div>
+        <div className="relative mt-14">
+          <span
+            aria-hidden
+            className="absolute top-5 right-[10%] left-[10%] hidden h-0.5 bg-gold/20 lg:block"
+          />
+          <ol className="relative grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            {PROCESS.map((step, i) => (
+              <Reveal key={step.num} delay={i * 80}>
+                <li className="text-center">
+                  <span className="relative z-10 mx-auto grid h-10 w-10 place-items-center rounded-full border-2 border-gold bg-white text-gold-dark">
+                    <step.icon className="h-4 w-4" />
+                  </span>
                   <h4 className="mt-4 text-base font-extrabold text-navy">{step.title}</h4>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
-                </div>
+                  <p className="mx-auto mt-1.5 max-w-[15rem] text-sm leading-relaxed text-muted-foreground">
+                    {step.body}
+                  </p>
+                </li>
               </Reveal>
-              {i < PROCESS.length - 1 && (
-                <span className="absolute -right-5 top-11 z-10 hidden h-8 w-8 place-items-center rounded-full border border-gold/25 bg-white text-gold lg:grid">
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </span>
-              )}
-            </div>
-          ))}
+            ))}
+          </ol>
         </div>
       </Section>
 
@@ -310,28 +304,27 @@ function ProductDetailPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="You Might Also Need"
-            title={`More in ${product.group}`}
-            description={`Every product Growth Capital Services arranges under ${product.group}, so you can see the full picture before you choose.`}
+            eyebrow="Worth Comparing"
+            title={`The rest of ${product.group}`}
+            description={`So you can weigh ${product.title} against everything else we arrange in this category before deciding.`}
           />
         </Reveal>
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+        <div className="mt-8 border-t border-border">
           {fallbackRelated.map((p, i) => (
-            <Reveal key={p.slug} delay={i * 80}>
+            <Reveal key={p.slug} delay={i * 60}>
               <Link
                 to="/services/$slug"
                 params={{ slug: p.slug }}
-                className="group flex h-full flex-col rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]"
+                className="group flex items-center gap-4 border-b border-border py-5"
               >
-                <span className="font-heading text-lg italic text-gold-dark">{String(i + 2).padStart(2, "0")}</span>
-                <span className="mt-3 grid h-10 w-10 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
                   <p.icon className="h-5 w-5" />
                 </span>
-                <h4 className="mt-4 text-base font-extrabold text-navy">{p.title}</h4>
-                <p className="mt-1.5 text-sm text-muted-foreground">{p.tagline}</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-gold-dark">
-                  Explore {productCode(p.title)} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-base font-extrabold text-navy">{p.title}</span>
+                  <span className="block text-sm text-muted-foreground">{p.tagline}</span>
                 </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
               </Link>
             </Reveal>
           ))}
@@ -349,7 +342,7 @@ function ProductDetailPage() {
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
             <h3 className="relative text-2xl font-extrabold text-navy sm:text-3xl">
-              Ready to apply for {product.title}? <span className="gold-text">Let's talk.</span>
+              Still deciding on {product.title}? <span className="gold-text">Ask us directly.</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
               Call {CONTACT.phone} · {CONTACT.hours}

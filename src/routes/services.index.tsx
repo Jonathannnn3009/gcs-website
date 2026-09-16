@@ -29,7 +29,7 @@ const SERVICE_STATS = [
   { value: `${PRODUCTS.length}+`, label: "Loan Products" },
   { value: "75+", label: "Bank & NBFC Partners" },
   { value: "100%", label: "Transparent Process" },
-  { value: "Since 2017", label: "Active DSA" },
+  { value: "2017", label: "Arranging Loans Since" },
 ];
 
 function ServicesPage() {
@@ -50,14 +50,14 @@ function ServicesPage() {
               <span className="text-gold">/</span>
               <span className="text-navy">Services</span>
             </p>
-            <p className="eyebrow mt-5">Our Loan Suite</p>
+            <p className="eyebrow mt-5">Every Product, One Desk</p>
             <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl">
-              {PRODUCTS.length}-plus instruments —<br />
-              <span className="gold-text-static italic">one private desk.</span>
+              {PRODUCTS.length} loan products,<br />
+              <span className="gold-text-static italic">matched to your file, not a script.</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-              Curated across 75+ banks and NBFCs — matched to your profile by a senior advisor,
-              not a call-centre script.
+              One advisor works across our full catalogue of {PRODUCTS.length} products and our
+              75+ lender network to find what actually fits your profile.
             </p>
           </Reveal>
 
@@ -78,9 +78,12 @@ function ServicesPage() {
           </Reveal>
 
           {/* Stats */}
-          <Reveal delay={180} className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-4">
+          <Reveal
+            delay={180}
+            className="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-x-10 gap-y-4 border-t border-border pt-8"
+          >
             {SERVICE_STATS.map((s) => (
-              <div key={s.label} className="rounded-2xl border border-gold/15 bg-white p-6 text-center">
+              <div key={s.label} className="border-l-2 border-gold/40 pl-4 text-left">
                 <p className="font-heading text-2xl font-bold text-navy sm:text-3xl">{s.value}</p>
                 <p className="mt-1 text-xs font-bold tracking-wide text-gold-dark uppercase">{s.label}</p>
               </div>
