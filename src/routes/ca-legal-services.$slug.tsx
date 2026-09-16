@@ -88,55 +88,61 @@ function ProfessionalServiceDetailPage() {
         </div>
       </section>
 
-      {/* Who needs it + process + documents */}
+      {/* Who needs it + process + documents — one continuous dossier panel */}
       <Section className="pt-10">
         <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
-          {/* LEFT */}
-          <div className="space-y-10">
-            <Reveal>
-              <p className="eyebrow flex items-center gap-1.5">
-                <Users className="h-3.5 w-3.5" /> Who Needs This
-              </p>
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                {service.whoNeedsIt}
-              </p>
-            </Reveal>
-
-            <Reveal delay={80}>
-              <p className="eyebrow">How It Works</p>
-              <div className="mt-4 space-y-5">
-                {service.process.map((step, i) => (
-                  <div key={step} className="flex gap-4">
-                    <span className="font-heading shrink-0 text-2xl font-extrabold text-gold-dark">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{step}</p>
-                  </div>
-                ))}
+          {/* LEFT: the dossier */}
+          <Reveal>
+            <div className="overflow-hidden rounded-2xl border border-gold/15 bg-white">
+              <div className="p-7 sm:p-9">
+                <p className="eyebrow flex items-center gap-1.5">
+                  <Users className="h-3.5 w-3.5" /> Who Needs This
+                </p>
+                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                  {service.whoNeedsIt}
+                </p>
               </div>
-            </Reveal>
 
-            <Reveal delay={140}>
-              <p className="eyebrow flex items-center gap-1.5">
-                <FileText className="h-3.5 w-3.5" /> Documents Typically Required
-              </p>
-              <ul className="mt-4 space-y-2.5">
-                {service.documents.map((doc) => (
-                  <li key={doc} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
-                    {doc}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
+              <div className="border-t border-dashed border-border" />
 
-            <div className="flex items-start gap-2.5 rounded-xl border border-border bg-secondary/40 p-4 text-xs leading-relaxed text-muted-foreground">
-              This service is arranged through our associated professionals —{" "}
-              {service.division === "CA Services" ? "our CA Services team" : "Sheetal Associates"}{" "}
-              — who handle the work through their own professional process. Requirements,
-              documentation and timelines vary case to case.
+              <div className="p-7 sm:p-9">
+                <p className="eyebrow">How It Works</p>
+                <div className="mt-5 space-y-5">
+                  {service.process.map((step, i) => (
+                    <div key={step} className="flex gap-4">
+                      <span className="font-heading shrink-0 text-2xl font-extrabold text-gold-dark">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{step}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="border-t border-dashed border-border" />
+
+              <div className="p-7 sm:p-9">
+                <p className="eyebrow flex items-center gap-1.5">
+                  <FileText className="h-3.5 w-3.5" /> Documents Typically Required
+                </p>
+                <ul className="mt-5 space-y-2.5">
+                  {service.documents.map((doc) => (
+                    <li key={doc} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                      {doc}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-secondary/40 p-5 text-xs leading-relaxed text-muted-foreground">
+                This service is arranged through our associated professionals —{" "}
+                {service.division === "CA Services" ? "our CA Services team" : "Sheetal Associates"}{" "}
+                — who handle the work through their own professional process. Requirements,
+                documentation and timelines vary case to case.
+              </div>
             </div>
-          </div>
+          </Reveal>
 
           {/* RIGHT: sticky enquiry form */}
           <Reveal delay={100} className="lg:sticky lg:top-28">
@@ -165,33 +171,24 @@ function ProfessionalServiceDetailPage() {
       {similar.length > 0 && (
         <Section className="pt-0">
           <Reveal>
-            <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-              More in {service.category}
-            </p>
+            <p className="eyebrow">More in {service.category}</p>
           </Reveal>
-          <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 border-t border-border">
             {similar.map((s, i) => (
-              <Reveal key={s.slug} delay={i * 60} className="h-full">
+              <Reveal key={s.slug} delay={i * 60}>
                 <Link
                   to="/ca-legal-services/$slug"
                   params={{ slug: s.slug }}
-                  className="group flex h-full flex-col gap-3 rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]"
+                  className="group flex items-center gap-4 border-b border-border py-4"
                 >
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/70 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
                     <s.icon className="h-5 w-5" />
                   </span>
-                  <div>
-                    <p className="mt-1.5 font-heading text-base leading-snug font-bold text-navy">
-                      {s.title}
-                    </p>
-                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                      {s.summary}
-                    </p>
-                  </div>
-                  <span className="mt-auto inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark">
-                    Learn more
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-base font-bold text-navy">{s.title}</span>
+                    <span className="block text-sm text-muted-foreground">{s.summary}</span>
                   </span>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
                 </Link>
               </Reveal>
             ))}

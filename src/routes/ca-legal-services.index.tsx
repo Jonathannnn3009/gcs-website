@@ -71,69 +71,65 @@ function CaLegalServicesPage() {
         </div>
       </section>
 
-      {/* Divisions */}
+      {/* Divisions — each gets its own visual identity since they're two different practices */}
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-        <div className="space-y-16">
-          {SERVICE_DIVISIONS.map(({ division, categories }, di) => (
-            <div key={division} id={divisionId(division)} className="scroll-mt-24">
-              <Reveal delay={di * 80}>
-                <p className="eyebrow">{division}</p>
-                <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
-                  {division === "CA Services"
-                    ? "Tax, GST, accounting and business registration."
-                    : "Property, society and legal documentation."}
-                </h2>
-              </Reveal>
-
-              <div className="mt-8 space-y-10">
-                {categories.map((category, ci) => {
-                  const services = PROFESSIONAL_SERVICES.filter(
-                    (s) => s.division === division && s.category === category,
-                  );
-                  if (services.length === 0) return null;
-                  return (
-                    <div key={category}>
-                      <Reveal delay={ci * 60}>
-                        <div className="flex items-center gap-3">
-                          <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-                            {category}
-                          </p>
-                          <div className="h-px flex-1 bg-border" />
-                        </div>
-                      </Reveal>
-                      <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                        {services.map((s, i) => (
-                          <Reveal key={s.slug} delay={i * 60} className="h-full">
-                            <Link
-                              to="/ca-legal-services/$slug"
-                              params={{ slug: s.slug }}
-                              className="group flex h-full flex-col gap-3 rounded-2xl border border-border bg-white p-6 transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-[var(--shadow-lift)]"
-                            >
-                              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
-                                <s.icon className="h-5 w-5" />
-                              </span>
-                              <div>
-                                <h3 className="font-heading text-base leading-snug font-bold text-navy">
-                                  {s.title}
-                                </h3>
-                                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                                  {s.summary}
-                                </p>
-                              </div>
-                              <span className="mt-auto inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark">
-                                Learn more
-                                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
-                              </span>
-                            </Link>
-                          </Reveal>
-                        ))}
-                      </div>
+        <div className="space-y-10">
+          {SERVICE_DIVISIONS.map(({ division }, di) => {
+            const services = PROFESSIONAL_SERVICES.filter((s) => s.division === division);
+            const isLegal = division === "Sheetal Associates";
+            return (
+              <Reveal key={division} delay={di * 80}>
+                <div
+                  id={divisionId(division)}
+                  className={`scroll-mt-24 rounded-3xl border p-6 sm:p-10 ${
+                    isLegal ? "border-navy/15 bg-white" : "border-gold/20 bg-gold-pale/15"
+                  }`}
+                >
+                  <div className="flex flex-wrap items-baseline justify-between gap-3">
+                    <div>
+                      <p className="eyebrow">{division}</p>
+                      <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
+                        {isLegal
+                          ? "Property, society and legal documentation."
+                          : "Tax, GST, accounting and business registration."}
+                      </h2>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+                    <span className="text-xs font-bold tracking-wide text-muted-foreground">
+                      {services.length} services
+                    </span>
+                  </div>
+
+                  <div className="mt-8 border-t border-border/70">
+                    {services.map((s, i) => (
+                      <Reveal key={s.slug} delay={i * 40}>
+                        <Link
+                          to="/ca-legal-services/$slug"
+                          params={{ slug: s.slug }}
+                          className="group flex items-center gap-4 border-b border-border/70 py-4"
+                        >
+                          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-gold-dark ring-1 ring-gold/20 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
+                            <s.icon className="h-5 w-5" />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="flex flex-wrap items-baseline gap-x-2">
+                              <span className="text-base font-bold text-navy">{s.title}</span>
+                              <span className="text-[10px] font-bold tracking-wide text-gold-dark uppercase">
+                                {s.category}
+                              </span>
+                            </span>
+                            <span className="block text-sm text-muted-foreground">
+                              {s.summary}
+                            </span>
+                          </span>
+                          <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
+                        </Link>
+                      </Reveal>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
       </section>
 

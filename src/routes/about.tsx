@@ -152,17 +152,15 @@ function AboutPage() {
       <section className="pb-16 sm:pb-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <div className="navy-panel relative overflow-hidden rounded-3xl p-8 sm:p-14">
-              <div className="absolute top-0 right-1/4 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
-              <div className="relative grid gap-10 lg:grid-cols-2 lg:divide-x lg:divide-white/10">
+            <div className="relative overflow-hidden rounded-3xl border border-gold/15 bg-white p-8 sm:p-14">
+              <div className="absolute top-0 right-1/4 h-72 w-72 rounded-full bg-gold/8 blur-[100px]" />
+              <div className="relative grid gap-10 lg:grid-cols-2 lg:divide-x lg:divide-border">
                 <div className="lg:pr-10">
-                  <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">
-                    Our Mission
-                  </p>
-                  <h3 className="mt-3 text-2xl font-extrabold text-white sm:text-3xl">
+                  <p className="eyebrow">Our Mission</p>
+                  <h3 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl">
                     Match the file to the lender who actually wants it.
                   </h3>
-                  <p className="mt-4 text-[15px] leading-relaxed text-white/70">
+                  <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
                     Every profile fits somewhere — irregular income, a thin credit file, an
                     unconventional business. Our job is finding which of our partner lenders is
                     the right fit, instead of forcing your file into a template it was never going
@@ -170,13 +168,11 @@ function AboutPage() {
                   </p>
                 </div>
                 <div className="lg:pl-10">
-                  <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">
-                    Our Vision
-                  </p>
-                  <h3 className="mt-3 text-2xl font-extrabold text-white sm:text-3xl">
+                  <p className="eyebrow">Our Vision</p>
+                  <h3 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl">
                     The advisor people call before they call a bank.
                   </h3>
-                  <p className="mt-4 text-[15px] leading-relaxed text-white/70">
+                  <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
                     To be the first call a borrower makes across our markets — because they
                     already trust we'll route them honestly, and to the lender that actually fits.
                   </p>
@@ -293,27 +289,22 @@ function AboutPage() {
               </h2>
             </div>
           </Reveal>
-          <div className="relative mt-14">
-            <span
-              aria-hidden
-              className="absolute top-5 right-[10%] left-[10%] hidden h-0.5 bg-gold/20 lg:block"
-            />
-            <ol className="relative grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5">
-              {PROCESS.map((step, i) => (
-                <Reveal key={step.num} delay={i * 80}>
-                  <li className="text-center">
-                    <span className="relative z-10 mx-auto grid h-10 w-10 place-items-center rounded-full border-2 border-gold bg-white text-sm font-bold text-gold-dark">
-                      {step.num}
-                    </span>
-                    <h3 className="mt-4 text-base font-extrabold text-navy">{step.title}</h3>
-                    <p className="mx-auto mt-1.5 max-w-[14rem] text-sm leading-relaxed text-muted-foreground">
-                      {step.body}
-                    </p>
-                  </li>
-                </Reveal>
-              ))}
-            </ol>
-          </div>
+          {/* A spec-sheet row — no icons or shapes, just a clean divided strip */}
+          <ol className="mt-14 grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-5 sm:divide-x sm:divide-y-0">
+            {PROCESS.map((step, i) => (
+              <Reveal key={step.num} delay={i * 80}>
+                <li className="p-6 text-center sm:p-5">
+                  <span className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
+                    Step {step.num}
+                  </span>
+                  <h3 className="mt-2 text-base font-extrabold text-navy">{step.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {step.body}
+                  </p>
+                </li>
+              </Reveal>
+            ))}
+          </ol>
         </div>
       </section>
 

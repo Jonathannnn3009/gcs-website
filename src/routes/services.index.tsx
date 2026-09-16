@@ -104,12 +104,17 @@ function ServicesPage() {
         <LoanGoals />
       </Section>
 
-      {/* All products by group */}
-      {PRODUCT_GROUPS.map((group) => (
+      {/* All products by group — each group gets its own panel so 25 products don't blur together */}
+      {PRODUCT_GROUPS.map((group, gi) => (
         <Section
           key={group.name}
           id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
           className="pt-0 scroll-mt-24"
+        >
+        <div
+          className={`rounded-3xl border p-6 sm:p-10 ${
+            gi % 2 === 0 ? "border-gold/20 bg-gold-pale/10" : "border-border bg-white"
+          }`}
         >
           <Reveal>
             <SectionHeading
@@ -188,6 +193,7 @@ function ServicesPage() {
               </Reveal>
             ))}
           </div>
+        </div>
         </Section>
       ))}
 

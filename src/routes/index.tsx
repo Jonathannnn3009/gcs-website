@@ -402,7 +402,7 @@ function HomePage() {
 
           {/* Consultation form, with a floating trust badge tucked at its top corner */}
           <Reveal delay={200} className="relative mx-auto w-full max-w-[420px] lg:mr-0">
-            <div className="absolute -top-4 -left-4 z-10 hidden items-center gap-1.5 rounded-xl border border-gold/25 bg-navy px-3.5 py-2 shadow-[var(--shadow-lift)] sm:flex">
+            <div className="absolute -top-4 -right-4 z-10 hidden items-center gap-1.5 rounded-xl border border-gold/25 bg-navy px-3.5 py-2 shadow-[var(--shadow-lift)] sm:flex">
               <Landmark className="h-3.5 w-3.5 text-gold-light" />
               <span className="text-[11px] font-bold text-white">75+ Banks & NBFCs</span>
             </div>
