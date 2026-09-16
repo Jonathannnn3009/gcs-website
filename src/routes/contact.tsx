@@ -174,8 +174,8 @@ function ContactPage() {
               className="block"
             />
 
-            {/* Floating spotlight card */}
-            <div className="absolute top-6 left-6 max-w-sm rounded-2xl border border-gold/20 bg-white/95 p-6 shadow-[var(--shadow-lift)] backdrop-blur-md sm:top-8 sm:left-8">
+            {/* Floating spotlight card — kept on the right so it never overlaps Google's own place card, which always anchors top-left */}
+            <div className="absolute top-6 right-6 max-w-sm rounded-2xl border border-gold/20 bg-white/95 p-6 shadow-[var(--shadow-lift)] backdrop-blur-md sm:top-8 sm:right-8">
               <p className="text-sm leading-relaxed text-muted-foreground">
                 Our advisory team is based at CCTV Towers on the Andheri-Ghatkopar Road, accessible
                 to clients across the western suburbs.

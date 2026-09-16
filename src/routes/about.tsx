@@ -79,12 +79,12 @@ function AboutPage() {
             </p>
             <p className="eyebrow mt-4">About Growth Capital Services</p>
             <h1 className="mt-3 max-w-3xl text-3xl font-extrabold text-navy sm:text-5xl">
-              The desk that gets your file to "yes."
+              A loan advisory built around one discipline.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Growth Capital Services has spent since {2017} doing one job well: reading a
-              borrower's actual file — the irregular income, the awkward timing, the bank that
-              already said no — and finding the lender in our network who'll say yes to it.
+              Since {2017}, Growth Capital Services has focused on one thing: reading a borrower's
+              actual file — the irregular income, the awkward timing, the bank that already
+              declined it — and matching it to the right lender in our network.
             </p>
           </Reveal>
 
