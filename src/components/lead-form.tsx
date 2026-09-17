@@ -1,7 +1,11 @@
 import { useId, useState, type ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
+import { APPLICANT_CATEGORY_LABELS } from "@/data/products";
 import { Toast } from "@/components/toast";
+
+// Paperwork genuinely differs by applicant type for these two — ask early.
+const LOAN_TYPES_WITH_CATEGORY = new Set(["Home Loan", "Loan Against Property"]);
 
 type Fields = {
   name: string;
@@ -9,6 +13,7 @@ type Fields = {
   email: string;
   loanType: string;
   loanTypeOther: string;
+  applicantCategory: string;
   city: string;
   cityOther: string;
   loanAmount: string;
@@ -20,6 +25,7 @@ const empty: Fields = {
   email: "",
   loanType: "",
   loanTypeOther: "",
+  applicantCategory: "",
   city: "",
   cityOther: "",
   loanAmount: "",
@@ -84,7 +90,12 @@ export function LeadForm() {
     setValues((v) => ({ ...v, [key]: e.target.value }));
 
   const setLoanType = (e: React.ChangeEvent<HTMLSelectElement>) =>
-    setValues((v) => ({ ...v, loanType: e.target.value, loanTypeOther: "" }));
+    setValues((v) => ({
+      ...v,
+      loanType: e.target.value,
+      loanTypeOther: "",
+      applicantCategory: LOAN_TYPES_WITH_CATEGORY.has(e.target.value) ? v.applicantCategory : "",
+    }));
 
   const setCity = (e: React.ChangeEvent<HTMLSelectElement>) =>
     setValues((v) => ({ ...v, city: e.target.value, cityOther: "" }));
@@ -102,6 +113,8 @@ export function LeadForm() {
     if (!values.loanType) next.loanType = "Select a loan type";
     else if (values.loanType === "Other" && !values.loanTypeOther.trim())
       next.loanType = "Please enter your loan type";
+    if (LOAN_TYPES_WITH_CATEGORY.has(values.loanType) && !values.applicantCategory)
+      next.applicantCategory = "Select one";
     if (!values.city) next.city = "Select your city";
     else if (values.city === "Other" && !values.cityOther.trim())
       next.city = "Please enter your city";
@@ -197,6 +210,29 @@ export function LeadForm() {
                 />
               ) : null}
             </Field>
+
+            {LOAN_TYPES_WITH_CATEGORY.has(values.loanType) ? (
+              <Field
+                id={`${uid}-applicant-category`}
+                label="You Are"
+                error={errors.applicantCategory}
+                className="sm:col-span-2"
+              >
+                <select
+                  id={`${uid}-applicant-category`}
+                  className={selectClass}
+                  value={values.applicantCategory}
+                  onChange={set("applicantCategory")}
+                >
+                  <option value="">Select one</option>
+                  {APPLICANT_CATEGORY_LABELS.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            ) : null}
 
             <Field id={`${uid}-city`} label="City" error={errors.city}>
               <select

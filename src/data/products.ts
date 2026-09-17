@@ -76,6 +76,8 @@ const NRI_DOCS = [
   "Power of Attorney (POA) in favour of a resident Indian representative, for signing if the applicant can't be present in India",
   "A resident Indian co-applicant's PAN card and address proof",
 ];
+export const APPLICANT_CATEGORY_LABELS = ["Salaried", "Non-Salaried / Self-Employed", "NRI"];
+
 const APPLICANT_DOC_CATEGORIES = [
   {
     label: "Salaried",
