@@ -165,8 +165,8 @@ export const PRODUCTS: Product[] = [
     tagline: "Rent today becomes capital today.",
     group: "Property Finance",
     facts: [
-      { label: "Interest rate", value: "From 8.99%* p.a." },
-      { label: "Loan amount", value: "Up to 80% of future rentals" },
+      { label: "Interest rate", value: "From 7.50%* p.a." },
+      { label: "Loan amount", value: "Up to 90% of future rentals" },
       { label: "Tenure", value: "Aligned to the lease, typically up to 15 years" },
     ],
     about:
@@ -223,7 +223,7 @@ export const PRODUCTS: Product[] = [
     group: "Property Finance",
     facts: [
       { label: "Structure", value: "Secured drop-line overdraft" },
-      { label: "LTV", value: "Up to 60% of property value" },
+      { label: "LTV", value: "Up to 80% of property value" },
       { label: "Interest rate", value: "From 9.75%* p.a. on the drawn balance" },
     ],
     about:
@@ -278,7 +278,7 @@ export const PRODUCTS: Product[] = [
     group: "Business Growth",
     facts: [
       { label: "Loan amount", value: "Up to ₹10 Cr" },
-      { label: "Interest rate", value: "From 9.25%* p.a." },
+      { label: "Interest rate", value: "From 9%* p.a." },
       { label: "Security", value: "Government guarantee cover" },
     ],
     about:
@@ -303,9 +303,9 @@ export const PRODUCTS: Product[] = [
     tagline: "Fixed EMIs, zero security.",
     group: "Business Growth",
     facts: [
-      { label: "Loan amount", value: "Up to ₹7.5 Cr" },
+      { label: "Loan amount", value: "Up to ₹5 Cr" },
       { label: "Interest rate", value: "From 11.50%* p.a." },
-      { label: "Tenure", value: "12 — 84 months" },
+      { label: "Tenure", value: "12 — 60 months" },
       { label: "Security", value: "None" },
     ],
     about:
@@ -317,7 +317,7 @@ export const PRODUCTS: Product[] = [
       "Top-up available after a clean repayment run",
     ],
     eligibility: [
-      "At least 2 years in business with audited or CA-certified financials",
+      "At least 3 years in business with audited or CA-certified financials",
       "Consistent bank credits through the preceding 12 months",
       "A CIBIL score of 680 or higher for the business and its promoters",
     ],
@@ -401,8 +401,8 @@ export const PRODUCTS: Product[] = [
       "Consortium or multiple-banking arrangements structured where useful",
     ],
     eligibility: [
-      "At least 2 years of business operations",
-      "Two years of audited financial statements",
+      "At least 3 years of business operations",
+      "Annual turnover of ₹2 Cr or above, with audited financial statements",
       "A visible working-capital gap in the balance sheet",
     ],
     documents: [KYC, BUSINESS_DOCS, "Audited financials and stock / debtor statements"],
@@ -441,7 +441,7 @@ export const PRODUCTS: Product[] = [
     group: "Cash Flow & Trade",
     facts: [
       { label: "Facility", value: "Account overdraft" },
-      { label: "Interest rate", value: "10% – 16%* p.a. depending on security" },
+      { label: "Interest", value: "Charged on usage only" },
       { label: "Security", value: "Secured or unsecured" },
     ],
     about:
@@ -519,7 +519,7 @@ export const PRODUCTS: Product[] = [
     group: "Cash Flow & Trade",
     facts: [
       { label: "Structure", value: "Term loan on WC gap" },
-      { label: "Tenure", value: "24 — 84 months" },
+      { label: "Tenure", value: "12 — 60 months" },
       { label: "Use", value: "Cycle reset & consolidation" },
     ],
     about:
@@ -545,9 +545,9 @@ export const PRODUCTS: Product[] = [
     tagline: "Money for life's plans, minus the paperwork.",
     group: "Personal & Education",
     facts: [
-      { label: "Interest rate", value: "From 10.50%* p.a." },
-      { label: "Loan amount", value: "Up to ₹50 lakh" },
-      { label: "Tenure", value: "12 — 72 months" },
+      { label: "Interest rate", value: "From 10.49%* p.a." },
+      { label: "Loan amount", value: "Up to ₹1 Cr" },
+      { label: "Tenure", value: "12 — 60 months" },
       { label: "Disbursal", value: "As fast as 48 hours" },
       { label: "Minimum ticket size", value: "₹2 Lakh" },
     ],
@@ -588,7 +588,7 @@ export const PRODUCTS: Product[] = [
     eligibility: [
       "Approved securities held in the applicant's own name",
       "A demat account with a recognised depository",
-      "Resident Indian, 18 years or older",
+      "Resident Indian, 21 years or older",
     ],
     documents: [KYC, "Demat holding statement", "Portfolio / policy documents"],
   },
@@ -712,8 +712,8 @@ export const PRODUCTS: Product[] = [
     tagline: "A great pre-owned car, sensibly financed.",
     group: "Vehicles & Special Cases",
     facts: [
-      { label: "Funding", value: "Up to 80% of valuation" },
-      { label: "Vehicle age", value: "Up to 10 years at loan end" },
+      { label: "Funding", value: "Up to 90% of valuation" },
+      { label: "Vehicle age", value: "Up to 8 years at loan end" },
       { label: "Interest rate", value: "From 10.25%* p.a." },
       { label: "Tenure", value: "12 — 60 months" },
     ],
@@ -766,7 +766,7 @@ export const PRODUCTS: Product[] = [
     tagline: "Fast money when the clock is ticking.",
     group: "Vehicles & Special Cases",
     facts: [
-      { label: "Turnaround", value: "3 — 7 days" },
+      { label: "Disbursal", value: "Within 48 hours" },
       { label: "Security", value: "Property backed" },
       { label: "Interest rate", value: "From 15%* p.a., profile-dependent" },
       { label: "Use", value: "Bridge & short-term needs" },
