@@ -1,8 +1,10 @@
 import { useState, useMemo } from "react";
-import { SliderField } from "@/components/slider-field";
 
 type PaymentHistory = "always" | "occasional" | "frequent" | "default";
 type CreditMix = "mixed" | "single" | "none";
+type Utilization = "low" | "moderate" | "high" | "maxed";
+type HistoryLength = "new" | "short" | "medium" | "long";
+type Inquiries = "none" | "few" | "several" | "many";
 
 const PAYMENT_OPTIONS: { value: PaymentHistory; label: string; score: number }[] = [
   { value: "always", label: "Always paid on time", score: 100 },
@@ -17,6 +19,69 @@ const MIX_OPTIONS: { value: CreditMix; label: string; score: number }[] = [
   { value: "none", label: "No active credit right now", score: 40 },
 ];
 
+// Representative figures per bucket, feeding the same scoring formula that
+// used to take a raw slider value — swapping precision you'd have to guess
+// at for a plain-language choice you actually know the answer to.
+const UTILIZATION_OPTIONS: { value: Utilization; label: string; score: number }[] = [
+  { value: "low", label: "Rarely close to the limit", score: 90 },
+  { value: "moderate", label: "Use about a third of it", score: 70 },
+  { value: "high", label: "Often over half used up", score: 45 },
+  { value: "maxed", label: "Usually near or at the limit", score: 15 },
+];
+
+const HISTORY_OPTIONS: { value: HistoryLength; label: string; score: number }[] = [
+  { value: "new", label: "Less than 2 years", score: 13 },
+  { value: "short", label: "2 to 5 years", score: 25 },
+  { value: "medium", label: "5 to 10 years", score: 55 },
+  { value: "long", label: "More than 10 years", score: 100 },
+];
+
+const INQUIRY_OPTIONS: { value: Inquiries; label: string; score: number }[] = [
+  { value: "none", label: "None", score: 100 },
+  { value: "few", label: "1 to 2", score: 78 },
+  { value: "several", label: "3 to 5", score: 45 },
+  { value: "many", label: "6 or more", score: 15 },
+];
+
+function ChoiceGroup<T extends string>({
+  label,
+  hint,
+  options,
+  value,
+  onChange,
+  twoCol = false,
+}: {
+  label: string;
+  hint?: string;
+  options: { value: T; label: string }[];
+  value: T;
+  onChange: (value: T) => void;
+  twoCol?: boolean;
+}) {
+  return (
+    <div>
+      <label className="text-sm font-semibold text-foreground">{label}</label>
+      <div className={`mt-2 grid gap-2 ${twoCol ? "sm:grid-cols-2" : ""}`}>
+        {options.map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onChange(opt.value)}
+            className={`rounded-lg border px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+              value === opt.value
+                ? "border-gold bg-gold-pale/50 text-navy"
+                : "border-border text-muted-foreground hover:border-gold/40"
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+      {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
+    </div>
+  );
+}
+
 function scoreBand(score: number): { label: string; color: string } {
   if (score >= 750) return { label: "Excellent", color: "text-emerald-600" };
   if (score >= 700) return { label: "Good", color: "text-gold-dark" };
@@ -26,16 +91,16 @@ function scoreBand(score: number): { label: string; color: string } {
 
 export function CreditScoreEstimator() {
   const [payment, setPayment] = useState<PaymentHistory>("always");
-  const [utilization, setUtilization] = useState(30);
-  const [historyYears, setHistoryYears] = useState(5);
-  const [inquiries, setInquiries] = useState(1);
+  const [utilization, setUtilization] = useState<Utilization>("moderate");
+  const [historyLength, setHistoryLength] = useState<HistoryLength>("medium");
+  const [inquiries, setInquiries] = useState<Inquiries>("few");
   const [mix, setMix] = useState<CreditMix>("mixed");
 
   const result = useMemo(() => {
     const paymentScore = PAYMENT_OPTIONS.find((p) => p.value === payment)!.score;
-    const utilizationScore = Math.max(100 - utilization, 0);
-    const historyScore = Math.min((historyYears / 15) * 100, 100);
-    const inquiryScore = Math.max(100 - inquiries * 15, 0);
+    const utilizationScore = UTILIZATION_OPTIONS.find((u) => u.value === utilization)!.score;
+    const historyScore = HISTORY_OPTIONS.find((h) => h.value === historyLength)!.score;
+    const inquiryScore = INQUIRY_OPTIONS.find((i) => i.value === inquiries)!.score;
     const mixScore = MIX_OPTIONS.find((m) => m.value === mix)!.score;
 
     // Weights loosely follow the widely-published FICO factor breakdown
@@ -54,7 +119,7 @@ export function CreditScoreEstimator() {
     const high = Math.min(900, Math.round(midpoint / 10) * 10 + 25);
 
     return { low, high, midpoint, paymentScore, utilizationScore, historyScore, inquiryScore, mixScore };
-  }, [payment, utilization, historyYears, inquiries, mix]);
+  }, [payment, utilization, historyLength, inquiries, mix]);
 
   const band = scoreBand(result.midpoint);
 
@@ -81,85 +146,42 @@ export function CreditScoreEstimator() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <div className="space-y-6">
-          <div>
-            <label className="text-sm font-semibold text-foreground">Payment History</label>
-            <div className="mt-2 grid gap-2 sm:grid-cols-2">
-              {PAYMENT_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => setPayment(opt.value)}
-                  className={`rounded-lg border px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                    payment === opt.value
-                      ? "border-gold bg-gold-pale/50 text-navy"
-                      : "border-border text-muted-foreground hover:border-gold/40"
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <SliderField
-              label="Credit Utilization"
-              value={utilization}
-              onChange={setUtilization}
-              min={0}
-              max={100}
-              step={5}
-              suffix="%"
-              ariaLabel="Credit utilization percentage"
-            />
-            <p className="mt-1 text-xs text-muted-foreground">
-              How much of your total credit card limit you typically use
-            </p>
-          </div>
-
-          <SliderField
-            label="Credit History Length"
-            value={historyYears}
-            onChange={setHistoryYears}
-            min={0}
-            max={25}
-            step={1}
-            suffix={historyYears === 1 ? "Year" : "Years"}
-            ariaLabel="Credit history length in years"
+          <ChoiceGroup
+            label="Payment History"
+            options={PAYMENT_OPTIONS}
+            value={payment}
+            onChange={setPayment}
+            twoCol
           />
 
-          <div>
-            <SliderField
-              label="Hard Inquiries (Last 6 Months)"
-              value={inquiries}
-              onChange={setInquiries}
-              min={0}
-              max={10}
-              step={1}
-              ariaLabel="Number of hard inquiries in the last 6 months"
-            />
-            <p className="mt-1 text-xs text-muted-foreground">New loan or credit card applications</p>
-          </div>
+          <ChoiceGroup
+            label="Credit Utilization"
+            hint="How much of your total credit card limit you typically use"
+            options={UTILIZATION_OPTIONS}
+            value={utilization}
+            onChange={setUtilization}
+            twoCol
+          />
 
-          <div>
-            <label className="text-sm font-semibold text-foreground">Credit Mix</label>
-            <div className="mt-2 grid gap-2">
-              {MIX_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => setMix(opt.value)}
-                  className={`rounded-lg border px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                    mix === opt.value
-                      ? "border-gold bg-gold-pale/50 text-navy"
-                      : "border-border text-muted-foreground hover:border-gold/40"
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <ChoiceGroup
+            label="Credit History Length"
+            hint="How long you've had a credit card or loan in your name"
+            options={HISTORY_OPTIONS}
+            value={historyLength}
+            onChange={setHistoryLength}
+            twoCol
+          />
+
+          <ChoiceGroup
+            label="Hard Inquiries (Last 6 Months)"
+            hint="New loan or credit card applications"
+            options={INQUIRY_OPTIONS}
+            value={inquiries}
+            onChange={setInquiries}
+            twoCol
+          />
+
+          <ChoiceGroup label="Credit Mix" options={MIX_OPTIONS} value={mix} onChange={setMix} />
         </div>
 
         <div className="flex flex-col items-center justify-center">
