@@ -11,8 +11,8 @@ const NAV = [
   { to: "/services", label: "Our Services", dropdown: "services" },
   { to: "/tools", label: "Tools", dropdown: "tools" },
   { to: "/case-studies", label: "Case Studies" },
-  { to: "/ca-legal-services", label: "CA & Legal Services" },
-  { to: "/partner", label: "Become Partner" },
+  { to: "/ca-legal-services", label: "CA & Legal" },
+  { to: "/partner", label: "Partner" },
   { to: "/contact", label: "Contact Us" },
 ] as const;
 
@@ -71,8 +71,8 @@ export function SiteHeader() {
           : "border-transparent bg-white/80 backdrop-blur-md"
       }`}
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-6 px-5 py-5 sm:px-8 lg:px-10">
-        {/* Logo */}
+      <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)] items-center gap-4 px-5 py-5 sm:px-8 lg:px-10">
+        {/* Logo — fixed width, never shrinks even if the nav grows */}
         <Link
           to="/"
           aria-label="Growth Capital Services — Home"
@@ -83,9 +83,9 @@ export function SiteHeader() {
         </Link>
 
         {/* Right side */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center justify-end gap-4">
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-0.5 xl:flex">
+          <nav className="hidden items-center xl:flex">
             {NAV.map((link) => {
               if (link.dropdown) {
                 return (
@@ -100,7 +100,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-1 rounded-md px-3 py-2.5 text-sm font-semibold transition-colors hover:text-foreground"
+                      className="group relative flex items-center gap-1 rounded-md px-2.5 py-2.5 text-sm font-semibold transition-colors hover:text-foreground"
                     >
                       {link.label}
                       <ChevronDown
@@ -226,7 +226,7 @@ export function SiteHeader() {
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
-                  className="relative rounded-md px-3 py-2.5 text-sm font-semibold transition-colors after:absolute after:bottom-0.5 after:left-3 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-1.5rem)]"
+                  className="relative rounded-md px-2.5 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-2.5 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-1.25rem)]"
                 >
                   {link.label}
                 </Link>
