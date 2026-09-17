@@ -63,18 +63,21 @@ export function monthsToYearsMonths(months: number): string {
 
 // Indicative rates — always confirm with the state's sub-registrar.
 // `stampDutyFemale` is only set where a female-buyer concession is
-// consistently documented (Delhi); left unset elsewhere rather than guessing
-// a figure that varies by municipal area or changes without much notice.
+// reasonably well documented. Delhi, Maharashtra and Haryana genuinely
+// charge less when the property is registered solely in a woman's name;
+// left unset for Rajasthan and UP, where cited figures conflict (Rajasthan)
+// or the concession is capped by property value rather than a flat
+// percentage-point cut (UP) — not modelled here rather than guessed.
 export const STAMP_DUTY_RATES: Record<
   string,
   { stampDuty: number; stampDutyFemale?: number; registration: number }
 > = {
   Delhi: { stampDuty: 6, stampDutyFemale: 4, registration: 1 },
-  Maharashtra: { stampDuty: 5, registration: 1 },
+  Maharashtra: { stampDuty: 5, stampDutyFemale: 4, registration: 1 },
   Karnataka: { stampDuty: 5, registration: 1 },
   "Tamil Nadu": { stampDuty: 7, registration: 1 },
   "Uttar Pradesh": { stampDuty: 7, registration: 1 },
-  Haryana: { stampDuty: 6, registration: 1 },
+  Haryana: { stampDuty: 6, stampDutyFemale: 4, registration: 1 },
   Gujarat: { stampDuty: 4.9, registration: 1 },
   Telangana: { stampDuty: 5.5, registration: 0.5 },
   "West Bengal": { stampDuty: 6, registration: 1 },

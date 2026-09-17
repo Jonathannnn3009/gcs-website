@@ -69,11 +69,11 @@ const TOOLS: Tool[] = [
 const TOOL_IDS = TOOLS.map((t) => t.id);
 
 function useHashAccordion(defaultId: string) {
-  const [openId, setOpenId] = useState<string | null>(() => {
-    if (typeof window === "undefined") return defaultId;
-    const h = window.location.hash.replace("#", "");
-    return TOOL_IDS.includes(h) ? h : defaultId;
-  });
+  // Always starts at defaultId so the client's first render matches the
+  // server's (window.location.hash doesn't exist during SSR) — the mount
+  // effect below corrects it to the real hash right after, without a
+  // hydration mismatch.
+  const [openId, setOpenId] = useState<string | null>(defaultId);
 
   useEffect(() => {
     const openAndScroll = (id: string) => {
