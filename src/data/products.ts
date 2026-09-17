@@ -47,6 +47,8 @@ export type Product = {
   documents: string[];
   /** Only for products where paperwork genuinely differs by applicant type. */
   documentCategories?: { label: string; description: string; items: string[] }[];
+  /** For sensitive/informal products we don't want to spell out publicly — show only the top facts, then a direct "contact us" instead of features/eligibility/documents. */
+  minimalDisclosure?: boolean;
 };
 
 const KYC = "KYC (PAN, Aadhaar, address proof)";
@@ -766,25 +768,17 @@ export const PRODUCTS: Product[] = [
     tagline: "Fast money when the clock is ticking.",
     group: "Vehicles & Special Cases",
     facts: [
-      { label: "Disbursal", value: "Within 48 hours" },
-      { label: "Security", value: "Property backed" },
-      { label: "Interest rate", value: "From 15%* p.a., profile-dependent" },
-      { label: "Use", value: "Bridge & short-term needs" },
+      { label: "Security", value: "No property required" },
+      { label: "Interest rate", value: "2% – 3% per month" },
+      { label: "Repayment", value: "EMI charged twice a month" },
+      { label: "Eligibility", value: "Self-employed, turnover up to ₹30 Cr" },
     ],
     about:
-      "Short-term, property-backed funds from vetted private lenders for bridge financing, auction purchases or urgent settlements — every rate and exit term set out in writing before you commit, since private credit is priced well above bank rates.",
-    features: [
-      "Quick sanction and disbursal when timelines are tight",
-      "Structured to bridge until a bank facility takes over",
-      "More flexibility on profile and documentation than a bank",
-      "An exit route agreed upfront at the time of sanction",
-    ],
-    eligibility: [
-      "Marketable property to offer as security",
-      "A credible, time-bound plan to repay or refinance",
-      "Ownership papers ready for legal verification",
-    ],
-    documents: [KYC, PROPERTY_DOCS, "Purpose note and repayment plan"],
+      "Short-term, unsecured funds from vetted private lenders for self-employed profiles that need cash fast — every rate and repayment term set out in writing before you commit, since private credit is priced well above bank rates.",
+    features: [],
+    eligibility: [],
+    documents: [],
+    minimalDisclosure: true,
   },
 ];
 

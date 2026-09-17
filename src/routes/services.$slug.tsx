@@ -162,19 +162,21 @@ function ProductDetailPage() {
               </div>
 
               {/* At-a-glance eligibility snapshot */}
-              <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-8 lg:flex">
-                <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
-                  At A Glance
-                </p>
-                <ul className="space-y-4">
-                  {product.eligibility.slice(0, 3).map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
-                      <span className="text-sm leading-snug text-foreground">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {!product.minimalDisclosure && (
+                <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-8 lg:flex">
+                  <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+                    At A Glance
+                  </p>
+                  <ul className="space-y-4">
+                    {product.eligibility.slice(0, 3).map((item) => (
+                      <li key={item} className="flex items-start gap-2.5">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                        <span className="text-sm leading-snug text-foreground">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </Reveal>
         </div>
@@ -196,6 +198,34 @@ function ProductDetailPage() {
                 </p>
               </div>
 
+              {product.minimalDisclosure ? (
+                <>
+                  <div className="border-t border-dashed border-border" />
+                  <div className="navy-panel p-7 text-center sm:p-9">
+                    <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
+                      For More Information
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed text-white/70">
+                      Terms vary case to case — call or WhatsApp us and a senior advisor will talk
+                      you through the details directly.
+                    </p>
+                    <div className="mt-5 flex flex-wrap justify-center gap-3">
+                      <a href={CONTACT.phoneHref} className="gold-btn py-3 text-sm">
+                        Call {CONTACT.phone} <ArrowRight className="h-3.5 w-3.5" />
+                      </a>
+                      <a
+                        href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-md border border-white/20 px-5 py-3 text-sm font-bold text-white/80 transition-colors hover:border-gold/40 hover:text-white"
+                      >
+                        WhatsApp Us
+                      </a>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
               <div className="border-t border-dashed border-border" />
 
               <div className="p-7 sm:p-9">
@@ -304,6 +334,8 @@ function ProductDetailPage() {
                   />
                 </div>
               </div>
+                </>
+              )}
             </div>
           </Reveal>
 
