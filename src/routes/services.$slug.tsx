@@ -229,6 +229,24 @@ function ProductDetailPage() {
                       </li>
                     ))}
                   </ul>
+
+                  {product.documentCategories ? (
+                    <>
+                      <p className="mt-6 text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
+                        Which One Are You
+                      </p>
+                      <div className="mt-3 space-y-3">
+                        {product.documentCategories.map((cat) => (
+                          <div key={cat.label}>
+                            <span className="block text-sm font-bold text-navy">{cat.label}</span>
+                            <span className="mt-0.5 block text-sm leading-relaxed text-muted-foreground">
+                              {cat.description}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : null}
                 </div>
                 <div className="navy-panel p-7 sm:p-9">
                   <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
@@ -237,26 +255,19 @@ function ProductDetailPage() {
 
                   {product.documentCategories ? (
                     <>
-                      <p className="mt-3 text-xs leading-relaxed text-white/50">
-                        Exact paperwork depends a little on which of these you are — pick one to
-                        get that checklist.
-                      </p>
-                      <div className="mt-4 space-y-2">
+                      <div className="mt-4 flex flex-wrap gap-1.5">
                         {product.documentCategories.map((cat) => (
                           <button
                             key={cat.label}
                             type="button"
                             onClick={() => setPresetCategory(cat.label)}
-                            className={`w-full rounded-lg border p-3.5 text-left transition-colors ${
+                            className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
                               presetCategory === cat.label
-                                ? "border-gold bg-gold/10"
-                                : "border-white/15 hover:border-gold/40 hover:bg-white/5"
+                                ? "border-gold bg-gold text-navy"
+                                : "border-white/20 text-white/60 hover:border-gold/40 hover:text-white"
                             }`}
                           >
-                            <span className="block text-sm font-bold text-white">{cat.label}</span>
-                            <span className="mt-1 block text-xs leading-relaxed text-white/60">
-                              {cat.description}
-                            </span>
+                            {cat.label}
                           </button>
                         ))}
                       </div>
