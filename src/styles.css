@@ -434,6 +434,15 @@
   50% { transform: translateY(-8px); }
 }
 
+@keyframes gcs-kenburns {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.08) translate(-1%, -1%); }
+}
+
+@utility kenburns {
+  animation: gcs-kenburns 14s ease-in-out infinite;
+}
+
 @keyframes gcs-pulse-gold {
   0%, 100% {
     box-shadow: 0 0 0 0 oklch(0.75 0.14 75 / 0.4);

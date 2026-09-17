@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   BadgeCheck,
@@ -144,6 +144,7 @@ const CLIENT_STORIES = [
     name: "Priya Deshmukh",
     city: "Mumbai",
     product: "Home Loan Balance Transfer",
+    rating: 5,
     quote:
       "Switched our home loan and shaved ₹3,800 off the EMI within three weeks. Wish we'd called sooner.",
   },
@@ -151,6 +152,7 @@ const CLIENT_STORIES = [
     name: "Rohan Mehta",
     city: "Thane",
     product: "Business Loan",
+    rating: 4.5,
     quote:
       "Working capital sanctioned in 9 days flat — right when a big order needed raw materials.",
   },
@@ -158,12 +160,14 @@ const CLIENT_STORIES = [
     name: "Anjali Kulkarni",
     city: "Pune",
     product: "Personal Loan",
+    rating: 4,
     quote: "Needed funds fast for a family emergency. Disbursed in two days, no drama at all.",
   },
   {
     name: "Sameer Iyer",
     city: "Navi Mumbai",
     product: "Loan Against Property",
+    rating: 5,
     quote:
       "Unlocked funds against our property without touching our savings. Clean process, clear terms.",
   },
@@ -171,24 +175,28 @@ const CLIENT_STORIES = [
     name: "Neha Joshi",
     city: "Mumbai",
     product: "Education Loan",
+    rating: 4.5,
     quote: "Got my daughter's admission abroad funded end-to-end, tuition and living costs both.",
   },
   {
     name: "Vikram Shah",
     city: "Pune",
     product: "CGTMSE Funding",
+    rating: 4,
     quote: "No collateral, no problem. They found the right scheme for my two-year-old business.",
   },
   {
     name: "Arjun Nair",
     city: "Thane",
     product: "New Car Loan",
+    rating: 4.5,
     quote: "100% on-road funding on my first car — didn't touch my savings for the down payment.",
   },
   {
     name: "Kavita Rao",
     city: "Navi Mumbai",
     product: "Balance Transfer",
+    rating: 5,
     quote: "One phone call, and my home loan rate dropped by over a full percentage point.",
   },
 ];
@@ -287,6 +295,27 @@ function PersonaPanel() {
   );
 }
 
+/** Half-star-aware rating, drawn as a gold overlay clipped over a pale-star base. */
+function StarRating({ rating }: { rating: number }) {
+  return (
+    <div className="flex items-center gap-0.5">
+      {Array.from({ length: 5 }).map((_, i) => {
+        const fill = Math.max(0, Math.min(1, rating - i)) * 100;
+        return (
+          <span key={i} className="relative inline-block h-3.5 w-3.5">
+            <Star className="absolute inset-0 h-3.5 w-3.5 text-gold-pale" />
+            <span className="absolute inset-0 overflow-hidden" style={{ width: `${fill}%` }}>
+              <Star className="h-3.5 w-3.5 fill-current text-gold" />
+            </span>
+          </span>
+        );
+      })}
+      <span className="ml-1 text-xs font-bold text-navy">{rating}</span>
+    </div>
+  );
+}
+
+/** Letter-style testimonial card — name up top like a signature, quote read as a note, not a spec sheet. */
 function StoryCard({ story }: { story: (typeof CLIENT_STORIES)[number] }) {
   const initials = story.name
     .split(" ")
@@ -294,16 +323,10 @@ function StoryCard({ story }: { story: (typeof CLIENT_STORIES)[number] }) {
     .join("");
 
   return (
-    <div className="flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] sm:w-[340px]">
-      <div className="flex items-center gap-1 text-gold">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Star key={i} className="h-3.5 w-3.5 fill-current" />
-        ))}
-      </div>
-      <Quote className="h-5 w-5 text-gold-pale" />
-      <p className="text-sm leading-relaxed text-foreground">"{story.quote}"</p>
-      <div className="mt-auto flex items-center gap-3 border-t border-border pt-4">
-        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-navy text-xs font-bold text-gold-light">
+    <div className="relative flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl bg-white p-7 shadow-[var(--shadow-card)] sm:w-[350px]">
+      <Quote className="absolute top-6 right-6 h-9 w-9 text-gold-pale/70" />
+      <div className="flex items-center gap-3">
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-navy text-xs font-bold text-gold-light">
           {initials}
         </span>
         <div className="min-w-0">
@@ -313,28 +336,77 @@ function StoryCard({ story }: { story: (typeof CLIENT_STORIES)[number] }) {
           </p>
         </div>
       </div>
+      <StarRating rating={story.rating} />
+      <p className="font-heading text-[15px] leading-relaxed text-foreground italic">
+        "{story.quote}"
+      </p>
     </div>
   );
 }
 
-/** Auto-scrolling strip of client experiences — the same marquee technique as the bank-logo strip. */
+/** Horizontally scrollable strip of client experiences — idles into a slow auto-drift, but drag or scroll takes over instantly. */
 function ClientStoriesMarquee() {
   const doubled = [...CLIENT_STORIES, ...CLIENT_STORIES];
+  const trackRef = useRef<HTMLDivElement>(null);
+  const dragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartScroll = useRef(0);
+  const [autoDrift, setAutoDrift] = useState(true);
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    let raf: number;
+    const step = () => {
+      if (autoDrift && !dragging.current) {
+        el.scrollLeft += 0.5;
+        const half = el.scrollWidth / 2;
+        if (el.scrollLeft >= half) el.scrollLeft -= half;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [autoDrift]);
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    const el = trackRef.current;
+    if (!el) return;
+    dragging.current = true;
+    dragStartX.current = e.clientX;
+    dragStartScroll.current = el.scrollLeft;
+    el.setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    const el = trackRef.current;
+    if (!el) return;
+    el.scrollLeft = dragStartScroll.current - (e.clientX - dragStartX.current);
+  };
+  const endDrag = () => {
+    dragging.current = false;
+  };
+
   return (
     <div>
-      <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
-        <div
-          className="marquee-track flex w-max gap-5 py-1 hover:[animation-play-state:paused]"
-          style={{ animationDuration: "70s" }}
-        >
-          {doubled.map((story, i) => (
-            <StoryCard key={`${story.name}-${i}`} story={story} />
-          ))}
-        </div>
+      <div
+        ref={trackRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerLeave={endDrag}
+        onPointerCancel={endDrag}
+        onMouseEnter={() => setAutoDrift(false)}
+        onMouseLeave={() => setAutoDrift(true)}
+        className="flex w-full cursor-grab gap-5 overflow-x-auto py-1 select-none active:cursor-grabbing [-ms-overflow-style:none] [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {doubled.map((story, i) => (
+          <StoryCard key={`${story.name}-${i}`} story={story} />
+        ))}
       </div>
       <p className="mt-4 text-center text-xs text-muted-foreground">
         Illustrative client experiences based on situations we commonly structure — not verbatim
-        testimonials.
+        testimonials. Drag or scroll to browse.
       </p>
     </div>
   );

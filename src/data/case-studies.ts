@@ -103,17 +103,17 @@ export const CASE_STUDIES: CaseStudy[] = [
     icon: ShieldCheck,
     group: "Business & Cash Flow",
     category: "CGTMSE Funding · Collateral-Free Business Loan",
-    headline: "₹35 lakh funded — zero collateral, one government guarantee",
-    amountLabel: "₹35 Lakh",
+    headline: "₹62 lakh funded — zero collateral, one government guarantee",
+    amountLabel: "₹62 Lakh",
     productSlug: "cgtmse",
     productLabel: "CGTMSE Funding",
     clientProfile:
-      "A small manufacturing unit in Navi Mumbai, 18 months into operations, with consistent GST filings and healthy banking turnover, but no owned commercial or residential property to offer as collateral.",
+      "A growing manufacturing unit in Navi Mumbai, two years into operations, with consistent GST filings and healthy banking turnover, but no owned commercial or residential property to offer as collateral.",
     challenge:
-      "Most business-loan lenders wanted collateral given the business's short operating history, effectively ruling out standard secured business loan routes.",
+      "Most business-loan lenders wanted collateral given the business's short operating history, effectively ruling out standard secured business loan routes for the funding the business needed.",
     structuring:
       "GCS structured the application under the CGTMSE (Credit Guarantee Fund Trust for Micro and Small Enterprises) route, where a government-backed guarantee substitutes for physical collateral, and matched the client with a lender empanelled for CGTMSE-backed lending.",
-    outcome: "₹35 lakh collateral-free business loan sanctioned under the CGTMSE scheme.",
+    outcome: "₹62 lakh collateral-free business loan sanctioned under the CGTMSE scheme.",
   },
   {
     slug: "business-loan-banking-strength",
@@ -138,8 +138,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     icon: RefreshCw,
     group: "Business & Cash Flow",
     category: "Working Capital · Seasonal Cash-Flow Bridge",
-    headline: "₹40 lakh working capital — released before the order was lost",
-    amountLabel: "₹40 Lakh",
+    headline: "₹68 lakh working capital — released before the order was lost",
+    amountLabel: "₹68 Lakh",
     productSlug: "working-capital",
     productLabel: "Working Capital",
     clientProfile:
@@ -149,7 +149,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     structuring:
       "GCS structured a cash credit facility sized to the business's stock and receivables cycle, rather than a fixed-term loan that wouldn't flex with the seasonal pattern.",
     outcome:
-      "₹40 lakh working capital limit sanctioned, drawn against as needed rather than disbursed as a lump sum.",
+      "₹68 lakh working capital limit sanctioned, drawn against as needed rather than disbursed as a lump sum.",
   },
 
   // ── Personal Goals ─────────────────────────────────────

@@ -61,19 +61,28 @@ function CaseStudiesPage() {
               </p>
             </Reveal>
 
-            {/* Tally card instead of a plain paragraph stat */}
+            {/* Real image with a Ken-Burns drift, plus a floating tally badge — instead of a plain stat box */}
             <Reveal delay={100}>
-              <div className="grid grid-cols-3 gap-3 rounded-2xl border border-gold/15 bg-white p-5 shadow-[var(--shadow-card)]">
-                {CASE_STUDY_GROUPS.map((group) => (
-                  <div key={group} className="text-center">
-                    <p className="font-heading text-3xl font-bold text-navy">
-                      {CASE_STUDIES.filter((c) => c.group === group).length}
-                    </p>
-                    <p className="mt-1 text-[10px] leading-tight font-bold tracking-[0.08em] text-gold-dark uppercase">
-                      {group}
-                    </p>
-                  </div>
-                ))}
+              <div className="relative pb-6 pl-6 sm:pb-8 sm:pl-8">
+                <div className="overflow-hidden rounded-3xl shadow-[var(--shadow-lift)]">
+                  <img
+                    src="/brand/hero-city.jpg"
+                    alt="Growth Capital Services — real lending outcomes across our markets"
+                    className="kenburns h-56 w-full object-cover sm:h-64"
+                  />
+                </div>
+                <div className="absolute bottom-0 left-0 grid grid-cols-3 gap-3 rounded-2xl border border-gold/15 bg-white p-4 shadow-[var(--shadow-card)] sm:p-5">
+                  {CASE_STUDY_GROUPS.map((group) => (
+                    <div key={group} className="text-center">
+                      <p className="font-heading text-2xl font-bold text-navy sm:text-3xl">
+                        {CASE_STUDIES.filter((c) => c.group === group).length}
+                      </p>
+                      <p className="mt-1 text-[9px] leading-tight font-bold tracking-[0.06em] text-gold-dark uppercase sm:text-[10px]">
+                        {group}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </Reveal>
           </div>
