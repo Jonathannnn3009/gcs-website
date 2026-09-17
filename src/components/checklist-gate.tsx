@@ -7,25 +7,40 @@ const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
 const fieldClass =
   "mt-1 w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2.5 text-sm text-white outline-none transition-all duration-300 placeholder:text-white/40 focus:border-gold focus:ring-2 focus:ring-gold/20";
 
-export function ChecklistGate({ pdfHref, productTitle }: { pdfHref: string; productTitle: string }) {
+export function ChecklistGate({
+  pdfHref,
+  productTitle,
+  categories,
+}: {
+  pdfHref: string;
+  productTitle: string;
+  categories?: string[];
+}) {
   const uid = useId();
   const [unlocked, setUnlocked] = useState(false);
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
+  const [category, setCategory] = useState("");
+  const [errors, setErrors] = useState<{ name?: string; phone?: string; category?: string }>({});
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const next: { name?: string; phone?: string } = {};
+    const next: { name?: string; phone?: string; category?: string } = {};
     if (name.trim().length < 2) next.name = "Enter your name";
     if (!PHONE_RE.test(phone.replace(/[\s-]/g, ""))) next.phone = "Enter a valid 10-digit mobile number";
+    if (categories && !category) next.category = "Select one";
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
     setSubmitting(true);
-    await submitLead({ name: name.trim(), phone: phone.trim(), source: "checklist-download", detail: productTitle });
+    await submitLead({
+      name: name.trim(),
+      phone: phone.trim(),
+      source: "checklist-download",
+      detail: category ? `${productTitle} — ${category}` : productTitle,
+    });
     setSubmitting(false);
     setUnlocked(true);
   };
@@ -60,6 +75,29 @@ export function ChecklistGate({ pdfHref, productTitle }: { pdfHref: string; prod
         Share your name and number and we'll unlock the download — an advisor may follow up.
       </p>
       <div className="mt-3 space-y-3">
+        {categories ? (
+          <div>
+            <label htmlFor={`${uid}-category`} className="text-[10px] font-bold tracking-[0.16em] text-gold uppercase">
+              You Are
+            </label>
+            <select
+              id={`${uid}-category`}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className={`${fieldClass} appearance-none`}
+            >
+              <option value="" className="text-ink">
+                Select one
+              </option>
+              {categories.map((c) => (
+                <option key={c} value={c} className="text-ink">
+                  {c}
+                </option>
+              ))}
+            </select>
+            {errors.category && <span className="mt-1 block text-xs text-red-300">{errors.category}</span>}
+          </div>
+        ) : null}
         <div>
           <label htmlFor={`${uid}-name`} className="text-[10px] font-bold tracking-[0.16em] text-gold uppercase">
             Full Name

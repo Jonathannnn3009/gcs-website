@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -95,6 +96,7 @@ function productCode(title: string): string {
 function ProductDetailPage() {
   const { slug } = Route.useParams();
   const product = getProduct(slug);
+  const [activeCategory, setActiveCategory] = useState(0);
   if (!product) return <NotFoundBlock />;
   const related = PRODUCTS.filter((p) => p.group === product.group && p.slug !== product.slug);
   const fallbackRelated =
@@ -238,7 +240,43 @@ function ProductDetailPage() {
                   <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
                     Paperwork You'll Need
                   </p>
-                  <ul className="mt-5 space-y-2.5">
+
+                  {product.documentCategories ? (
+                    <>
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {product.documentCategories.map((cat, i) => (
+                          <button
+                            key={cat.label}
+                            type="button"
+                            onClick={() => setActiveCategory(i)}
+                            className={`rounded-full px-3 py-1.5 text-xs font-bold transition-colors ${
+                              activeCategory === i
+                                ? "bg-gold text-navy"
+                                : "border border-white/20 text-white/60 hover:border-gold/40 hover:text-white"
+                            }`}
+                          >
+                            {cat.label}
+                          </button>
+                        ))}
+                      </div>
+                      <ul className="mt-4 space-y-2.5">
+                        {product.documentCategories[activeCategory].items.map((item) => (
+                          <li
+                            key={item}
+                            className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70"
+                          >
+                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="mt-4 text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
+                        For Every Applicant
+                      </p>
+                    </>
+                  ) : null}
+
+                  <ul className="mt-4 space-y-2.5">
                     {product.documents.map((item) => (
                       <li
                         key={item}
@@ -253,6 +291,7 @@ function ProductDetailPage() {
                     <ChecklistGate
                       pdfHref={CHECKLIST_PDF[product.slug]}
                       productTitle={product.title}
+                      categories={product.documentCategories?.map((c) => c.label)}
                     />
                   )}
                 </div>

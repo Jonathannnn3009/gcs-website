@@ -45,12 +45,42 @@ export type Product = {
   features: string[];
   eligibility: string[];
   documents: string[];
+  /** Only for products where paperwork genuinely differs by applicant type. */
+  documentCategories?: { label: string; items: string[] }[];
 };
 
 const KYC = "KYC (PAN, Aadhaar, address proof)";
 const INCOME = "Income proof (salary slips, ITR, bank statements)";
 const BUSINESS_DOCS = "Business proof (GST returns, ITR with financials, 12-month banking)";
 const PROPERTY_DOCS = "Property papers (agreement, title chain, tax receipts)";
+const PHOTOS = "Passport-size photographs of applicant and co-applicant";
+
+// Income-proof paperwork for secured loans varies enough by applicant type
+// that it's shown as its own tab rather than folded into one flat list.
+const SALARIED_DOCS = [
+  "Last 3 months' salary slips",
+  "Last 6 months' bank statement showing salary credits",
+  "Latest Form 16, or last 2 years' Form 16",
+  "Offer or appointment letter, if under 1 year with the current employer",
+];
+const SELF_EMPLOYED_DOCS = [
+  "Last 3 years' ITR with computation of income",
+  "Last 3 years' audited financials — P&L and balance sheet, where applicable",
+  "Last 12 months' bank statements (savings and current account)",
+  "Business proof — GST registration, shop licence, partnership deed or MOA/AOA as applicable",
+];
+const NRI_DOCS = [
+  "Passport and valid visa copy",
+  "Last 6 months' salary slips and a copy of the employment contract",
+  "Last 12 months' NRE/NRO account statements",
+  "Power of Attorney (POA) in favour of a resident Indian representative, for signing if the applicant can't be present in India",
+  "A resident Indian co-applicant's PAN card and address proof",
+];
+const APPLICANT_DOC_CATEGORIES = [
+  { label: "Salaried", items: SALARIED_DOCS },
+  { label: "Non-Salaried / Self-Employed", items: SELF_EMPLOYED_DOCS },
+  { label: "NRI", items: NRI_DOCS },
+];
 
 export const PRODUCTS: Product[] = [
   {
@@ -79,7 +109,8 @@ export const PRODUCTS: Product[] = [
       "Salaried with take-home income from about ₹25,000/month, or self-employed with 2–3 years of ITR",
       "A CIBIL score near 700 gets the sharpest rate; lower scores are reviewed case by case, not auto-rejected",
     ],
-    documents: [KYC, INCOME, PROPERTY_DOCS],
+    documents: [KYC, PROPERTY_DOCS, PHOTOS],
+    documentCategories: APPLICANT_DOC_CATEGORIES,
   },
   {
     slug: "loan-against-property",
@@ -106,7 +137,8 @@ export const PRODUCTS: Product[] = [
       "Clean and marketable title with the full ownership chain on record",
       "Demonstrable repayment capacity via income, business banking or rental receipts",
     ],
-    documents: [KYC, INCOME, PROPERTY_DOCS],
+    documents: [KYC, PROPERTY_DOCS, PHOTOS],
+    documentCategories: APPLICANT_DOC_CATEGORIES,
   },
   {
     slug: "lease-rental-discounting",
