@@ -12,7 +12,7 @@ const NAV = [
   { to: "/tools", label: "Tools", dropdown: "tools" },
   { to: "/case-studies", label: "Case Studies" },
   { to: "/ca-legal-services", label: "CA & Legal" },
-  { to: "/partner", label: "Partner" },
+  { to: "/partner", label: "Become Partner" },
   { to: "/contact", label: "Contact Us" },
 ] as const;
 

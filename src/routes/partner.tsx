@@ -540,14 +540,23 @@ function PartnerPage() {
 
       {/* How it works — interactive stepper */}
       <Section className="pt-0">
-        <Reveal>
-          <SectionHeading
-            eyebrow="How It Works"
-            title="From introduction to payout — four steps."
-            description="You make the introduction. Everything after that is on us."
-          />
-        </Reveal>
-        <Reveal delay={80} className="mt-10">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <Reveal>
+            <SectionHeading
+              eyebrow="How It Works"
+              title="From introduction to payout — four steps."
+              description="You make the introduction. Everything after that is on us."
+            />
+          </Reveal>
+          <Reveal delay={80}>
+            <img
+              src="/brand/partner-presenting-growth.png"
+              alt="An advisor walking a client through their loan options"
+              className="w-full rounded-3xl object-cover"
+            />
+          </Reveal>
+        </div>
+        <Reveal delay={120} className="mt-10">
           <PartnerStepper />
         </Reveal>
       </Section>
@@ -576,30 +585,46 @@ function PartnerPage() {
         </div>
       </Section>
 
-      {/* More reasons — accordion */}
+      {/* Reasons to partner — accordion beside an image */}
       <Section className="pt-0">
-        <Reveal>
-          <p className="eyebrow">Worth Knowing</p>
-          <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
-            A few more reasons to partner with us.
-          </h2>
-        </Reveal>
-        <Reveal delay={100} className="mx-auto mt-8 max-w-3xl">
-          <Accordion items={MORE_REASONS} />
-        </Reveal>
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <Reveal>
+            <img
+              src="/brand/partner-helping-climb.png"
+              alt="A helping hand at every stage of the referral"
+              className="w-full rounded-3xl object-cover"
+            />
+          </Reveal>
+          <Reveal delay={80}>
+            <p className="eyebrow">Worth Knowing</p>
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
+              Reasons to partner with us.
+            </h2>
+            <div className="mt-6">
+              <Accordion items={MORE_REASONS} />
+            </div>
+          </Reveal>
+        </div>
       </Section>
 
-      {/* FAQ */}
+      {/* FAQ, alongside an image */}
       <Section className="pt-0">
-        <Reveal>
-          <p className="eyebrow text-center">Before You Register</p>
-          <h2 className="mt-2 text-center text-2xl font-extrabold text-navy sm:text-3xl">
-            Quick answers.
-          </h2>
-        </Reveal>
-        <Reveal delay={100} className="mx-auto mt-8 max-w-2xl">
-          <Accordion items={PARTNER_FAQS} />
-        </Reveal>
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <Reveal>
+            <p className="eyebrow">Before You Register</p>
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">Quick answers.</h2>
+            <div className="mt-6">
+              <Accordion items={PARTNER_FAQS} />
+            </div>
+          </Reveal>
+          <Reveal delay={80}>
+            <img
+              src="/brand/partner-handshake-puzzle.png"
+              alt="Two professionals shaking hands on a partnership"
+              className="w-full rounded-3xl object-cover"
+            />
+          </Reveal>
+        </div>
       </Section>
 
       {/* CTA */}
