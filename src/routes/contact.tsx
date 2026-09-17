@@ -152,71 +152,78 @@ function ContactPage() {
         </div>
       </section>
 
-      {/* Visit our office — spotlight card floating over the map instead of a plain split */}
-      <Section>
-        <Reveal>
-          <p className="eyebrow text-center">Visit Us</p>
-          <h2 className="mt-2 text-center text-2xl font-extrabold text-navy sm:text-3xl">
-            Our Office in <span className="gold-text-static italic">Ghatkopar West.</span>
-          </h2>
-        </Reveal>
+      {/* Visit our office */}
+      <Section className="pt-0">
+        <div className="grid items-center gap-8 lg:grid-cols-2">
+          <Reveal>
+            <p className="eyebrow">Visit Our Office</p>
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
+              Our Office in <span className="gold-text-static italic">Ghatkopar West.</span>
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              Our advisory team is based at CCTV Towers on the Andheri-Ghatkopar Road, accessible to
+              clients across the western suburbs. Visit by appointment for a structured file review.
+            </p>
 
-        <Reveal delay={100} className="mt-8">
-          <div className="relative overflow-hidden rounded-3xl border border-border">
-            <iframe
-              title="Growth Capital Services Office Location"
-              src="https://www.google.com/maps?q=CCTV+Towers+Andheri+Ghatkopar+Road+Ghatkopar+West+Mumbai&output=embed"
-              width="100%"
-              height="440"
-              style={{ border: 0, filter: "grayscale(0.15) contrast(1.02)" }}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="block"
-            />
-
-            {/* Floating spotlight card — kept on the right so it never overlaps Google's own place card, which always anchors top-left */}
-            <div className="absolute top-6 right-6 max-w-sm rounded-2xl border border-gold/20 bg-white/95 p-6 shadow-[var(--shadow-lift)] backdrop-blur-md sm:top-8 sm:right-8">
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                Our advisory team is based at CCTV Towers on the Andheri-Ghatkopar Road, accessible
-                to clients across the western suburbs.
-              </p>
-              <div className="mt-5 space-y-3">
-                <div className="flex items-start gap-3">
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg navy-panel text-gold-light">
-                    <MapPin className="h-4 w-4" />
-                  </span>
-                  <p className="mt-1 text-xs leading-snug font-semibold text-navy">
-                    {CONTACT.address}
+            <div className="mt-6 space-y-4">
+              <div className="flex items-start gap-3">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg navy-panel text-gold-light">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
+                    Address
                   </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg navy-panel text-gold-light">
-                    <Clock className="h-4 w-4" />
-                  </span>
-                  <p className="text-xs font-semibold text-navy">{CONTACT.hours}</p>
+                  <p className="mt-0.5 text-sm font-semibold text-navy">{CONTACT.address}</p>
                 </div>
               </div>
-              <div className="mt-5 flex flex-wrap gap-2.5">
-                <a
-                  href="https://maps.google.com/?q=CCTV+Towers+Andheri+Ghatkopar+Road+Ghatkopar+West+Mumbai"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-md bg-navy px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-navy-soft"
-                >
-                  <Navigation className="h-3.5 w-3.5" /> Directions
-                </a>
-                <a
-                  href={CONTACT.whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-md border border-navy/20 px-4 py-2.5 text-xs font-bold text-navy transition-colors hover:border-gold/40"
-                >
-                  Book a visit
-                </a>
+              <div className="flex items-start gap-3">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg navy-panel text-gold-light">
+                  <Clock className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
+                    Hours
+                  </p>
+                  <p className="mt-0.5 text-sm font-semibold text-navy">{CONTACT.hours}</p>
+                </div>
               </div>
             </div>
-          </div>
-        </Reveal>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a
+                href="https://maps.google.com/?q=CCTV+Towers+Andheri+Ghatkopar+Road+Ghatkopar+West+Mumbai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md bg-navy px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-navy-soft"
+              >
+                <Navigation className="h-4 w-4" /> Get directions
+              </a>
+              <a
+                href={CONTACT.whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 px-5 py-3 text-sm font-bold text-navy transition-colors hover:border-gold/40"
+              >
+                Book an appointment
+              </a>
+            </div>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <div className="overflow-hidden rounded-2xl border border-border">
+              <iframe
+                title="Growth Capital Services Office Location"
+                src="https://www.google.com/maps?q=CCTV+Towers+Andheri+Ghatkopar+Road+Ghatkopar+West+Mumbai&output=embed"
+                width="100%"
+                height="360"
+                style={{ border: 0 }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+          </Reveal>
+        </div>
       </Section>
 
       {/* FAQ */}
