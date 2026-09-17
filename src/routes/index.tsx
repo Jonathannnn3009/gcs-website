@@ -404,10 +404,6 @@ function ClientStoriesMarquee() {
           <StoryCard key={`${story.name}-${i}`} story={story} />
         ))}
       </div>
-      <p className="mt-4 text-center text-xs text-muted-foreground">
-        Illustrative client experiences based on situations we commonly structure — not verbatim
-        testimonials. Drag or scroll to browse.
-      </p>
     </div>
   );
 }
