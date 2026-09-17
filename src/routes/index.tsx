@@ -428,8 +428,20 @@ function HomePage() {
         </ul>
       </section>
 
-      {/* ─── BANK PARTNERS (moved up as an immediate trust signal) ──── */}
+      {/* ─── SERVICES ─────────────────────────────────── */}
       <Section>
+        <Reveal>
+          <SectionHeading
+            eyebrow="Our Services"
+            title="So, what are you planning?"
+            description="Pick a goal — we'll point you to the loan that gets you there."
+          />
+        </Reveal>
+        <LoanGoals />
+      </Section>
+
+      {/* ─── BANK PARTNERS ────────────────────────────── */}
+      <Section className="pt-0">
         <Reveal>
           <SectionHeading
             eyebrow="Our Network"
@@ -443,18 +455,6 @@ function HomePage() {
             <BankMarquee />
           </div>
         </Reveal>
-      </Section>
-
-      {/* ─── SERVICES ─────────────────────────────────── */}
-      <Section className="pt-0">
-        <Reveal>
-          <SectionHeading
-            eyebrow="Our Services"
-            title="So, what are you planning?"
-            description="Pick a goal — we'll point you to the loan that gets you there."
-          />
-        </Reveal>
-        <LoanGoals />
       </Section>
 
       {/* ─── PERSONA + WHY US (merged, interactive) ───── */}
