@@ -3,9 +3,25 @@ import { ArrowRight } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
 import { Toast } from "@/components/toast";
 
-type Fields = { name: string; phone: string; email: string; loanType: string; city: string };
+type Fields = {
+  name: string;
+  phone: string;
+  email: string;
+  loanType: string;
+  city: string;
+  cityOther: string;
+  loanAmount: string;
+};
 
-const empty: Fields = { name: "", phone: "", email: "", loanType: "", city: "" };
+const empty: Fields = {
+  name: "",
+  phone: "",
+  email: "",
+  loanType: "",
+  city: "",
+  cityOther: "",
+  loanAmount: "",
+};
 
 const cardClass =
   "relative overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-lift)]";
@@ -28,24 +44,32 @@ function Field({
   id,
   label,
   error,
+  required = true,
   className = "",
   children,
 }: {
   id: string;
   label: string;
   error?: string | undefined;
+  required?: boolean;
   className?: string;
   children: ReactNode;
 }) {
   return (
     <div className={className}>
       <label htmlFor={id} className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase">
-        {label} <span className="text-gold">*</span>
+        {label} {required ? <span className="text-gold">*</span> : null}
       </label>
       {children}
       {error ? <span className="mt-1 block text-xs text-destructive">{error}</span> : null}
     </div>
   );
+}
+
+// Groups typed digits with Indian comma placement (e.g. 12,50,000) as the user types.
+function formatIndianAmount(raw: string) {
+  const digits = raw.replace(/\D/g, "");
+  return digits ? Number(digits).toLocaleString("en-IN") : "";
 }
 
 export function LeadForm() {
@@ -57,6 +81,12 @@ export function LeadForm() {
   const set = (key: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setValues((v) => ({ ...v, [key]: e.target.value }));
 
+  const setCity = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setValues((v) => ({ ...v, city: e.target.value, cityOther: "" }));
+
+  const setLoanAmount = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setValues((v) => ({ ...v, loanAmount: formatIndianAmount(e.target.value) }));
+
   const validate = () => {
     const next: Partial<Fields> = {};
     if (values.name.trim().length < 2) next.name = "Please enter your full name";
@@ -66,6 +96,8 @@ export function LeadForm() {
       next.email = "Please match the requested format — name@example.com";
     if (!values.loanType) next.loanType = "Select a loan type";
     if (!values.city) next.city = "Select your city";
+    else if (values.city === "Other" && !values.cityOther.trim())
+      next.city = "Please enter your city";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -154,7 +186,7 @@ export function LeadForm() {
                 id={`${uid}-city`}
                 className={selectClass}
                 value={values.city}
-                onChange={set("city")}
+                onChange={setCity}
               >
                 <option value="">Select city</option>
                 {CONTACT.cities.map((c) => (
@@ -164,6 +196,37 @@ export function LeadForm() {
                 ))}
                 <option value="Other">Other</option>
               </select>
+              {values.city === "Other" ? (
+                <input
+                  className={`${fieldClass} mt-2`}
+                  value={values.cityOther}
+                  onChange={set("cityOther")}
+                  maxLength={100}
+                  placeholder="Enter your city"
+                  autoFocus
+                />
+              ) : null}
+            </Field>
+
+            <Field
+              id={`${uid}-amount`}
+              label="Loan Amount"
+              required={false}
+              className="sm:col-span-2"
+            >
+              <div className="relative">
+                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-sm text-muted-foreground">
+                  ₹
+                </span>
+                <input
+                  id={`${uid}-amount`}
+                  className={`${fieldClass} pl-7`}
+                  value={values.loanAmount}
+                  onChange={setLoanAmount}
+                  inputMode="numeric"
+                  placeholder="e.g. 5,00,000"
+                />
+              </div>
             </Field>
           </div>
 
