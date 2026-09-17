@@ -63,6 +63,7 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 8.10%* p.a." },
       { label: "Loan amount", value: "Up to ₹10 Cr" },
       { label: "Tenure", value: "Up to 30 years" },
+      { label: "Minimum ticket size", value: "₹20 Lakh" },
     ],
     about:
       "Whether it's a ready flat, an under-construction project, a self-build or a plot purchase, we shortlist the lender likely to sanction fastest for your profile — and push a stalled or declined file to someone better placed to say yes.",
@@ -90,6 +91,7 @@ export const PRODUCTS: Product[] = [
       { label: "Loan amount", value: "Up to 70% of property value" },
       { label: "Interest rate", value: "From 9.50%* p.a." },
       { label: "Tenure", value: "Up to 15 years" },
+      { label: "Minimum ticket size", value: "₹20 Lakh" },
     ],
     about:
       "Borrow against a residential, commercial or industrial property you already own — for expansion, debt consolidation, a medical bill, or any need the bank doesn't need to approve of. You keep ownership and keep using the property throughout.",
@@ -201,6 +203,7 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 14%* p.a." },
       { label: "Tenure", value: "12 — 60 months" },
       { label: "Collateral", value: "Not required" },
+      { label: "Minimum ticket size", value: "₹2 Lakh" },
     ],
     about:
       "Quick, collateral-free funding for expansion, inventory, hiring or new equipment, assessed mainly off your GST filings and bank statements rather than a stack of audited financials — so it moves fast.",
@@ -496,6 +499,7 @@ export const PRODUCTS: Product[] = [
       { label: "Loan amount", value: "Up to ₹50 lakh" },
       { label: "Tenure", value: "12 — 72 months" },
       { label: "Disbursal", value: "As fast as 48 hours" },
+      { label: "Minimum ticket size", value: "₹2 Lakh" },
     ],
     about:
       "Collateral-free funds for a wedding, medical bill, travel or clearing costlier debt — sized so the EMI actually fits your monthly budget, not just your eligibility limit.",
@@ -602,6 +606,7 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 8.15%* p.a." },
       { label: "Tenure", value: "Up to 15 years" },
       { label: "Benefit", value: "Section 80E deduction" },
+      { label: "Minimum ticket size", value: "₹8 Lakh" },
     ],
     about:
       "Funding for study in India or abroad — tuition, living costs, travel and equipment. Collateral-backed loans get the lowest rates; unsecured loans for study abroad are priced higher but move faster.",
