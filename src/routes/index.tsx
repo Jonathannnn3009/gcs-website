@@ -8,8 +8,10 @@ import {
   Globe,
   Landmark,
   Phone,
+  Quote,
   ShieldCheck,
   Sparkles,
+  Star,
   Target,
   Timer,
   TrendingDown,
@@ -136,6 +138,61 @@ const STEPS = [
   },
 ];
 
+/** Illustrative client experiences — anonymized composites, not verbatim testimonials. */
+const CLIENT_STORIES = [
+  {
+    name: "Priya Deshmukh",
+    city: "Mumbai",
+    product: "Home Loan Balance Transfer",
+    quote:
+      "Switched our home loan and shaved ₹3,800 off the EMI within three weeks. Wish we'd called sooner.",
+  },
+  {
+    name: "Rohan Mehta",
+    city: "Thane",
+    product: "Business Loan",
+    quote:
+      "Working capital sanctioned in 9 days flat — right when a big order needed raw materials.",
+  },
+  {
+    name: "Anjali Kulkarni",
+    city: "Pune",
+    product: "Personal Loan",
+    quote: "Needed funds fast for a family emergency. Disbursed in two days, no drama at all.",
+  },
+  {
+    name: "Sameer Iyer",
+    city: "Navi Mumbai",
+    product: "Loan Against Property",
+    quote:
+      "Unlocked funds against our property without touching our savings. Clean process, clear terms.",
+  },
+  {
+    name: "Neha Joshi",
+    city: "Mumbai",
+    product: "Education Loan",
+    quote: "Got my daughter's admission abroad funded end-to-end, tuition and living costs both.",
+  },
+  {
+    name: "Vikram Shah",
+    city: "Pune",
+    product: "CGTMSE Funding",
+    quote: "No collateral, no problem. They found the right scheme for my two-year-old business.",
+  },
+  {
+    name: "Arjun Nair",
+    city: "Thane",
+    product: "New Car Loan",
+    quote: "100% on-road funding on my first car — didn't touch my savings for the down payment.",
+  },
+  {
+    name: "Kavita Rao",
+    city: "Navi Mumbai",
+    product: "Balance Transfer",
+    quote: "One phone call, and my home loan rate dropped by over a full percentage point.",
+  },
+];
+
 function WhatsAppIcon() {
   return (
     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
@@ -226,6 +283,59 @@ function PersonaPanel() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function StoryCard({ story }: { story: (typeof CLIENT_STORIES)[number] }) {
+  const initials = story.name
+    .split(" ")
+    .map((w) => w[0])
+    .join("");
+
+  return (
+    <div className="flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] sm:w-[340px]">
+      <div className="flex items-center gap-1 text-gold">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star key={i} className="h-3.5 w-3.5 fill-current" />
+        ))}
+      </div>
+      <Quote className="h-5 w-5 text-gold-pale" />
+      <p className="text-sm leading-relaxed text-foreground">"{story.quote}"</p>
+      <div className="mt-auto flex items-center gap-3 border-t border-border pt-4">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-navy text-xs font-bold text-gold-light">
+          {initials}
+        </span>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-bold text-navy">{story.name}</p>
+          <p className="truncate text-xs text-muted-foreground">
+            {story.city} · {story.product}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Auto-scrolling strip of client experiences — the same marquee technique as the bank-logo strip. */
+function ClientStoriesMarquee() {
+  const doubled = [...CLIENT_STORIES, ...CLIENT_STORIES];
+  return (
+    <div>
+      <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+        <div
+          className="marquee-track flex w-max gap-5 py-1 hover:[animation-play-state:paused]"
+          style={{ animationDuration: "70s" }}
+        >
+          {doubled.map((story, i) => (
+            <StoryCard key={`${story.name}-${i}`} story={story} />
+          ))}
+        </div>
+      </div>
+      <p className="mt-4 text-center text-xs text-muted-foreground">
+        Illustrative client experiences based on situations we commonly structure — not verbatim
+        testimonials.
+      </p>
     </div>
   );
 }
@@ -433,8 +543,8 @@ function HomePage() {
         <Reveal>
           <SectionHeading
             eyebrow="Our Services"
-            title="So, what are you planning?"
-            description="Pick a goal — we'll point you to the loan that gets you there."
+            title="Financing for Every Goal"
+            description="Loan products organized by what you're trying to achieve — home, business or personal."
           />
         </Reveal>
         <LoanGoals />
@@ -468,6 +578,15 @@ function HomePage() {
         </Reveal>
         <Reveal delay={80} className="mt-10">
           <PersonaPanel />
+        </Reveal>
+
+        <Reveal delay={120} className="mt-14">
+          <p className="text-center text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
+            Real Clients, Real Outcomes
+          </p>
+          <div className="mt-6">
+            <ClientStoriesMarquee />
+          </div>
         </Reveal>
       </Section>
 

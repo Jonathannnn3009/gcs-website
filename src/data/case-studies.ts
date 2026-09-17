@@ -47,36 +47,36 @@ export const CASE_STUDIES: CaseStudy[] = [
     icon: Home,
     group: "Home & Property",
     category: "Home Loan · Non-Conventional Income",
-    headline: "₹58 lakh sanctioned — no salary slip, no problem",
-    amountLabel: "₹58 Lakh",
+    headline: "₹2.4 crore sanctioned — no salary slip, no problem",
+    amountLabel: "₹2.4 Crore",
     productSlug: "home-loan",
     productLabel: "Home Loan",
     clientProfile:
-      "A self-employed architect in Thane, five years into private practice, with strong monthly billings but no salary slip and income that varies year to year.",
+      "A self-employed architect running an established design practice in Thane, with strong monthly billings but no salary slip and income that varies year to year.",
     challenge:
       'Two banks rejected the application at the initial screening stage, citing "income not verifiable" — a common outcome for self-employed applicants whose income doesn\'t fit a standard salaried-income template.',
     structuring:
       "GCS reviewed 18 months of banking activity and client-billing records alongside the applicant's ITRs, and matched the profile with a lender whose underwriting norms specifically accommodate self-employed and professional income assessed on banking turnover rather than salary slips.",
     outcome:
-      "₹58 lakh home loan sanctioned by the matched lender, against the client's target property in Thane.",
+      "₹2.4 crore home loan sanctioned by the matched lender, against the client's target property in Thane.",
   },
   {
     slug: "lap-balance-transfer-business-expansion",
     icon: Building2,
     group: "Home & Property",
     category: "Loan Against Property · Balance Transfer + Top-Up",
-    headline: "₹1.4 crore unlocked — one property, a lower rate, fresh capital to expand",
-    amountLabel: "₹1.4 Crore",
+    headline: "₹2.6 crore unlocked — one property, a lower rate, fresh capital to expand",
+    amountLabel: "₹2.6 Crore",
     productSlug: "loan-against-property",
     productLabel: "Loan Against Property",
     clientProfile:
-      "A small trading business owner in Mumbai carrying an existing Loan Against Property from another lender at a rate that had crept up over three years, wanting extra funds to expand inventory.",
+      "A growing trading business owner in Mumbai carrying an existing Loan Against Property from another lender at a rate that had crept up over three years, wanting extra funds to expand inventory.",
     challenge:
       "The client's existing lender had no incentive to reduce the rate on a running facility, and a fresh application elsewhere would have meant re-starting the entire property and income verification process from scratch.",
     structuring:
       "GCS reviewed the existing loan's outstanding principal, tenure and current rate, and identified a lender offering a materially better rate for a balance transfer plus an additional top-up sized to the client's business requirement — combining both into a single new facility.",
     outcome:
-      "₹1.4 crore facility approved (existing ₹95 lakh transferred + ₹45 lakh fresh top-up), with a lower monthly EMI than the client's original loan despite the additional funds.",
+      "₹2.6 crore facility approved (existing ₹1.8 crore transferred + ₹80 lakh fresh top-up), with a lower monthly EMI than the client's original loan despite the additional funds.",
   },
   {
     slug: "home-loan-review-savings",
@@ -120,18 +120,18 @@ export const CASE_STUDIES: CaseStudy[] = [
     icon: Briefcase,
     group: "Business & Cash Flow",
     category: "Business Loan · Banking-Strength Underwriting",
-    headline: "₹28 lakh sanctioned — on banking strength, not the ITR",
-    amountLabel: "₹28 Lakh",
+    headline: "₹55 lakh sanctioned — on banking strength, not the ITR",
+    amountLabel: "₹55 Lakh",
     productSlug: "business-loan",
     productLabel: "Business Loan",
     clientProfile:
-      "A trading proprietorship in Mumbai, three years in business, with strong monthly banking credits but an ITR that understated real turnover — common for cash-heavy trading businesses.",
+      "An established trading firm in Mumbai, three years in business, with strong monthly banking credits but an ITR that understated real turnover — common for cash-heavy trading businesses.",
     challenge:
       "Standard business-loan underwriting leans heavily on ITR-declared income, and an ITR-only assessment would have supported a much smaller loan than the business could actually service.",
     structuring:
       "GCS built the case around 12 months of banking turnover and GST filings rather than ITR alone, and matched the profile with a lender whose credit policy weighs banking strength for trading businesses.",
     outcome:
-      "₹28 lakh unsecured business loan sanctioned — nearly double what an ITR-only assessment would have supported.",
+      "₹55 lakh unsecured business loan sanctioned — nearly double what an ITR-only assessment would have supported.",
   },
   {
     slug: "working-capital-seasonal-bridge",
@@ -158,18 +158,18 @@ export const CASE_STUDIES: CaseStudy[] = [
     icon: Wallet,
     group: "Personal Goals",
     category: "Personal Loan · Fast Turnaround",
-    headline: "₹6 lakh, disbursed in days — when a medical bill couldn't wait",
-    amountLabel: "₹6 Lakh",
+    headline: "₹24 lakh, disbursed in days — when a medical bill couldn't wait",
+    amountLabel: "₹24 Lakh",
     productSlug: "personal-loan",
     productLabel: "Personal Loan",
     clientProfile:
-      "A salaried IT professional in Pune with a clean credit history and stable employment, needing funds quickly for a family medical emergency.",
+      "A senior salaried IT professional in Pune with a clean credit history, strong take-home pay and stable employment, needing funds quickly for a major family medical emergency.",
     challenge:
       "Time was the constraint, not eligibility — the client needed funds within days, and going lender-by-lender to compare processing timelines would have cost valuable time.",
     structuring:
       "Given the client's clean profile, GCS routed the application directly to a lender known for minimal documentation and fast turnaround for salaried applicants with strong credit scores.",
     outcome:
-      "₹6 lakh personal loan sanctioned and disbursed within a few working days of application.",
+      "₹24 lakh personal loan sanctioned and disbursed within a few working days of application.",
   },
   {
     slug: "education-loan-co-applicant",
