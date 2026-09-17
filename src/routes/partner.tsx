@@ -51,6 +51,12 @@ const PARTNER_STATS = [
   { value: "No Cap", label: "On Referral Earnings" },
 ];
 
+const HERO_HIGHLIGHTS = [
+  "No paperwork or compliance work on your end",
+  "Track every referral's status in real time",
+  "Payout settled as soon as the loan disburses",
+];
+
 const SEGMENTS = [
   {
     icon: Scale,
@@ -464,9 +470,9 @@ function PartnerPage() {
       {/* Hero: navy panel with stats + the registration form */}
       <section className="bg-bg-light py-10 sm:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-5 lg:grid-cols-2">
+          <div className="grid gap-5 lg:grid-cols-2 lg:items-start">
             <Reveal>
-              <div className="navy-panel relative flex h-full flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
+              <div className="navy-panel relative flex flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
                 <div className="float-animation absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
                 <p className="relative text-xs font-bold tracking-[0.2em] text-gold uppercase">
                   Partner With Us
@@ -498,7 +504,16 @@ function PartnerPage() {
                   ))}
                 </div>
 
-                <div className="relative mt-auto pt-8">
+                <div className="relative mt-8 space-y-3 border-t border-white/10 pt-6">
+                  {HERO_HIGHLIGHTS.map((h) => (
+                    <div key={h} className="flex items-start gap-2.5 text-sm text-white/75">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" />
+                      <span>{h}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="relative mt-8 border-t border-white/10 pt-6">
                   <p className="font-heading text-base italic leading-relaxed text-white/80">
                     "You bring the introduction. We bring 75+ lenders, a senior advisor, and the
                     paperwork."
