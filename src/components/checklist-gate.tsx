@@ -68,10 +68,6 @@ export function ChecklistGate({
   }
 
   if (!open) {
-    // Categorized products drive this via a profile-card click (presetCategory) instead of
-    // a generic button — nothing to render here until the caller sets one.
-    if (categories && !presetCategory) return null;
-
     return (
       <button
         type="button"
