@@ -8,6 +8,7 @@ type Fields = {
   phone: string;
   email: string;
   loanType: string;
+  loanTypeOther: string;
   city: string;
   cityOther: string;
   loanAmount: string;
@@ -18,6 +19,7 @@ const empty: Fields = {
   phone: "",
   email: "",
   loanType: "",
+  loanTypeOther: "",
   city: "",
   cityOther: "",
   loanAmount: "",
@@ -81,6 +83,9 @@ export function LeadForm() {
   const set = (key: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setValues((v) => ({ ...v, [key]: e.target.value }));
 
+  const setLoanType = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setValues((v) => ({ ...v, loanType: e.target.value, loanTypeOther: "" }));
+
   const setCity = (e: React.ChangeEvent<HTMLSelectElement>) =>
     setValues((v) => ({ ...v, city: e.target.value, cityOther: "" }));
 
@@ -95,6 +100,8 @@ export function LeadForm() {
     if (!EMAIL_RE.test(values.email.trim()))
       next.email = "Please match the requested format — name@example.com";
     if (!values.loanType) next.loanType = "Select a loan type";
+    else if (values.loanType === "Other" && !values.loanTypeOther.trim())
+      next.loanType = "Please enter your loan type";
     if (!values.city) next.city = "Select your city";
     else if (values.city === "Other" && !values.cityOther.trim())
       next.city = "Please enter your city";
@@ -169,7 +176,7 @@ export function LeadForm() {
                 id={`${uid}-loan`}
                 className={selectClass}
                 value={values.loanType}
-                onChange={set("loanType")}
+                onChange={setLoanType}
               >
                 <option value="">Select loan type</option>
                 {SERVICES.map((s) => (
@@ -179,6 +186,16 @@ export function LeadForm() {
                 ))}
                 <option value="Other">Other</option>
               </select>
+              {values.loanType === "Other" ? (
+                <input
+                  className={`${fieldClass} mt-2`}
+                  value={values.loanTypeOther}
+                  onChange={set("loanTypeOther")}
+                  maxLength={100}
+                  placeholder="Enter your loan type"
+                  autoFocus
+                />
+              ) : null}
             </Field>
 
             <Field id={`${uid}-city`} label="City" error={errors.city}>
