@@ -107,7 +107,7 @@ export const PRODUCTS: Product[] = [
     tagline: "The keys to your home, without the runaround.",
     group: "Property Finance",
     facts: [
-      { label: "Interest rate", value: "From 8.10%* p.a." },
+      { label: "Interest rate", value: "From 7.10%* p.a." },
       { label: "Loan amount", value: "Up to ₹10 Cr" },
       { label: "Tenure", value: "Up to 30 years" },
       { label: "Minimum ticket size", value: "₹20 Lakh" },
@@ -122,8 +122,9 @@ export const PRODUCTS: Product[] = [
       "Joint-applicant structuring for tax breaks under 80C and 24(b)",
     ],
     eligibility: [
-      "Resident Indian, generally 23–65 (up to around 70 for self-employed) at loan maturity",
+      "Resident Indian, generally 21–65 (up to around 70 for self-employed) at loan maturity",
       "Salaried with take-home income from about ₹25,000/month, or self-employed with 2–3 years of ITR",
+      "Cash salary accepted as income proof too, not just bank-credited salary",
       "A CIBIL score near 700 gets the sharpest rate; lower scores are reviewed case by case, not auto-rejected",
     ],
     documents: [KYC, PROPERTY_DOCS, PHOTOS],
@@ -136,9 +137,9 @@ export const PRODUCTS: Product[] = [
     tagline: "Your property's value, working for you.",
     group: "Property Finance",
     facts: [
-      { label: "Loan amount", value: "Up to 70% of property value" },
-      { label: "Interest rate", value: "From 9.50%* p.a." },
-      { label: "Tenure", value: "Up to 15 years" },
+      { label: "Loan amount", value: "Up to 100% of property value" },
+      { label: "Interest rate", value: "From 7.50%* p.a." },
+      { label: "Tenure", value: "Up to 20 years" },
       { label: "Minimum ticket size", value: "₹20 Lakh" },
     ],
     about:
@@ -150,9 +151,9 @@ export const PRODUCTS: Product[] = [
       "Term loan or a reducing overdraft, your call",
     ],
     eligibility: [
-      "Property owner, generally up to 70 years of age when the loan matures",
+      "Property owner, generally 21–70 years of age when the loan matures",
       "Clean and marketable title with the full ownership chain on record",
-      "Demonstrable repayment capacity via income, business banking or rental receipts",
+      "Demonstrable repayment capacity via income, business banking or rental receipts — cash salary accepted too, not just bank-credited salary",
     ],
     documents: [KYC, PROPERTY_DOCS, PHOTOS],
     documentCategories: APPLICANT_DOC_CATEGORIES,
