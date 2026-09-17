@@ -161,12 +161,23 @@ function ProductDetailPage() {
                 </div>
               </div>
 
-              {/* At-a-glance eligibility snapshot */}
-              {!product.minimalDisclosure && (
-                <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-8 lg:flex">
-                  <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
-                    At A Glance
-                  </p>
+              {/* At-a-glance snapshot */}
+              <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-8 lg:flex">
+                <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+                  At A Glance
+                </p>
+                {product.minimalDisclosure ? (
+                  <ul className="space-y-4">
+                    {product.facts.map((fact) => (
+                      <li key={fact.label} className="flex items-start gap-2.5">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                        <span className="text-sm leading-snug text-foreground">
+                          <span className="font-bold text-navy">{fact.label}:</span> {fact.value}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
                   <ul className="space-y-4">
                     {product.eligibility.slice(0, 3).map((item) => (
                       <li key={item} className="flex items-start gap-2.5">
@@ -175,8 +186,8 @@ function ProductDetailPage() {
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </Reveal>
         </div>
