@@ -134,12 +134,11 @@ function ProfessionalServiceDetailPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="navy-panel mt-5 rounded-xl p-4">
-                  <ChecklistGate
-                    pdfHref={`/checklists/${service.slug}-checklist.pdf`}
-                    productTitle={service.title}
-                  />
-                </div>
+                <ChecklistGate
+                  pdfHref={`/checklists/${service.slug}-checklist.pdf`}
+                  productTitle={service.title}
+                  theme="light"
+                />
               </div>
 
               <div className="bg-secondary/40 p-5 text-xs leading-relaxed text-muted-foreground">

@@ -170,21 +170,21 @@ export function ServiceEnquiryForm({
                   {values.incomeType === "Salaried" ? "Salary" : "Income"} (Optional)
                 </label>
                 <div className="mt-1.5 flex gap-2">
-                  <div className="relative flex-1">
+                  <div className="relative min-w-0 flex-1">
                     <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-sm text-muted-foreground">
                       ₹
                     </span>
                     <input
                       id={`${uid}-salary`}
-                      className={`${fieldClass} mt-0 pl-7`}
+                      className={`${fieldClass} mt-0 w-full pl-7`}
                       value={values.salaryAmount}
                       onChange={setSalaryAmount}
                       inputMode="numeric"
-                      placeholder={values.salaryUnit === "Monthly" ? "e.g. 40,000" : "e.g. 8,00,000"}
+                      placeholder={values.salaryUnit === "Monthly" ? "e.g. 40,000" : "e.g. 8"}
                     />
                   </div>
                   <select
-                    className={`${selectClass} mt-0 w-[9.5rem] shrink-0`}
+                    className={`${selectClass} mt-0 !w-32 shrink-0 px-2 text-sm`}
                     value={values.salaryUnit}
                     onChange={set("salaryUnit")}
                     aria-label="Salary period"
