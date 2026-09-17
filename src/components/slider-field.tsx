@@ -27,7 +27,14 @@ export function SliderField({
   maxLabel?: string;
   ariaLabel: string;
 }) {
-  const clamp = (v: number) => Math.min(max, Math.max(min, v));
+  // The slider itself stays bounded to [min, max] — sliders need a fixed
+  // range to be usable. Typing a number, though, can go past max (someone
+  // asking about a ₹15 Cr loan shouldn't be capped at the slider's ₹10 Cr
+  // ceiling); only floor it at min so it can't go negative or below zero.
+  const clampTyped = (v: number) => Math.max(min, v);
+  // The range input's own value clamps visually at max even if the
+  // underlying value is higher, so the thumb doesn't render past the track.
+  const sliderValue = Math.min(value, max);
 
   return (
     <div>
@@ -40,14 +47,13 @@ export function SliderField({
               type="number"
               value={value}
               min={min}
-              max={max}
               step={step}
               onChange={(e) => {
                 if (e.target.value === "") return;
-                onChange(clamp(Number(e.target.value)));
+                onChange(clampTyped(Number(e.target.value)));
               }}
-              className="w-20 bg-transparent text-right text-sm font-bold text-gold-dark outline-none"
-              aria-label={`${ariaLabel} — type a value`}
+              className="w-28 bg-transparent text-right text-sm font-bold text-gold-dark outline-none"
+              aria-label={`${ariaLabel} — type a value, no upper limit`}
             />
             {suffix ? <span className="text-sm font-bold text-gold-dark">{suffix}</span> : null}
           </div>
@@ -58,7 +64,7 @@ export function SliderField({
         min={min}
         max={max}
         step={step}
-        value={value}
+        value={sliderValue}
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full"
         aria-label={ariaLabel}
