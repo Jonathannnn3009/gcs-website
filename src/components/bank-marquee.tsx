@@ -1,37 +1,41 @@
 import { BANK_PARTNERS, type BankPartner } from "@/data/site";
 
-// A calm, static row of our most recognizable partners — plain logos, no
-// card borders, no scroll animation. The full partner list still exists in
-// site.ts for other uses; this is a deliberately short, curated set.
-const FEATURED_BANK_NAMES = [
-  "HDFC Bank",
-  "ICICI Bank",
-  "SBI",
-  "Axis Bank",
-  "Kotak Mahindra",
-  "Standard Chartered",
-  "HSBC",
-  "Bajaj Finserv",
-  "Tata Capital",
-  "Aditya Birla Capital",
-];
+// Plain logo, no card border — the clean look, just in motion.
+function LogoItem({ bank }: { bank: BankPartner }) {
+  return (
+    <img
+      src={bank.logo}
+      alt={bank.name}
+      title={bank.name}
+      className="h-9 w-auto shrink-0 object-contain sm:h-11"
+    />
+  );
+}
 
 export function BankMarquee() {
-  const featured = FEATURED_BANK_NAMES.map((name) =>
-    BANK_PARTNERS.find((b) => b.name === name),
-  ).filter((b): b is BankPartner & { logo: string } => Boolean(b?.logo));
+  const partners = BANK_PARTNERS.filter((b) => b.logo);
+  const mid = Math.ceil(partners.length / 2);
+  const row1 = [...partners.slice(0, mid), ...partners.slice(0, mid)];
+  const row2 = [...partners.slice(mid), ...partners.slice(mid)];
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-x-14 gap-y-10">
-      {featured.map((bank) => (
-        <img
-          key={bank.name}
-          src={bank.logo}
-          alt={bank.name}
-          title={bank.name}
-          className="h-8 w-auto object-contain sm:h-10"
-        />
-      ))}
+    <div className="space-y-8">
+      <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+        <div className="marquee-track flex w-max items-center gap-14 py-1 hover:[animation-play-state:paused]">
+          {row1.map((bank, i) => (
+            <LogoItem key={`${bank.name}-${i}`} bank={bank} />
+          ))}
+        </div>
+      </div>
+      {row2.length > 0 && (
+        <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+          <div className="marquee-track-reverse flex w-max items-center gap-14 py-1 hover:[animation-play-state:paused]">
+            {row2.map((bank, i) => (
+              <LogoItem key={`${bank.name}-rev-${i}`} bank={bank} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
