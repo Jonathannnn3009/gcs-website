@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { ArrowRight, Download } from "lucide-react";
 import { submitLead } from "@/lib/leads";
 
@@ -11,10 +11,13 @@ export function ChecklistGate({
   pdfHref,
   productTitle,
   categories,
+  presetCategory,
 }: {
   pdfHref: string;
   productTitle: string;
   categories?: string[];
+  /** Set when the user already picked their category elsewhere on the page (e.g. a profile card) — opens the form straight away with that category locked in. */
+  presetCategory?: string | null;
 }) {
   const uid = useId();
   const [unlocked, setUnlocked] = useState(false);
@@ -24,6 +27,13 @@ export function ChecklistGate({
   const [category, setCategory] = useState("");
   const [errors, setErrors] = useState<{ name?: string; phone?: string; category?: string }>({});
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (presetCategory) {
+      setCategory(presetCategory);
+      setOpen(true);
+    }
+  }, [presetCategory]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +68,10 @@ export function ChecklistGate({
   }
 
   if (!open) {
+    // Categorized products drive this via a profile-card click (presetCategory) instead of
+    // a generic button — nothing to render here until the caller sets one.
+    if (categories && !presetCategory) return null;
+
     return (
       <button
         type="button"
@@ -75,7 +89,14 @@ export function ChecklistGate({
         Share your name and number and we'll unlock the download — an advisor may follow up.
       </p>
       <div className="mt-3 space-y-3">
-        {categories ? (
+        {presetCategory ? (
+          <div>
+            <span className="text-[10px] font-bold tracking-[0.16em] text-gold uppercase">You Are</span>
+            <p className="mt-1 rounded-lg border border-white/20 bg-white/10 px-3.5 py-2.5 text-sm font-bold text-white">
+              {presetCategory}
+            </p>
+          </div>
+        ) : categories ? (
           <div>
             <label htmlFor={`${uid}-category`} className="text-[10px] font-bold tracking-[0.16em] text-gold uppercase">
               You Are

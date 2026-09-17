@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -74,13 +75,6 @@ const PROCESS = [
   },
 ];
 
-const CHECKLIST_PDF: Record<string, string> = {
-  "home-loan": "/checklists/home-loan-checklist.pdf",
-  "loan-against-property": "/checklists/loan-against-property-checklist.pdf",
-  "business-loan": "/checklists/business-loan-checklist.pdf",
-  "personal-loan": "/checklists/personal-loan-checklist.pdf",
-};
-
 function productCode(title: string): string {
   const skip = new Set(["against", "and", "for", "of", "the", "on"]);
   return title
@@ -95,6 +89,8 @@ function productCode(title: string): string {
 function ProductDetailPage() {
   const { slug } = Route.useParams();
   const product = getProduct(slug);
+  const [presetCategory, setPresetCategory] = useState<string | null>(null);
+  useEffect(() => setPresetCategory(null), [slug]);
   if (!product) return <NotFoundBlock />;
   const related = PRODUCTS.filter((p) => p.group === product.group && p.slug !== product.slug);
   const fallbackRelated =
@@ -241,19 +237,31 @@ function ProductDetailPage() {
 
                   {product.documentCategories ? (
                     <>
-                      <div className="mt-4 flex flex-wrap gap-1.5">
+                      <p className="mt-3 text-xs leading-relaxed text-white/50">
+                        Exact paperwork depends a little on which of these you are — pick one to
+                        get that checklist.
+                      </p>
+                      <div className="mt-4 space-y-2">
                         {product.documentCategories.map((cat) => (
-                          <span
+                          <button
                             key={cat.label}
-                            className="rounded-full border border-white/20 px-3 py-1.5 text-xs font-bold text-white/60"
+                            type="button"
+                            onClick={() => setPresetCategory(cat.label)}
+                            className={`w-full rounded-lg border p-3.5 text-left transition-colors ${
+                              presetCategory === cat.label
+                                ? "border-gold bg-gold/10"
+                                : "border-white/15 hover:border-gold/40 hover:bg-white/5"
+                            }`}
                           >
-                            {cat.label}
-                          </span>
+                            <span className="block text-sm font-bold text-white">{cat.label}</span>
+                            <span className="mt-1 block text-xs leading-relaxed text-white/60">
+                              {cat.description}
+                            </span>
+                          </button>
                         ))}
                       </div>
-                      <p className="mt-3 text-xs leading-relaxed text-white/50">
-                        Exact paperwork varies a little by which of these you are — the full,
-                        category-wise list is in the checklist download below.
+                      <p className="mt-4 text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
+                        For Every Applicant
                       </p>
                     </>
                   ) : null}
@@ -269,13 +277,20 @@ function ProductDetailPage() {
                       </li>
                     ))}
                   </ul>
-                  {CHECKLIST_PDF[product.slug] && (
-                    <ChecklistGate
-                      pdfHref={CHECKLIST_PDF[product.slug]}
-                      productTitle={product.title}
-                      categories={product.documentCategories?.map((c) => c.label)}
-                    />
+
+                  {!product.documentCategories && (
+                    <p className="mt-4 text-xs leading-relaxed text-white/50">
+                      Get the exact checklist for {product.title.toLowerCase()}, sent as a PDF you
+                      can save or print.
+                    </p>
                   )}
+
+                  <ChecklistGate
+                    pdfHref={`/checklists/${product.slug}-checklist.pdf`}
+                    productTitle={product.title}
+                    categories={product.documentCategories?.map((c) => c.label)}
+                    presetCategory={presetCategory}
+                  />
                 </div>
               </div>
             </div>

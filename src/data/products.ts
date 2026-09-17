@@ -46,7 +46,7 @@ export type Product = {
   eligibility: string[];
   documents: string[];
   /** Only for products where paperwork genuinely differs by applicant type. */
-  documentCategories?: { label: string; items: string[] }[];
+  documentCategories?: { label: string; description: string; items: string[] }[];
 };
 
 const KYC = "KYC (PAN, Aadhaar, address proof)";
@@ -77,9 +77,24 @@ const NRI_DOCS = [
   "A resident Indian co-applicant's PAN card and address proof",
 ];
 const APPLICANT_DOC_CATEGORIES = [
-  { label: "Salaried", items: SALARIED_DOCS },
-  { label: "Non-Salaried / Self-Employed", items: SELF_EMPLOYED_DOCS },
-  { label: "NRI", items: NRI_DOCS },
+  {
+    label: "Salaried",
+    description:
+      "You draw a fixed monthly salary from an employer. Lenders mainly check salary slips, Form 16 and bank credits.",
+    items: SALARIED_DOCS,
+  },
+  {
+    label: "Non-Salaried / Self-Employed",
+    description:
+      "You run a business, practice a profession, or freelance. Lenders look at ITRs, audited financials and business banking.",
+    items: SELF_EMPLOYED_DOCS,
+  },
+  {
+    label: "NRI",
+    description:
+      "You live and work outside India. Expect visa, passport and NRE/NRO account checks, plus a resident co-applicant.",
+    items: NRI_DOCS,
+  },
 ];
 
 export const PRODUCTS: Product[] = [
