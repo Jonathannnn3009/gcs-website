@@ -85,7 +85,7 @@ export function SiteHeader() {
         {/* Right side */}
         <div className="flex items-center gap-6">
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-0.5 lg:flex">
+          <nav className="hidden items-center gap-0.5 xl:flex">
             {NAV.map((link) => {
               if (link.dropdown) {
                 return (
@@ -245,7 +245,7 @@ export function SiteHeader() {
             type="button"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             onClick={() => setMobileOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border xl:hidden"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -255,7 +255,7 @@ export function SiteHeader() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div
-          className="border-t bg-white lg:hidden"
+          className="border-t bg-white xl:hidden"
           style={{ animation: "gcs-slide-up 300ms ease both" }}
         >
           <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">

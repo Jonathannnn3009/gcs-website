@@ -85,7 +85,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         {
           title:
-            "Growth Capital Services — Your Dreams, Our Funding Expertise",
+            "Growth Capital Services — Your Growth, Our Financial Expertise",
         },
         {
           name: "description",
@@ -101,7 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           property: "og:title",
           content:
-            "Growth Capital Services — Your Dreams, Our Funding Expertise",
+            "Growth Capital Services — Your Growth, Our Financial Expertise",
         },
         {
           property: "og:description",

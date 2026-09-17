@@ -44,7 +44,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Your dreams, our funding expertise. Zero-hassle loan solutions from major Banks and NBFCs.",
+          "Your growth, our financial expertise. Zero-hassle loan solutions from major Banks and NBFCs.",
       },
     ],
   }),
@@ -333,7 +333,7 @@ function HomePage() {
             </Reveal>
 
             <h1 className="mt-5 text-[2.5rem] leading-[1.08] font-bold text-navy sm:text-5xl lg:text-[3.5rem]">
-              {["Your", "Dreams,"].map((w, i) => (
+              {["Your", "Growth,"].map((w, i) => (
                 <span
                   key={w}
                   className="word-rise mr-[0.25em]"
@@ -343,7 +343,7 @@ function HomePage() {
                 </span>
               ))}
               <br />
-              {["Our", "Funding", "Expertise."].map((w, i) => (
+              {["Our", "Financial", "Expertise."].map((w, i) => (
                 <span
                   key={w}
                   className="word-rise gold-text-static mr-[0.25em] last:mr-0"
