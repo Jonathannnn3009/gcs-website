@@ -356,7 +356,7 @@ function PartnerForm() {
         className="group mt-6 flex w-full items-center justify-center gap-3 rounded-lg bg-navy py-3.5 text-sm font-bold text-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-soft"
       >
         Register as a Partner
-        <span className="grid h-7 w-7 place-items-center rounded-full bg-gold text-navy transition-transform duration-300 group-hover:translate-x-0.5">
+        <span className="pulse-gold grid h-7 w-7 place-items-center rounded-full bg-gold text-navy transition-transform duration-300 group-hover:translate-x-0.5">
           <ArrowRight className="h-3.5 w-3.5" />
         </span>
       </button>
@@ -467,7 +467,7 @@ function PartnerPage() {
           <div className="grid gap-5 lg:grid-cols-2">
             <Reveal>
               <div className="navy-panel relative flex h-full flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
-                <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
+                <div className="float-animation absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
                 <p className="relative text-xs font-bold tracking-[0.2em] text-gold uppercase">
                   Partner With Us
                 </p>
@@ -482,8 +482,12 @@ function PartnerPage() {
                 </p>
 
                 <div className="relative mt-8 grid grid-cols-2 gap-5 sm:grid-cols-4">
-                  {PARTNER_STATS.map((s) => (
-                    <div key={s.label} className="border-l-2 border-gold/40 pl-3">
+                  {PARTNER_STATS.map((s, i) => (
+                    <div
+                      key={s.label}
+                      style={{ animationDelay: `${i * 100}ms` }}
+                      className="rise-in border-l-2 border-gold/40 pl-3 transition-transform duration-300 hover:-translate-y-0.5"
+                    >
                       <p className="font-heading text-xl font-bold text-white sm:text-2xl">
                         {s.value}
                       </p>
@@ -522,8 +526,8 @@ function PartnerPage() {
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SEGMENTS.map((s, i) => (
             <Reveal key={s.title} delay={i * 60}>
-              <div className="h-full rounded-2xl border border-border bg-white p-6">
-                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark">
+              <div className="group h-full rounded-2xl border border-border bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]">
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out]">
                   <s.icon className="h-5 w-5" />
                 </span>
                 <h3 className="mt-4 text-base font-extrabold text-navy">{s.title}</h3>
@@ -560,8 +564,8 @@ function PartnerPage() {
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {BENEFITS.map((b, i) => (
             <Reveal key={b.title} delay={i * 60}>
-              <div className="h-full rounded-2xl border border-border bg-white p-6">
-                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark">
+              <div className="group h-full rounded-2xl border border-border bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]">
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out]">
                   <b.icon className="h-5 w-5" />
                 </span>
                 <h3 className="mt-4 text-base font-extrabold text-navy">{b.title}</h3>
@@ -603,7 +607,7 @@ function PartnerPage() {
         <Reveal>
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
-            <Handshake className="relative mx-auto h-10 w-10 text-gold-dark" />
+            <Handshake className="float-animation relative mx-auto h-10 w-10 text-gold-dark" />
             <h3 className="relative mt-4 font-heading text-2xl font-bold text-navy sm:text-3xl">
               Prefer to talk it through first? <span className="gold-text">Call us.</span>
             </h3>

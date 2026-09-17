@@ -209,82 +209,54 @@ function CaseStudyDetailPage() {
             <Reveal delay={60}>
               <NarrativeStepper study={study} />
             </Reveal>
-
-            <Reveal>
-              <div className="flex items-start gap-4 rounded-2xl border border-gold/20 bg-gradient-to-br from-gold-pale/40 via-white to-white p-6 sm:p-7">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-navy text-gold-light">
-                  <Compass className="h-5 w-5" />
-                </span>
-                <div>
-                  <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
-                    A Working Promise
-                  </p>
-                  <p className="mt-2 font-heading text-lg leading-snug italic text-navy">
-                    "One advisor reviews your file, matches you with the lender most likely to fit
-                    your profile, and stays with your case through to disbursal."
-                  </p>
-                </div>
-              </div>
-            </Reveal>
           </div>
 
-          {/* RIGHT: sticky CTA card, then a scene illustration filling the space beneath it */}
-          <div className="space-y-6">
-            <Reveal delay={100} className="lg:sticky lg:top-28">
-              <div className="rounded-2xl border border-gold/15 panel-light p-7">
-                <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-                  Have a Similar Profile?
-                </p>
-                <h3 className="mt-3 font-heading text-2xl font-bold text-navy">
-                  Explore <span className="italic text-gold-dark">{study.productLabel}.</span>
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  A senior advisor will review your situation and tell you which lenders in our
-                  network are the best fit — free of cost.
-                </p>
-                <div className="mt-6 flex flex-col gap-3">
-                  {product && (
-                    <Link
-                      to="/services/$slug"
-                      params={{ slug: product.slug }}
-                      className="gold-btn justify-center py-3.5 text-sm"
-                    >
-                      {product.title} Details <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  )}
-                  <Link
-                    to="/tools"
-                    hash="eligibility"
-                    className="inline-flex items-center justify-center gap-2 rounded-md border border-navy/20 px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"
-                  >
-                    <Calculator className="h-4 w-4" /> Check Your Eligibility
-                  </Link>
-                  <a
-                    href={waLink(
-                      `Hi, I have a situation similar to "${study.headline}" — could you help me explore ${study.productLabel} options?`,
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-md bg-[#25D366] px-6 py-3.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5"
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                      <path d="M12.04 2A10 10 0 0 0 2 12.04a9.94 9.94 0 0 0 1.34 4.99L2 22l5.13-1.34A9.95 9.95 0 0 0 12.04 22 10 10 0 0 0 22 12.04 10 10 0 0 0 12.04 2zm5.82 14.12c-.24.67-1.42 1.24-1.96 1.32-.5.07-1.14.1-1.84-.12a16.84 16.84 0 0 1-1.67-.62c-2.93-1.27-4.84-4.23-4.99-4.43-.15-.2-1.2-1.6-1.2-3.06 0-1.45.76-2.17 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.02.9 2.17.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.13.99 2.09 1.3 2.39 1.44.3.15.47.13.64-.07.17-.21.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z" />
-                    </svg>
-                    Chat on WhatsApp
-                  </a>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={140}>
-              <div className="overflow-hidden rounded-2xl">
-                <img src={study.image} alt={study.headline} className="w-full object-cover" />
-              </div>
-              <p className="mt-3 text-center text-xs text-muted-foreground">
-                Illustrative — anonymized scenario, not the actual client.
+          {/* RIGHT: sticky CTA card, aligned flush with the sticky header */}
+          <Reveal delay={100} className="lg:sticky lg:top-[73px]">
+            <div className="rounded-2xl border border-gold/15 panel-light p-7">
+              <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
+                Have a Similar Profile?
               </p>
-            </Reveal>
-          </div>
+              <h3 className="mt-3 font-heading text-2xl font-bold text-navy">
+                Explore <span className="italic text-gold-dark">{study.productLabel}.</span>
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                A senior advisor will review your situation and tell you which lenders in our
+                network are the best fit — free of cost.
+              </p>
+              <div className="mt-6 flex flex-col gap-3">
+                {product && (
+                  <Link
+                    to="/services/$slug"
+                    params={{ slug: product.slug }}
+                    className="gold-btn justify-center py-3.5 text-sm"
+                  >
+                    {product.title} Details <ArrowRight className="h-4 w-4" />
+                  </Link>
+                )}
+                <Link
+                  to="/tools"
+                  hash="eligibility"
+                  className="inline-flex items-center justify-center gap-2 rounded-md border border-navy/20 px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"
+                >
+                  <Calculator className="h-4 w-4" /> Check Your Eligibility
+                </Link>
+                <a
+                  href={waLink(
+                    `Hi, I have a situation similar to "${study.headline}" — could you help me explore ${study.productLabel} options?`,
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-md bg-[#25D366] px-6 py-3.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M12.04 2A10 10 0 0 0 2 12.04a9.94 9.94 0 0 0 1.34 4.99L2 22l5.13-1.34A9.95 9.95 0 0 0 12.04 22 10 10 0 0 0 22 12.04 10 10 0 0 0 12.04 2zm5.82 14.12c-.24.67-1.42 1.24-1.96 1.32-.5.07-1.14.1-1.84-.12a16.84 16.84 0 0 1-1.67-.62c-2.93-1.27-4.84-4.23-4.99-4.43-.15-.2-1.2-1.6-1.2-3.06 0-1.45.76-2.17 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.02.9 2.17.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.13.99 2.09 1.3 2.39 1.44.3.15.47.13.64-.07.17-.21.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z" />
+                  </svg>
+                  Chat on WhatsApp
+                </a>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </Section>
 
