@@ -3,9 +3,11 @@ import { BankMark } from "@/components/bank-mark";
 
 function LogoItem({ bank }: { bank: BankPartner }) {
   return (
-    <div className="flex h-16 w-56 shrink-0 items-center gap-3 rounded-xl border bg-white px-4 transition-all duration-400 hover:border-gold/40 hover:shadow-[0_0_16px_oklch(0.75_0.14_75/0.12)]">
-      <BankMark bank={bank} className="h-9 w-9" />
-      <span className="truncate text-sm font-bold text-foreground">{bank.name}</span>
+    <div
+      title={bank.name}
+      className="flex h-16 w-32 shrink-0 items-center justify-center rounded-xl border border-border/60 bg-white px-3 transition-all duration-400 hover:border-gold/40 hover:shadow-[0_0_16px_oklch(0.75_0.14_75/0.12)]"
+    >
+      <BankMark bank={bank} className="h-11 w-11" />
     </div>
   );
 }
