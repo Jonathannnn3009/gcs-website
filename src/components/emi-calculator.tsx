@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { SliderField } from "@/components/slider-field";
 
 function formatCurrency(n: number): string {
   if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`;
@@ -52,77 +53,44 @@ export function EmiCalculator() {
       <div className="grid gap-8 lg:grid-cols-[1fr_auto]">
         {/* Sliders */}
         <div className="space-y-7">
-          {/* Loan Amount */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Loan Amount</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {formatCurrency(principal)}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={100000}
-              max={100000000}
-              step={100000}
-              value={principal}
-              onChange={(e) => setPrincipal(Number(e.target.value))}
-              className="w-full"
-              aria-label="Loan amount"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>₹1 L</span>
-              <span>₹10 Cr</span>
-            </div>
-          </div>
+          <SliderField
+            label="Loan Amount"
+            value={principal}
+            onChange={setPrincipal}
+            min={100000}
+            max={100000000}
+            step={100000}
+            format={formatCurrency}
+            minLabel="₹1 L"
+            maxLabel="₹10 Cr"
+            ariaLabel="Loan amount"
+          />
 
-          {/* Interest Rate */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Interest Rate (p.a.)</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {rate.toFixed(1)}%
-              </span>
-            </div>
-            <input
-              type="range"
-              min={5}
-              max={24}
-              step={0.1}
-              value={rate}
-              onChange={(e) => setRate(Number(e.target.value))}
-              className="w-full"
-              aria-label="Interest rate"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>5%</span>
-              <span>24%</span>
-            </div>
-          </div>
+          <SliderField
+            label="Interest Rate (p.a.)"
+            value={rate}
+            onChange={setRate}
+            min={5}
+            max={24}
+            step={0.1}
+            suffix="%"
+            minLabel="5%"
+            maxLabel="24%"
+            ariaLabel="Interest rate"
+          />
 
-          {/* Tenure */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Loan Tenure</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {tenure} {tenure === 1 ? "Year" : "Years"}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={1}
-              max={30}
-              step={1}
-              value={tenure}
-              onChange={(e) => setTenure(Number(e.target.value))}
-              className="w-full"
-              aria-label="Loan tenure in years"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>1 Yr</span>
-              <span>30 Yrs</span>
-            </div>
-          </div>
+          <SliderField
+            label="Loan Tenure"
+            value={tenure}
+            onChange={setTenure}
+            min={1}
+            max={30}
+            step={1}
+            suffix={tenure === 1 ? "Year" : "Years"}
+            minLabel="1 Yr"
+            maxLabel="30 Yrs"
+            ariaLabel="Loan tenure in years"
+          />
 
           {/* Result Cards */}
           <div className="grid grid-cols-3 gap-3">

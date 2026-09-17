@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { formatCurrency } from "@/lib/finance";
+import { SliderField } from "@/components/slider-field";
 
 export function WorkingCapitalCalculator() {
   const [turnover, setTurnover] = useState(20000000);
@@ -26,28 +27,18 @@ export function WorkingCapitalCalculator() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <div className="space-y-7">
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Projected Annual Turnover</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {formatCurrency(turnover)}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={1000000}
-              max={500000000}
-              step={500000}
-              value={turnover}
-              onChange={(e) => setTurnover(Number(e.target.value))}
-              className="w-full"
-              aria-label="Projected annual turnover"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>₹10 L</span>
-              <span>₹50 Cr</span>
-            </div>
-          </div>
+          <SliderField
+            label="Projected Annual Turnover"
+            value={turnover}
+            onChange={setTurnover}
+            min={1000000}
+            max={500000000}
+            step={500000}
+            format={formatCurrency}
+            minLabel="₹10 L"
+            maxLabel="₹50 Cr"
+            ariaLabel="Projected annual turnover"
+          />
 
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">

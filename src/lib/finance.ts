@@ -62,8 +62,14 @@ export function monthsToYearsMonths(months: number): string {
 }
 
 // Indicative rates — always confirm with the state's sub-registrar.
-export const STAMP_DUTY_RATES: Record<string, { stampDuty: number; registration: number }> = {
-  Delhi: { stampDuty: 6, registration: 1 },
+// `stampDutyFemale` is only set where a female-buyer concession is
+// consistently documented (Delhi); left unset elsewhere rather than guessing
+// a figure that varies by municipal area or changes without much notice.
+export const STAMP_DUTY_RATES: Record<
+  string,
+  { stampDuty: number; stampDutyFemale?: number; registration: number }
+> = {
+  Delhi: { stampDuty: 6, stampDutyFemale: 4, registration: 1 },
   Maharashtra: { stampDuty: 5, registration: 1 },
   Karnataka: { stampDuty: 5, registration: 1 },
   "Tamil Nadu": { stampDuty: 7, registration: 1 },

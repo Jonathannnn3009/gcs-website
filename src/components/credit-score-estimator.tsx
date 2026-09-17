@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { SliderField } from "@/components/slider-field";
 
 type PaymentHistory = "always" | "occasional" | "frequent" | "default";
 type CreditMix = "mixed" | "single" | "none";
@@ -101,62 +102,41 @@ export function CreditScoreEstimator() {
           </div>
 
           <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Credit Utilization</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {utilization}%
-              </span>
-            </div>
-            <input
-              type="range"
+            <SliderField
+              label="Credit Utilization"
+              value={utilization}
+              onChange={setUtilization}
               min={0}
               max={100}
               step={5}
-              value={utilization}
-              onChange={(e) => setUtilization(Number(e.target.value))}
-              className="w-full"
-              aria-label="Credit utilization percentage"
+              suffix="%"
+              ariaLabel="Credit utilization percentage"
             />
             <p className="mt-1 text-xs text-muted-foreground">
               How much of your total credit card limit you typically use
             </p>
           </div>
 
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Credit History Length</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {historyYears} {historyYears === 1 ? "Year" : "Years"}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={0}
-              max={25}
-              step={1}
-              value={historyYears}
-              onChange={(e) => setHistoryYears(Number(e.target.value))}
-              className="w-full"
-              aria-label="Credit history length in years"
-            />
-          </div>
+          <SliderField
+            label="Credit History Length"
+            value={historyYears}
+            onChange={setHistoryYears}
+            min={0}
+            max={25}
+            step={1}
+            suffix={historyYears === 1 ? "Year" : "Years"}
+            ariaLabel="Credit history length in years"
+          />
 
           <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Hard Inquiries (Last 6 Months)</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {inquiries}
-              </span>
-            </div>
-            <input
-              type="range"
+            <SliderField
+              label="Hard Inquiries (Last 6 Months)"
+              value={inquiries}
+              onChange={setInquiries}
               min={0}
               max={10}
               step={1}
-              value={inquiries}
-              onChange={(e) => setInquiries(Number(e.target.value))}
-              className="w-full"
-              aria-label="Number of hard inquiries in the last 6 months"
+              ariaLabel="Number of hard inquiries in the last 6 months"
             />
             <p className="mt-1 text-xs text-muted-foreground">New loan or credit card applications</p>
           </div>

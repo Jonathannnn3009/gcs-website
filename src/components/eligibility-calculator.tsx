@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { formatCurrency, principalFromEmi } from "@/lib/finance";
+import { SliderField } from "@/components/slider-field";
 
 export function EligibilityCalculator() {
   const [monthlyIncome, setMonthlyIncome] = useState(100000);
@@ -27,101 +28,57 @@ export function EligibilityCalculator() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <div className="space-y-7">
-          {/* Monthly Income */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Monthly Income (Net)</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {formatCurrency(monthlyIncome)}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={20000}
-              max={5000000}
-              step={10000}
-              value={monthlyIncome}
-              onChange={(e) => setMonthlyIncome(Number(e.target.value))}
-              className="w-full"
-              aria-label="Monthly income"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>₹20K</span>
-              <span>₹50L</span>
-            </div>
-          </div>
+          <SliderField
+            label="Monthly Income (Net)"
+            value={monthlyIncome}
+            onChange={setMonthlyIncome}
+            min={20000}
+            max={5000000}
+            step={10000}
+            format={formatCurrency}
+            minLabel="₹20K"
+            maxLabel="₹50L"
+            ariaLabel="Monthly income"
+          />
 
-          {/* Existing EMIs */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Existing EMIs</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {formatCurrency(existingEmi)}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={0}
-              max={Math.max(monthlyIncome * 0.6, 10000)}
-              step={1000}
-              value={existingEmi}
-              onChange={(e) => setExistingEmi(Number(e.target.value))}
-              className="w-full"
-              aria-label="Existing EMIs"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>₹0</span>
-              <span>{formatCurrency(Math.max(monthlyIncome * 0.6, 10000))}</span>
-            </div>
-          </div>
+          <SliderField
+            label="Existing EMIs"
+            value={existingEmi}
+            onChange={setExistingEmi}
+            min={0}
+            max={Math.max(monthlyIncome * 0.6, 10000)}
+            step={1000}
+            format={formatCurrency}
+            minLabel="₹0"
+            maxLabel={formatCurrency(Math.max(monthlyIncome * 0.6, 10000))}
+            ariaLabel="Existing EMIs"
+          />
 
-          {/* Interest Rate */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Expected Interest Rate</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {rate.toFixed(1)}%
-              </span>
-            </div>
-            <input
-              type="range"
-              min={6}
-              max={20}
-              step={0.25}
-              value={rate}
-              onChange={(e) => setRate(Number(e.target.value))}
-              className="w-full"
-              aria-label="Interest rate"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>6%</span>
-              <span>20%</span>
-            </div>
-          </div>
+          <SliderField
+            label="Expected Interest Rate"
+            value={rate}
+            onChange={setRate}
+            min={6}
+            max={20}
+            step={0.25}
+            suffix="%"
+            minLabel="6%"
+            maxLabel="20%"
+            ariaLabel="Interest rate"
+          />
 
-          {/* Tenure */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Preferred Tenure</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {tenure} Years
-              </span>
-            </div>
-            <input
-              type="range"
-              min={1}
-              max={30}
-              step={1}
-              value={tenure}
-              onChange={(e) => setTenure(Number(e.target.value))}
-              className="w-full"
-              aria-label="Tenure"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>1 Year</span>
-              <span>30 Years</span>
-            </div>
-          </div>
+          <SliderField
+            label="Preferred Tenure"
+            value={tenure}
+            onChange={setTenure}
+            min={1}
+            max={30}
+            step={1}
+            suffix={tenure === 1 ? "Year" : "Years"}
+            minLabel="1 Year"
+            maxLabel="30 Years"
+            ariaLabel="Tenure"
+          />
         </div>
 
         {/* Result */}

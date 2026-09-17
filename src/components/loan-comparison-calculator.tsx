@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { emi, formatCurrency, formatINR } from "@/lib/finance";
+import { SliderField } from "@/components/slider-field";
 
 type Offer = { label: string; rate: number; fee: number };
 
@@ -42,42 +43,26 @@ export function LoanComparisonCalculator() {
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <label className="text-sm font-semibold text-foreground">Loan Amount</label>
-            <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-              {formatCurrency(principal)}
-            </span>
-          </div>
-          <input
-            type="range"
-            min={100000}
-            max={100000000}
-            step={100000}
-            value={principal}
-            onChange={(e) => setPrincipal(Number(e.target.value))}
-            className="w-full"
-            aria-label="Loan amount"
-          />
-        </div>
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <label className="text-sm font-semibold text-foreground">Tenure</label>
-            <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-              {tenure} Years
-            </span>
-          </div>
-          <input
-            type="range"
-            min={1}
-            max={30}
-            step={1}
-            value={tenure}
-            onChange={(e) => setTenure(Number(e.target.value))}
-            className="w-full"
-            aria-label="Tenure"
-          />
-        </div>
+        <SliderField
+          label="Loan Amount"
+          value={principal}
+          onChange={setPrincipal}
+          min={100000}
+          max={100000000}
+          step={100000}
+          format={formatCurrency}
+          ariaLabel="Loan amount"
+        />
+        <SliderField
+          label="Tenure"
+          value={tenure}
+          onChange={setTenure}
+          min={1}
+          max={30}
+          step={1}
+          suffix={tenure === 1 ? "Year" : "Years"}
+          ariaLabel="Tenure"
+        />
       </div>
 
       <div className="mt-8 overflow-x-auto">

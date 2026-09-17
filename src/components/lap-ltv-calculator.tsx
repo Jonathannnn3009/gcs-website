@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { emi, formatCurrency, formatINR } from "@/lib/finance";
+import { SliderField } from "@/components/slider-field";
 
 export function LapLtvCalculator() {
   const [propertyValue, setPropertyValue] = useState(10000000);
@@ -27,89 +28,53 @@ export function LapLtvCalculator() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <div className="space-y-7">
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Property Market Value</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {formatCurrency(propertyValue)}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={1000000}
-              max={200000000}
-              step={500000}
-              value={propertyValue}
-              onChange={(e) => setPropertyValue(Number(e.target.value))}
-              className="w-full"
-              aria-label="Property market value"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>₹10 L</span>
-              <span>₹20 Cr</span>
-            </div>
-          </div>
+          <SliderField
+            label="Property Market Value"
+            value={propertyValue}
+            onChange={setPropertyValue}
+            min={1000000}
+            max={200000000}
+            step={500000}
+            format={formatCurrency}
+            minLabel="₹10 L"
+            maxLabel="₹20 Cr"
+            ariaLabel="Property market value"
+          />
 
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Loan-to-Value (LTV)</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {ltv}%
-              </span>
-            </div>
-            <input
-              type="range"
-              min={40}
-              max={75}
-              step={1}
-              value={ltv}
-              onChange={(e) => setLtv(Number(e.target.value))}
-              className="w-full"
-              aria-label="Loan to value percentage"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>40%</span>
-              <span>75%</span>
-            </div>
-          </div>
+          <SliderField
+            label="Loan-to-Value (LTV)"
+            value={ltv}
+            onChange={setLtv}
+            min={40}
+            max={75}
+            step={1}
+            suffix="%"
+            minLabel="40%"
+            maxLabel="75%"
+            ariaLabel="Loan to value percentage"
+          />
 
           <div className="grid gap-6 sm:grid-cols-2">
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <label className="text-sm font-semibold text-foreground">Interest Rate</label>
-                <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                  {rate.toFixed(1)}%
-                </span>
-              </div>
-              <input
-                type="range"
-                min={8}
-                max={18}
-                step={0.1}
-                value={rate}
-                onChange={(e) => setRate(Number(e.target.value))}
-                className="w-full"
-                aria-label="Interest rate"
-              />
-            </div>
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <label className="text-sm font-semibold text-foreground">Tenure</label>
-                <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                  {tenure} Years
-                </span>
-              </div>
-              <input
-                type="range"
-                min={1}
-                max={20}
-                step={1}
-                value={tenure}
-                onChange={(e) => setTenure(Number(e.target.value))}
-                className="w-full"
-                aria-label="Tenure"
-              />
-            </div>
+            <SliderField
+              label="Interest Rate"
+              value={rate}
+              onChange={setRate}
+              min={8}
+              max={18}
+              step={0.1}
+              suffix="%"
+              ariaLabel="Interest rate"
+            />
+            <SliderField
+              label="Tenure"
+              value={tenure}
+              onChange={setTenure}
+              min={1}
+              max={20}
+              step={1}
+              suffix={tenure === 1 ? "Year" : "Years"}
+              ariaLabel="Tenure"
+            />
           </div>
         </div>
 

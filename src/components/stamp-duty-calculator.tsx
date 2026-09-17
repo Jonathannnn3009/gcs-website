@@ -1,18 +1,29 @@
 import { useState, useMemo } from "react";
 import { formatCurrency, STAMP_DUTY_RATES } from "@/lib/finance";
+import { SliderField } from "@/components/slider-field";
 
 const STATES = Object.keys(STAMP_DUTY_RATES);
 
 export function StampDutyCalculator() {
   const [propertyValue, setPropertyValue] = useState(6000000);
   const [state, setState] = useState("Maharashtra");
+  const [buyer, setBuyer] = useState<"male" | "female">("male");
 
   const result = useMemo(() => {
     const rates = STAMP_DUTY_RATES[state];
-    const stampDuty = (propertyValue * rates.stampDuty) / 100;
+    const hasFemaleRate = rates.stampDutyFemale !== undefined;
+    const stampDutyPercent = buyer === "female" && hasFemaleRate ? rates.stampDutyFemale! : rates.stampDuty;
+    const stampDuty = (propertyValue * stampDutyPercent) / 100;
     const registration = (propertyValue * rates.registration) / 100;
-    return { stampDuty, registration, total: stampDuty + registration, rates };
-  }, [propertyValue, state]);
+    return {
+      stampDuty,
+      registration,
+      total: stampDuty + registration,
+      rates,
+      stampDutyPercent,
+      hasFemaleRate,
+    };
+  }, [propertyValue, state, buyer]);
 
   return (
     <div className="glass-card p-6 sm:p-8" id="stamp-duty">
@@ -28,53 +39,66 @@ export function StampDutyCalculator() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <div className="space-y-7">
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-foreground">State / UT</label>
-            <select
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none"
-              aria-label="State"
-            >
-              {STATES.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-foreground">State / UT</label>
+              <select
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none"
+                aria-label="State"
+              >
+                {STATES.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-foreground">
+                Property Registered In Name Of
+              </label>
+              <select
+                value={buyer}
+                onChange={(e) => setBuyer(e.target.value as "male" | "female")}
+                className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none"
+                aria-label="Buyer"
+              >
+                <option value="male">Male / Joint</option>
+                <option value="female">Female (sole owner)</option>
+              </select>
+            </div>
           </div>
 
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Property Value</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {formatCurrency(propertyValue)}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={500000}
-              max={100000000}
-              step={100000}
-              value={propertyValue}
-              onChange={(e) => setPropertyValue(Number(e.target.value))}
-              className="w-full"
-              aria-label="Property value"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>₹5 L</span>
-              <span>₹10 Cr</span>
-            </div>
-          </div>
+          <SliderField
+            label="Property Value"
+            value={propertyValue}
+            onChange={setPropertyValue}
+            min={500000}
+            max={100000000}
+            step={100000}
+            format={formatCurrency}
+            minLabel="₹5 L"
+            maxLabel="₹10 Cr"
+            ariaLabel="Property value"
+          />
 
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
               <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">Stamp Duty Rate</p>
-              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">{result.rates.stampDuty}%</p>
+              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">{result.stampDutyPercent}%</p>
             </div>
             <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
               <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">Registration Rate</p>
               <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">{result.rates.registration}%</p>
             </div>
           </div>
+
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            {result.hasFemaleRate
+              ? "This state charges a lower stamp duty rate when the property is registered solely in a woman's name."
+              : `${state} doesn't publish a separate female-buyer stamp duty rate — the standard rate applies regardless of the owner's gender.`}
+          </p>
         </div>
 
         <div className="flex flex-col items-center justify-center">

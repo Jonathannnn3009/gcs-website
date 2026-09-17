@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { formatCurrency, formatINR } from "@/lib/finance";
+import { SliderField } from "@/components/slider-field";
 
 export function CgtmseCalculator() {
   const [loanAmount, setLoanAmount] = useState(5000000);
@@ -27,74 +28,44 @@ export function CgtmseCalculator() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
         <div className="space-y-7">
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Loan Amount</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {formatCurrency(loanAmount)}
-              </span>
-            </div>
-            <input
-              type="range"
-              min={100000}
-              max={20000000}
-              step={100000}
-              value={loanAmount}
-              onChange={(e) => setLoanAmount(Number(e.target.value))}
-              className="w-full"
-              aria-label="Loan amount"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>₹1 L</span>
-              <span>₹2 Cr</span>
-            </div>
-          </div>
+          <SliderField
+            label="Loan Amount"
+            value={loanAmount}
+            onChange={setLoanAmount}
+            min={100000}
+            max={20000000}
+            step={100000}
+            format={formatCurrency}
+            minLabel="₹1 L"
+            maxLabel="₹2 Cr"
+            ariaLabel="Loan amount"
+          />
 
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Guarantee Cover</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {coverPct}%
-              </span>
-            </div>
-            <input
-              type="range"
-              min={50}
-              max={85}
-              step={1}
-              value={coverPct}
-              onChange={(e) => setCoverPct(Number(e.target.value))}
-              className="w-full"
-              aria-label="Guarantee cover percentage"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>50%</span>
-              <span>85%</span>
-            </div>
-          </div>
+          <SliderField
+            label="Guarantee Cover"
+            value={coverPct}
+            onChange={setCoverPct}
+            min={50}
+            max={85}
+            step={1}
+            suffix="%"
+            minLabel="50%"
+            maxLabel="85%"
+            ariaLabel="Guarantee cover percentage"
+          />
 
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-semibold text-foreground">Annual Guarantee Fee Rate</label>
-              <span className="rounded-lg bg-secondary px-3 py-1 text-sm font-bold text-gold-dark">
-                {feeRate.toFixed(2)}%
-              </span>
-            </div>
-            <input
-              type="range"
-              min={0.37}
-              max={2}
-              step={0.01}
-              value={feeRate}
-              onChange={(e) => setFeeRate(Number(e.target.value))}
-              className="w-full"
-              aria-label="Annual guarantee fee rate"
-            />
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-              <span>0.37%</span>
-              <span>2%</span>
-            </div>
-          </div>
+          <SliderField
+            label="Annual Guarantee Fee Rate"
+            value={feeRate}
+            onChange={setFeeRate}
+            min={0.37}
+            max={2}
+            step={0.01}
+            suffix="%"
+            minLabel="0.37%"
+            maxLabel="2%"
+            ariaLabel="Annual guarantee fee rate"
+          />
         </div>
 
         <div className="flex flex-col items-center justify-center">
