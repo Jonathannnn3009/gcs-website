@@ -3,6 +3,7 @@ import { ArrowRight, Check, FileText, Users } from "lucide-react";
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { ServiceEnquiryForm } from "@/components/service-enquiry-form";
+import { ChecklistGate } from "@/components/checklist-gate";
 import { CONTACT } from "@/data/site";
 import { PROFESSIONAL_SERVICES, getProfessionalService } from "@/data/professional-services";
 
@@ -133,6 +134,12 @@ function ProfessionalServiceDetailPage() {
                     </li>
                   ))}
                 </ul>
+                <div className="navy-panel mt-5 rounded-xl p-4">
+                  <ChecklistGate
+                    pdfHref={`/checklists/${service.slug}-checklist.pdf`}
+                    productTitle={service.title}
+                  />
+                </div>
               </div>
 
               <div className="bg-secondary/40 p-5 text-xs leading-relaxed text-muted-foreground">
@@ -150,6 +157,7 @@ function ProfessionalServiceDetailPage() {
               heading={`Need Help With ${service.title}?`}
               description="Share your requirement and our team will connect you with the right professional."
               serviceTitle={service.title}
+              showIncomeType={service.division === "CA Services"}
             />
             <div className="mt-4 text-center text-xs text-muted-foreground">
               Prefer to talk it through? Call {CONTACT.phone} or{" "}

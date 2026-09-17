@@ -5,20 +5,48 @@ import { submitLead } from "@/lib/leads";
 const fieldClass =
   "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20";
 
-type Fields = { name: string; phone: string; message: string };
-const empty: Fields = { name: "", phone: "", message: "" };
+const selectClass = `${fieldClass} appearance-none cursor-pointer`;
+
+type IncomeType = "" | "Salaried" | "Self-Employed";
+type SalaryUnit = "Monthly" | "Annual (LPA)";
+
+type Fields = {
+  name: string;
+  phone: string;
+  message: string;
+  incomeType: IncomeType;
+  salaryUnit: SalaryUnit;
+  salaryAmount: string;
+};
+const empty: Fields = {
+  name: "",
+  phone: "",
+  message: "",
+  incomeType: "",
+  salaryUnit: "Monthly",
+  salaryAmount: "",
+};
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
+
+// Groups typed digits with Indian comma placement (e.g. 12,50,000) as the user types.
+function formatIndianAmount(raw: string) {
+  const digits = raw.replace(/\D/g, "");
+  return digits ? Number(digits).toLocaleString("en-IN") : "";
+}
 
 type Props = {
   heading?: string;
   description?: string;
   serviceTitle?: string;
+  /** CA Services filings vary by income type — ask upfront there; skip for Sheetal Associates legal work. */
+  showIncomeType?: boolean;
 };
 
 export function ServiceEnquiryForm({
   heading = "Need Help With This?",
   description = "Tell us your requirement and our team will guide you on the process, documents and next steps.",
   serviceTitle,
+  showIncomeType = false,
 }: Props) {
   const uid = useId();
   const [values, setValues] = useState<Fields>(empty);
@@ -26,8 +54,12 @@ export function ServiceEnquiryForm({
   const [submitted, setSubmitted] = useState(false);
 
   const set =
-    (key: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    (key: keyof Fields) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
       setValues((v) => ({ ...v, [key]: e.target.value }));
+
+  const setSalaryAmount = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setValues((v) => ({ ...v, salaryAmount: formatIndianAmount(e.target.value) }));
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,11 +70,14 @@ export function ServiceEnquiryForm({
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
+    const incomeDetail = values.incomeType
+      ? ` — ${values.incomeType}${values.salaryAmount ? `, ₹${values.salaryAmount} (${values.salaryUnit})` : ""}`
+      : "";
     await submitLead({
       name: values.name.trim(),
       phone: values.phone.trim(),
       source: "ca-legal-enquiry",
-      detail: `${serviceTitle ? serviceTitle + " — " : ""}${values.message.trim()}`,
+      detail: `${serviceTitle ? serviceTitle + " — " : ""}${values.message.trim()}${incomeDetail}`,
     });
     setValues(empty);
     setSubmitted(true);
@@ -106,6 +141,62 @@ export function ServiceEnquiryForm({
           />
           {errors.phone && <span className="mt-1 block text-xs text-destructive">{errors.phone}</span>}
         </div>
+        {showIncomeType ? (
+          <>
+            <div>
+              <label
+                htmlFor={`${uid}-income-type`}
+                className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase"
+              >
+                You Are (Optional)
+              </label>
+              <select
+                id={`${uid}-income-type`}
+                className={selectClass}
+                value={values.incomeType}
+                onChange={set("incomeType")}
+              >
+                <option value="">Select one</option>
+                <option value="Salaried">Salaried</option>
+                <option value="Self-Employed">Self-Employed</option>
+              </select>
+            </div>
+            {values.incomeType ? (
+              <div>
+                <label
+                  htmlFor={`${uid}-salary`}
+                  className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase"
+                >
+                  {values.incomeType === "Salaried" ? "Salary" : "Income"} (Optional)
+                </label>
+                <div className="mt-1.5 flex gap-2">
+                  <div className="relative flex-1">
+                    <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-sm text-muted-foreground">
+                      ₹
+                    </span>
+                    <input
+                      id={`${uid}-salary`}
+                      className={`${fieldClass} mt-0 pl-7`}
+                      value={values.salaryAmount}
+                      onChange={setSalaryAmount}
+                      inputMode="numeric"
+                      placeholder={values.salaryUnit === "Monthly" ? "e.g. 40,000" : "e.g. 8,00,000"}
+                    />
+                  </div>
+                  <select
+                    className={`${selectClass} mt-0 w-[9.5rem] shrink-0`}
+                    value={values.salaryUnit}
+                    onChange={set("salaryUnit")}
+                    aria-label="Salary period"
+                  >
+                    <option value="Monthly">Monthly</option>
+                    <option value="Annual (LPA)">Annual (LPA)</option>
+                  </select>
+                </div>
+              </div>
+            ) : null}
+          </>
+        ) : null}
         <div>
           <label
             htmlFor={`${uid}-message`}
