@@ -547,6 +547,13 @@ function PartnerPage() {
               title="From introduction to payout — four steps."
               description="You make the introduction. Everything after that is on us."
             />
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              Most referral programs leave you chasing updates or managing paperwork you never
+              signed up for. Ours doesn't. Once you share a lead, a dedicated advisor takes
+              ownership of the file end to end — checking eligibility, matching it against our
+              network of 75+ banks and NBFCs, and pushing it through to disbursal — while you get
+              scheduled updates at every stage instead of radio silence until the payout.
+            </p>
           </Reveal>
           <Reveal delay={80}>
             <img
@@ -600,6 +607,10 @@ function PartnerPage() {
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
               Reasons to partner with us.
             </h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              Beyond the referral fee, most professionals who stick with this partnership for years
+              mention the same handful of reasons. Expand each one below.
+            </p>
             <div className="mt-6">
               <Accordion items={MORE_REASONS} />
             </div>
@@ -613,6 +624,9 @@ function PartnerPage() {
           <Reveal>
             <p className="eyebrow">Before You Register</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">Quick answers.</h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              The questions that come up most before someone sends their first referral.
+            </p>
             <div className="mt-6">
               <Accordion items={PARTNER_FAQS} />
             </div>
