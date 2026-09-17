@@ -41,7 +41,7 @@ function CaseStudiesPage() {
       <section className="relative overflow-hidden bg-bg-light py-14 sm:py-20">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-end">
+          <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-start">
             <Reveal>
               <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                 <Link to="/" className="hover:text-navy">
@@ -61,29 +61,21 @@ function CaseStudiesPage() {
               </p>
             </Reveal>
 
-            {/* Real image with a Ken-Burns drift, plus a floating tally badge — instead of a plain stat box */}
+            {/* Real illustration with a Ken-Burns drift and an About-page-style caption underneath */}
             <Reveal delay={100}>
-              <div className="relative pb-6 pl-6 sm:pb-8 sm:pl-8">
-                <div className="overflow-hidden rounded-3xl shadow-[var(--shadow-lift)]">
-                  <img
-                    src="/brand/hero-city.jpg"
-                    alt="Growth Capital Services — real lending outcomes across our markets"
-                    className="kenburns h-56 w-full object-cover sm:h-64"
-                  />
-                </div>
-                <div className="absolute bottom-0 left-0 grid grid-cols-3 gap-3 rounded-2xl border border-gold/15 bg-white p-4 shadow-[var(--shadow-card)] sm:p-5">
-                  {CASE_STUDY_GROUPS.map((group) => (
-                    <div key={group} className="text-center">
-                      <p className="font-heading text-2xl font-bold text-navy sm:text-3xl">
-                        {CASE_STUDIES.filter((c) => c.group === group).length}
-                      </p>
-                      <p className="mt-1 text-[9px] leading-tight font-bold tracking-[0.06em] text-gold-dark uppercase sm:text-[10px]">
-                        {group}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+              <div className="overflow-hidden rounded-3xl">
+                <img
+                  src="/brand/case-story-home.png"
+                  alt="Growth Capital Services — a family closing on their home loan"
+                  className="kenburns w-full object-cover"
+                />
               </div>
+              <p className="mt-6 font-heading text-2xl leading-snug italic text-navy sm:text-3xl">
+                "Every file here started with a no from somewhere else."
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                The scenarios below show how we routed each one to a yes.
+              </p>
             </Reveal>
           </div>
         </div>
