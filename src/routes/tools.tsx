@@ -110,7 +110,7 @@ function ToolsPage() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="eyebrow">Calculators</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl">
+            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
               Know Your Numbers. <span className="gold-text">Then Apply with Confidence.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
@@ -138,17 +138,17 @@ function ToolsPage() {
                     type="button"
                     onClick={() => toggle(t.id)}
                     aria-expanded={isOpen}
-                    className="flex w-full items-center gap-4 bg-white px-5 py-4 text-left transition-colors hover:bg-gold/5 sm:px-6 sm:py-5"
+                    className="flex w-full items-center gap-4 bg-white px-5 py-4 text-left transition-colors hover:bg-gold/5 sm:px-6 sm:py-5 dark:bg-card"
                   >
                     <span
                       className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-colors ${
-                        isOpen ? "bg-navy text-gold-light" : "bg-gold-pale/60 text-gold-dark"
+                        isOpen ? "bg-navy text-gold-light" : "bg-gold-pale/60 text-gold-dark dark:bg-gold/15"
                       }`}
                     >
                       <t.icon className="h-5 w-5" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-base font-bold text-navy">{t.label}</span>
+                      <span className="block text-base font-bold text-navy dark:text-white">{t.label}</span>
                       <span className="block text-xs text-muted-foreground">{t.sub}</span>
                     </span>
                     <ChevronDown
@@ -158,7 +158,7 @@ function ToolsPage() {
                     />
                   </button>
                   {isOpen && (
-                    <div className="border-t border-border bg-bg-light p-3 sm:p-5">{t.render()}</div>
+                    <div className="border-t border-border bg-bg-light p-3 sm:p-5 dark:bg-background">{t.render()}</div>
                   )}
                 </div>
               </Reveal>

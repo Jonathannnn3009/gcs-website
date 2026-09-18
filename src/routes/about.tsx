@@ -78,7 +78,7 @@ function AboutPage() {
               Home <span className="text-gold">/</span> About
             </p>
             <p className="eyebrow mt-4">About Growth Capital Services</p>
-            <h1 className="mt-3 max-w-3xl text-3xl font-extrabold text-navy sm:text-5xl">
+            <h1 className="mt-3 max-w-3xl text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
               A loan advisory built around one discipline.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
@@ -91,7 +91,7 @@ function AboutPage() {
           <Reveal delay={100} className="mt-10 flex flex-wrap gap-x-10 gap-y-4 border-t border-border pt-8">
             {STATS.map((s) => (
               <div key={s.label} className="border-l-2 border-gold/40 pl-4">
-                <p className="font-heading text-3xl font-bold text-navy sm:text-4xl">{s.value}</p>
+                <p className="font-heading text-3xl font-bold text-navy sm:text-4xl dark:text-white">{s.value}</p>
                 <p className="mt-1 text-xs font-semibold tracking-wide text-gold-dark uppercase">
                   {s.label}
                 </p>
@@ -113,7 +113,7 @@ function AboutPage() {
                   className="w-full object-cover"
                 />
               </div>
-              <p className="mt-6 font-heading text-2xl leading-snug italic text-navy sm:text-3xl">
+              <p className="mt-6 font-heading text-2xl leading-snug italic text-navy sm:text-3xl dark:text-white">
                 "We read the file behind the file."
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -123,7 +123,7 @@ function AboutPage() {
 
             <Reveal delay={100} className="lg:pt-4">
               <p className="eyebrow">How It Started</p>
-              <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
+              <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
                 Too many good files were getting rejected for the wrong reasons.
               </h2>
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
@@ -139,7 +139,7 @@ function AboutPage() {
               </p>
               <Link
                 to="/services"
-                className="mt-7 inline-flex items-center gap-2 rounded-md border border-navy/20 px-6 py-3 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50"
+                className="mt-7 inline-flex items-center gap-2 rounded-md border border-navy/20 px-6 py-3 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50 dark:text-white"
               >
                 See our loan products <ArrowRight className="h-4 w-4" />
               </Link>
@@ -152,12 +152,12 @@ function AboutPage() {
       <section className="pb-16 sm:pb-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <div className="relative overflow-hidden rounded-3xl border border-gold/15 bg-white p-8 sm:p-14">
+            <div className="relative overflow-hidden rounded-3xl border border-gold/15 bg-white p-8 sm:p-14 dark:bg-card">
               <div className="absolute top-0 right-1/4 h-72 w-72 rounded-full bg-gold/8 blur-[100px]" />
               <div className="relative grid gap-10 lg:grid-cols-2 lg:divide-x lg:divide-border">
                 <div className="lg:pr-10">
                   <p className="eyebrow">Our Mission</p>
-                  <h3 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl">
+                  <h3 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
                     Match the file to the lender who actually wants it.
                   </h3>
                   <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
@@ -169,7 +169,7 @@ function AboutPage() {
                 </div>
                 <div className="lg:pl-10">
                   <p className="eyebrow">Our Vision</p>
-                  <h3 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl">
+                  <h3 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
                     The advisor people call before they call a bank.
                   </h3>
                   <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
@@ -188,7 +188,7 @@ function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="eyebrow">Why Choose Growth Capital Services</p>
-            <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
               What clients mention <span className="gold-text-static italic">when they refer us.</span>
             </h2>
           </Reveal>
@@ -200,7 +200,7 @@ function AboutPage() {
                     № {w.num}
                   </span>
                   <div>
-                    <h3 className="text-lg font-extrabold text-navy">{w.title}</h3>
+                    <h3 className="text-lg font-extrabold text-navy dark:text-white">{w.title}</h3>
                     <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
                       {w.body}
                     </p>
@@ -219,13 +219,13 @@ function AboutPage() {
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="eyebrow">Our Services</p>
-                <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
+                <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
                   25 products, <span className="gold-text-static italic">one advisor who knows all of them.</span>
                 </h2>
               </div>
               <Link
                 to="/services"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 px-5 py-2.5 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 px-5 py-2.5 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50 dark:text-white"
               >
                 View all services <ArrowRight className="h-4 w-4" />
               </Link>
@@ -247,7 +247,7 @@ function AboutPage() {
                       key={p.slug}
                       to="/services/$slug"
                       params={{ slug: p.slug }}
-                      className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-[var(--shadow-card)]"
+                      className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-[var(--shadow-card)] dark:bg-card"
                     >
                       <span className="text-[14px] font-bold text-foreground">{p.title}</span>
                       <ArrowUpRight className="h-4 w-4 shrink-0 text-gold/60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gold" />
@@ -265,7 +265,7 @@ function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="eyebrow">Our Partners</p>
-            <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
               India's leading <span className="gold-text-static italic">banks & NBFCs.</span>
             </h2>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
@@ -284,7 +284,7 @@ function AboutPage() {
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
               <p className="eyebrow">How We Work</p>
-              <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
+              <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
                 A guided process — <span className="gold-text-static italic">from first call to disbursal.</span>
               </h2>
             </div>
@@ -297,7 +297,7 @@ function AboutPage() {
                   <span className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
                     Step {step.num}
                   </span>
-                  <h3 className="mt-2 text-base font-extrabold text-navy">{step.title}</h3>
+                  <h3 className="mt-2 text-base font-extrabold text-navy dark:text-white">{step.title}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                     {step.body}
                   </p>

@@ -83,7 +83,7 @@ export function PrepaymentCalculator() {
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
               Interest Saved
             </p>
-            <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl">
+            <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl dark:text-white">
               {formatCurrency(Math.max(result.interestSaved, 0))}
             </p>
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>

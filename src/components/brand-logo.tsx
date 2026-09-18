@@ -35,7 +35,7 @@ export function BrandLogo({
           className={cn(s.mark, "w-auto shrink-0 object-contain mix-blend-multiply")}
         />
         <span className="flex flex-col justify-center leading-none">
-          <span className={cn("font-brand font-semibold tracking-[0.02em] whitespace-nowrap text-navy uppercase", s.name)}>
+          <span className={cn("font-brand font-semibold tracking-[0.02em] whitespace-nowrap text-navy uppercase dark:text-white", s.name)}>
             Growth Capital
           </span>
           <span className={cn("mt-1 flex items-center gap-1.5 font-brand font-medium whitespace-nowrap text-gold-dark uppercase", s.sub)}>
@@ -60,7 +60,7 @@ export function BrandLogo({
       />
       <span
         className={cn(
-          "font-brand font-semibold tracking-[0.04em] whitespace-nowrap text-navy uppercase",
+          "font-brand font-semibold tracking-[0.04em] whitespace-nowrap text-navy uppercase dark:text-white",
           s.name,
         )}
       >

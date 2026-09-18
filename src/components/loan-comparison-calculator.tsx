@@ -75,7 +75,7 @@ export function LoanComparisonCalculator() {
                   <input
                     value={r.label}
                     onChange={(e) => updateOffer(i, "label", e.target.value)}
-                    className="w-full rounded-lg border border-border bg-white px-2 py-1.5 text-sm font-bold text-navy focus:border-gold/50 focus:outline-none"
+                    className="w-full rounded-lg border border-border bg-white px-2 py-1.5 text-sm font-bold text-navy focus:border-gold/50 focus:outline-none dark:text-white dark:bg-card"
                     aria-label={`Lender ${i + 1} name`}
                   />
                 </th>
@@ -92,7 +92,7 @@ export function LoanComparisonCalculator() {
                     step={0.05}
                     value={r.rate}
                     onChange={(e) => updateOffer(i, "rate", Number(e.target.value))}
-                    className="w-full rounded-lg border border-border bg-white px-2 py-1.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none"
+                    className="w-full rounded-lg border border-border bg-white px-2 py-1.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none dark:text-white dark:bg-card"
                     aria-label={`Rate for ${r.label}`}
                   />
                 </td>
@@ -107,7 +107,7 @@ export function LoanComparisonCalculator() {
                     step={1000}
                     value={r.fee}
                     onChange={(e) => updateOffer(i, "fee", Number(e.target.value))}
-                    className="w-full rounded-lg border border-border bg-white px-2 py-1.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none"
+                    className="w-full rounded-lg border border-border bg-white px-2 py-1.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none dark:text-white dark:bg-card"
                     aria-label={`Fee for ${r.label}`}
                   />
                 </td>
@@ -116,13 +116,13 @@ export function LoanComparisonCalculator() {
             <tr>
               <td className="py-3 text-xs font-bold tracking-wide text-muted-foreground uppercase">Monthly EMI</td>
               {rows.map((r, i) => (
-                <td key={i} className="px-2 py-3 text-sm font-bold text-navy">{formatINR(r.monthlyEmi)}</td>
+                <td key={i} className="px-2 py-3 text-sm font-bold text-navy dark:text-white">{formatINR(r.monthlyEmi)}</td>
               ))}
             </tr>
             <tr>
               <td className="py-3 text-xs font-bold tracking-wide text-muted-foreground uppercase">Total Interest</td>
               {rows.map((r, i) => (
-                <td key={i} className="px-2 py-3 text-sm font-bold text-navy">{formatCurrency(r.totalInterest)}</td>
+                <td key={i} className="px-2 py-3 text-sm font-bold text-navy dark:text-white">{formatCurrency(r.totalInterest)}</td>
               ))}
             </tr>
             <tr>
@@ -131,7 +131,7 @@ export function LoanComparisonCalculator() {
                 <td key={i} className="px-2 py-3">
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-extrabold ${
-                      r.isCheapest ? "bg-gold-pale/70 text-gold-dark ring-1 ring-gold/30" : "text-navy"
+                      r.isCheapest ? "bg-gold-pale/70 text-gold-dark ring-1 ring-gold/30" : "text-navy dark:text-white"
                     }`}
                   >
                     {formatCurrency(r.totalCost)}

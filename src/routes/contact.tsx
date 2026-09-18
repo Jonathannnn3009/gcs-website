@@ -65,14 +65,14 @@ const CONTACT_FAQS = [
 function FaqAccordion() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-white">
+    <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-white dark:bg-card">
       {CONTACT_FAQS.map((f, i) => (
         <div key={f.q}>
           <button
             onClick={() => setOpen(open === i ? null : i)}
             className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
           >
-            <span className="text-sm font-bold text-navy">{f.q}</span>
+            <span className="text-sm font-bold text-navy dark:text-white">{f.q}</span>
             <ChevronDown
               className={`h-4 w-4 shrink-0 text-gold transition-transform duration-300 ${open === i ? "rotate-180" : ""}`}
             />
@@ -90,7 +90,7 @@ function ContactPage() {
   return (
     <>
       {/* Split hero: navy intro (now carrying the reach-methods inline) + form */}
-      <section className="bg-bg-light py-10 sm:py-14">
+      <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-5 lg:grid-cols-2">
             <Reveal>
@@ -157,7 +157,7 @@ function ContactPage() {
         <div className="grid items-center gap-8 lg:grid-cols-2">
           <Reveal>
             <p className="eyebrow">Visit Our Office</p>
-            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
               Our Office in <span className="gold-text-static italic">Ghatkopar West.</span>
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -174,7 +174,7 @@ function ContactPage() {
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
                     Address
                   </p>
-                  <p className="mt-0.5 text-sm font-semibold text-navy">{CONTACT.address}</p>
+                  <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">{CONTACT.address}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -185,7 +185,7 @@ function ContactPage() {
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
                     Hours
                   </p>
-                  <p className="mt-0.5 text-sm font-semibold text-navy">{CONTACT.hours}</p>
+                  <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">{CONTACT.hours}</p>
                 </div>
               </div>
             </div>
@@ -203,7 +203,7 @@ function ContactPage() {
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 px-5 py-3 text-sm font-bold text-navy transition-colors hover:border-gold/40"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 px-5 py-3 text-sm font-bold text-navy transition-colors hover:border-gold/40 dark:text-white"
               >
                 Book an appointment
               </a>
@@ -230,7 +230,7 @@ function ContactPage() {
       <Section className="pt-0">
         <Reveal>
           <p className="eyebrow text-center">Before You Write</p>
-          <h2 className="mt-2 text-center text-2xl font-extrabold text-navy sm:text-3xl">
+          <h2 className="mt-2 text-center text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
             Quick answers.
           </h2>
         </Reveal>

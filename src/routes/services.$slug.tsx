@@ -37,7 +37,7 @@ function NotFoundBlock() {
   return (
     <Section className="text-center">
       <p className="eyebrow">Not Found</p>
-      <h1 className="mt-3 text-3xl font-extrabold text-navy">That product doesn't exist.</h1>
+      <h1 className="mt-3 text-3xl font-extrabold text-navy dark:text-white">That product doesn't exist.</h1>
       <p className="mt-3 text-muted-foreground">
         It may have moved — browse the full list instead.
       </p>
@@ -100,7 +100,7 @@ function ProductDetailPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-bg-light py-10 sm:py-14">
+      <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="grid gap-0 overflow-hidden rounded-3xl lg:grid-cols-[1.4fr_1fr]">
@@ -162,7 +162,7 @@ function ProductDetailPage() {
               </div>
 
               {/* At-a-glance snapshot */}
-              <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-8 lg:flex">
+              <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-8 lg:flex dark:bg-gold/10">
                 <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
                   At A Glance
                 </p>
@@ -172,7 +172,7 @@ function ProductDetailPage() {
                       <li key={fact.label} className="flex items-start gap-2.5">
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
                         <span className="text-sm leading-snug text-foreground">
-                          <span className="font-bold text-navy">{fact.label}:</span> {fact.value}
+                          <span className="font-bold text-navy dark:text-white">{fact.label}:</span> {fact.value}
                         </span>
                       </li>
                     ))}
@@ -198,10 +198,10 @@ function ProductDetailPage() {
         <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
           {/* LEFT: the dossier */}
           <Reveal>
-            <div className="overflow-hidden rounded-2xl border border-gold/15 bg-white">
+            <div className="overflow-hidden rounded-2xl border border-gold/15 bg-white dark:bg-card">
               <div className="p-7 sm:p-9">
                 <p className="eyebrow">The Short Version</p>
-                <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl">
+                <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
                   What {product.title} actually does for you.
                 </h2>
                 <p className="mt-4 text-base leading-relaxed text-muted-foreground">
@@ -279,7 +279,7 @@ function ProductDetailPage() {
                       <div className="mt-3 space-y-3">
                         {product.documentCategories.map((cat) => (
                           <div key={cat.label}>
-                            <span className="block text-sm font-bold text-navy">{cat.label}</span>
+                            <span className="block text-sm font-bold text-navy dark:text-white">{cat.label}</span>
                             <span className="mt-0.5 block text-sm leading-relaxed text-muted-foreground">
                               {cat.description}
                             </span>
@@ -356,7 +356,7 @@ function ProductDetailPage() {
               <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
                 Start Your File
               </p>
-              <h3 className="mt-3 font-heading text-2xl font-bold text-navy">
+              <h3 className="mt-3 font-heading text-2xl font-bold text-navy dark:text-white">
                 Apply for <span className="italic text-gold-dark">{product.title}.</span>
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -366,16 +366,16 @@ function ProductDetailPage() {
               <div className="mt-6 space-y-3">
                 <a
                   href={CONTACT.phoneHref}
-                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40"
+                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40 dark:bg-card"
                 >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
                     <Phone className="h-4 w-4" />
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
                       Call Us
                     </span>
-                    <span className="block truncate text-sm font-bold text-navy">
+                    <span className="block truncate text-sm font-bold text-navy dark:text-white">
                       {CONTACT.phone}
                     </span>
                   </span>
@@ -385,16 +385,16 @@ function ProductDetailPage() {
                   href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40"
+                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40 dark:bg-card"
                 >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
                     <MessageCircle className="h-4 w-4" />
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
                       WhatsApp
                     </span>
-                    <span className="block truncate text-sm font-bold text-navy">
+                    <span className="block truncate text-sm font-bold text-navy dark:text-white">
                       Message us now
                     </span>
                   </span>
@@ -402,16 +402,16 @@ function ProductDetailPage() {
                 </a>
                 <a
                   href={`mailto:${CONTACT.email}`}
-                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40"
+                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40 dark:bg-card"
                 >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
                     <Mail className="h-4 w-4" />
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
                       Email
                     </span>
-                    <span className="block truncate text-sm font-bold text-navy">
+                    <span className="block truncate text-sm font-bold text-navy dark:text-white">
                       {CONTACT.email}
                     </span>
                   </span>
@@ -453,10 +453,10 @@ function ProductDetailPage() {
             {PROCESS.map((step, i) => (
               <Reveal key={step.num} delay={i * 80}>
                 <li className="text-center">
-                  <span className="relative z-10 mx-auto grid h-10 w-10 place-items-center rounded-full border-2 border-gold bg-white text-gold-dark">
+                  <span className="relative z-10 mx-auto grid h-10 w-10 place-items-center rounded-full border-2 border-gold bg-white text-gold-dark dark:bg-card">
                     <step.icon className="h-4 w-4" />
                   </span>
-                  <h4 className="mt-4 text-base font-extrabold text-navy">{step.title}</h4>
+                  <h4 className="mt-4 text-base font-extrabold text-navy dark:text-white">{step.title}</h4>
                   <p className="mx-auto mt-1.5 max-w-[15rem] text-sm leading-relaxed text-muted-foreground">
                     {step.body}
                   </p>
@@ -484,11 +484,11 @@ function ProductDetailPage() {
                 params={{ slug: p.slug }}
                 className="group flex items-center gap-4 border-b border-border py-5"
               >
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy dark:bg-gold/15">
                   <p.icon className="h-5 w-5" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-base font-extrabold text-navy">{p.title}</span>
+                  <span className="block text-base font-extrabold text-navy dark:text-white">{p.title}</span>
                   <span className="block text-sm text-muted-foreground">{p.tagline}</span>
                 </span>
                 <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
@@ -499,7 +499,7 @@ function ProductDetailPage() {
         <Reveal delay={200} className="mt-6 text-center">
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 text-sm font-bold text-navy hover:text-gold-dark"
+            className="inline-flex items-center gap-2 text-sm font-bold text-navy hover:text-gold-dark dark:text-white"
           >
             View all services <ArrowRight className="h-4 w-4" />
           </Link>
@@ -511,7 +511,7 @@ function ProductDetailPage() {
         <Reveal>
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
-            <h3 className="relative text-2xl font-extrabold text-navy sm:text-3xl">
+            <h3 className="relative text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
               Still deciding on {product.title}? <span className="gold-text">Ask us directly.</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
@@ -525,7 +525,7 @@ function ProductDetailPage() {
                 href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white dark:bg-card"
               >
                 WhatsApp Us
               </a>

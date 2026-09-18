@@ -28,7 +28,7 @@ function NotFoundBlock() {
   return (
     <Section className="text-center">
       <p className="eyebrow">Not Found</p>
-      <h1 className="mt-3 text-3xl font-extrabold text-navy">That service doesn't exist.</h1>
+      <h1 className="mt-3 text-3xl font-extrabold text-navy dark:text-white">That service doesn't exist.</h1>
       <p className="mt-3 text-muted-foreground">
         It may have moved — browse the full list instead.
       </p>
@@ -51,7 +51,7 @@ function ProfessionalServiceDetailPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-bg-light py-10 sm:py-14">
+      <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="overflow-hidden rounded-3xl navy-panel relative p-8 sm:p-12">
@@ -94,7 +94,7 @@ function ProfessionalServiceDetailPage() {
         <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
           {/* LEFT: the dossier */}
           <Reveal>
-            <div className="overflow-hidden rounded-2xl border border-gold/15 bg-white">
+            <div className="overflow-hidden rounded-2xl border border-gold/15 bg-white dark:bg-card">
               <div className="p-7 sm:p-9">
                 <p className="eyebrow flex items-center gap-1.5">
                   <Users className="h-3.5 w-3.5" /> Who Needs This
@@ -188,11 +188,11 @@ function ProfessionalServiceDetailPage() {
                   params={{ slug: s.slug }}
                   className="group flex items-center gap-4 border-b border-border py-4"
                 >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/70 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/70 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy dark:bg-gold/15">
                     <s.icon className="h-5 w-5" />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-base font-bold text-navy">{s.title}</span>
+                    <span className="block text-base font-bold text-navy dark:text-white">{s.title}</span>
                     <span className="block text-sm text-muted-foreground">{s.summary}</span>
                   </span>
                   <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />

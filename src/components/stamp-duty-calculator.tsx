@@ -45,7 +45,7 @@ export function StampDutyCalculator() {
               <select
                 value={state}
                 onChange={(e) => setState(e.target.value)}
-                className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none"
+                className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none dark:text-white dark:bg-card"
                 aria-label="State"
               >
                 {STATES.map((s) => (
@@ -61,7 +61,7 @@ export function StampDutyCalculator() {
               <select
                 value={buyer}
                 onChange={(e) => setBuyer(e.target.value as "male" | "female")}
-                className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none"
+                className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm font-semibold text-navy focus:border-gold/50 focus:outline-none dark:text-white dark:bg-card"
                 aria-label="Buyer"
               >
                 <option value="male">Male / Joint</option>
@@ -107,7 +107,7 @@ export function StampDutyCalculator() {
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
               Total Payable
             </p>
-            <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl">
+            <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl dark:text-white">
               {formatCurrency(result.total)}
             </p>
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>

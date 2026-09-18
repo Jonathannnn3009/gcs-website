@@ -32,10 +32,10 @@ const empty: Fields = {
 };
 
 const cardClass =
-  "relative overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-lift)]";
+  "relative overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-lift)] dark:bg-card";
 
 const fieldClass =
-  "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20";
+  "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20 dark:bg-card dark:text-white";
 
 // Same base styling as fieldClass, minus the native browser arrow.
 const selectClass = `${fieldClass} appearance-none cursor-pointer`;
@@ -65,7 +65,7 @@ function Field({
 }) {
   return (
     <div className={className}>
-      <label htmlFor={id} className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase">
+      <label htmlFor={id} className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white">
         {label} {required ? <span className="text-gold">*</span> : null}
       </label>
       {children}
@@ -135,11 +135,11 @@ export function LeadForm() {
       <form onSubmit={onSubmit} noValidate className={cardClass}>
         <AccentBar />
         <div className="p-6 sm:p-7">
-          <span className="inline-flex items-center gap-2 rounded-full bg-gold-pale/60 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+          <span className="inline-flex items-center gap-2 rounded-full bg-gold-pale/60 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase dark:bg-gold/15">
             <span className="h-1.5 w-1.5 rounded-full bg-gold"></span>
             Takes less than a minute
           </span>
-          <h3 className="mt-4 font-heading text-[1.6rem] leading-tight font-bold text-navy">
+          <h3 className="mt-4 font-heading text-[1.6rem] leading-tight font-bold text-navy dark:text-white">
             Request a Free Consultation
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">

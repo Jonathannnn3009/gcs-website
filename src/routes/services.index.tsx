@@ -41,17 +41,17 @@ function ServicesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-bg-light py-14 sm:py-20">
+      <section className="relative overflow-hidden bg-bg-light py-14 sm:py-20 dark:bg-background">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center">
             <p className="flex items-center justify-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-              <Link to="/" className="hover:text-navy">Home</Link>
+              <Link to="/" className="hover:text-navy dark:text-white">Home</Link>
               <span className="text-gold">/</span>
-              <span className="text-navy">Services</span>
+              <span className="text-navy dark:text-white">Services</span>
             </p>
             <p className="eyebrow mt-5">Every Product, One Desk</p>
-            <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl">
+            <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
               {PRODUCTS.length} loan products,<br />
               <span className="gold-text-static italic">matched to your file, not a script.</span>
             </h1>
@@ -67,10 +67,10 @@ function ServicesPage() {
               <a
                 key={g.name}
                 href={`#${g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold text-navy transition-colors hover:border-gold/40"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold text-navy transition-colors hover:border-gold/40 dark:text-white dark:bg-card"
               >
                 {g.name}
-                <span className="grid h-5 w-5 place-items-center rounded-full bg-gold-pale/70 text-[11px] font-bold text-gold-dark">
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-gold-pale/70 text-[11px] font-bold text-gold-dark dark:bg-gold/15">
                   {g.count}
                 </span>
               </a>
@@ -84,7 +84,7 @@ function ServicesPage() {
           >
             {SERVICE_STATS.map((s) => (
               <div key={s.label} className="border-l-2 border-gold/40 pl-4 text-left">
-                <p className="font-heading text-2xl font-bold text-navy sm:text-3xl">{s.value}</p>
+                <p className="font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">{s.value}</p>
                 <p className="mt-1 text-xs font-bold tracking-wide text-gold-dark uppercase">{s.label}</p>
               </div>
             ))}
@@ -113,7 +113,7 @@ function ServicesPage() {
         >
         <div
           className={`rounded-3xl border p-6 sm:p-10 ${
-            gi % 2 === 0 ? "border-gold/20 bg-gold-pale/10" : "border-border bg-white"
+            gi % 2 === 0 ? "border-gold/20 bg-gold-pale/10" : "border-border bg-white dark:bg-card"
           }`}
         >
           <Reveal>
@@ -128,7 +128,7 @@ function ServicesPage() {
               <Reveal key={product.slug} delay={i * 60}>
                 <article
                   id={product.slug}
-                  className="group relative h-full scroll-mt-28 overflow-hidden rounded-2xl border border-border bg-white p-7 transition-all duration-500 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]"
+                  className="group relative h-full scroll-mt-28 overflow-hidden rounded-2xl border border-border bg-white p-7 transition-all duration-500 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-card"
                 >
                   {/* Brand bar that sweeps in on hover */}
                   <span
@@ -137,11 +137,11 @@ function ServicesPage() {
                   />
 
                   <div className="flex items-start gap-4">
-                    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:animate-[gcs-wiggle_700ms_ease-in-out] group-hover:bg-gold group-hover:text-navy">
+                    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:animate-[gcs-wiggle_700ms_ease-in-out] group-hover:bg-gold group-hover:text-navy dark:bg-gold/15">
                       <product.icon className="h-6 w-6" />
                     </span>
                     <div>
-                      <h3 className="text-xl font-extrabold text-navy">{product.title}</h3>
+                      <h3 className="text-xl font-extrabold text-navy dark:text-white">{product.title}</h3>
                       <p className="mt-1 text-sm font-semibold text-gold-dark">{product.tagline}</p>
                     </div>
                   </div>
@@ -150,12 +150,12 @@ function ServicesPage() {
                     {product.facts.map((fact) => (
                       <div
                         key={fact.label}
-                        className="rounded-lg border border-border bg-bg-light px-3 py-1.5"
+                        className="rounded-lg border border-border bg-bg-light px-3 py-1.5 dark:bg-background"
                       >
                         <span className="block text-[10px] font-bold tracking-wide text-muted-foreground uppercase">
                           {fact.label}
                         </span>
-                        <span className="block text-sm font-bold text-navy">{fact.value}</span>
+                        <span className="block text-sm font-bold text-navy dark:text-white">{fact.value}</span>
                       </div>
                     ))}
                   </div>
@@ -175,7 +175,7 @@ function ServicesPage() {
                     <Link
                       to="/services/$slug"
                       params={{ slug: product.slug }}
-                      className="group/link inline-flex items-center gap-2 text-sm font-bold text-navy transition-colors hover:text-gold-dark"
+                      className="group/link inline-flex items-center gap-2 text-sm font-bold text-navy transition-colors hover:text-gold-dark dark:text-white"
                     >
                       View full details
                       <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-1" />
@@ -183,7 +183,7 @@ function ServicesPage() {
                     <Link
                       to="/tools"
                       hash="eligibility"
-                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-navy"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-navy dark:text-white"
                     >
                       <Calculator className="h-3.5 w-3.5" />
                       Check eligibility
@@ -202,7 +202,7 @@ function ServicesPage() {
         <Reveal>
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
-            <h3 className="relative font-heading text-2xl font-bold text-navy sm:text-3xl">
+            <h3 className="relative font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
               Not sure which one fits? <span className="gold-text">Let&apos;s talk.</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
@@ -217,7 +217,7 @@ function ServicesPage() {
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white dark:bg-card"
               >
                 WhatsApp Us
               </a>

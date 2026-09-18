@@ -20,15 +20,15 @@ const THEMES = {
   },
   light: {
     field:
-      "mt-1 w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20",
+      "mt-1 w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20 dark:bg-card dark:text-white",
     unlockedLink:
-      "mt-5 flex items-center justify-center gap-2 rounded-lg border border-gold/30 bg-gold-pale/40 py-3 text-sm font-bold text-gold-dark transition-colors hover:bg-gold-pale/70",
+      "mt-5 flex items-center justify-center gap-2 rounded-lg border border-gold/30 bg-gold-pale/40 py-3 text-sm font-bold text-gold-dark transition-colors hover:bg-gold-pale/70 dark:bg-gold/10 dark:hover:bg-gold/15",
     trigger:
-      "mt-5 flex w-full items-center justify-center gap-2 rounded-lg border border-gold/30 py-3 text-sm font-bold text-gold-dark transition-colors hover:bg-gold-pale/30",
+      "mt-5 flex w-full items-center justify-center gap-2 rounded-lg border border-gold/30 py-3 text-sm font-bold text-gold-dark transition-colors hover:bg-gold-pale/30 dark:hover:bg-gold/10",
     form: "mt-5 rounded-lg border border-border bg-secondary/40 p-4",
     intro: "text-xs leading-relaxed text-muted-foreground",
     label: "text-[10px] font-bold tracking-[0.16em] text-gold-dark uppercase",
-    presetValue: "mt-1 rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm font-bold text-navy",
+    presetValue: "mt-1 rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm font-bold text-navy dark:bg-card dark:text-white",
     error: "mt-1 block text-xs text-destructive",
   },
 } as const;
@@ -123,11 +123,11 @@ export function ChecklistGate({
               onChange={(e) => setCategory(e.target.value)}
               className={`${t.field} appearance-none`}
             >
-              <option value="" className="text-ink">
+              <option value="" className="text-ink dark:text-white">
                 Select one
               </option>
               {categories.map((c) => (
-                <option key={c} value={c} className="text-ink">
+                <option key={c} value={c} className="text-ink dark:text-white">
                   {c}
                 </option>
               ))}

@@ -67,8 +67,8 @@ export function SiteHeader() {
     <header
       className={`sticky top-0 z-50 w-full border-b transition-all duration-400 ${
         scrolled
-          ? "border-gold/10 bg-white/95 shadow-[0_4px_30px_oklch(0.13_0.04_265/0.08)] backdrop-blur-xl"
-          : "border-transparent bg-white/80 backdrop-blur-md"
+          ? "border-gold/10 bg-white/95 shadow-[0_4px_30px_oklch(0.13_0.04_265/0.08)] backdrop-blur-xl dark:bg-card/95"
+          : "border-transparent bg-white/80 backdrop-blur-md dark:bg-card/80"
       }`}
     >
       <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)] items-center gap-4 px-5 py-5 sm:px-8 lg:px-10">
@@ -116,7 +116,7 @@ export function SiteHeader() {
                         className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
                         style={{ animation: "gcs-scale-in 200ms ease both" }}
                       >
-                        <div className="w-[1180px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
+                        <div className="w-[1180px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)] dark:bg-card">
                           <div className="flex items-center justify-between border-b border-border px-6 py-3.5">
                             <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
                               {PRODUCTS.length} Loan Products, By Category
@@ -145,7 +145,7 @@ export function SiteHeader() {
                                       onClick={() => setActiveDropdown(null)}
                                       className="group/item flex items-start gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-gold/5"
                                     >
-                                      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-gold-pale/50 text-gold-dark transition-colors duration-300 group-hover/item:animate-[gcs-wiggle_600ms_ease-in-out] group-hover/item:bg-gold group-hover/item:text-navy">
+                                      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-gold-pale/50 text-gold-dark transition-colors duration-300 group-hover/item:animate-[gcs-wiggle_600ms_ease-in-out] group-hover/item:bg-gold group-hover/item:text-navy dark:bg-gold/12">
                                         <product.icon className="h-3.5 w-3.5" />
                                       </span>
                                       <span className="min-w-0 pt-0.5">
@@ -169,7 +169,7 @@ export function SiteHeader() {
                         className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
                         style={{ animation: "gcs-scale-in 200ms ease both" }}
                       >
-                        <div className="w-[560px] overflow-hidden rounded-xl border border-gold/10 bg-white p-3 shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)]">
+                        <div className="w-[560px] overflow-hidden rounded-xl border border-gold/10 bg-white p-3 shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)] dark:bg-card">
                           <p className="mb-2 px-2 text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
                             Calculators
                           </p>
@@ -255,7 +255,7 @@ export function SiteHeader() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div
-          className="border-t bg-white xl:hidden"
+          className="border-t bg-white xl:hidden dark:bg-card"
           style={{ animation: "gcs-slide-up 300ms ease both" }}
         >
           <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">

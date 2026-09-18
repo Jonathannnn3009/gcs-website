@@ -9,7 +9,7 @@ export function SiteFooter() {
       {/* Gold accent line */}
       <div className="h-1 w-full bg-gradient-to-r from-transparent via-gold to-transparent"></div>
 
-      <div className="bg-white">
+      <div className="bg-white dark:bg-card">
         {/* Main footer grid */}
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr] lg:px-8">
           {/* Brand column */}
@@ -112,7 +112,7 @@ export function SiteFooter() {
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                 <a
                   href={CONTACT.phoneHref}
-                  className="text-ink/80 transition-colors hover:text-gold"
+                  className="text-ink/80 transition-colors hover:text-gold dark:text-white"
                 >
                   {CONTACT.phone}
                 </a>
@@ -121,7 +121,7 @@ export function SiteFooter() {
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                 <a
                   href={`mailto:${CONTACT.email}`}
-                  className="text-ink/80 transition-colors hover:text-gold"
+                  className="text-ink/80 transition-colors hover:text-gold dark:text-white"
                 >
                   {CONTACT.email}
                 </a>

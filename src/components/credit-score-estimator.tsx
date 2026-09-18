@@ -69,7 +69,7 @@ function ChoiceGroup<T extends string>({
             onClick={() => onChange(opt.value)}
             className={`rounded-lg border px-3 py-2.5 text-left text-sm font-medium transition-colors ${
               value === opt.value
-                ? "border-gold bg-gold-pale/50 text-navy"
+                ? "border-gold bg-gold-pale/50 text-navy dark:bg-gold/12 dark:text-white"
                 : "border-border text-muted-foreground hover:border-gold/40"
             }`}
           >
@@ -190,7 +190,7 @@ export function CreditScoreEstimator() {
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
               Indicative Score Range
             </p>
-            <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl">
+            <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl dark:text-white">
               {result.low}–{result.high}
             </p>
             <p className={`relative mt-2 text-sm font-bold ${band.color}`}>{band.label}</p>

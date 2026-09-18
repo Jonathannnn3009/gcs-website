@@ -228,19 +228,19 @@ function PersonaPanel() {
               className={`group flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-300 ${
                 isActive
                   ? "border-gold bg-navy shadow-[var(--shadow-lift)]"
-                  : "border-border bg-white hover:border-gold/40"
+                  : "border-border bg-white hover:border-gold/40 dark:bg-card"
               }`}
             >
               <span
                 className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-colors duration-300 ${
-                  isActive ? "bg-gold text-navy" : "bg-gold-pale/70 text-gold-dark"
+                  isActive ? "bg-gold text-navy" : "bg-gold-pale/70 text-gold-dark dark:bg-gold/15"
                 }`}
               >
                 <p.icon className="h-5 w-5" />
               </span>
               <span className="min-w-0">
                 <span
-                  className={`block text-sm font-extrabold ${isActive ? "text-white" : "text-navy"}`}
+                  className={`block text-sm font-extrabold ${isActive ? "text-white" : "text-navy dark:text-white"}`}
                 >
                   {p.title}
                 </span>
@@ -271,20 +271,20 @@ function PersonaPanel() {
         <span className="relative grid h-14 w-14 place-items-center rounded-2xl bg-navy text-gold-light shadow-md">
           <persona.icon className="h-6 w-6" />
         </span>
-        <h3 className="relative mt-5 font-heading text-2xl font-bold text-navy">{persona.title}</h3>
+        <h3 className="relative mt-5 font-heading text-2xl font-bold text-navy dark:text-white">{persona.title}</h3>
         <p className="relative mt-2 text-base leading-relaxed text-muted-foreground">
           {persona.body}
         </p>
 
-        <div className="relative mt-6 flex items-start gap-3 rounded-xl border border-gold/15 bg-white/70 p-4">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gold-pale/70 text-gold-dark">
+        <div className="relative mt-6 flex items-start gap-3 rounded-xl border border-gold/15 bg-white/70 p-4 dark:bg-white/5">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
             <persona.why.icon className="h-4 w-4" />
           </span>
           <div>
             <p className="text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
               Why clients like this choose us
             </p>
-            <p className="mt-1 text-sm font-bold text-navy">{persona.why.title}</p>
+            <p className="mt-1 text-sm font-bold text-navy dark:text-white">{persona.why.title}</p>
             <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
               {persona.why.body}
             </p>
@@ -310,7 +310,7 @@ function StarRating({ rating }: { rating: number }) {
           </span>
         );
       })}
-      <span className="ml-1 text-xs font-bold text-navy">{rating}</span>
+      <span className="ml-1 text-xs font-bold text-navy dark:text-white">{rating}</span>
     </div>
   );
 }
@@ -323,14 +323,14 @@ function StoryCard({ story }: { story: (typeof CLIENT_STORIES)[number] }) {
     .join("");
 
   return (
-    <div className="relative flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl bg-white p-7 shadow-[var(--shadow-card)] sm:w-[350px]">
+    <div className="relative flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl bg-white p-7 shadow-[var(--shadow-card)] sm:w-[350px] dark:bg-card">
       <Quote className="absolute top-6 right-6 h-9 w-9 text-gold-pale/70" />
       <div className="flex items-center gap-3">
         <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-navy text-xs font-bold text-gold-light">
           {initials}
         </span>
         <div className="min-w-0">
-          <p className="truncate text-sm font-bold text-navy">{story.name}</p>
+          <p className="truncate text-sm font-bold text-navy dark:text-white">{story.name}</p>
           <p className="truncate text-xs text-muted-foreground">
             {story.city} · {story.product}
           </p>
@@ -435,14 +435,14 @@ function ProcessStepper() {
                   isActive
                     ? "-translate-y-1 border-gold bg-gold text-navy shadow-[var(--shadow-gold)]"
                     : isDone
-                      ? "border-gold/60 bg-white text-gold-dark"
-                      : "border-border bg-white text-muted-foreground group-hover:border-gold/40"
+                      ? "border-gold/60 bg-white text-gold-dark dark:bg-card"
+                      : "border-border bg-white text-muted-foreground group-hover:border-gold/40 dark:bg-card"
                 }`}
               >
                 {i + 1}
               </span>
               <span
-                className={`hidden text-[11px] font-bold sm:block ${isActive ? "text-navy" : "text-muted-foreground"}`}
+                className={`hidden text-[11px] font-bold sm:block ${isActive ? "text-navy dark:text-white" : "text-muted-foreground"}`}
               >
                 {s.title}
               </span>
@@ -453,7 +453,7 @@ function ProcessStepper() {
 
       <div
         key={active}
-        className="rise-in mt-8 flex flex-col items-center gap-5 rounded-2xl border border-gold/15 bg-white p-8 text-center shadow-[var(--shadow-card)] sm:flex-row sm:text-left"
+        className="rise-in mt-8 flex flex-col items-center gap-5 rounded-2xl border border-gold/15 bg-white p-8 text-center shadow-[var(--shadow-card)] sm:flex-row sm:text-left dark:bg-card"
       >
         <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-navy to-navy-soft text-gold shadow-md">
           <step.icon className="h-7 w-7" />
@@ -462,13 +462,13 @@ function ProcessStepper() {
           <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
             Step {active + 1} of {STEPS.length}
           </p>
-          <h3 className="mt-1 font-heading text-xl font-bold text-navy">{step.title}</h3>
+          <h3 className="mt-1 font-heading text-xl font-bold text-navy dark:text-white">{step.title}</h3>
           <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
         </div>
         <button
           type="button"
           onClick={() => setActive((v) => (v + 1) % STEPS.length)}
-          className="mt-2 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-navy/15 px-4 py-2 text-xs font-bold text-navy transition-colors hover:border-gold/50 sm:mt-0 sm:ml-auto"
+          className="mt-2 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-navy/15 px-4 py-2 text-xs font-bold text-navy transition-colors hover:border-gold/50 sm:mt-0 sm:ml-auto dark:text-white"
         >
           Next step <ArrowRight className="h-3.5 w-3.5" />
         </button>
@@ -510,7 +510,7 @@ function HomePage() {
               </p>
             </Reveal>
 
-            <h1 className="mt-5 text-[2.5rem] leading-[1.08] font-bold text-navy sm:text-5xl lg:text-[3.5rem]">
+            <h1 className="mt-5 text-[2.5rem] leading-[1.08] font-bold text-navy sm:text-5xl lg:text-[3.5rem] dark:text-white">
               {["Your", "Growth,"].map((w, i) => (
                 <span
                   key={w}
@@ -553,9 +553,9 @@ function HomePage() {
                   href={CONTACT.whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2.5 text-sm font-bold text-navy transition-colors duration-300 hover:text-gold-dark"
+                  className="group inline-flex items-center gap-2.5 text-sm font-bold text-navy transition-colors duration-300 hover:text-gold-dark dark:text-white"
                 >
-                  <span className="grid h-11 w-11 place-items-center rounded-full border-2 border-navy/15 text-navy transition-all duration-300 group-hover:border-gold group-hover:bg-gold group-hover:text-navy">
+                  <span className="grid h-11 w-11 place-items-center rounded-full border-2 border-navy/15 text-navy transition-all duration-300 group-hover:border-gold group-hover:bg-gold group-hover:text-navy dark:text-white dark:group-hover:text-navy">
                     <WhatsAppIcon />
                   </span>
                   Talk to an Advisor
@@ -570,7 +570,7 @@ function HomePage() {
                     key={p.title}
                     className="flex flex-col justify-center border-l-2 border-gold/40 pl-3 text-sm leading-snug"
                   >
-                    <span className="font-bold text-navy">{p.title}</span>
+                    <span className="font-bold text-navy dark:text-white">{p.title}</span>
                     <span className="text-muted-foreground">{p.sub}</span>
                   </li>
                 ))}
@@ -590,13 +590,13 @@ function HomePage() {
       </section>
 
       {/* ─── TRUST TICKER ─────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-gold/15 bg-white py-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+      <section className="relative overflow-hidden border-b border-gold/15 bg-white py-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] dark:bg-card">
         <ul className="marquee-track flex w-max items-center hover:[animation-play-state:paused]">
           {[...TRUST, ...TRUST, ...TRUST, ...TRUST].map((item, i) => (
             <li
               key={`${item.label}-${i}`}
               aria-hidden={i >= TRUST.length}
-              className="flex items-center gap-2.5 px-7 whitespace-nowrap text-ink/80"
+              className="flex items-center gap-2.5 px-7 whitespace-nowrap text-ink/80 dark:text-white"
             >
               <item.icon className="h-5 w-5 text-gold" />
               <span className="text-sm font-semibold">{item.label}</span>
@@ -706,7 +706,7 @@ function HomePage() {
             <div className="absolute top-0 right-0 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
             <div className="relative flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="font-heading text-2xl font-bold text-navy sm:text-3xl">
+                <h3 className="font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
                   Ready to move your loan <span className="gold-text">forward?</span>
                 </h3>
                 <p className="mt-2 max-w-xl text-sm text-muted-foreground">
@@ -722,7 +722,7 @@ function HomePage() {
                   href={CONTACT.whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-[#25D366]/50"
+                  className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-[#25D366]/50 dark:text-white dark:bg-card"
                 >
                   <span className="text-[#25D366]">
                     <WhatsAppIcon />

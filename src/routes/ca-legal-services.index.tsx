@@ -29,19 +29,19 @@ function CaLegalServicesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-bg-light py-14 sm:py-20">
+      <section className="relative overflow-hidden bg-bg-light py-14 sm:py-20 dark:bg-background">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center">
             <p className="flex items-center justify-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-              <Link to="/" className="hover:text-navy">
+              <Link to="/" className="hover:text-navy dark:text-white">
                 Home
               </Link>
               <span className="text-gold">/</span>
-              <span className="text-navy">CA & Legal Services</span>
+              <span className="text-navy dark:text-white">CA & Legal Services</span>
             </p>
             <p className="eyebrow mt-5">Beyond Your Loan</p>
-            <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl">
+            <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
               Tax, Compliance &<br />
               <span className="gold-text-static italic">Legal Documentation, Sorted.</span>
             </h1>
@@ -60,7 +60,7 @@ function CaLegalServicesPage() {
                 <a
                   key={division}
                   href={`#${divisionId(division)}`}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-gold/25 bg-white px-4 py-2 text-xs font-bold text-navy transition-all hover:-translate-y-0.5 hover:border-gold hover:bg-gold-pale/30"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-gold/25 bg-white px-4 py-2 text-xs font-bold text-navy transition-all hover:-translate-y-0.5 hover:border-gold hover:bg-gold-pale/30 dark:bg-card dark:text-white dark:hover:bg-gold/15"
                 >
                   {division}
                   <span className="text-gold-dark">{count}</span>
@@ -82,13 +82,13 @@ function CaLegalServicesPage() {
                 <div
                   id={divisionId(division)}
                   className={`scroll-mt-24 rounded-3xl border p-6 sm:p-10 ${
-                    isLegal ? "border-navy/15 bg-white" : "border-gold/20 bg-gold-pale/15"
+                    isLegal ? "border-navy/15 bg-white dark:bg-card" : "border-gold/20 bg-gold-pale/15"
                   }`}
                 >
                   <div className="flex flex-wrap items-baseline justify-between gap-3">
                     <div>
                       <p className="eyebrow">{division}</p>
-                      <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
+                      <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
                         {isLegal
                           ? "Property, society and legal documentation."
                           : "Tax, GST, accounting and business registration."}
@@ -107,12 +107,12 @@ function CaLegalServicesPage() {
                           params={{ slug: s.slug }}
                           className="group flex items-center gap-4 border-b border-border/70 py-4"
                         >
-                          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-gold-dark ring-1 ring-gold/20 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
+                          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-gold-dark ring-1 ring-gold/20 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy dark:bg-card">
                             <s.icon className="h-5 w-5" />
                           </span>
                           <span className="min-w-0 flex-1">
                             <span className="flex flex-wrap items-baseline gap-x-2">
-                              <span className="text-base font-bold text-navy">{s.title}</span>
+                              <span className="text-base font-bold text-navy dark:text-white">{s.title}</span>
                               <span className="text-[10px] font-bold tracking-wide text-gold-dark uppercase">
                                 {s.category}
                               </span>
@@ -138,7 +138,7 @@ function CaLegalServicesPage() {
         <div className="grid gap-8 rounded-2xl border border-gold/25 panel-light p-8 sm:p-12 lg:grid-cols-[1fr_420px] lg:items-center">
           <Reveal>
             <p className="eyebrow">Not Sure Where to Start?</p>
-            <h3 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
+            <h3 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
               Tell us what you need — <span className="gold-text">we'll point you right.</span>
             </h3>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">

@@ -189,7 +189,7 @@ const PARTNER_FAQS = [
 ];
 
 const fieldClass =
-  "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20";
+  "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20 dark:bg-card dark:text-white";
 
 type Fields = { name: string; phone: string; email: string; profession: string; message: string };
 const empty: Fields = { name: "", phone: "", email: "", profession: "", message: "" };
@@ -236,11 +236,11 @@ function PartnerForm() {
 
   if (submitted) {
     return (
-      <div className="flex h-full min-h-[420px] flex-col items-center justify-center rounded-2xl border border-gold/20 bg-white p-8 text-center">
-        <span className="grid h-12 w-12 place-items-center rounded-full bg-gold-pale/70 text-gold-dark">
+      <div className="flex h-full min-h-[420px] flex-col items-center justify-center rounded-2xl border border-gold/20 bg-white p-8 text-center dark:bg-card">
+        <span className="grid h-12 w-12 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
           <Check className="h-6 w-6" />
         </span>
-        <h3 className="mt-4 text-lg font-extrabold text-navy">Thanks — we'll be in touch.</h3>
+        <h3 className="mt-4 text-lg font-extrabold text-navy dark:text-white">Thanks — we'll be in touch.</h3>
         <p className="mt-2 text-sm text-muted-foreground">
           A member of our team will reach out to set up your referral partnership.
         </p>
@@ -252,9 +252,9 @@ function PartnerForm() {
     <form
       onSubmit={onSubmit}
       noValidate
-      className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-lift)] sm:p-7"
+      className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-lift)] sm:p-7 dark:bg-card"
     >
-      <h3 className="text-xl font-extrabold text-navy">Become a Referral Partner</h3>
+      <h3 className="text-xl font-extrabold text-navy dark:text-white">Become a Referral Partner</h3>
       <p className="mt-2 text-sm text-muted-foreground">
         Tell us a bit about yourself — we'll set up your partnership and walk you through how
         referrals work.
@@ -263,7 +263,7 @@ function PartnerForm() {
         <div>
           <label
             htmlFor={`${uid}-name`}
-            className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase"
+            className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white"
           >
             Full Name <span className="text-gold">*</span>
           </label>
@@ -283,7 +283,7 @@ function PartnerForm() {
           <div>
             <label
               htmlFor={`${uid}-phone`}
-              className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase"
+              className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white"
             >
               Phone <span className="text-gold">*</span>
             </label>
@@ -303,7 +303,7 @@ function PartnerForm() {
           <div>
             <label
               htmlFor={`${uid}-email`}
-              className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase"
+              className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white"
             >
               Email
             </label>
@@ -324,7 +324,7 @@ function PartnerForm() {
         <div>
           <label
             htmlFor={`${uid}-profession`}
-            className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase"
+            className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white"
           >
             Profession / Firm <span className="text-gold">*</span>
           </label>
@@ -343,7 +343,7 @@ function PartnerForm() {
         <div>
           <label
             htmlFor={`${uid}-message`}
-            className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase"
+            className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white"
           >
             Anything Else (Optional)
           </label>
@@ -397,14 +397,14 @@ function PartnerStepper() {
                   isActive
                     ? "-translate-y-1 border-gold bg-gold text-navy shadow-[var(--shadow-gold)]"
                     : isDone
-                      ? "border-gold/60 bg-white text-gold-dark"
-                      : "border-border bg-white text-muted-foreground group-hover:border-gold/40"
+                      ? "border-gold/60 bg-white text-gold-dark dark:bg-card"
+                      : "border-border bg-white text-muted-foreground group-hover:border-gold/40 dark:bg-card"
                 }`}
               >
                 {i + 1}
               </span>
               <span
-                className={`hidden text-[11px] font-bold sm:block ${isActive ? "text-navy" : "text-muted-foreground"}`}
+                className={`hidden text-[11px] font-bold sm:block ${isActive ? "text-navy dark:text-white" : "text-muted-foreground"}`}
               >
                 {s.title}
               </span>
@@ -415,7 +415,7 @@ function PartnerStepper() {
 
       <div
         key={active}
-        className="rise-in mt-8 flex flex-col items-center gap-5 rounded-2xl border border-gold/15 bg-white p-8 text-center shadow-[var(--shadow-card)] sm:flex-row sm:text-left"
+        className="rise-in mt-8 flex flex-col items-center gap-5 rounded-2xl border border-gold/15 bg-white p-8 text-center shadow-[var(--shadow-card)] sm:flex-row sm:text-left dark:bg-card"
       >
         <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-navy to-navy-soft text-gold shadow-md">
           <step.icon className="h-7 w-7" />
@@ -424,13 +424,13 @@ function PartnerStepper() {
           <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
             Step {active + 1} of {STEPS.length}
           </p>
-          <h3 className="mt-1 font-heading text-xl font-bold text-navy">{step.title}</h3>
+          <h3 className="mt-1 font-heading text-xl font-bold text-navy dark:text-white">{step.title}</h3>
           <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
         </div>
         <button
           type="button"
           onClick={() => setActive((v) => (v + 1) % STEPS.length)}
-          className="mt-2 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-navy/15 px-4 py-2 text-xs font-bold text-navy transition-colors hover:border-gold/50 sm:mt-0 sm:ml-auto"
+          className="mt-2 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-navy/15 px-4 py-2 text-xs font-bold text-navy transition-colors hover:border-gold/50 sm:mt-0 sm:ml-auto dark:text-white"
         >
           Next step <ArrowRight className="h-3.5 w-3.5" />
         </button>
@@ -443,14 +443,14 @@ function PartnerStepper() {
 function Accordion({ items }: { items: { q: string; a: string }[] }) {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-white">
+    <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-white dark:bg-card">
       {items.map((item, i) => (
         <div key={item.q}>
           <button
             onClick={() => setOpen(open === i ? null : i)}
             className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
           >
-            <span className="text-sm font-bold text-navy">{item.q}</span>
+            <span className="text-sm font-bold text-navy dark:text-white">{item.q}</span>
             <ChevronDown
               className={`h-4 w-4 shrink-0 text-gold transition-transform duration-300 ${open === i ? "rotate-180" : ""}`}
             />
@@ -468,7 +468,7 @@ function PartnerPage() {
   return (
     <>
       {/* Hero: navy panel with stats + the registration form */}
-      <section className="bg-bg-light py-10 sm:py-14">
+      <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-5 lg:grid-cols-2 lg:items-start">
             <Reveal>
@@ -541,11 +541,11 @@ function PartnerPage() {
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SEGMENTS.map((s, i) => (
             <Reveal key={s.title} delay={i * 60}>
-              <div className="group h-full rounded-2xl border border-border bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]">
-                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out]">
+              <div className="group h-full rounded-2xl border border-border bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-card">
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out] dark:bg-gold/15">
                   <s.icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 text-base font-extrabold text-navy">{s.title}</h3>
+                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">{s.title}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
               </div>
             </Reveal>
@@ -595,11 +595,11 @@ function PartnerPage() {
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {BENEFITS.map((b, i) => (
             <Reveal key={b.title} delay={i * 60}>
-              <div className="group h-full rounded-2xl border border-border bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]">
-                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out]">
+              <div className="group h-full rounded-2xl border border-border bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-card">
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out] dark:bg-gold/15">
                   <b.icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 text-base font-extrabold text-navy">{b.title}</h3>
+                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">{b.title}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{b.body}</p>
               </div>
             </Reveal>
@@ -619,7 +619,7 @@ function PartnerPage() {
           </Reveal>
           <Reveal delay={80}>
             <p className="eyebrow">Worth Knowing</p>
-            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
               Reasons to partner with us.
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -638,7 +638,7 @@ function PartnerPage() {
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <Reveal>
             <p className="eyebrow">Before You Register</p>
-            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">Quick answers.</h2>
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">Quick answers.</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               The questions that come up most before someone sends their first referral.
             </p>
@@ -662,7 +662,7 @@ function PartnerPage() {
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
             <Handshake className="float-animation relative mx-auto h-10 w-10 text-gold-dark" />
-            <h3 className="relative mt-4 font-heading text-2xl font-bold text-navy sm:text-3xl">
+            <h3 className="relative mt-4 font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
               Prefer to talk it through first? <span className="gold-text">Call us.</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
@@ -676,7 +676,7 @@ function PartnerPage() {
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white dark:bg-card"
               >
                 WhatsApp Us
               </a>

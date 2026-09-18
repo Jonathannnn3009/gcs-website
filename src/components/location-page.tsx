@@ -10,14 +10,14 @@ import type { LocationContent } from "@/data/locations";
 function FaqAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-white">
+    <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-white dark:bg-card">
       {faqs.map((f, i) => (
         <div key={f.q}>
           <button
             onClick={() => setOpen(open === i ? null : i)}
             className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
           >
-            <span className="text-sm font-bold text-navy">{f.q}</span>
+            <span className="text-sm font-bold text-navy dark:text-white">{f.q}</span>
             <ChevronDown
               className={`h-4 w-4 shrink-0 text-gold transition-transform duration-300 ${open === i ? "rotate-180" : ""}`}
             />
@@ -43,12 +43,12 @@ export function LocationPage({ location }: { location: LocationContent }) {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-              <Link to="/" className="hover:text-navy">Home</Link>
+              <Link to="/" className="hover:text-navy dark:text-white">Home</Link>
               <span className="text-gold">/</span>
-              <span className="text-navy">{location.city}</span>
+              <span className="text-navy dark:text-white">{location.city}</span>
             </p>
             <p className="eyebrow mt-5">Loan Advisory in {location.city}</p>
-            <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl">
+            <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
               Trusted Loan Advisors in <span className="gold-text">{location.city}.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
@@ -62,7 +62,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white dark:bg-card"
               >
                 WhatsApp Us
               </a>
@@ -78,7 +78,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
             <p className="eyebrow">
               {location.hasOffice ? "Our Office" : "How We Serve You Here"}
             </p>
-            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl">
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
               {location.hasOffice
                 ? "Visit us, or handle everything remotely."
                 : `${location.city}, without a branch counter.`}
@@ -94,7 +94,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
                     {location.hasOffice ? "Address" : "Registered Office"}
                   </p>
-                  <p className="mt-0.5 text-sm font-semibold text-navy">{CONTACT.address}</p>
+                  <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">{CONTACT.address}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -103,7 +103,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
                 </span>
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">Hours</p>
-                  <p className="mt-0.5 text-sm font-semibold text-navy">{CONTACT.hours}</p>
+                  <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">{CONTACT.hours}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -112,7 +112,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
                 </span>
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">Call or WhatsApp</p>
-                  <a href={CONTACT.phoneHref} className="mt-0.5 block text-sm font-semibold text-navy hover:text-gold-dark">
+                  <a href={CONTACT.phoneHref} className="mt-0.5 block text-sm font-semibold text-navy hover:text-gold-dark dark:text-white">
                     {CONTACT.phone}
                   </a>
                 </div>
@@ -155,12 +155,12 @@ export function LocationPage({ location }: { location: LocationContent }) {
                 <Link
                   to="/services/$slug"
                   params={{ slug: first.slug }}
-                  className="group flex h-full flex-col rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]"
+                  className="group flex h-full flex-col rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-card"
                 >
-                  <span className="grid h-10 w-10 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark">
+                  <span className="grid h-10 w-10 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
                     <Building2 className="h-5 w-5" />
                   </span>
-                  <h3 className="mt-4 text-base font-extrabold text-navy">{group.name}</h3>
+                  <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">{group.name}</h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">{group.description}</p>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-gold-dark">
                     Explore products
@@ -177,7 +177,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
       <Section className="pt-0">
         <Reveal>
           <p className="eyebrow text-center">{location.city} FAQs</p>
-          <h2 className="mt-2 text-center text-2xl font-extrabold text-navy sm:text-3xl">
+          <h2 className="mt-2 text-center text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
             Common questions from {location.city} clients.
           </h2>
         </Reveal>
@@ -191,7 +191,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
         <Reveal>
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
-            <h3 className="relative font-heading text-2xl font-bold text-navy sm:text-3xl">
+            <h3 className="relative font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
               Ready to talk? <span className="gold-text">Let's start.</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
@@ -205,7 +205,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white dark:bg-card"
               >
                 WhatsApp Us
               </a>

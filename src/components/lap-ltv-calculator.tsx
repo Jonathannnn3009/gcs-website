@@ -84,7 +84,7 @@ export function LapLtvCalculator() {
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
               Eligible Loan Amount
             </p>
-            <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl">
+            <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl dark:text-white">
               {formatCurrency(result.eligibleLoan)}
             </p>
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>

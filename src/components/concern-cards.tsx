@@ -39,11 +39,11 @@ export function ConcernCards() {
                 )}
               >
                 {/* Front */}
-                <span className="absolute inset-0 flex flex-col rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] backface-hidden">
-                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25">
+                <span className="absolute inset-0 flex flex-col rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] backface-hidden dark:bg-card">
+                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 dark:bg-gold/15">
                     <Icon className="h-6 w-6" />
                   </span>
-                  <span className="mt-5 font-heading text-xl leading-snug font-bold text-navy">
+                  <span className="mt-5 font-heading text-xl leading-snug font-bold text-navy dark:text-white">
                     {p.question}
                   </span>
                 </span>
@@ -51,7 +51,7 @@ export function ConcernCards() {
                 {/* Back */}
                 <span className="absolute inset-0 flex rotate-y-180 flex-col justify-center rounded-2xl border border-gold/40 bg-gradient-to-br from-gold-pale via-white to-gold-pale/60 p-6 backface-hidden">
                   <CheckCircle2 className="h-7 w-7 text-gold-dark" />
-                  <span className="mt-3 text-[15px] leading-relaxed text-ink">{p.answer}</span>
+                  <span className="mt-3 text-[15px] leading-relaxed text-ink dark:text-white">{p.answer}</span>
                 </span>
               </span>
             </button>

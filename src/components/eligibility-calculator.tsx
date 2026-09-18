@@ -89,7 +89,7 @@ export function EligibilityCalculator() {
               Maximum Loan Amount
             </p>
             <p
-              className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl"
+              className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl dark:text-white"
               style={{ animation: "gcs-count-up 500ms ease both" }}
               key={result.maxLoan}
             >

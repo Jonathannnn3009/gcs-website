@@ -113,7 +113,7 @@ function GoalCard({ goal: g, index }: { goal: Goal; index: number }) {
       <Link
         to="/services/$slug"
         params={{ slug: g.slug }}
-        className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white p-6 transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-[var(--shadow-lift)]"
+        className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white p-6 transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-[var(--shadow-lift)] dark:bg-card"
       >
         {/* Gold wash that eases in on hover, echoing the featured-card treatment */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent to-gold-pale/50 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -125,16 +125,16 @@ function GoalCard({ goal: g, index }: { goal: Goal; index: number }) {
           </span>
         )}
 
-        <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out]">
+        <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out] dark:bg-gold/15">
           <g.icon className="h-6 w-6" />
         </span>
 
-        <h4 className="relative mt-4 font-heading text-lg leading-tight font-bold text-navy">
+        <h4 className="relative mt-4 font-heading text-lg leading-tight font-bold text-navy dark:text-white">
           {g.goal}
         </h4>
         <p className="relative mt-1.5 text-sm leading-relaxed text-muted-foreground">{g.line}</p>
 
-        <span className="relative mt-4 inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark">
+        <span className="relative mt-4 inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark dark:text-white">
           {g.product} details
           <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
           <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gold-dark transition-all duration-300 group-hover:w-[calc(100%-1.25rem)]" />
@@ -169,11 +169,11 @@ export function LoanGoals() {
       ))}
 
       <Reveal delay={CATEGORIES.length * 80}>
-        <div className="group/cta relative flex flex-col items-center justify-between gap-4 overflow-hidden rounded-2xl border border-gold/20 bg-gold-pale/30 px-6 py-5 text-center transition-colors duration-500 hover:border-gold/40 sm:flex-row sm:text-left">
+        <div className="group/cta relative flex flex-col items-center justify-between gap-4 overflow-hidden rounded-2xl border border-gold/20 bg-gold-pale/30 px-6 py-5 text-center transition-colors duration-500 hover:border-gold/40 sm:flex-row sm:text-left dark:bg-gold/10">
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-gold-pale/0 via-gold-pale/40 to-gold-pale/0 opacity-0 transition-opacity duration-700 group-hover/cta:opacity-100" />
 
           <div className="relative">
-            <p className="font-heading text-base font-bold text-navy">Not sure which one fits?</p>
+            <p className="font-heading text-base font-bold text-navy dark:text-white">Not sure which one fits?</p>
             <p className="mt-0.5 text-sm text-muted-foreground">
               Check your eligibility in under 2 minutes, or browse all {PRODUCTS.length} loan types
               we arrange.
@@ -190,7 +190,7 @@ export function LoanGoals() {
             </Link>
             <Link
               to="/services"
-              className="group/link relative text-xs font-bold text-navy transition-colors hover:text-gold-dark"
+              className="group/link relative text-xs font-bold text-navy transition-colors hover:text-gold-dark dark:text-white"
             >
               See all loans
               <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-100 bg-gold transition-all duration-300 group-hover/link:bg-gold-dark" />

@@ -28,7 +28,7 @@ function NotFoundBlock() {
   return (
     <Section className="text-center">
       <p className="eyebrow">Not Found</p>
-      <h1 className="mt-3 text-3xl font-extrabold text-navy">That case study doesn't exist.</h1>
+      <h1 className="mt-3 text-3xl font-extrabold text-navy dark:text-white">That case study doesn't exist.</h1>
       <p className="mt-3 text-muted-foreground">
         It may have moved — browse the full list instead.
       </p>
@@ -62,7 +62,7 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
 
   return (
     <div>
-      <div className="flex gap-2 rounded-2xl border border-border bg-white p-1.5 shadow-[var(--shadow-card)]">
+      <div className="flex gap-2 rounded-2xl border border-border bg-white p-1.5 shadow-[var(--shadow-card)] dark:bg-card">
         {STAGES.map((s, i) => {
           const isActive = i === active;
           return (
@@ -73,7 +73,7 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
               className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-xs font-bold transition-all duration-300 sm:text-sm ${
                 isActive
                   ? "bg-navy text-white shadow-[var(--shadow-card)]"
-                  : "text-muted-foreground hover:bg-secondary/60 hover:text-navy"
+                  : "text-muted-foreground hover:bg-secondary/60 hover:text-navy dark:hover:text-white"
               }`}
             >
               <s.icon className={`h-4 w-4 ${isActive ? "text-gold-light" : "text-gold-dark"}`} />
@@ -86,12 +86,12 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
 
       <div
         key={active}
-        className="rise-in mt-6 rounded-2xl border border-gold/15 bg-white p-7 shadow-[var(--shadow-card)] sm:p-8"
+        className="rise-in mt-6 rounded-2xl border border-gold/15 bg-white p-7 shadow-[var(--shadow-card)] sm:p-8 dark:bg-card"
       >
         <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
           {stage.eyebrow}
         </p>
-        <h2 className="mt-1 text-xl font-extrabold text-navy">{stage.label}</h2>
+        <h2 className="mt-1 text-xl font-extrabold text-navy dark:text-white">{stage.label}</h2>
         <p className="mt-3 text-base leading-relaxed text-muted-foreground">{study[stage.key]}</p>
 
         <div className="mt-6 flex items-center justify-between border-t border-border pt-5">
@@ -99,7 +99,7 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
             type="button"
             disabled={active === 0}
             onClick={() => setActive((v) => Math.max(0, v - 1))}
-            className="text-xs font-bold text-navy transition-colors disabled:pointer-events-none disabled:opacity-30"
+            className="text-xs font-bold text-navy transition-colors disabled:pointer-events-none disabled:opacity-30 dark:text-white"
           >
             ← Back
           </button>
@@ -117,7 +117,7 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
             type="button"
             disabled={active === STAGES.length - 1}
             onClick={() => setActive((v) => Math.min(STAGES.length - 1, v + 1))}
-            className="text-xs font-bold text-navy transition-colors disabled:pointer-events-none disabled:opacity-30"
+            className="text-xs font-bold text-navy transition-colors disabled:pointer-events-none disabled:opacity-30 dark:text-white"
           >
             Next →
           </button>
@@ -140,7 +140,7 @@ function CaseStudyDetailPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-bg-light py-10 sm:py-14">
+      <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="overflow-hidden rounded-3xl navy-panel relative p-8 sm:p-12">
@@ -217,7 +217,7 @@ function CaseStudyDetailPage() {
               <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
                 Have a Similar Profile?
               </p>
-              <h3 className="mt-3 font-heading text-2xl font-bold text-navy">
+              <h3 className="mt-3 font-heading text-2xl font-bold text-navy dark:text-white">
                 Explore <span className="italic text-gold-dark">{study.productLabel}.</span>
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -237,7 +237,7 @@ function CaseStudyDetailPage() {
                 <Link
                   to="/tools"
                   hash="eligibility"
-                  className="inline-flex items-center justify-center gap-2 rounded-md border border-navy/20 px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5"
+                  className="inline-flex items-center justify-center gap-2 rounded-md border border-navy/20 px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white"
                 >
                   <Calculator className="h-4 w-4" /> Check Your Eligibility
                 </Link>
@@ -274,20 +274,20 @@ function CaseStudyDetailPage() {
                 <Link
                   to="/case-studies/$slug"
                   params={{ slug: c.slug }}
-                  className="group flex h-full flex-col gap-3 rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-lift)]"
+                  className="group flex h-full flex-col gap-3 rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-card"
                 >
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold-pale/70 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy dark:bg-gold/15">
                     <c.icon className="h-5 w-5" />
                   </span>
                   <div>
                     <p className="text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
                       {c.category}
                     </p>
-                    <p className="mt-1.5 font-heading text-base leading-snug font-bold text-navy">
+                    <p className="mt-1.5 font-heading text-base leading-snug font-bold text-navy dark:text-white">
                       {c.headline}
                     </p>
                   </div>
-                  <span className="mt-auto inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark">
+                  <span className="mt-auto inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark dark:text-white">
                     Read the case
                     <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
                   </span>

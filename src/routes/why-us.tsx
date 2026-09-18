@@ -72,7 +72,7 @@ function WhyUsPage() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="eyebrow">Why Choose Us</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl">
+            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
               Experience Financial Freedom <span className="gold-text">With Us</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
@@ -97,7 +97,7 @@ function WhyUsPage() {
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {PILLARS.map((p, i) => (
             <Reveal key={p.title} delay={i * 70}>
-              <div className="group relative h-full overflow-hidden rounded-2xl border border-gold/10 bg-white p-6 transition-all duration-400 hover:-translate-y-1 hover:border-gold/25 hover:shadow-[var(--shadow-gold)]">
+              <div className="group relative h-full overflow-hidden rounded-2xl border border-gold/10 bg-white p-6 transition-all duration-400 hover:-translate-y-1 hover:border-gold/25 hover:shadow-[var(--shadow-gold)] dark:bg-card">
                 <div className="absolute top-0 right-0 h-24 w-24 rounded-full bg-gold/5 blur-[30px] transition-all group-hover:bg-gold/10"></div>
                 <span className="relative grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-navy to-navy-soft text-gold shadow-md transition-all duration-400 group-hover:scale-110">
                   <p.icon className="h-5 w-5" />
@@ -174,7 +174,7 @@ function WhyUsPage() {
         <Reveal>
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 sm:p-12 text-center">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
-            <h3 className="relative text-2xl font-extrabold text-navy sm:text-3xl">
+            <h3 className="relative text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
               Ready to experience the <span className="gold-text">difference?</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
