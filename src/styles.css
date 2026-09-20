@@ -54,10 +54,11 @@
 }
 
 :root {
-  /* Light-only design — tell the browser explicitly so phones in system dark
-     mode don't auto-invert form fields, scrollbars, etc. against our own
-     light-only colors (no dark theme exists here to switch into). */
-  color-scheme: light;
+  /* We support both themes ourselves (see the dark-mode block below) — tell
+     the browser explicitly so it trusts our own styling instead of layering
+     its own forced-dark "correction" on top (which mangles gradient-clipped
+     text and other non-trivial colors into muddy, wrong tones). */
+  color-scheme: light dark;
   --radius: 0.375rem;
 
   /* ── Brand palette ──
