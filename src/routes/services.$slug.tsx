@@ -339,6 +339,15 @@ function ProductDetailPage() {
 
                   <ChecklistGate
                     pdfHref={`/checklists/${product.slug}-checklist.pdf`}
+                    pdfHrefByCategory={
+                      product.slug === "home-loan"
+                        ? {
+                            Salaried: "/checklists/home-loan-salaried-checklist.pdf",
+                            "Self-Employed": "/checklists/home-loan-self-employed-checklist.pdf",
+                            NRI: "/checklists/home-loan-nri-checklist.pdf",
+                          }
+                        : undefined
+                    }
                     productTitle={product.title}
                     categories={product.documentCategories?.map((c) => c.label)}
                     presetCategory={presetCategory}

@@ -36,6 +36,7 @@ const THEMES = {
 
 export function ChecklistGate({
   pdfHref,
+  pdfHrefByCategory,
   productTitle,
   categories,
   presetCategory,
@@ -43,6 +44,8 @@ export function ChecklistGate({
   intakeFields,
 }: {
   pdfHref: string;
+  /** When the checklist itself differs by category (e.g. Home Loan's Salaried/Self-Employed/NRI each have their own PDF), map category label to its PDF path — takes priority over `pdfHref` once a category is picked. */
+  pdfHrefByCategory?: Record<string, string>;
   productTitle: string;
   categories?: string[];
   /** Set when the user already picked their category elsewhere on the page (e.g. a profile card) — opens the form straight away with that category locked in. */
@@ -104,8 +107,9 @@ export function ChecklistGate({
   };
 
   if (unlocked) {
+    const resolvedHref = (category && pdfHrefByCategory?.[category]) || pdfHref;
     return (
-      <a href={pdfHref} download className={t.unlockedLink}>
+      <a href={resolvedHref} download className={t.unlockedLink}>
         <Download className="h-4 w-4" /> Download Now
       </a>
     );
