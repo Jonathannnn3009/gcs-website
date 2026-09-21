@@ -618,23 +618,6 @@ function HomePage() {
         <LoanGoals />
       </Section>
 
-      {/* ─── BANK PARTNERS ────────────────────────────── */}
-      <Section className="pt-0">
-        <Reveal>
-          <SectionHeading
-            eyebrow="Our Network"
-            title="Banks in our network"
-            description="We compare offers across major Banks and NBFCs so you can choose with confidence, without the legwork."
-            align="center"
-          />
-        </Reveal>
-        <Reveal delay={80}>
-          <div className="mt-10">
-            <BankMarquee />
-          </div>
-        </Reveal>
-      </Section>
-
       {/* ─── PERSONA + WHY US (merged, interactive) ───── */}
       <Section className="pt-0">
         <Reveal>
@@ -731,6 +714,23 @@ function HomePage() {
                 </a>
               </div>
             </div>
+          </div>
+        </Reveal>
+      </Section>
+
+      {/* ─── BANK PARTNERS ────────────────────────────── */}
+      <Section className="pt-0">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Our Network"
+            title="Banks in our network"
+            description="We compare offers across major Banks and NBFCs so you can choose with confidence, without the legwork."
+            align="center"
+          />
+        </Reveal>
+        <Reveal delay={80}>
+          <div className="mt-10">
+            <BankMarquee />
           </div>
         </Reveal>
       </Section>
