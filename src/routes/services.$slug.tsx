@@ -342,6 +342,7 @@ function ProductDetailPage() {
                     productTitle={product.title}
                     categories={product.documentCategories?.map((c) => c.label)}
                     presetCategory={presetCategory}
+                    intakeFields={product.checklistIntake}
                   />
                 </div>
               </div>

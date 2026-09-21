@@ -34,6 +34,11 @@ export type ProductGroup =
   | "Personal & Education"
   | "Vehicles & Special Cases";
 
+export type ChecklistIntakeField =
+  | { key: string; label: string; type: "text"; placeholder?: string }
+  | { key: string; label: string; type: "select"; options: string[] }
+  | { key: string; label: string; type: "date" };
+
 export type Product = {
   slug: string;
   icon: LucideIcon;
@@ -49,6 +54,8 @@ export type Product = {
   documentCategories?: { label: string; description: string; items: string[] }[];
   /** For sensitive/informal products we don't want to spell out publicly — show only the top facts, then a direct "contact us" instead of features/eligibility/documents. */
   minimalDisclosure?: boolean;
+  /** Extra questions asked in the checklist-download form, on top of name/phone — per Mahesh's intake list for these products. */
+  checklistIntake?: ChecklistIntakeField[];
 };
 
 const KYC = "KYC (PAN, Aadhaar, address proof)";
@@ -131,6 +138,22 @@ export const PRODUCTS: Product[] = [
     ],
     documents: [KYC, PROPERTY_DOCS, PHOTOS],
     documentCategories: APPLICANT_DOC_CATEGORIES,
+    checklistIntake: [
+      {
+        key: "loanRequirement",
+        label: "Loan Requirement",
+        type: "select",
+        options: ["Home Loan", "Balance Transfer", "Top-Up", "Other"],
+      },
+      {
+        key: "propertyType",
+        label: "Property Type",
+        type: "select",
+        options: ["Builder Purchase", "Resale"],
+      },
+      { key: "possessionDate", label: "Possession Date", type: "date" },
+      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 50,00,000" },
+    ],
   },
   {
     slug: "loan-against-property",
@@ -679,6 +702,14 @@ export const PRODUCTS: Product[] = [
       "Co-applicant income proof",
       "Academic records",
     ],
+    checklistIntake: [
+      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 15,00,000" },
+      { key: "courseName", label: "Course Name", type: "text" },
+      { key: "courseDuration", label: "Course Duration", type: "text", placeholder: "e.g. 2 years" },
+      { key: "courseStartDate", label: "Course Start Date", type: "date" },
+      { key: "universityName", label: "University Name", type: "text" },
+      { key: "country", label: "Country", type: "text" },
+    ],
   },
 
   {
@@ -706,6 +737,10 @@ export const PRODUCTS: Product[] = [
       "A CIBIL score of 650+ is usually enough; 750+ unlocks the sharpest rates",
     ],
     documents: [KYC, INCOME, "Dealer's vehicle quotation"],
+    checklistIntake: [
+      { key: "purchaseFrom", label: "Purchase From", type: "select", options: ["Dealer", "Resale"] },
+      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 8,00,000" },
+    ],
   },
   {
     slug: "used-car-loan",
@@ -733,6 +768,10 @@ export const PRODUCTS: Product[] = [
       "A clean RC, with no lapses in the insurance history",
     ],
     documents: [KYC, INCOME, "RC copy, insurance and valuation report"],
+    checklistIntake: [
+      { key: "purchaseFrom", label: "Purchase From", type: "select", options: ["Dealer", "Resale"] },
+      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 8,00,000" },
+    ],
   },
   {
     slug: "car-refinance",
@@ -760,6 +799,9 @@ export const PRODUCTS: Product[] = [
       "Documented income and a credit report free of active defaults",
     ],
     documents: [KYC, INCOME, "RC, insurance and any current loan statement"],
+    checklistIntake: [
+      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 5,00,000" },
+    ],
   },
   {
     slug: "private-funding",

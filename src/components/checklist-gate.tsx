@@ -1,6 +1,7 @@
 import { useEffect, useId, useState } from "react";
 import { ArrowRight, Download } from "lucide-react";
 import { submitLead } from "@/lib/leads";
+import type { ChecklistIntakeField } from "@/data/products";
 
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
 
@@ -39,6 +40,7 @@ export function ChecklistGate({
   categories,
   presetCategory,
   theme = "dark",
+  intakeFields,
 }: {
   pdfHref: string;
   productTitle: string;
@@ -47,6 +49,8 @@ export function ChecklistGate({
   presetCategory?: string | null;
   /** "dark" for a navy panel background (loan pages), "light" for a white card background (CA & Legal pages). */
   theme?: "dark" | "light";
+  /** Extra product-specific questions asked alongside name/phone, e.g. course name for Education Loan. */
+  intakeFields?: ChecklistIntakeField[];
 }) {
   const uid = useId();
   const t = THEMES[theme];
@@ -55,7 +59,8 @@ export function ChecklistGate({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [category, setCategory] = useState("");
-  const [errors, setErrors] = useState<{ name?: string; phone?: string; category?: string }>({});
+  const [intakeValues, setIntakeValues] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -65,21 +70,34 @@ export function ChecklistGate({
     }
   }, [presetCategory]);
 
+  const setIntakeValue = (key: string, value: string) =>
+    setIntakeValues((v) => ({ ...v, [key]: value }));
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const next: { name?: string; phone?: string; category?: string } = {};
-    if (name.trim().length < 2) next.name = "Enter your name";
-    if (!PHONE_RE.test(phone.replace(/[\s-]/g, ""))) next.phone = "Enter a valid 10-digit mobile number";
-    if (categories && !category) next.category = "Select one";
+    const next: Record<string, string> = {};
+    if (name.trim().length < 2) next["name"] = "Enter your name";
+    if (!PHONE_RE.test(phone.replace(/[\s-]/g, ""))) next["phone"] = "Enter a valid 10-digit mobile number";
+    if (categories && !category) next["category"] = "Select one";
+    for (const f of intakeFields ?? []) {
+      if (!intakeValues[f.key]?.trim()) next[f.key] = "Required";
+    }
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
     setSubmitting(true);
+    const intakeDetail = (intakeFields ?? [])
+      .map((f) => `${f.label}: ${intakeValues[f.key]?.trim()}`)
+      .join(", ");
+    const detailParts = [
+      category ? `${productTitle} — ${category}` : productTitle,
+      intakeDetail,
+    ].filter(Boolean);
     await submitLead({
       name: name.trim(),
       phone: phone.trim(),
       source: "checklist-download",
-      detail: category ? `${productTitle} — ${category}` : productTitle,
+      detail: detailParts.join(" | "),
     });
     setSubmitting(false);
     setUnlocked(true);
@@ -132,7 +150,7 @@ export function ChecklistGate({
                 </option>
               ))}
             </select>
-            {errors.category && <span className={t.error}>{errors.category}</span>}
+            {errors['category'] && <span className={t.error}>{errors['category']}</span>}
           </div>
         ) : null}
         <div>
@@ -147,7 +165,7 @@ export function ChecklistGate({
             placeholder="Enter your name"
             maxLength={100}
           />
-          {errors.name && <span className={t.error}>{errors.name}</span>}
+          {errors['name'] && <span className={t.error}>{errors['name']}</span>}
         </div>
         <div>
           <label htmlFor={`${uid}-phone`} className={t.label}>
@@ -162,8 +180,43 @@ export function ChecklistGate({
             inputMode="tel"
             maxLength={15}
           />
-          {errors.phone && <span className={t.error}>{errors.phone}</span>}
+          {errors['phone'] && <span className={t.error}>{errors['phone']}</span>}
         </div>
+        {(intakeFields ?? []).map((f) => (
+          <div key={f.key}>
+            <label htmlFor={`${uid}-${f.key}`} className={t.label}>
+              {f.label}
+            </label>
+            {f.type === "select" ? (
+              <select
+                id={`${uid}-${f.key}`}
+                value={intakeValues[f.key] ?? ""}
+                onChange={(e) => setIntakeValue(f.key, e.target.value)}
+                className={`${t.field} appearance-none`}
+              >
+                <option value="" className="text-ink dark:text-white">
+                  Select one
+                </option>
+                {f.options.map((o) => (
+                  <option key={o} value={o} className="text-ink dark:text-white">
+                    {o}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                id={`${uid}-${f.key}`}
+                type={f.type === "date" ? "date" : "text"}
+                value={intakeValues[f.key] ?? ""}
+                onChange={(e) => setIntakeValue(f.key, e.target.value)}
+                className={t.field}
+                placeholder={f.type === "text" ? f.placeholder : undefined}
+                maxLength={100}
+              />
+            )}
+            {errors[f.key] && <span className={t.error}>{errors[f.key]}</span>}
+          </div>
+        ))}
       </div>
       <button
         type="submit"
