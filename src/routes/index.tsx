@@ -21,13 +21,11 @@ import {
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
-import { MissionVision } from "@/components/mission-vision";
 import { LoanGoals } from "@/components/loan-goals";
 import { ConcernCards } from "@/components/concern-cards";
 import { BankMarquee } from "@/components/bank-marquee";
 import { LeadForm } from "@/components/lead-form";
 import { ConsultationBackdrop } from "@/components/consultation-backdrop";
-import { EmiCalculator } from "@/components/emi-calculator";
 import { CONTACT } from "@/data/site";
 
 export const Route = createFileRoute("/")({
@@ -641,13 +639,6 @@ function HomePage() {
         </Reveal>
       </Section>
 
-      {/* ─── EMI CALCULATOR ───────────────────────────── */}
-      <Section className="pt-0">
-        <Reveal>
-          <EmiCalculator />
-        </Reveal>
-      </Section>
-
       {/* ─── HOW IT WORKS (click-through stepper) ─────── */}
       <Section className="pt-0">
         <Reveal>
@@ -660,14 +651,6 @@ function HomePage() {
         <Reveal delay={80} className="mt-12">
           <ProcessStepper />
         </Reveal>
-      </Section>
-
-      {/* ─── MISSION & VISION ─────────────────────────── */}
-      <Section className="pt-0">
-        <MissionVision
-          mission="We are driven by a mission to foster lasting relationships with each client, aiming to deliver excellent service for years to come. Unlike many large national mortgage firms, we prioritize the security and privacy of your information, ensuring a trustworthy partnership."
-          vision="Dreaming of a future without barriers, our vision is to transform financial experiences for everyone. We strive to play a crucial role in enhancing financial experience with innovation, trust and inspiration. We aim to lead and reshape the financial landscape in India."
-        />
       </Section>
 
       {/* ─── COMMON CONCERNS ──────────────────────────── */}
