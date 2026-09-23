@@ -4,15 +4,19 @@ export function Reveal({
   children,
   delay = 0,
   className = "",
+  animate = true,
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
+  /** Set false to render content immediately, with no scroll-triggered fade-in — for pages where that animation reads as content "not being there yet" rather than a nice reveal. */
+  animate?: boolean;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [shown, setShown] = useState(false);
+  const [shown, setShown] = useState(!animate);
 
   useEffect(() => {
+    if (!animate) return;
     const el = ref.current;
     if (!el) return;
     if (typeof IntersectionObserver === "undefined") {

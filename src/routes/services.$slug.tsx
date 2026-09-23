@@ -102,7 +102,7 @@ function ProductDetailPage() {
       {/* Hero */}
       <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Reveal>
+          <Reveal animate={false}>
             <div className="grid gap-0 overflow-hidden rounded-3xl lg:grid-cols-[1.4fr_1fr]">
               {/* Navy card */}
               <div className="navy-panel relative overflow-hidden p-8 sm:p-12">
@@ -197,7 +197,7 @@ function ProductDetailPage() {
       <Section>
         <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
           {/* LEFT: the dossier */}
-          <Reveal>
+          <Reveal animate={false}>
             <div className="overflow-hidden rounded-2xl border border-gold/15 bg-white dark:bg-card">
               <div className="p-7 sm:p-9">
                 <p className="eyebrow">The Short Version</p>
@@ -392,7 +392,7 @@ function ProductDetailPage() {
           </Reveal>
 
           {/* RIGHT: sticky apply card */}
-          <Reveal delay={100} className="lg:sticky lg:top-28">
+          <Reveal animate={false} delay={100} className="lg:sticky lg:top-28">
             <div className="rounded-2xl border border-gold/15 panel-light p-7">
               <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
                 Start Your File
@@ -478,7 +478,7 @@ function ProductDetailPage() {
 
       {/* Process */}
       <Section className="pt-0">
-        <Reveal>
+        <Reveal animate={false}>
           <SectionHeading
             eyebrow="Our Process"
             title="From first conversation to disbursal."
@@ -492,7 +492,7 @@ function ProductDetailPage() {
           />
           <ol className="relative grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {PROCESS.map((step, i) => (
-              <Reveal key={step.num} delay={i * 80}>
+              <Reveal animate={false} key={step.num} delay={i * 80}>
                 <li className="text-center">
                   <span className="relative z-10 mx-auto grid h-10 w-10 place-items-center rounded-full border-2 border-gold bg-white text-gold-dark dark:bg-card">
                     <step.icon className="h-4 w-4" />
@@ -510,7 +510,7 @@ function ProductDetailPage() {
 
       {/* Related products */}
       <Section className="pt-0">
-        <Reveal>
+        <Reveal animate={false}>
           <SectionHeading
             eyebrow="Worth Comparing"
             title={`The rest of ${product.group}`}
@@ -519,7 +519,7 @@ function ProductDetailPage() {
         </Reveal>
         <div className="mt-8 border-t border-border">
           {fallbackRelated.map((p, i) => (
-            <Reveal key={p.slug} delay={i * 60}>
+            <Reveal animate={false} key={p.slug} delay={i * 60}>
               <Link
                 to="/services/$slug"
                 params={{ slug: p.slug }}
@@ -537,7 +537,7 @@ function ProductDetailPage() {
             </Reveal>
           ))}
         </div>
-        <Reveal delay={200} className="mt-6 text-center">
+        <Reveal animate={false} delay={200} className="mt-6 text-center">
           <Link
             to="/services"
             className="inline-flex items-center gap-2 text-sm font-bold text-navy hover:text-gold-dark dark:text-white"
@@ -549,7 +549,7 @@ function ProductDetailPage() {
 
       {/* Final CTA */}
       <Section className="pt-0">
-        <Reveal>
+        <Reveal animate={false}>
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
             <h3 className="relative text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
