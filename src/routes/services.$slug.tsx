@@ -211,6 +211,37 @@ function ProductDetailPage() {
 
               {product.minimalDisclosure ? (
                 <>
+                  {product.pullQuote ? (
+                    <>
+                      <div className="border-t border-dashed border-border" />
+                      <div className="p-7 sm:p-9">
+                        <p className="border-l-2 border-gold pl-4 text-base leading-relaxed font-medium text-navy italic dark:text-white">
+                          "{product.pullQuote}"
+                        </p>
+                      </div>
+                    </>
+                  ) : null}
+
+                  {product.features.length > 0 ? (
+                    <>
+                      <div className="border-t border-dashed border-border" />
+                      <div className="p-7 sm:p-9">
+                        <p className="eyebrow">Why Clients Choose This</p>
+                        <ul className="mt-5 space-y-2.5">
+                          {product.features.map((item) => (
+                            <li
+                              key={item}
+                              className="flex items-start gap-2.5 text-sm leading-relaxed text-foreground"
+                            >
+                              <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </>
+                  ) : null}
+
                   <div className="border-t border-dashed border-border" />
                   <div className="navy-panel p-7 text-center sm:p-9">
                     <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">

@@ -54,6 +54,8 @@ export type Product = {
   documentCategories?: { label: string; description: string; items: string[] }[];
   /** For sensitive/informal products we don't want to spell out publicly — show only the top facts, then a direct "contact us" instead of features/eligibility/documents. */
   minimalDisclosure?: boolean;
+  /** A short highlighted line shown above the USPs on a minimal-disclosure product's page. */
+  pullQuote?: string;
   /** Extra questions asked in the checklist-download form, on top of name/phone — per Mahesh's intake list for these products. */
   checklistIntake?: ChecklistIntakeField[];
 };
@@ -811,13 +813,24 @@ export const PRODUCTS: Product[] = [
     group: "Vehicles & Special Cases",
     facts: [
       { label: "Security", value: "No property required" },
-      { label: "Interest rate", value: "2% – 3% per month" },
+      { label: "Interest rate", value: "From ~2.70% per month" },
+      { label: "Turnaround", value: "24 – 48 hours" },
       { label: "Repayment", value: "EMI charged twice a month" },
       { label: "Eligibility", value: "Self-employed, turnover up to ₹30 Cr" },
     ],
     about:
       "Short-term, unsecured funds from vetted private lenders for self-employed profiles that need cash fast — every rate and repayment term set out in writing before you commit, since private credit is priced well above bank rates.",
-    features: [],
+    pullQuote:
+      "Whatever funding amount you require, we can provide the required amount with a fast 24–48 hour turnaround, subject to the business profile and documentation.",
+    features: [
+      "Full funding amount — whatever your eligible business requirement calls for",
+      "Fast turnaround — funding arranged within 24–48 hours",
+      "Rate and terms evaluated on your business profile, turnover and profitability",
+      "Structured without collateral, subject to the case and profile",
+      "Flexible EMI/repayment terms, discussed and structured to your need",
+      "Interest is never cut upfront — you receive the full agreed funding amount",
+      "Processing fee and documentation charges as per the applicable structure",
+    ],
     eligibility: [],
     documents: [],
     minimalDisclosure: true,
