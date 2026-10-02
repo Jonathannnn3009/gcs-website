@@ -56,7 +56,7 @@ const PIN_RE = /^[1-9]\d{5}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const UTR_RE = /^\d{12}$/;
 
-const STEP_LABELS = ["Bureau", "Last report", "Payment", "Your details"];
+const STEP_LABELS = ["Your details", "Bureau", "Last report", "Payment"];
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -197,18 +197,18 @@ function CibilFlow() {
     setDone(false);
   };
 
-  const confirmPayment = () => {
-    if (!UTR_RE.test(utr.trim())) {
-      setUtrError("Enter the 12-digit UPI transaction / UTR number from your payment app");
-      return;
-    }
-    setUtrError("");
-    setStep(4);
-  };
+  const detailLines = () => [
+    `Name: ${details.fullName.trim()}`,
+    `PAN: ${details.pan.trim()}`,
+    `DOB: ${details.dob}`,
+    `Gender: ${details.gender}`,
+    `Email: ${details.email.trim()}`,
+    `Address: ${details.address.trim()}, ${details.pincode.trim()}`,
+  ];
 
-  const onSubmit = async (e: React.FormEvent) => {
+  // Step 1 -> 2: capture the lead as soon as the details are in, before any payment.
+  const onSubmitDetails = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!bureau || !quote) return;
     const next: Record<string, string> = {};
     if (details.fullName.trim().length < 2) next["fullName"] = "Enter your full name as on PAN";
     if (!PAN_RE.test(details.pan.trim())) next["pan"] = "Enter a valid PAN, e.g. ABCDE1234F";
@@ -228,16 +228,32 @@ function CibilFlow() {
       name: details.fullName.trim(),
       phone: details.phone.trim(),
       source: "cibil-report-request",
+      detail: ["Stage: details captured, payment pending", ...detailLines()].join(" | "),
+    });
+    setSubmitting(false);
+    setStep(2);
+  };
+
+  // Step 4: payment done -> capture the lead again, now with bureau, amount and UTR.
+  const confirmPayment = async () => {
+    if (!bureau || !quote) return;
+    if (!UTR_RE.test(utr.trim())) {
+      setUtrError("Enter the 12-digit UPI transaction / UTR number from your payment app");
+      return;
+    }
+    setUtrError("");
+    setSubmitting(true);
+    await submitLead({
+      name: details.fullName.trim(),
+      phone: details.phone.trim(),
+      source: "cibil-report-request",
       detail: [
+        "Stage: payment submitted",
         `Bureau: ${bureau.name}`,
         `Last report taken: ${lastPulledLabel}`,
         `Paid: ₹${quote.amount} (${quote.kind === "paid" ? "paid report" : "service fee"})`,
         `UTR: ${utr.trim()}`,
-        `PAN: ${details.pan.trim()}`,
-        `DOB: ${details.dob}`,
-        `Gender: ${details.gender}`,
-        `Email: ${details.email.trim()}`,
-        `Address: ${details.address.trim()}, ${details.pincode.trim()}`,
+        ...detailLines(),
       ].join(" | "),
     });
     setSubmitting(false);
@@ -282,148 +298,13 @@ function CibilFlow() {
     <div className="rounded-2xl border border-border bg-white p-5 shadow-[var(--shadow-lift)] sm:p-8 dark:bg-card">
       <StepIndicator step={step} />
 
-      {/* Step 1 — bureau */}
+      {/* Step 1 — details */}
       {step === 1 && (
-        <div className="mt-8">
-          <h3 className="text-xl font-extrabold text-navy dark:text-white">
-            Which credit bureau's report do you need?
-          </h3>
+        <form onSubmit={onSubmitDetails} noValidate className="mt-8">
+          <h3 className="text-xl font-extrabold text-navy dark:text-white">First, your details</h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Pick the credit bureau whose report you want.
-          </p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            {BUREAUS.map((b) => (
-              <button
-                key={b.id}
-                type="button"
-                onClick={() => {
-                  setBureauId(b.id);
-                  setLastPulled(null);
-                  setStep(2);
-                }}
-                className="group flex items-start gap-3 rounded-xl border border-border bg-bg-light p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
-              >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark transition-colors group-hover:bg-gold group-hover:text-navy dark:bg-gold/15">
-                  <Gauge className="h-5 w-5" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-extrabold text-navy dark:text-white">
-                    {b.name}
-                  </span>
-                  <span className="mt-0.5 block text-xs leading-relaxed text-muted-foreground">
-                    {b.blurb}
-                  </span>
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Step 2 — last free report */}
-      {step === 2 && bureau && (
-        <div className="mt-8">
-          <BackButton onClick={() => setStep(1)} />
-          <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
-            When did you last take your {bureau.name} report?
-          </h3>
-          <p className="mt-2 text-sm text-muted-foreground">This decides what we charge.</p>
-          <div className="mt-5 space-y-3">
-            {LAST_PULLED_OPTIONS.map((o) => (
-              <button
-                key={o.id}
-                type="button"
-                onClick={() => {
-                  setLastPulled(o.id);
-                  setStep(3);
-                }}
-                className="group flex w-full items-center justify-between gap-3 rounded-xl border border-border bg-bg-light p-4 text-left transition-all duration-300 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
-              >
-                <span>
-                  <span className="block text-sm font-extrabold text-navy dark:text-white">
-                    {o.label}
-                  </span>
-                  <span className="mt-0.5 block text-xs text-muted-foreground">{o.hint}</span>
-                </span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-0.5" />
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Step 3 — payment */}
-      {step === 3 && bureau && quote && (
-        <div className="mt-8">
-          <BackButton onClick={() => setStep(2)} />
-          <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
-            Pay ₹{quote.amount} by UPI
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            {quote.kind === "free-eligible"
-              ? `We fetch your ${bureau.name} report for you for a flat ₹${quote.amount} service fee.`
-              : `You've taken your ${bureau.name} report in the last 12 months, so a fresh report is ₹${quote.amount}.`}
-          </p>
-
-          <div className="mt-6 grid items-center gap-6 sm:grid-cols-[auto_1fr]">
-            <UpiQr amount={quote.amount} note={`${bureau.name} report`} />
-            <div className="space-y-4">
-              <ol className="space-y-2 text-sm text-muted-foreground">
-                <li>1. Scan the QR with any UPI app (GPay, PhonePe, Paytm, BHIM…).</li>
-                <li>
-                  2. Pay exactly <strong className="text-foreground">₹{quote.amount}</strong>.
-                </li>
-                <li>3. Enter the 12-digit UTR / transaction ID below.</li>
-              </ol>
-              <a
-                href={upiLink(quote.amount, `${bureau.name} report`)}
-                className="inline-flex items-center gap-2 rounded-lg border border-gold/40 px-4 py-2 text-xs font-bold text-navy transition-colors hover:bg-gold/10 sm:hidden dark:text-white"
-              >
-                <Smartphone className="h-4 w-4" /> On your phone? Open your UPI app
-              </a>
-              {UPI_IS_PLACEHOLDER && import.meta.env.DEV && (
-                <p className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
-                  Dev warning: the UPI ID in <code>src/data/cibil.ts</code> is still a placeholder —
-                  this QR won't pay GCS yet.
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <label htmlFor={`${uid}-utr`} className={labelClass}>
-              UPI transaction / UTR number <span className="text-gold">*</span>
-            </label>
-            <input
-              id={`${uid}-utr`}
-              className={fieldClass}
-              value={utr}
-              onChange={(e) => setUtr(e.target.value.replace(/\D/g, "").slice(0, 12))}
-              placeholder="12-digit number from your payment app"
-              inputMode="numeric"
-            />
-            {utrError && <span className="mt-1 block text-xs text-destructive">{utrError}</span>}
-          </div>
-          <button
-            type="button"
-            onClick={confirmPayment}
-            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-navy px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-navy-light"
-          >
-            I've paid — continue <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-      )}
-
-      {/* Step 4 — details */}
-      {step === 4 && bureau && quote && (
-        <form onSubmit={onSubmit} noValidate className="mt-8">
-          <BackButton onClick={() => setStep(3)} />
-          <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
-            Details we need to pull your {bureau.name} report
-          </h3>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Enter these exactly as they appear on your PAN card and records, or the bureau may not
-            find your file.
+            We need these to pull your report. Enter them exactly as they appear on your PAN card
+            and records, or the bureau may not find your file.
           </p>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -571,8 +452,8 @@ function CibilFlow() {
               className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]"
             />
             <span>
-              I authorise Growth Capital Services to retrieve my {bureau.name} credit report on my
-              behalf and confirm the details above are correct.
+              I authorise Growth Capital Services to retrieve my credit report on my behalf and
+              confirm the details above are correct.
             </span>
           </label>
           {errors["consent"] && (
@@ -584,30 +465,162 @@ function CibilFlow() {
             disabled={submitting}
             className="mt-6 inline-flex items-center gap-2 rounded-lg bg-navy px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-navy-light disabled:opacity-60"
           >
-            {submitting ? "Sending…" : "Submit report request"} <ArrowRight className="h-4 w-4" />
+            {submitting ? "Saving…" : "Continue"} <ArrowRight className="h-4 w-4" />
           </button>
           <p className="mt-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
             <Lock className="h-3 w-3" /> Your details are used only to fetch your report.
           </p>
         </form>
       )}
+
+      {/* Step 2 — bureau */}
+      {step === 2 && (
+        <div className="mt-8">
+          <BackButton onClick={() => setStep(1)} />
+          <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
+            Which credit bureau's report do you need?
+          </h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Pick the credit bureau whose report you want.
+          </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            {BUREAUS.map((b) => (
+              <button
+                key={b.id}
+                type="button"
+                onClick={() => {
+                  setBureauId(b.id);
+                  setLastPulled(null);
+                  setStep(3);
+                }}
+                className="group flex items-start gap-3 rounded-xl border border-border bg-bg-light p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark transition-colors group-hover:bg-gold group-hover:text-navy dark:bg-gold/15">
+                  <Gauge className="h-5 w-5" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-extrabold text-navy dark:text-white">
+                    {b.name}
+                  </span>
+                  <span className="mt-0.5 block text-xs leading-relaxed text-muted-foreground">
+                    {b.blurb}
+                  </span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Step 3 — last report */}
+      {step === 3 && bureau && (
+        <div className="mt-8">
+          <BackButton onClick={() => setStep(2)} />
+          <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
+            When did you last take your {bureau.name} report?
+          </h3>
+          <p className="mt-2 text-sm text-muted-foreground">This decides what we charge.</p>
+          <div className="mt-5 space-y-3">
+            {LAST_PULLED_OPTIONS.map((o) => (
+              <button
+                key={o.id}
+                type="button"
+                onClick={() => {
+                  setLastPulled(o.id);
+                  setStep(4);
+                }}
+                className="group flex w-full items-center justify-between gap-3 rounded-xl border border-border bg-bg-light p-4 text-left transition-all duration-300 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
+              >
+                <span>
+                  <span className="block text-sm font-extrabold text-navy dark:text-white">
+                    {o.label}
+                  </span>
+                  <span className="mt-0.5 block text-xs text-muted-foreground">{o.hint}</span>
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-0.5" />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Step 4 — payment */}
+      {step === 4 && bureau && quote && (
+        <div className="mt-8">
+          <BackButton onClick={() => setStep(3)} />
+          <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
+            Pay ₹{quote.amount} by UPI
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {quote.kind === "free-eligible"
+              ? `We fetch your ${bureau.name} report for you for a flat ₹${quote.amount} service fee.`
+              : `You've taken your ${bureau.name} report in the last 12 months, so a fresh report is ₹${quote.amount}.`}
+          </p>
+
+          <div className="mt-6 grid items-center gap-6 sm:grid-cols-[auto_1fr]">
+            <UpiQr amount={quote.amount} note={`${bureau.name} report`} />
+            <div className="space-y-4">
+              <ol className="space-y-2 text-sm text-muted-foreground">
+                <li>1. Scan the QR with any UPI app (GPay, PhonePe, Paytm, BHIM…).</li>
+                <li>
+                  2. Pay exactly <strong className="text-foreground">₹{quote.amount}</strong>.
+                </li>
+                <li>3. Enter the 12-digit UTR / transaction ID below.</li>
+              </ol>
+              <a
+                href={upiLink(quote.amount, `${bureau.name} report`)}
+                className="inline-flex items-center gap-2 rounded-lg border border-gold/40 px-4 py-2 text-xs font-bold text-navy transition-colors hover:bg-gold/10 sm:hidden dark:text-white"
+              >
+                <Smartphone className="h-4 w-4" /> On your phone? Open your UPI app
+              </a>
+              {UPI_IS_PLACEHOLDER && import.meta.env.DEV && (
+                <p className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+                  Dev warning: the UPI ID in <code>src/data/cibil.ts</code> is still a placeholder —
+                  this QR won't pay GCS yet.
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <label htmlFor={`${uid}-utr`} className={labelClass}>
+              UPI transaction / UTR number <span className="text-gold">*</span>
+            </label>
+            <input
+              id={`${uid}-utr`}
+              className={fieldClass}
+              value={utr}
+              onChange={(e) => setUtr(e.target.value.replace(/\D/g, "").slice(0, 12))}
+              placeholder="12-digit number from your payment app"
+              inputMode="numeric"
+            />
+            {utrError && <span className="mt-1 block text-xs text-destructive">{utrError}</span>}
+          </div>
+          <button
+            type="button"
+            onClick={confirmPayment}
+            disabled={submitting}
+            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-navy px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-navy-light disabled:opacity-60"
+          >
+            {submitting ? "Sending…" : "I've paid — submit request"}{" "}
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
 const HOW_IT_WORKS = [
-  { title: "Choose your bureau", text: "TransUnion CIBIL, Experian, Equifax or CRIF High Mark." },
-  {
-    title: "Tell us when you last took your report",
-    text: "This sets the price.",
-  },
-  {
-    title: "Pay by UPI QR",
-    text: "₹100 service fee, or the report price if you took one in the last 12 months.",
-  },
   {
     title: "Share your details",
-    text: "PAN, date of birth and address — we pull the report and send it to you.",
+    text: "PAN, date of birth and address — exactly as on your records.",
+  },
+  { title: "Choose your bureau", text: "TransUnion CIBIL, Experian, Equifax or CRIF High Mark." },
+  { title: "Tell us when you last took your report", text: "This sets the price." },
+  {
+    title: "Pay by UPI QR",
+    text: "₹100 service fee, or the report price if you took one in the last 12 months. We then pull your report and send it to you.",
   },
 ];
 
