@@ -10,6 +10,7 @@ const NAV = [
   { to: "/about", label: "About Us" },
   { to: "/services", label: "Our Services", dropdown: "services" },
   { to: "/tools", label: "Tools", dropdown: "tools" },
+  { to: "/cibil", label: "CIBIL" },
   { to: "/case-studies", label: "Case Studies" },
   { to: "/ca-legal-services", label: "CA & Legal" },
   { to: "/partner", label: "Become Partner" },
@@ -100,7 +101,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-1 rounded-md px-2.5 py-2.5 text-sm font-semibold transition-colors hover:text-foreground"
+                      className="group relative flex items-center gap-1 rounded-md px-2.5 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors hover:text-foreground"
                     >
                       {link.label}
                       <ChevronDown
@@ -235,7 +236,7 @@ export function SiteHeader() {
           </nav>
 
           {/* Apply CTA */}
-          <Link to="/contact" className="gold-btn hidden py-2.5 sm:inline-flex">
+          <Link to="/contact" className="gold-btn hidden py-2.5 whitespace-nowrap sm:inline-flex">
             Apply Now
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>

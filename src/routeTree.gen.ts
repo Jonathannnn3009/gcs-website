@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
+import { Route as CibilRouteImport } from './routes/cibil'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as MumbaiRouteImport } from './routes/mumbai'
 import { Route as NaviMumbaiRouteImport } from './routes/navi-mumbai'
@@ -41,6 +42,11 @@ const AboutRoute = AboutRouteImport.update({
 const CaseStudiesRoute = CaseStudiesRouteImport.update({
   id: '/case-studies',
   path: '/case-studies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CibilRoute = CibilRouteImport.update({
+  id: '/cibil',
+  path: '/cibil',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/case-studies': typeof CaseStudiesRouteWithChildren
+  '/cibil': typeof CibilRoute
   '/contact': typeof ContactRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cibil': typeof CibilRoute
   '/contact': typeof ContactRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/case-studies': typeof CaseStudiesRouteWithChildren
+  '/cibil': typeof CibilRoute
   '/contact': typeof ContactRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/case-studies'
+    | '/cibil'
     | '/contact'
     | '/mumbai'
     | '/navi-mumbai'
@@ -203,6 +213,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/cibil'
     | '/contact'
     | '/mumbai'
     | '/navi-mumbai'
@@ -222,6 +233,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/case-studies'
+    | '/cibil'
     | '/contact'
     | '/mumbai'
     | '/navi-mumbai'
@@ -243,6 +255,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   CaseStudiesRoute: typeof CaseStudiesRouteWithChildren
+  CibilRoute: typeof CibilRoute
   ContactRoute: typeof ContactRoute
   MumbaiRoute: typeof MumbaiRoute
   NaviMumbaiRoute: typeof NaviMumbaiRoute
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       path: '/case-studies'
       fullPath: '/case-studies'
       preLoaderRoute: typeof CaseStudiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cibil': {
+      id: '/cibil'
+      path: '/cibil'
+      fullPath: '/cibil'
+      preLoaderRoute: typeof CibilRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -419,6 +439,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   CaseStudiesRoute: CaseStudiesRouteWithChildren,
+  CibilRoute: CibilRoute,
   ContactRoute: ContactRoute,
   MumbaiRoute: MumbaiRoute,
   NaviMumbaiRoute: NaviMumbaiRoute,
