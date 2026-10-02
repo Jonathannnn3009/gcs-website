@@ -230,8 +230,8 @@ function CibilFlow() {
       source: "cibil-report-request",
       detail: [
         `Bureau: ${bureau.name}`,
-        `Last free report: ${lastPulledLabel}`,
-        `Paid: ₹${quote.amount} (${quote.kind === "paid" ? "paid report" : "free-report service fee"})`,
+        `Last report taken: ${lastPulledLabel}`,
+        `Paid: ₹${quote.amount} (${quote.kind === "paid" ? "paid report" : "service fee"})`,
         `UTR: ${utr.trim()}`,
         `PAN: ${details.pan.trim()}`,
         `DOB: ${details.dob}`,
@@ -289,7 +289,7 @@ function CibilFlow() {
             Which credit bureau's report do you need?
           </h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Every bureau gives you one free full report a year. Pick the one you want.
+            Pick the credit bureau whose report you want.
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {BUREAUS.map((b) => (
@@ -325,11 +325,9 @@ function CibilFlow() {
         <div className="mt-8">
           <BackButton onClick={() => setStep(1)} />
           <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
-            When did you last take your free {bureau.name} report?
+            When did you last take your {bureau.name} report?
           </h3>
-          <p className="mt-2 text-sm text-muted-foreground">
-            The free report is available once every 12 months, so this decides what we charge.
-          </p>
+          <p className="mt-2 text-sm text-muted-foreground">This decides what we charge.</p>
           <div className="mt-5 space-y-3">
             {LAST_PULLED_OPTIONS.map((o) => (
               <button
@@ -363,8 +361,8 @@ function CibilFlow() {
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             {quote.kind === "free-eligible"
-              ? `Your free yearly ${bureau.name} report is still available — we fetch it for you for a flat ₹${quote.amount} service fee.`
-              : `You've already used this year's free ${bureau.name} report, so this is a paid pull at ₹${quote.amount}.`}
+              ? `We fetch your ${bureau.name} report for you for a flat ₹${quote.amount} service fee.`
+              : `You've taken your ${bureau.name} report in the last 12 months, so a fresh report is ₹${quote.amount}.`}
           </p>
 
           <div className="mt-6 grid items-center gap-6 sm:grid-cols-[auto_1fr]">
@@ -600,12 +598,12 @@ function CibilFlow() {
 const HOW_IT_WORKS = [
   { title: "Choose your bureau", text: "TransUnion CIBIL, Experian, Equifax or CRIF High Mark." },
   {
-    title: "Tell us your last free report",
-    text: "Free reports renew every 12 months — this sets the price.",
+    title: "Tell us when you last took your report",
+    text: "This sets the price.",
   },
   {
     title: "Pay by UPI QR",
-    text: "₹100 if your free report is available, the paid-report price if not.",
+    text: "₹100 service fee, or the report price if you took one in the last 12 months.",
   },
   {
     title: "Share your details",
@@ -666,7 +664,6 @@ function CibilPage() {
               </h3>
               <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted-foreground">
                 <li>Checking your own report is a soft enquiry — it doesn't lower your score.</li>
-                <li>Every bureau offers one free full report per 12 months.</li>
                 <li>
                   Growth Capital Services is independent of TransUnion CIBIL, Experian, Equifax and
                   CRIF High Mark; their names only tell us which report you want.

@@ -45,12 +45,12 @@ export const BUREAUS: Bureau[] = [
 export type LastPulled = "never" | "within-12-months" | "over-12-months";
 
 export const LAST_PULLED_OPTIONS: { id: LastPulled; label: string; hint: string }[] = [
-  { id: "never", label: "Never", hint: "I haven't taken a free report from them" },
-  { id: "over-12-months", label: "More than 12 months ago", hint: "My free report has renewed" },
+  { id: "never", label: "Never", hint: "I haven't taken a report from them" },
+  { id: "over-12-months", label: "More than 12 months ago", hint: "It's been over a year" },
   {
     id: "within-12-months",
     label: "Within the last 12 months",
-    hint: "I've already used this year's free report",
+    hint: "I took one recently",
   },
 ];
 
