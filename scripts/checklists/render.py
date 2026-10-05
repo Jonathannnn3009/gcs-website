@@ -46,6 +46,9 @@ MUTED = colors.HexColor("#6B7280")
 HAIRLINE = colors.HexColor("#E7E4DC")
 PALE_GOLD = colors.HexColor("#FAF5E8")
 FIELD_LINE = colors.HexColor("#C9CDD6")
+TABLE_EDGE = colors.HexColor("#CFC6AC")   # outer border of a section box
+TABLE_ROW = colors.HexColor("#E6E0CF")    # row dividers
+CHECK_CELL = colors.HexColor("#FBF8EF")   # tint behind the checkbox column
 
 PAGE_W, PAGE_H = A4
 SPINE_W = 3.2 * mm
@@ -155,8 +158,12 @@ class RichItem(Flowable):
     LEAD = 14.0
     VPAD = 1.5
 
-    def __init__(self, raw: str):
+    CELL_W = 6.6 * mm      # checkbox column
+    PAD_X = 2.2 * mm       # gap between the divider and the text
+
+    def __init__(self, raw: str, last: bool = False):
         super().__init__()
+        self.last = last
         self.mode = "check"
         text = raw
         if raw.startswith("!"):
@@ -168,7 +175,7 @@ class RichItem(Flowable):
         self.text = esc_rupee(text)
         self.tokens = tokenize(self.text)
         self.lines = []
-        self.indent = 6.4 * mm
+        self.indent = self.CELL_W + self.PAD_X
 
     def kinds(self):
         return {k for k, _ in self.tokens if k != "text"}
@@ -177,7 +184,7 @@ class RichItem(Flowable):
         size = self.SIZE
         font = "Helvetica-Oblique" if self.mode == "note" else "Helvetica"
         bold = "Helvetica-Bold" if self.mode == "strong" else font
-        max_w = aw - self.indent
+        max_w = aw - self.indent - 2.2 * mm
         lines = [[]]
         x = 0.0
         for kind, s in self.tokens:
@@ -220,16 +227,31 @@ class RichItem(Flowable):
         c = self.canv
         size = self.SIZE
         first_centre = self.height - self.VPAD - self.LEAD / 2
+        h, w = self.height, self.width
+        # table cells: tinted checkbox column, row divider, outer left/right edges
+        c.setFillColor(CHECK_CELL)
+        c.rect(0, 0, self.CELL_W, h, fill=1, stroke=0)
+        c.setLineWidth(0.7)
+        c.setStrokeColor(TABLE_EDGE)
+        c.line(0, 0, 0, h)
+        c.line(w, 0, w, h)
+        c.setStrokeColor(TABLE_ROW)
+        c.line(self.CELL_W, 0, self.CELL_W, h)
+        if self.last:
+            c.setStrokeColor(TABLE_EDGE)
+            c.setLineWidth(0.9)
+        c.line(0, 0, w, 0)
         # marker
+        cx = self.CELL_W / 2
         if self.mode in ("check", "strong"):
-            s = 2.9 * mm
+            sz = 2.9 * mm
             c.setStrokeColor(NAVY)
             c.setFillColor(colors.white)
             c.setLineWidth(0.8)
-            c.rect(0.4, first_centre - s / 2, s, s, fill=1, stroke=1)
+            c.rect(cx - sz / 2, first_centre - sz / 2, sz, sz, fill=1, stroke=1)
         elif self.mode == "bullet":
             c.setFillColor(GOLD)
-            c.rect(0.9, first_centre - 1.1, 2.2, 2.2, fill=1, stroke=0)
+            c.rect(cx - 1.1, first_centre - 1.1, 2.2, 2.2, fill=1, stroke=0)
         for i, line in enumerate(self.lines):
             centre = self.height - self.VPAD - i * self.LEAD - self.LEAD / 2
             base = centre - 0.34 * size
@@ -274,6 +296,14 @@ class SectionBar(Flowable):
         c = self.canv
         c.setFillColor(PALE_GOLD)
         c.rect(0, 0, self.width, self.height, fill=1, stroke=0)
+        c.setStrokeColor(TABLE_EDGE)
+        c.setLineWidth(0.7)
+        c.line(0, 0, 0, self.height)
+        c.line(self.width, 0, self.width, self.height)
+        c.line(0, self.height, self.width, self.height)
+        c.setStrokeColor(GOLD)
+        c.setLineWidth(1.0)
+        c.line(0, 0, self.width, 0)
         title_y = self.height - 4.6 * mm if self.stacked else self.height / 2 - 3.0
         c.setFillColor(GOLD)
         c.rect(2.2 * mm, title_y + 1.6, 2.8, 2.8, fill=1, stroke=0)
@@ -287,6 +317,50 @@ class SectionBar(Flowable):
                 c.drawString(6.6 * mm, 1.9 * mm, esc_rupee(self.note))
             else:
                 c.drawRightString(self.width - 2.5 * mm, title_y + 0.4, esc_rupee(self.note))
+
+
+class SectionTable(Flowable):
+    """Heading bar + ruled rows as one box. If it has to split, the next part repeats the heading."""
+
+    def __init__(self, title, note, items, cont=False):
+        super().__init__()
+        self.title, self.note, self.items, self.cont = title, note, items, cont
+        label = title + ("  (continued)" if cont else "")
+        self.bar = SectionBar(label, None if cont else note)
+
+    def wrap(self, aw, ah):
+        self.width = aw
+        _, bh = self.bar.wrap(aw, ah)
+        self.heights = [it.wrap(aw, ah)[1] for it in self.items]
+        self.bar_h = bh
+        self.height = bh + sum(self.heights)
+        return aw, self.height
+
+    def split(self, aw, ah):
+        self.wrap(aw, ah)
+        used = self.bar_h
+        k = 0
+        for h in self.heights:
+            if used + h > ah:
+                break
+            used += h
+            k += 1
+        if k < 2 or k >= len(self.items):   # need a decent first part, and something left over
+            return []
+        if len(self.items) - k == 1 and k > 2:  # don't strand a single row on its own
+            k -= 1
+        first_items, rest = self.items[:k], self.items[k:]
+        first_items[-1].last = True
+        return [SectionTable(self.title, self.note, first_items, self.cont),
+                SectionTable(self.title, self.note, rest, cont=True)]
+
+    def draw(self):
+        c = self.canv
+        y = self.height - self.bar_h
+        self.bar.drawOn(c, 0, y)
+        for it, h in zip(self.items, self.heights):
+            y -= h
+            it.drawOn(c, 0, y)
 
 
 class SubHead(Flowable):
@@ -538,18 +612,18 @@ def build_pdf(path, title, sections, subtitle=None, closing=True, columns=1):
     GAP = 6 * mm
     col_w = (CONTENT_W - GAP) / 2 if two else CONTENT_W
     if two:  # tighter type so a whole list fits on one page
-        RichItem.SIZE, RichItem.LEAD, RichItem.VPAD = 8.0, 12.2, 1.0
+        RichItem.SIZE, RichItem.LEAD, RichItem.VPAD = 8.0, 12.0, 1.9
     else:
-        RichItem.SIZE, RichItem.LEAD, RichItem.VPAD = 8.8, 14.0, 1.5
+        RichItem.SIZE, RichItem.LEAD, RichItem.VPAD = 8.8, 14.0, 2.2
 
     def item_flowables(items):
         out = []
-        for raw in items:
+        for n, raw in enumerate(items):
             if raw.startswith("## "):
                 out.append(CondPageBreak(24 * mm))
                 out.append(SubHead(raw[3:].strip()))
                 continue
-            it = RichItem(raw)
+            it = RichItem(raw, last=(n == len(items) - 1))
             kinds.update(it.kinds())
             out.append(it)
         return out
@@ -572,8 +646,8 @@ def build_pdf(path, title, sections, subtitle=None, closing=True, columns=1):
             story.append(callout(sec["callout"], col_w))
             story.append(Spacer(1, 3 * mm))
             continue
-        head = [SectionBar(sec["title"], sec.get("note")), Spacer(1, 1.2 * mm)]
         if "form" in sec:
+            head = [SectionBar(sec["title"], sec.get("note")), Spacer(1, 1.2 * mm)]
             if two:  # fill-in forms get a fresh full-width page
                 story.append(NextPageTemplate("single"))
                 story.append(PageBreak())
@@ -589,11 +663,12 @@ def build_pdf(path, title, sections, subtitle=None, closing=True, columns=1):
                     story.append(FormGroup(gtitle, fields))
         else:
             flows = item_flowables(sec["items"])
-            if len(flows) <= (7 if two else 9):  # short section: never split it across a page/column
-                story.append(KeepTogether(head + flows))
+            table = SectionTable(sec["title"], sec.get("note"), flows)
+            if len(flows) <= (7 if two else 9):  # short section: keep it whole
+                story.append(KeepTogether([table]))
             else:
                 story.append(CondPageBreak(34 * mm))
-                story.extend(head + flows)
+                story.append(table)
         story.append(Spacer(1, 2.6 * mm if two else 3.4 * mm))
 
     if closing_box is not None:
