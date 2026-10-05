@@ -36,7 +36,10 @@ built = []
 for slug, spec in LOAN_CHECKLISTS.items():
     if only and only not in slug:
         continue
-    build_pdf(path_for(slug), spec["title"], spec["sections"], subtitle=spec.get("subtitle"), columns=2)
+    # Prefer one full-width column; fall back to two columns only when the list won't fit one page that way.
+    build_pdf(path_for(slug), spec["title"], spec["sections"], subtitle=spec.get("subtitle"), columns=1)
+    if len(PdfReader(path_for(slug)).pages) > 1:
+        build_pdf(path_for(slug), spec["title"], spec["sections"], subtitle=spec.get("subtitle"), columns=2)
     built.append(slug)
     for copy in COPIES.get(slug, []):
         shutil.copyfile(path_for(slug), path_for(copy))
