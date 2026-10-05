@@ -29,6 +29,7 @@ from reportlab.platypus import (
     KeepTogether,
     Frame,
     NextPageTemplate,
+    PageBreak,
     PageTemplate,
     Paragraph,
     Spacer,
@@ -248,28 +249,44 @@ class RichItem(Flowable):
 
 
 class SectionBar(Flowable):
+    """Pale-gold heading bar. The small note sits on the right, or on a second line if it won't fit."""
+
     def __init__(self, title: str, note: str | None = None):
         super().__init__()
         self.title, self.note = title, note
 
     def wrap(self, aw, ah):
         self.width = aw
-        self.height = 7.2 * mm
+        self.stacked = False
+        # shrink a long title until it fits the bar
+        self.tsize = 8.9
+        label = esc_rupee(self.title).upper()
+        while stringWidth(label, "Helvetica-Bold", self.tsize) > aw - 9 * mm and self.tsize > 6.8:
+            self.tsize -= 0.2
+        if self.note:
+            tw = stringWidth(label, "Helvetica-Bold", self.tsize)
+            nw = stringWidth(esc_rupee(self.note), "Helvetica-Oblique", 7.4)
+            self.stacked = 6.6 * mm + tw + nw + 6 * mm > aw
+        self.height = 10.6 * mm if self.stacked else 7.2 * mm
         return aw, self.height
 
     def draw(self):
         c = self.canv
         c.setFillColor(PALE_GOLD)
         c.rect(0, 0, self.width, self.height, fill=1, stroke=0)
+        title_y = self.height - 4.6 * mm if self.stacked else self.height / 2 - 3.0
         c.setFillColor(GOLD)
-        c.rect(2.2 * mm, self.height / 2 - 1.4, 2.8, 2.8, fill=1, stroke=0)
+        c.rect(2.2 * mm, title_y + 1.6, 2.8, 2.8, fill=1, stroke=0)
         c.setFillColor(NAVY)
-        c.setFont("Helvetica-Bold", 8.9)
-        c.drawString(6.6 * mm, self.height / 2 - 3.0, esc_rupee(self.title).upper())
+        c.setFont("Helvetica-Bold", self.tsize)
+        c.drawString(6.6 * mm, title_y, esc_rupee(self.title).upper())
         if self.note:
             c.setFillColor(MUTED)
             c.setFont("Helvetica-Oblique", 7.4)
-            c.drawRightString(self.width - 2.5 * mm, self.height / 2 - 2.6, esc_rupee(self.note))
+            if self.stacked:
+                c.drawString(6.6 * mm, 1.9 * mm, esc_rupee(self.note))
+            else:
+                c.drawRightString(self.width - 2.5 * mm, title_y + 0.4, esc_rupee(self.note))
 
 
 class SubHead(Flowable):
@@ -292,27 +309,25 @@ class SubHead(Flowable):
 
 
 class FormGroup(Flowable):
-    """A block of fill-in boxes (label above an empty rounded box), two per row."""
+    """A block of fill-in boxes (label above an empty rounded box) on a 2- or 3-column grid."""
 
-    BOX_H = 7.4 * mm
-    ROW_GAP = 2.6 * mm
-
-    def __init__(self, title: str, fields):
+    def __init__(self, title: str, fields, cols: int = 2, box_h=7.4 * mm, label_h=3.6 * mm, row_gap=2.6 * mm,
+                 title_h=8.6 * mm):
         super().__init__()
-        self.title = title
-        self.fields = fields  # list of (label, span) with span 1 or 2
+        self.title, self.fields, self.cols = title, fields, cols
+        self.box_h, self.label_h, self.row_gap, self.title_h = box_h, label_h, row_gap, title_h
 
     def _rows(self):
-        rows, cur, used = [], [], 0
+        rows, cur, used = [], [], 0.0
         for label, span in self.fields:
-            if used + span > 2:
+            if used + span > self.cols + 1e-6:
                 rows.append(cur)
-                cur, used = [], 0
+                cur, used = [], 0.0
             cur.append((label, span))
             used += span
-            if used == 2:
+            if used >= self.cols - 1e-6:
                 rows.append(cur)
-                cur, used = [], 0
+                cur, used = [], 0.0
         if cur:
             rows.append(cur)
         return rows
@@ -320,32 +335,32 @@ class FormGroup(Flowable):
     def wrap(self, aw, ah):
         self.width = aw
         self.rows = self._rows()
-        row_h = 3.6 * mm + self.BOX_H + self.ROW_GAP
-        self.height = 8.6 * mm + len(self.rows) * row_h
+        self.height = self.title_h + len(self.rows) * (self.label_h + self.box_h + self.row_gap)
         return aw, self.height
 
     def draw(self):
         c = self.canv
+        gap = 4 * mm
+        unit = (self.width - gap * (self.cols - 1)) / self.cols
         c.setFillColor(GOLD)
-        c.rect(0.4, self.height - 5.4 * mm, 1.1, 3.8 * mm, fill=1, stroke=0)
+        c.rect(0.4, self.height - self.title_h + 2.2 * mm, 1.1, 3.6 * mm, fill=1, stroke=0)
         c.setFillColor(NAVY)
         c.setFont("Helvetica-Bold", 8.6)
-        c.drawString(3.4 * mm, self.height - 4.6 * mm, esc_rupee(self.title))
-        col_w = (self.width - 4 * mm) / 2
-        y = self.height - 8.6 * mm
+        c.drawString(3.4 * mm, self.height - self.title_h + 3.2 * mm, esc_rupee(self.title))
+        y = self.height - self.title_h
         for row in self.rows:
             x = 0.0
             for label, span in row:
-                w = col_w * span + (4 * mm if span == 2 else 0)
+                w = unit * span + gap * (span - 1)
                 c.setFillColor(MUTED)
-                c.setFont("Helvetica-Bold", 6.6)
-                c.drawString(x + 0.6, y - 2.6 * mm, esc_rupee(label).upper())
+                c.setFont("Helvetica-Bold", 6.4)
+                c.drawString(x + 0.6, y - self.label_h + 0.9 * mm, esc_rupee(label).upper())
                 c.setStrokeColor(FIELD_LINE)
                 c.setFillColor(colors.white)
                 c.setLineWidth(0.8)
-                c.roundRect(x, y - 3.6 * mm - self.BOX_H, w, self.BOX_H, 1.6, fill=1, stroke=1)
-                x += col_w + 4 * mm
-            y -= 3.6 * mm + self.BOX_H + self.ROW_GAP
+                c.roundRect(x, y - self.label_h - self.box_h, w, self.box_h, 1.6, fill=1, stroke=1)
+                x += w + gap
+            y -= self.label_h + self.box_h + self.row_gap
 
 
 def callout(text: str, width: float):
@@ -510,7 +525,7 @@ class NumberedCanvas(rl_canvas.Canvas):
 
 
 # ── document builder ──────────────────────────────────────────────────────
-def build_pdf(path, title, sections, subtitle=None, closing=True):
+def build_pdf(path, title, sections, subtitle=None, closing=True, columns=1):
     """sections: list of dicts —
          {"title", "note"?, "items": [...]}                  checklist block
          {"title", "note"?, "form": [(group_title, [(label, span)...])]}   fill-in boxes
@@ -519,6 +534,13 @@ def build_pdf(path, title, sections, subtitle=None, closing=True):
     subtitle = subtitle or "Document checklist. Please arrange copies of the items that apply to you."
     story = []
     kinds = set()
+    two = columns == 2
+    GAP = 6 * mm
+    col_w = (CONTENT_W - GAP) / 2 if two else CONTENT_W
+    if two:  # tighter type so a whole list fits on one page
+        RichItem.SIZE, RichItem.LEAD, RichItem.VPAD = 8.0, 12.2, 1.0
+    else:
+        RichItem.SIZE, RichItem.LEAD, RichItem.VPAD = 8.8, 14.0, 1.5
 
     def item_flowables(items):
         out = []
@@ -532,38 +554,52 @@ def build_pdf(path, title, sections, subtitle=None, closing=True):
             out.append(it)
         return out
 
+    has_form = two and any("form" in sec for sec in sections)
+    closing_box = None
+    if closing:
+        closing_box = callout(
+            "<b>Send clear photos or scans of the documents that apply to you on WhatsApp, sorted by "
+            "category.</b> This is an indicative list — exact requirements can vary by lender and profile, "
+            f"and our team will confirm before login. Questions? Call {PHONE} or write to {EMAIL}.",
+            col_w,
+        )
+
     for sec in sections:
+        if has_form and "form" in sec and closing_box is not None:
+            story.append(closing_box)
+            closing_box = None
         if "callout" in sec:
-            story.append(callout(sec["callout"], CONTENT_W))
+            story.append(callout(sec["callout"], col_w))
             story.append(Spacer(1, 3 * mm))
             continue
         head = [SectionBar(sec["title"], sec.get("note")), Spacer(1, 1.2 * mm)]
         if "form" in sec:
+            if two:  # fill-in forms get a fresh full-width page
+                story.append(NextPageTemplate("single"))
+                story.append(PageBreak())
             story.append(CondPageBreak(34 * mm))
             story.extend(head)
+            compact = sec.get("cols", 2) == 3
             for gtitle, fields in sec["form"]:
-                story.append(CondPageBreak(60 * mm))
-                story.append(FormGroup(gtitle, fields))
+                story.append(CondPageBreak(30 * mm if compact else 60 * mm))
+                if compact:
+                    story.append(FormGroup(gtitle, fields, cols=3, box_h=5.0 * mm, label_h=2.8 * mm,
+                                           row_gap=1.2 * mm, title_h=5.8 * mm))
+                else:
+                    story.append(FormGroup(gtitle, fields))
         else:
             flows = item_flowables(sec["items"])
-            if len(flows) <= 9:  # short section: never split it across pages
+            if len(flows) <= (7 if two else 9):  # short section: never split it across a page/column
                 story.append(KeepTogether(head + flows))
             else:
                 story.append(CondPageBreak(34 * mm))
                 story.extend(head + flows)
-        story.append(Spacer(1, 3.4 * mm))
+        story.append(Spacer(1, 2.6 * mm if two else 3.4 * mm))
 
-    if closing:
+    if closing_box is not None:
         story.append(CondPageBreak(30 * mm))
         story.append(Spacer(1, 1 * mm))
-        story.append(
-            callout(
-                "<b>Send clear photos or scans of the documents that apply to you on WhatsApp, sorted by "
-                "category.</b> This is an indicative list — exact requirements can vary by lender and profile, "
-                f"and our team will confirm before login. Questions? Call {PHONE} or write to {EMAIL}.",
-                CONTENT_W,
-            )
-        )
+        story.append(closing_box)
 
     meta = {"title": title, "subtitle": subtitle, "kinds": kinds}
     first_top = 58 * mm if (kinds & {"num", "if", "req"}) else 52 * mm
@@ -574,20 +610,28 @@ def build_pdf(path, title, sections, subtitle=None, closing=True):
         author="Growth Capital Services",
         subject="Document checklist",
     )
-    first = Frame(
-        CONTENT_X, 16 * mm, CONTENT_W, PAGE_H - first_top - 16 * mm,
-        leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0, id="first",
-    )
-    later = Frame(
-        CONTENT_X, 16 * mm, CONTENT_W, PAGE_H - 22 * mm - 16 * mm,
-        leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0, id="later",
-    )
-    doc.addPageTemplates(
-        [
-            PageTemplate(id="first", frames=[first], onPage=lambda c, d: draw_first_header(c, meta),
-                         autoNextPageTemplate="later"),
-            PageTemplate(id="later", frames=[later], onPage=lambda c, d: draw_later_header(c, meta)),
-        ]
-    )
+    bottom = 16 * mm
+    top_later = 22 * mm
+
+    def frames(top, ident):
+        if two:
+            h = PAGE_H - top - bottom
+            return [
+                Frame(CONTENT_X, bottom, col_w, h, leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0, id=f"{ident}L"),
+                Frame(CONTENT_X + col_w + GAP, bottom, col_w, h, leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0, id=f"{ident}R"),
+            ]
+        return [Frame(CONTENT_X, bottom, CONTENT_W, PAGE_H - top - bottom, leftPadding=0, rightPadding=0,
+                      topPadding=0, bottomPadding=0, id=ident)]
+
+    templates = [
+        PageTemplate(id="first", frames=frames(first_top, "f"), onPage=lambda c, d: draw_first_header(c, meta),
+                     autoNextPageTemplate="later"),
+        PageTemplate(id="later", frames=frames(top_later, "l"), onPage=lambda c, d: draw_later_header(c, meta)),
+    ]
+    if two:
+        single = [Frame(CONTENT_X, bottom, CONTENT_W, PAGE_H - 19 * mm - bottom, leftPadding=0, rightPadding=0,
+                        topPadding=0, bottomPadding=0, id="s")]
+        templates.append(PageTemplate(id="single", frames=single, onPage=lambda c, d: draw_later_header(c, meta)))
+    doc.addPageTemplates(templates)
     doc.build(story, canvasmaker=NumberedCanvas)
     return meta

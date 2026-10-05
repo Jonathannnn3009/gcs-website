@@ -15,3 +15,6 @@ Important details inside an item are boxed automatically — numbers/periods ("4
 conditions ("if applicable", "in case of ..."), "(require ...)" proofs, and form names
 (Form 16, GSTR 3B). Item prefixes: `!` bold, `*` note, `-` bullet, `## ` sub-heading,
 `[[Tag]]` a coloured tag at the start.
+
+The loan lists use two columns so each one fits a single page; the Education Loan list adds one
+separate page for its fill-in Customer Details Sheet.
