@@ -348,6 +348,11 @@ class SectionBar(Flowable):
         self.tsize = 8.0
         while spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7) > avail and self.tsize > 6.6:
             self.tsize -= 0.2
+        # if the title still crowds the DETAILS label, leave the label off rather than overlap it
+        self.show_details = bool(self.details_w) and spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7) <= avail
+        if not self.show_details and self.details_w:
+            while spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7) > aw and self.tsize > 6.0:
+                self.tsize -= 0.2
         self.height = 6.6 * mm
         return aw, self.height
 
@@ -363,7 +368,7 @@ class SectionBar(Flowable):
         c.drawText(t)
         used = spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7)
         if self.note:
-            room = self.width - (self.details_w + 2 * mm if self.details_w else 0) - used - 4 * mm
+            room = self.width - (self.details_w + 2 * mm if (self.details_w and self.show_details) else 0) - used - 4 * mm
             note = esc_rupee(self.note)
             size = 7.0
             while stringWidth(note, "Helvetica", size) > room and size > 5.8:
@@ -372,7 +377,7 @@ class SectionBar(Flowable):
                 c.setFillColor(FAINT)
                 c.setFont("Helvetica", size)
                 c.drawString(used + 4 * mm, base, note)
-        if self.details_w:
+        if self.details_w and self.show_details:
             c.setFillColor(FAINT)
             c.setFont("Helvetica-Bold", 6.4)
             t2 = c.beginText(self.width - self.details_w, base)

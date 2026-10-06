@@ -265,10 +265,10 @@ EDUCATION_LOAN = dict(
                 "Passport size photo",
             ],
         },
-        employment_income(4, title="Co-Applicant Income — Salaried", note="For salaried persons"),
+        employment_income(4, title="Co-Applicant — Salaried Income", note="For salaried persons"),
         self_employed_income(
             gstr=False,
-            title="Co-Applicant Income — Self-Employed",
+            title="Co-Applicant — Self-Employed",
             note="For businessman / self-employed",
         ),
         BUSINESS_PROOF,
