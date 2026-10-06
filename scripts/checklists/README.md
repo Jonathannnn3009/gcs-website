@@ -23,4 +23,4 @@ Details become thin outlined tags: periods (gold), "If ..." conditions (grey), "
 A section whose items have no details just shows the Document column.
 
 Lists use one full-width column when they fit a page that way, otherwise two columns (and a
-slightly smaller type size if needed). Education Loan adds a separate one-page details sheet.
+slightly smaller type size if needed).

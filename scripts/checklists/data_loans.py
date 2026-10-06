@@ -230,16 +230,6 @@ CAR_LOAN = dict(
     ],
 )
 
-# The Word file's own "Customer Details sheet for Education Loan" (3-column grid)
-_PERSON_FIELDS = [
-    ("Name", 2), ("Contact number (Indian & abroad, if any)", 1),
-    ("Current address", 3), ("Permanent address", 3),
-    ("Years at current address", 1), ("Personal email ID", 1), ("Qualification", 1),
-    ("Designation", 1), ("Office name", 1), ("Office email ID", 1),
-    ("Office address", 3),
-    ("Total years of working experience", 1.5), ("Current company work experience", 1.5),
-]
-
 EDUCATION_LOAN = dict(
     title="Education Loan",
     sections=[
@@ -278,34 +268,7 @@ EDUCATION_LOAN = dict(
             "items": PROPERTY_MORTGAGE_ITEMS,
         },
         {
-            "callout": "<b>Note:</b> we may ask for some more documents after the credit review. "
-            "Please also fill in the Customer Details Sheet on the next page."
-        },
-        {
-            "title": "Customer Details Sheet — Education Loan",
-            "note": "Fill in and send back with your documents",
-            "cols": 3,
-            "form": [
-                ("Student", [
-                    ("Student's name", 2), ("Contact no.", 1),
-                    ("Email ID", 2), ("Years at current address", 1),
-                    ("Current address", 3), ("Permanent address", 3),
-                ]),
-                ("Father  (Mr.)", _PERSON_FIELDS),
-                ("Mother  (Mrs.)", _PERSON_FIELDS),
-                ("Grandmothers", [
-                    ("Grandmother's name (father's mother)", 1.5),
-                    ("Grandmother's name (mother's mother)", 1.5),
-                ]),
-                ("Student Friends — Reference (Two)", [
-                    ("1) Name", 1), ("Contact no.", 1), ("Address", 1),
-                    ("2) Name", 1), ("Contact no.", 1), ("Address", 1),
-                ]),
-                ("Loan Details", [
-                    ("Loan amount (Lakh / Cr)", 1), ("Course name", 1), ("Course duration", 1),
-                    ("Course start date", 1), ("University name", 1), ("Country", 1),
-                ]),
-            ],
+            "callout": "<b>Note:</b> we may ask for some more documents after the credit review."
         },
     ],
 )
