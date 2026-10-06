@@ -7,7 +7,7 @@ function LogoItem({ bank }: { bank: BankPartner }) {
       src={bank.logo}
       alt={bank.name}
       title={bank.name}
-      className="h-9 w-auto shrink-0 object-contain sm:h-11"
+      className={`w-auto shrink-0 object-contain ${bank.small ? "h-5 sm:h-6" : "h-9 sm:h-11"}`}
     />
   );
 }

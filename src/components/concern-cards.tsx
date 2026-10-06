@@ -49,9 +49,9 @@ export function ConcernCards() {
                 </span>
 
                 {/* Back */}
-                <span className="absolute inset-0 flex rotate-y-180 flex-col justify-center rounded-2xl border border-gold/40 bg-gradient-to-br from-gold-pale via-white to-gold-pale/60 p-6 backface-hidden">
-                  <CheckCircle2 className="h-7 w-7 text-gold-dark" />
-                  <span className="mt-3 text-[15px] leading-relaxed text-ink dark:text-white">{p.answer}</span>
+                <span className="absolute inset-0 flex rotate-y-180 flex-col justify-center rounded-2xl border border-gold/50 bg-navy p-6 shadow-[var(--shadow-card)] backface-hidden">
+                  <CheckCircle2 className="h-7 w-7 text-gold" />
+                  <span className="mt-3 text-[15px] leading-relaxed font-medium text-white">{p.answer}</span>
                 </span>
               </span>
             </button>

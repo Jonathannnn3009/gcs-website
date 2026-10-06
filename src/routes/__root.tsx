@@ -16,6 +16,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { ScrollProgress } from "@/components/scroll-progress";
+import { PromoPopup } from "@/components/promo-popup";
 
 function NotFoundComponent() {
   return (
@@ -112,7 +113,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "twitter:card", content: "summary_large_image" },
         { name: "robots", content: "index, follow" },
         { name: "theme-color", content: "#F7F8FA" },
-        { name: "color-scheme", content: "light dark" },
+        { name: "color-scheme", content: "light" },
       ],
       links: [
         {
@@ -168,6 +169,7 @@ function RootComponent() {
         </main>
         <SiteFooter />
         <WhatsAppButton />
+        <PromoPopup />
       </div>
     </QueryClientProvider>
   );

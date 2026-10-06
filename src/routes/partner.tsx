@@ -113,6 +113,44 @@ const STEPS: { icon: LucideIcon; title: string; body: string }[] = [
   },
 ];
 
+// Mirrors backend/prisma/seed.ts RATE_CARDS in the CRM (served publicly at
+// /crm/api/public/commission-structure once the site is wired to the CRM) —
+// kept as static data here until that connection goes live.
+const COMMISSION_STRUCTURE = [
+  { product: "Home Loan", range: "0.2% – 0.5%", avgAmount: "₹30L – ₹1Cr", earning: "₹6,000 – ₹50,000" },
+  {
+    product: "Loan Against Property",
+    range: "0.5% – 1.0%",
+    avgAmount: "₹20L – ₹75L",
+    earning: "₹10,000 – ₹75,000",
+  },
+  {
+    product: "Business Loan",
+    range: "1.0% – 2.0%",
+    avgAmount: "₹10L – ₹50L",
+    earning: "₹10,000 – ₹1,00,000",
+  },
+  { product: "Personal Loan", range: "1.0% – 2.5%", avgAmount: "₹2L – ₹25L", earning: "₹2,000 – ₹62,500" },
+  {
+    product: "Working Capital Loan",
+    range: "0.5% – 1.5%",
+    avgAmount: "₹10L – ₹1Cr",
+    earning: "₹5,000 – ₹1,50,000",
+  },
+  {
+    product: "Loan Against Securities",
+    range: "0.3% – 0.8%",
+    avgAmount: "₹10L – ₹5Cr",
+    earning: "₹3,000 – ₹4,00,000",
+  },
+  {
+    product: "Project Funding",
+    range: "0.5% – 1.0%",
+    avgAmount: "₹50L – ₹10Cr",
+    earning: "₹25,000 – ₹10,00,000",
+  },
+];
+
 const BENEFITS = [
   {
     icon: Wallet,
@@ -605,6 +643,46 @@ function PartnerPage() {
             </Reveal>
           ))}
         </div>
+      </Section>
+
+      {/* Commission structure — the concrete numbers behind "uncapped earnings" */}
+      <Section className="pt-0">
+        <Reveal>
+          <SectionHeading
+            eyebrow="What You Earn"
+            title="Referral commission by loan type."
+            description="Indicative earning per successful referral — actual payout depends on the lender, loan amount and your partner tier."
+          />
+        </Reveal>
+        <Reveal delay={80}>
+          <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-card)]">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[640px] text-left text-sm">
+                <thead className="bg-bg-light/70 text-[11px] font-bold tracking-wide text-navy uppercase">
+                  <tr>
+                    <th className="px-6 py-4">Loan Product</th>
+                    <th className="px-6 py-4">Commission Range</th>
+                    <th className="px-6 py-4">Avg. Loan Amount</th>
+                    <th className="px-6 py-4">Potential Earning / Deal</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {COMMISSION_STRUCTURE.map((row) => (
+                    <tr key={row.product} className="transition-colors hover:bg-bg-light/50">
+                      <td className="px-6 py-4 font-bold text-navy">{row.product}</td>
+                      <td className="px-6 py-4 text-muted-foreground">{row.range}</td>
+                      <td className="px-6 py-4 text-muted-foreground">{row.avgAmount}</td>
+                      <td className="px-6 py-4 font-bold text-gold-dark">{row.earning}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground italic">
+            Commission rates may vary based on lender, loan amount and partner tier.
+          </p>
+        </Reveal>
       </Section>
 
       {/* Reasons to partner — accordion beside an image */}

@@ -129,7 +129,15 @@ export function SiteFooter() {
               </li>
               <li className="flex gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                <span className="text-muted-foreground">{CONTACT.address}</span>
+                <a
+                  href={CONTACT.mapsLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open our address in Google Maps"
+                  className="text-ink/80 transition-colors hover:text-gold dark:text-white"
+                >
+                  {CONTACT.address}
+                </a>
               </li>
               <li className="flex gap-3">
                 <Clock className="mt-0.5 h-4 w-4 shrink-0 text-gold" />

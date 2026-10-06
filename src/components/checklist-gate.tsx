@@ -48,7 +48,7 @@ export function ChecklistGate({
   pdfHrefByCategory?: Record<string, string>;
   productTitle: string;
   categories?: string[];
-  /** Set when the user already picked their category elsewhere on the page (e.g. a profile card) — opens the form straight away with that category locked in. */
+  /** Set when the user already picked their category elsewhere on the page (e.g. a profile card) — locks that category in. */
   presetCategory?: string | null;
   /** "dark" for a navy panel background (loan pages), "light" for a white card background (CA & Legal pages). */
   theme?: "dark" | "light";
@@ -58,7 +58,6 @@ export function ChecklistGate({
   const uid = useId();
   const t = THEMES[theme];
   const [unlocked, setUnlocked] = useState(false);
-  const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [category, setCategory] = useState("");
@@ -69,7 +68,6 @@ export function ChecklistGate({
   useEffect(() => {
     if (presetCategory) {
       setCategory(presetCategory);
-      setOpen(true);
     }
   }, [presetCategory]);
 
@@ -112,14 +110,6 @@ export function ChecklistGate({
       <a href={resolvedHref} download className={t.unlockedLink}>
         <Download className="h-4 w-4" /> Download Now
       </a>
-    );
-  }
-
-  if (!open) {
-    return (
-      <button type="button" onClick={() => setOpen(true)} className={t.trigger}>
-        <Download className="h-4 w-4" /> Download Checklist (PDF)
-      </button>
     );
   }
 

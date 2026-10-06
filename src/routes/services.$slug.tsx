@@ -6,12 +6,10 @@ import {
   FileCheck2,
   FileText,
   Landmark,
-  Mail,
-  MessageCircle,
-  Phone,
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
+import { LeadForm } from "@/components/lead-form";
 import { ChecklistGate } from "@/components/checklist-gate";
 import { PRODUCTS, getProduct } from "@/data/products";
 import { CONTACT, waLink } from "@/data/site";
@@ -393,85 +391,7 @@ function ProductDetailPage() {
 
           {/* RIGHT: sticky apply card */}
           <Reveal animate={false} delay={100} className="lg:sticky lg:top-28">
-            <div className="rounded-2xl border border-gold/15 panel-light p-7">
-              <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-                Start Your File
-              </p>
-              <h3 className="mt-3 font-heading text-2xl font-bold text-navy dark:text-white">
-                Apply for <span className="italic text-gold-dark">{product.title}.</span>
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                A senior advisor will call back within one business day with an indicative offer.
-              </p>
-
-              <div className="mt-6 space-y-3">
-                <a
-                  href={CONTACT.phoneHref}
-                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40 dark:bg-card"
-                >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
-                    <Phone className="h-4 w-4" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-                      Call Us
-                    </span>
-                    <span className="block truncate text-sm font-bold text-navy dark:text-white">
-                      {CONTACT.phone}
-                    </span>
-                  </span>
-                  <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
-                </a>
-                <a
-                  href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40 dark:bg-card"
-                >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
-                    <MessageCircle className="h-4 w-4" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-                      WhatsApp
-                    </span>
-                    <span className="block truncate text-sm font-bold text-navy dark:text-white">
-                      Message us now
-                    </span>
-                  </span>
-                  <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
-                </a>
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="group flex items-center gap-3 rounded-xl border border-border bg-white p-3.5 transition-colors hover:border-gold/40 dark:bg-card"
-                >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
-                    <Mail className="h-4 w-4" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-                      Email
-                    </span>
-                    <span className="block truncate text-sm font-bold text-navy dark:text-white">
-                      {CONTACT.email}
-                    </span>
-                  </span>
-                  <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
-                </a>
-              </div>
-
-              <Link
-                to="/contact"
-                className="mt-4 flex items-center justify-center rounded-xl bg-navy py-3.5 text-sm font-bold text-white transition-colors hover:bg-navy-soft"
-              >
-                Full application form <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-              <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-                <span>✓ Confidential</span>
-                <span>✓ No upfront fees</span>
-                <span>✓ 24-hr callback</span>
-              </div>
-            </div>
+            <LeadForm defaultLoanType={product.title} />
           </Reveal>
         </div>
       </Section>

@@ -45,7 +45,7 @@ const PILLARS = [
   {
     icon: Compass,
     title: "End-to-End Guidance",
-    body: "From choosing the right product to legal, insurance and post-disbursal support.",
+    body: "Our own case-management CRM tracks every file from lead to disbursal, so nothing falls through the cracks.",
   },
   {
     icon: Sparkles,
@@ -61,6 +61,7 @@ const ADVANTAGES = [
   "Complex profiles handled that banks return",
   "Written savings comparison before you commit",
   "Single point of contact for the full lifecycle",
+  "In-house CRM tracks your file end-to-end, from lead to disbursal",
 ];
 
 function WhyUsPage() {

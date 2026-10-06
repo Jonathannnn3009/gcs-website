@@ -7,6 +7,7 @@ import {
   Building2,
   Globe,
   Landmark,
+  LayoutDashboard,
   Phone,
   Quote,
   ShieldCheck,
@@ -67,6 +68,7 @@ const TRUST = [
   { icon: Sparkles, label: "Custom-built Loans" },
   { icon: BadgeCheck, label: "Zero Advisory Fee" },
   { icon: Globe, label: "PAN India Service" },
+  { icon: LayoutDashboard, label: "In-House CRM Tracking" },
 ];
 
 /** Each persona pairs one "who we help" story with one "why us" differentiator. */

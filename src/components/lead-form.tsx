@@ -80,9 +80,14 @@ function formatIndianAmount(raw: string) {
   return digits ? Number(digits).toLocaleString("en-IN") : "";
 }
 
-export function LeadForm() {
+export function LeadForm({ defaultLoanType = "" }: { defaultLoanType?: string } = {}) {
   const uid = useId();
-  const [values, setValues] = useState<Fields>(empty);
+  // Only pre-select a loan type the dropdown actually offers.
+  const initial: Fields = {
+    ...empty,
+    loanType: SERVICES.some((s) => s.title === defaultLoanType) ? defaultLoanType : "",
+  };
+  const [values, setValues] = useState<Fields>(initial);
   const [errors, setErrors] = useState<Partial<Fields>>({});
   const [showToast, setShowToast] = useState(false);
 
@@ -125,7 +130,7 @@ export function LeadForm() {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    setValues(empty);
+    setValues(initial);
     setErrors({});
     setShowToast(true);
   };

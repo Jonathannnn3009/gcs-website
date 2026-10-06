@@ -15,6 +15,12 @@ export const CONTACT = {
   email: "growthcs17@gmail.com",
   address:
     "CCTV Towers, Andheri-Ghatkopar Rd, Bhatwadi, Kaju Pada, Barve Nagar, Ghatkopar West, Mumbai 400084",
+  // Opens Google Maps (or the Maps app on a phone) searching for the office address.
+  mapsLink:
+    "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent(
+      "CCTV Towers, Andheri-Ghatkopar Rd, Bhatwadi, Kaju Pada, Barve Nagar, Ghatkopar West, Mumbai 400084",
+    ),
   hours: "Monday to Saturday · 10:00 AM – 6:00 PM",
   cities: ["Mumbai", "Thane", "Navi Mumbai", "Pune"],
 };
@@ -161,46 +167,29 @@ export type BankPartner = {
   name: string;
   /** Path under /public; omitted when no usable logo exists (a monogram is shown). */
   logo?: string;
+  /** Very wide logos (long wordmarks) are shown shorter so they do not dominate the strip. */
+  small?: boolean;
 };
 
+// The lenders shown in the homepage marquee. Mirrors the list on vivacapital.in
+// (logos copied from there into /banks/viva), plus IDFC First Bank, Bajaj
+// Finserv, IndusInd Bank, State Bank of India and Bank of Baroda.
+// Other lenders we work with are not shown here.
 export const BANK_PARTNERS: BankPartner[] = [
-  { name: "HDFC Bank", logo: "/banks/hdfc-bank.svg" },
-  { name: "ICICI Bank", logo: "/banks/icici-bank.png" },
-  { name: "SBI", logo: "/banks/sbi.svg" },
-  { name: "Axis Bank", logo: "/banks/axis-bank.svg" },
-  { name: "Bank of India", logo: "/banks/bank-of-india.png" },
-  { name: "Kotak Mahindra", logo: "/banks/kotak-mahindra.svg" },
-  { name: "Yes Bank", logo: "/banks/yes-bank.svg" },
-  { name: "Bajaj Finserv", logo: "/banks/bajaj-finserv.svg" },
-  { name: "Tata Capital", logo: "/banks/tata-capital.jpg" },
-  { name: "Standard Chartered", logo: "/banks/standard-chartered.png" },
-  { name: "HSBC", logo: "/banks/hsbc.png" },
-  { name: "IDBI Bank", logo: "/banks/idbi-bank.svg" },
+  { name: "HDFC Bank", logo: "/banks/viva/hdfc.svg" },
+  { name: "ICICI Bank", logo: "/banks/viva/icici.svg" },
+  { name: "Axis Bank", logo: "/banks/viva/axis.svg" },
+  { name: "Kotak Mahindra Bank", logo: "/banks/viva/kotak.svg" },
+  { name: "Yes Bank", logo: "/banks/viva/yes.svg" },
   { name: "IDFC First Bank", logo: "/banks/idfc-first-bank.svg" },
-  { name: "PNB Housing", logo: "/banks/pnb-housing.png" },
-  { name: "Federal Bank", logo: "/banks/federal-bank.svg" },
-  { name: "Union Bank", logo: "/banks/union-bank.svg" },
-  { name: "Aditya Birla Capital", logo: "/banks/aditya-birla-capital-new.png" },
-  { name: "Bandhan Bank", logo: "/banks/bandhan-bank.svg" },
+  { name: "IndusInd Bank", logo: "/banks/indusind-bank-new.svg", small: true },
+  { name: "Standard Chartered", logo: "/banks/viva/standard-chartered.svg" },
+  { name: "Tata Capital", logo: "/banks/viva/tata-capital.jpg" },
+  { name: "Aditya Birla Capital", logo: "/banks/viva/aditya-birla.svg" },
+  { name: "Godrej Capital", logo: "/banks/viva/godrej.png" },
+  { name: "State Bank of India", logo: "/banks/sbi.svg" },
+  { name: "Bajaj Finserv", logo: "/banks/bajaj-finserv.svg" },
   { name: "Bank of Baroda", logo: "/banks/bank-of-baroda.svg" },
-  { name: "AU Small Finance", logo: "/banks/au-small-finance.png" },
-  { name: "Axis Finance", logo: "/banks/axis-finance.svg" },
-  { name: "Bajaj Housing", logo: "/banks/bajaj-housing.svg" },
-  { name: "Cholamandalam", logo: "/banks/cholamandalam-new.svg" },
-  { name: "Deutsche Bank", logo: "/banks/deutsche-bank.png" },
-  { name: "DCB Bank", logo: "/banks/dcb-bank.svg" },
-  { name: "Godrej Capital", logo: "/banks/godrej-capital-new.svg" },
-  { name: "HDFC Sales", logo: "/banks/hdfc-sales.svg" },
-  { name: "Hero FinCorp", logo: "/banks/hero-fincorp.svg" },
-  { name: "IndusInd Bank", logo: "/banks/indusind-bank-new.svg" },
-  { name: "LIC HFL", logo: "/banks/lic-hfl.png" },
-  { name: "Mahindra Finance", logo: "/banks/mahindra-finance-new.svg" },
-  { name: "Piramal Finance", logo: "/banks/piramal-finance-new.svg" },
-  { name: "Poonawalla Fincorp", logo: "/banks/poonawalla-fincorp.png" },
-  { name: "SBI Home Loans", logo: "/banks/sbi-home-loans.svg" },
-  { name: "Shriram Finance", logo: "/banks/shriram-finance.svg" },
-  { name: "Central Bank of India", logo: "/banks/central-bank-of-india.svg" },
-  { name: "Aadhar Housing", logo: "/banks/aadhar-housing.png" },
 ];
 
 export const BANK_NAMES = BANK_PARTNERS.map((b) => b.name);

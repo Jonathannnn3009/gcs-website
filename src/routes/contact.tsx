@@ -174,7 +174,15 @@ function ContactPage() {
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
                     Address
                   </p>
-                  <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">{CONTACT.address}</p>
+                  <a
+                    href={CONTACT.mapsLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open our address in Google Maps"
+                    className="mt-0.5 block text-sm font-semibold text-navy transition-colors hover:text-gold-dark dark:text-white"
+                  >
+                    {CONTACT.address}
+                  </a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
