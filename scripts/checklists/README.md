@@ -9,12 +9,18 @@ forms hand out).
 
 - `data_loans.py`    — loan checklist content (the Word files' wording) and which products share a list
 - `data_ca_legal.py` — CA & legal service checklists
-- `render.py`        — the look: header, section bars, checkboxes, highlight boxes, fill-in forms
+- `render.py`        — the look: a small table per section (Document | Details)
+- `build.py`         — picks the roomiest layout that still fits one page
 
-Important details inside an item are boxed automatically — numbers/periods ("4 months"),
-conditions ("if applicable", "in case of ..."), "(require ...)" proofs, and form names
-(Form 16, GSTR 3B). Item prefixes: `!` bold, `*` note, `-` bullet, `## ` sub-heading,
-`[[Tag]]` a coloured tag at the start.
+Each section is a table. Put an item's specifics in the Details column with ` || `:
 
-The loan lists use two columns so each one fits a single page; the Education Loan list adds one
-separate page for its fill-in Customer Details Sheet.
+    "Salary slips || Latest 4 months"
+    "ITR || Last 2 years | If income is taxable"
+    "Shop Act licence, GST certificate || tag:Proprietor"
+
+Details become thin outlined tags: periods (gold), "If ..." conditions (grey), "... required"
+(navy), `tag:` (gold). Item prefixes: `!` bold, `*` note, `-` bullet, `## ` sub-heading.
+A section whose items have no details just shows the Document column.
+
+Lists use one full-width column when they fit a page that way, otherwise two columns (and a
+slightly smaller type size if needed). Education Loan adds a separate one-page details sheet.

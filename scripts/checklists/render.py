@@ -1,12 +1,17 @@
-"""Renderer for the branded document-checklist PDFs — a quiet, minimal look.
+"""Renderer for the branded document-checklist PDFs — a quiet, minimal table.
 
-Items are plain strings. Important details inside them are picked out lightly:
+Each section is a small table:   [ ]  Document  |  Details
 
-  * numbers / periods        "Latest 4 months salary slips"      -> "4 months" in a thin gold-outlined tag
-  * conditions               "(if income is taxable)", "if any"  -> "IF INCOME IS TAXABLE" in a hairline tag
-  * must-have proofs         "(require 3 year continuity proof)" -> navy-outlined tag
-  * form / statement codes   "Form 16", "GSTR 3B", "3CB"         -> bold
-  * "[[Tag]] text"           an explicit small gold tag at the start of an item
+An item is a plain string. Put the specifics in the Details column with " || ":
+
+    "Salary slips || Latest 4 months"
+    "ITR || Last 2 years | If income is taxable"
+    "Shop Act licence, Udyam certificate || tag:Proprietor"
+
+Details are drawn as thin outlined tags: numbers/periods (gold), "If ..." conditions (grey),
+"... required" (navy), and anything with a "tag:" prefix (gold, for business types).
+Anything left in the document text is still picked out inline (e.g. a mid-sentence "(if applicable)",
+form names in bold).
 
 Item prefixes:  "!" bold item, "*" italic note (no checkbox), "-" bullet, "## " sub-heading.
 """
@@ -37,11 +42,11 @@ from reportlab.platypus import (
 NAVY = colors.HexColor("#0B1849")
 NAVY_DEEP = colors.HexColor("#071230")
 GOLD = colors.HexColor("#C8952A")
-GOLD_DARK = colors.HexColor("#8F6A14")
 INK = colors.HexColor("#222936")
 MUTED = colors.HexColor("#6B7280")
 FAINT = colors.HexColor("#9AA1AE")
 HAIR = colors.HexColor("#E4E1D8")
+ROW_LINE = colors.HexColor("#ECE9E0")
 BOX_LINE = colors.HexColor("#8A93A6")
 FIELD_LINE = colors.HexColor("#BFC5D2")
 
@@ -57,13 +62,17 @@ LOGO_RATIO = 545 / 870  # height / width
 
 PHONE = "+91 88280 01700"
 EMAIL = "growthcs17@gmail.com"
+FOOTER_NOTE = (
+    "Send clear photos or scans of the documents that apply to you on WhatsApp. "
+    "Indicative list — our team will confirm before login."
+)
 
-# ── highlight tags ────────────────────────────────────────────────────────
+# ── tags ──────────────────────────────────────────────────────────────────
 CHIP = {
     "num": dict(fill="#FBF5E3", stroke="#DDC27A", color="#071230", scale=1.0, upper=False),
     "if": dict(fill=None, stroke="#AEB6CB", color="#4B5675", scale=0.8, upper=True),
     "req": dict(fill=None, stroke="#0B1849", color="#0B1849", scale=0.8, upper=True),
-    "tag": dict(fill=None, stroke="#C8952A", color="#8F6A14", scale=0.76, upper=True),
+    "tag": dict(fill=None, stroke="#C8952A", color="#8F6A14", scale=0.8, upper=True),
 }
 CHIP_FONT = "Helvetica-Bold"
 
@@ -80,12 +89,8 @@ CHIP_RE = re.compile(
 
 
 def tokenize(text: str):
-    """Split an item string into (kind, text) tokens. Kinds: text, b (bold), num, if, req, tag."""
+    """Split document text into (kind, text) tokens. Kinds: text, b (bold), num, if, req."""
     toks = []
-    m = re.match(r"^\[\[(.+?)\]\]\s*(.*)$", text)
-    if m:
-        toks.append(("tag", m.group(1)))
-        text = m.group(2)
     pos = 0
     for m in CHIP_RE.finditer(text):
         if m.start() > pos:
@@ -106,26 +111,43 @@ def tokenize(text: str):
     return toks
 
 
+def classify_detail(s: str):
+    s = s.strip()
+    if s.lower().startswith("tag:"):
+        return "tag", s[4:].strip()
+    low = s.lower()
+    if low.startswith(("if ", "in case")):
+        return "if", s
+    if "require" in low:
+        return "req", s
+    if re.search(r"\d|month|year", low):
+        return "num", s
+    return "tag", s
+
+
 def esc_rupee(t: str) -> str:
     return t.replace("₹", "Rs.")
 
 
-# ── tag drawing ───────────────────────────────────────────────────────────
-def chip_label(kind: str, text: str) -> str:
+def spaced_width(text, font, size, space):
+    return stringWidth(text, font, size) + space * (len(text) - 1)
+
+
+def chip_label(kind, text):
     return text.upper() if CHIP[kind]["upper"] else text
 
 
-def chip_size(kind: str, size: float) -> float:
+def chip_size(kind, size):
     return size * CHIP[kind]["scale"]
 
 
-def chip_width(kind: str, text: str, size: float) -> float:
+def chip_width(kind, text, size):
     cs = chip_size(kind, size)
     return stringWidth(chip_label(kind, text), CHIP_FONT, cs) + 2 * (0.5 * cs + 1.4)
 
 
 def draw_chip(c, x, base_y, kind, text, size):
-    """Draw a tag whose neighbouring text has baseline `base_y` and size `size`."""
+    """A single-line tag whose neighbouring text has baseline `base_y` and size `size` (inline use)."""
     st = CHIP[kind]
     cs = chip_size(kind, size)
     label = chip_label(kind, text)
@@ -145,22 +167,60 @@ def draw_chip(c, x, base_y, kind, text, size):
     return w
 
 
-def spaced_width(text, font, size, space):
-    return stringWidth(text, font, size) + space * (len(text) - 1)
+def wrap_label(label, font, size, max_w):
+    words, lines, cur = label.split(), [], ""
+    for w in words:
+        trial = (cur + " " + w).strip()
+        if stringWidth(trial, font, size) <= max_w or not cur:
+            cur = trial
+        else:
+            lines.append(cur)
+            cur = w
+    if cur:
+        lines.append(cur)
+    return lines
+
+
+def tag_block(kind, text, size, max_w):
+    """A (possibly multi-line) tag for the Details column -> dict with geometry."""
+    cs = chip_size(kind, size)
+    padx, pady = 0.5 * cs + 1.4, 1.5
+    lines = wrap_label(chip_label(kind, text), CHIP_FONT, cs, max_w - 2 * padx)
+    lead = cs * 1.22
+    w = max(stringWidth(l, CHIP_FONT, cs) for l in lines) + 2 * padx
+    h = len(lines) * lead + 2 * pady
+    return dict(kind=kind, lines=lines, cs=cs, lead=lead, padx=padx, pady=pady, w=w, h=h)
+
+
+def draw_tag_block(c, x, y_top, b):
+    st = CHIP[b["kind"]]
+    c.saveState()
+    c.setLineWidth(0.55)
+    c.setStrokeColor(colors.HexColor(st["stroke"]))
+    if st["fill"]:
+        c.setFillColor(colors.HexColor(st["fill"]))
+    c.roundRect(x, y_top - b["h"], b["w"], b["h"], 1.6, fill=1 if st["fill"] else 0, stroke=1)
+    c.setFillColor(colors.HexColor(st["color"]))
+    c.setFont(CHIP_FONT, b["cs"])
+    ty = y_top - b["pady"] - b["lead"] * 0.78
+    for line in b["lines"]:
+        c.drawString(x + b["padx"], ty, line)
+        ty -= b["lead"]
+    c.restoreState()
 
 
 # ── flowables ─────────────────────────────────────────────────────────────
-class RichItem(Flowable):
-    """One checklist line: small checkbox + text with light inline tags, wrapped to width."""
+class TableRow(Flowable):
+    """One checklist row: small checkbox | document text | details tags, with a hairline beneath."""
 
     SIZE = 8.4
-    LEAD = 12.8
-    VPAD = 1.5
-    INDENT = 5.6 * mm
+    LEAD = 12.6
+    VPAD = 2.0
+    CELL_W = 5.8 * mm
+    TAG_GAP = 1.6
 
-    def __init__(self, raw: str, last: bool = False):
+    def __init__(self, raw: str, details_w: float = 0.0):
         super().__init__()
-        self.last = last
         self.mode = "check"
         text = raw
         if raw.startswith("!"):
@@ -169,18 +229,19 @@ class RichItem(Flowable):
             self.mode, text = "note", raw[1:].strip()
         elif raw.startswith("-"):
             self.mode, text = "bullet", raw[1:].strip()
-        self.text = esc_rupee(text)
-        self.tokens = tokenize(self.text)
-        self.lines = []
+        doc, _, det = esc_rupee(text).partition(" || ")
+        self.tokens = tokenize(doc.strip())
+        self.details = [classify_detail(d) for d in det.split(" | ") if d.strip()]
+        self.details_w = details_w
 
-    def kinds(self):
-        return {k for k, _ in self.tokens if k in CHIP}
+    def has_details(self):
+        return bool(self.details)
 
     def wrap(self, aw, ah):
         size = self.SIZE
         font = "Helvetica-Oblique" if self.mode == "note" else "Helvetica"
         bold = "Helvetica-Bold" if self.mode == "strong" else font
-        max_w = aw - self.INDENT
+        doc_w = aw - self.CELL_W - (self.details_w + 2.4 * mm if self.details_w else 0)
         lines = [[]]
         x = 0.0
         for kind, s in self.tokens:
@@ -196,7 +257,7 @@ class RichItem(Flowable):
                         x += w
                         continue
                     w = stringWidth(piece, f, size)
-                    if x + w > max_w and x > 0:
+                    if x + w > doc_w and x > 0:
                         if lines[-1] and lines[-1][-1][0] == "sp":
                             lines[-1].pop()
                         lines.append([])
@@ -205,24 +266,42 @@ class RichItem(Flowable):
                     x += w
             else:
                 cw = chip_width(kind, s, size)
-                if x + cw > max_w and x > 0:
+                if x + cw > doc_w and x > 0:
                     if lines[-1] and lines[-1][-1][0] == "sp":
                         lines[-1].pop()
                     lines.append([])
                     x = 0.0
-                gap = 3.6 if kind == "tag" else 1.6
                 lines[-1].append(("chip", s, cw, kind))
-                x += cw + gap
-                lines[-1].append(("gap", "", gap, None))
+                x += cw + 1.6
+                lines[-1].append(("gap", "", 1.6, None))
         self.lines = lines
+        self.doc_h = len(lines) * self.LEAD
+        # details column: stacked tags
+        self.blocks = []
+        det_h = 0.0
+        if self.details_w:
+            for kind, s in self.details:
+                b = tag_block(kind, s, size, self.details_w)
+                self.blocks.append(b)
+                det_h += b["h"] + self.TAG_GAP
+            det_h = max(det_h - self.TAG_GAP, 0.0)
+        self.det_h = det_h
         self.width = aw
-        self.height = len(lines) * self.LEAD + 2 * self.VPAD
+        self.height = max(self.doc_h, det_h + (self.LEAD - 9) * 0.0) + 2 * self.VPAD
         return aw, self.height
 
     def draw(self):
         c = self.canv
         size = self.SIZE
-        first_centre = self.height - self.VPAD - self.LEAD / 2
+        h, w = self.height, self.width
+        # hairline under the row and a faint divider before the details column
+        c.setStrokeColor(ROW_LINE)
+        c.setLineWidth(0.6)
+        c.line(0, 0, w, 0)
+        det_x = w - self.details_w if self.details_w else None
+        if det_x is not None:
+            c.line(det_x - 1.6 * mm, 0.0, det_x - 1.6 * mm, h)
+        first_centre = h - self.VPAD - self.LEAD / 2
         if self.mode in ("check", "strong"):
             sz = 2.6 * mm
             c.setStrokeColor(BOX_LINE)
@@ -233,9 +312,9 @@ class RichItem(Flowable):
             c.setFillColor(GOLD)
             c.circle(1.4 * mm, first_centre, 0.9, fill=1, stroke=0)
         for i, line in enumerate(self.lines):
-            centre = self.height - self.VPAD - i * self.LEAD - self.LEAD / 2
+            centre = h - self.VPAD - i * self.LEAD - self.LEAD / 2
             base = centre - 0.34 * size
-            x = self.INDENT
+            x = self.CELL_W
             for part in line:
                 tag = part[0]
                 if tag in ("w", "sp"):
@@ -248,33 +327,33 @@ class RichItem(Flowable):
                 else:
                     draw_chip(c, x, base, part[3], part[1], size)
                     x += part[2]
+        if self.blocks:
+            y_top = h - self.VPAD - (self.LEAD - self.blocks[0]["h"]) / 2 if self.blocks[0]["h"] < self.LEAD else h - self.VPAD
+            for b in self.blocks:
+                draw_tag_block(c, det_x, y_top, b)
+                y_top -= b["h"] + self.TAG_GAP
 
 
 class SectionBar(Flowable):
-    """Small spaced heading with a thin rule (gold lead-in) beneath. The note sits right or underneath."""
+    """Small spaced heading, the section note beside it, a 'DETAILS' column label, and a thin rule."""
 
-    def __init__(self, title: str, note: str | None = None):
+    def __init__(self, title: str, note=None, details_w: float = 0.0):
         super().__init__()
-        self.title, self.note = title, note
+        self.title, self.note, self.details_w = title, note, details_w
 
     def wrap(self, aw, ah):
         self.width = aw
         self.label = esc_rupee(self.title).upper()
+        avail = aw - (self.details_w + 2 * mm if self.details_w else 0)
         self.tsize = 8.0
-        sp = 0.7
-        while spaced_width(self.label, "Helvetica-Bold", self.tsize, sp) > aw and self.tsize > 6.6:
+        while spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7) > avail and self.tsize > 6.6:
             self.tsize -= 0.2
-        self.stacked = False
-        if self.note:
-            tw = spaced_width(self.label, "Helvetica-Bold", self.tsize, sp)
-            nw = stringWidth(esc_rupee(self.note), "Helvetica-Oblique", 7.2)
-            self.stacked = tw + nw + 6 * mm > aw
-        self.height = 9.6 * mm if self.stacked else 6.4 * mm
+        self.height = 6.6 * mm
         return aw, self.height
 
     def draw(self):
         c = self.canv
-        base = self.height - 3.6 * mm
+        base = self.height - 3.8 * mm
         t = c.beginText(0, base)
         t.setFont("Helvetica-Bold", self.tsize)
         t.setFillColor(NAVY)
@@ -282,13 +361,27 @@ class SectionBar(Flowable):
         t.textOut(self.label)
         t.setCharSpace(0)  # otherwise the spacing leaks onto later text
         c.drawText(t)
+        used = spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7)
         if self.note:
+            room = self.width - (self.details_w + 2 * mm if self.details_w else 0) - used - 4 * mm
+            note = esc_rupee(self.note)
+            size = 7.0
+            while stringWidth(note, "Helvetica", size) > room and size > 5.8:
+                size -= 0.2
+            if stringWidth(note, "Helvetica", size) <= room:
+                c.setFillColor(FAINT)
+                c.setFont("Helvetica", size)
+                c.drawString(used + 4 * mm, base, note)
+        if self.details_w:
             c.setFillColor(FAINT)
-            c.setFont("Helvetica-Oblique", 7.2)
-            if self.stacked:
-                c.drawString(0, base - 3.3 * mm, esc_rupee(self.note))
-            else:
-                c.drawRightString(self.width, base, esc_rupee(self.note))
+            c.setFont("Helvetica-Bold", 6.4)
+            t2 = c.beginText(self.width - self.details_w, base)
+            t2.setFont("Helvetica-Bold", 6.4)
+            t2.setFillColor(FAINT)
+            t2.setCharSpace(0.7)
+            t2.textOut("DETAILS")
+            t2.setCharSpace(0)
+            c.drawText(t2)
         c.setStrokeColor(HAIR)
         c.setLineWidth(0.7)
         c.line(0, 0.9 * mm, self.width, 0.9 * mm)
@@ -300,22 +393,23 @@ class SectionBar(Flowable):
 class SectionTable(Flowable):
     """Heading + rows as one block. If it must split, the next part repeats the heading."""
 
-    def __init__(self, title, note, items, cont=False):
+    def __init__(self, title, note, items, details_w, cont=False):
         super().__init__()
         self.title, self.note, self.items, self.cont = title, note, items, cont
-        self.bar = SectionBar(title + ("  (continued)" if cont else ""), None if cont else note)
+        self.details_w = details_w
+        self.bar = SectionBar(title + ("  (continued)" if cont else ""), None if cont else note, details_w)
 
     def wrap(self, aw, ah):
         self.width = aw
         _, bh = self.bar.wrap(aw, ah)
         self.heights = [it.wrap(aw, ah)[1] for it in self.items]
         self.bar_h = bh
-        self.height = bh + 1.2 * mm + sum(self.heights)
+        self.height = bh + sum(self.heights)
         return aw, self.height
 
     def split(self, aw, ah):
         self.wrap(aw, ah)
-        used = self.bar_h + 1.2 * mm
+        used = self.bar_h
         k = 0
         for h in self.heights:
             if used + h > ah:
@@ -327,15 +421,14 @@ class SectionTable(Flowable):
         if len(self.items) - k == 1 and k > 2:  # don't strand a single row on its own
             k -= 1
         return [
-            SectionTable(self.title, self.note, self.items[:k], self.cont),
-            SectionTable(self.title, self.note, self.items[k:], cont=True),
+            SectionTable(self.title, self.note, self.items[:k], self.details_w, self.cont),
+            SectionTable(self.title, self.note, self.items[k:], self.details_w, cont=True),
         ]
 
     def draw(self):
         c = self.canv
         y = self.height - self.bar_h
         self.bar.drawOn(c, 0, y)
-        y -= 1.2 * mm
         for it, h in zip(self.items, self.heights):
             y -= h
             it.drawOn(c, 0, y)
@@ -530,63 +623,41 @@ class NumberedCanvas(rl_canvas.Canvas):
         self.setStrokeColor(HAIR)
         self.setLineWidth(0.6)
         self.line(CONTENT_X, y + 3.6 * mm, CONTENT_X + CONTENT_W, y + 3.6 * mm)
-        self.setFillColor(NAVY)
-        self.setFont("Helvetica-Bold", 7)
-        self.drawString(CONTENT_X, y, "Growth Capital Services")
         self.setFillColor(FAINT)
-        self.setFont("Helvetica", 7)
-        self.drawString(
-            CONTENT_X + stringWidth("Growth Capital Services", "Helvetica-Bold", 7) + 5,
-            y,
-            f"·  {PHONE}  ·  {EMAIL}",
-        )
+        self.setFont("Helvetica", 6.8)
+        self.drawString(CONTENT_X, y, FOOTER_NOTE)
         self.drawRightString(CONTENT_X + CONTENT_W, y, f"{self._pageNumber} / {total}")
 
 
 # ── document builder ──────────────────────────────────────────────────────
-def build_pdf(path, title, sections, subtitle=None, closing=True, columns=1):
+def build_pdf(path, title, sections, subtitle=None, columns=1, size=None):
     """sections: list of dicts —
-         {"title", "note"?, "items": [...]}                  checklist block
+         {"title", "note"?, "items": [...]}                  checklist table
          {"title", "note"?, "form": [(group_title, [(label, span)...])], "cols"?}   fill-in lines
          {"callout": "<b>html</b> text"}                      standalone quiet note
     """
-    subtitle = subtitle or "Document checklist. Please arrange copies of the items that apply to you."
+    subtitle = subtitle or "Document checklist"
     story = []
-    kinds = set()
     two = columns == 2
     GAP = 8 * mm
     col_w = (CONTENT_W - GAP) / 2 if two else CONTENT_W
-    if two:
-        RichItem.SIZE, RichItem.LEAD, RichItem.VPAD = 8.3, 12.6, 1.5
-    else:
-        RichItem.SIZE, RichItem.LEAD, RichItem.VPAD = 8.8, 13.6, 1.8
+    details_w = 30 * mm if two else 52 * mm
+    base = size or (8.0 if two else 8.6)
+    TableRow.SIZE, TableRow.LEAD, TableRow.VPAD = base, base * 1.5, 1.7
 
-    def item_flowables(items):
+    def rows_for(items):
+        has = any(" || " in it for it in items if not it.startswith("## "))
+        dw = details_w if has else 0.0
         out = []
-        for n, raw in enumerate(items):
+        for raw in items:
             if raw.startswith("## "):
                 out.append(CondPageBreak(24 * mm))
                 out.append(SubHead(raw[3:].strip()))
-                continue
-            it = RichItem(raw, last=(n == len(items) - 1))
-            kinds.update(it.kinds())
-            out.append(it)
-        return out
-
-    closing_box = None
-    if closing:
-        closing_box = callout(
-            "<b>Send clear photos or scans of the documents that apply to you on WhatsApp, sorted by "
-            "category.</b> This is an indicative list — exact requirements can vary by lender and profile, "
-            f"and our team will confirm before login. Questions? Call {PHONE} or write to {EMAIL}.",
-            col_w,
-        )
-    has_form = two and any("form" in sec for sec in sections)
+            else:
+                out.append(TableRow(raw, dw))
+        return out, dw
 
     for sec in sections:
-        if has_form and "form" in sec and closing_box is not None:
-            story.append(closing_box)
-            closing_box = None
         if "callout" in sec:
             story.append(callout(sec["callout"], col_w))
             story.append(Spacer(1, 3 * mm))
@@ -607,22 +678,17 @@ def build_pdf(path, title, sections, subtitle=None, closing=True, columns=1):
                 else:
                     story.append(FormGroup(gtitle, fields))
         else:
-            flows = item_flowables(sec["items"])
-            table = SectionTable(sec["title"], sec.get("note"), flows)
+            flows, dw = rows_for(sec["items"])
+            table = SectionTable(sec["title"], sec.get("note"), flows, dw)
             if len(flows) <= (7 if two else 9):  # short section: keep it whole
                 story.append(KeepTogether([table]))
             else:
                 story.append(CondPageBreak(34 * mm))
                 story.append(table)
-        story.append(Spacer(1, 4.0 * mm if two else 4.6 * mm))
+        story.append(Spacer(1, 4.2 * mm if two else 5.0 * mm))
 
-    if closing_box is not None:
-        story.append(CondPageBreak(30 * mm))
-        story.append(Spacer(1, 1 * mm))
-        story.append(closing_box)
-
-    meta = {"title": title, "subtitle": subtitle, "kinds": kinds}
-    first_top = 50 * mm
+    meta = {"title": title, "subtitle": subtitle}
+    first_top = 53 * mm
     doc = BaseDocTemplate(
         path,
         pagesize=A4,

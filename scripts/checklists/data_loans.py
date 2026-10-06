@@ -3,6 +3,8 @@
 The eight families built from the Word files in the project root use their full
 wording (typos fixed: Aadhar -> Aadhaar, Reliving -> Relieving). The other loan
 products reuse the same shared blocks so every list says the same thing.
+
+Item syntax:  "Document text || Detail | Detail"   (see render.py)
 """
 
 # ── shared blocks (taken from the Word files) ─────────────────────────────
@@ -12,7 +14,7 @@ KYC_INDIVIDUAL = {
     "items": [
         "Photo ID — PAN card, Aadhaar card & Passport",
         "Address proof — Electricity bill, Rent agreement (if applicable), Telephone bill, Passport",
-        "Permanent address proof, if current residence address is different",
+        "Permanent address proof || If current residence address is different",
         "Passport size photograph",
     ],
 }
@@ -24,10 +26,17 @@ KYC_BUSINESS = {
         "Photo ID — PAN card & Aadhaar card",
         "Address proof, residence & office — Latest electricity bill (if rented — rent agreement), "
         "Telephone bill, Passport (if available)",
-        "Permanent address proof, if current residence address is different",
+        "Permanent address proof || If current residence address is different",
         "Passport size photograph",
     ],
 }
+
+EMPLOYMENT_PROOF = (
+    "Employment proof — Company ID / Offer letter / Appointment letter / Increment letter & "
+    "previous company relieving letter, if any || 3 year continuity proof required"
+)
+RENT_ITEM = "!Other rent income — rent agreement along with rent reflection in bank statements || If any"
+LOAN_ITEM = "!All loan sanction letters & Loan SOA (EMI obligation & details sheet) || In case of any existing loan"
 
 
 def employment_income(slips: int, title="Income Documents", note="For salaried persons"):
@@ -35,27 +44,26 @@ def employment_income(slips: int, title="Income Documents", note="For salaried p
         "title": title,
         "note": note,
         "items": [
-            "Employment proof — Company ID / Offer letter / Appointment letter / Increment letter & "
-            "previous company relieving letter, if any. (require 3 year continuity proof)",
-            f"Latest {slips} months salary slips",
-            "Latest 12 months salary and savings account statements",
-            "Latest 2 years Form 16 (Part A & Part B) & Form 26AS",
-            "ITR of last 2 years (if income is taxable)",
-            "!Other rent income (if any) — rent agreement along with rent reflection in bank statements",
-            "!In case of any existing loan, require all loan sanction letters & Loan SOA "
-            "(EMI obligation & details sheet)",
+            EMPLOYMENT_PROOF,
+            f"Salary slips || Latest {slips} months",
+            "Salary and savings account statements || Latest 12 months",
+            "Form 16 (Part A & Part B) & Form 26AS || Latest 2 years",
+            "ITR || Last 2 years | If income is taxable",
+            RENT_ITEM,
+            LOAN_ITEM,
         ],
     }
 
 
 SELF_EMPLOYED_CORE = [
-    "Latest 3 years ITRs, BS & P&L statements and Computation of Income (COI), duly certified / audited by a "
-    "Chartered Accountant with UIDN — with full financials including 3CB & 3CD, Audit Report and all schedules",
-    "Latest 12 months business Current and Savings account bank statements "
-    "(all existing loan EMI reflection account statements)",
-    "Latest 2 years Form 26AS",
+    "ITRs, BS & P&L statements and Computation of Income (COI), duly certified / audited by a Chartered "
+    "Accountant with UIDN — with full financials including 3CB & 3CD, Audit Report and all schedules "
+    "|| Latest 3 years",
+    "Business Current and Savings account bank statements (all existing loan EMI reflection account "
+    "statements) || Latest 12 months",
+    "Form 26AS || Latest 2 years",
 ]
-GSTR = "Latest 12 months GSTR 3B"
+GSTR = "GSTR 3B || Latest 12 months"
 
 
 def self_employed_income(extra=(), gstr=True, title="Income Documents", note="For businessman / self-employed"):
@@ -67,23 +75,19 @@ BUSINESS_PROOF = {
     "title": "Business Proof",
     "note": "As per your business type",
     "items": [
-        "[[Proprietor]] Shop Act licence, Udyam registration certificate, GST registration certificate",
-        "[[Partnership firm]] PAN card, registered Partnership Deed, list of Partners & shareholding pattern on "
-        "company letterhead duly attested by CA, Shop Act licence, Udyam registration certificate, GST "
-        "registration certificate",
-        "[[Pvt Ltd company]] PAN card, Memorandum & Articles of Association (MOA & AOA) / Resolution, list of "
-        "Directors & Shareholders on company letterhead duly attested by CA, Certificate of Incorporation, "
-        "Shop Act licence, Udyam registration certificate, GST registration certificate",
+        "Shop Act licence, Udyam registration certificate, GST registration certificate || tag:Proprietor",
+        "PAN card, registered Partnership Deed, list of Partners & shareholding pattern on company letterhead "
+        "duly attested by CA, Shop Act licence, Udyam registration certificate, GST registration certificate "
+        "|| tag:Partnership firm",
+        "PAN card, Memorandum & Articles of Association (MOA & AOA) / Resolution, list of Directors & "
+        "Shareholders on company letterhead duly attested by CA, Certificate of Incorporation, Shop Act "
+        "licence, Udyam registration certificate, GST registration certificate || tag:Pvt Ltd company",
     ],
 }
 
 RENT_AND_EXISTING_LOANS = {
     "title": "Rental Income & Existing Loans",
-    "items": [
-        "!Other rent income (if any) — rent agreement along with rent reflection in bank statements",
-        "!In case of any existing loan, require all loan sanction letters & Loan SOA "
-        "(EMI obligation & details sheet)",
-    ],
+    "items": [RENT_ITEM, LOAN_ITEM],
 }
 
 
@@ -101,9 +105,9 @@ def balance_transfer(with_lod=True):
 PROPERTY_RESALE_ITEMS = [
     "Draft agreement",
     "Conveyance deed",
-    "Sale agreement along with chain agreements, if any",
+    "Sale agreement along with chain agreements || If any",
     "Share certificate, Society registration certificate",
-    "Property card, Title certificate (if applicable)",
+    "Property card, Title certificate || If applicable",
     "CC, OC or sanctioned / approved plan copy",
     "Latest electricity bill, maintenance bill and property tax receipt",
 ]
@@ -117,9 +121,9 @@ PROPERTY_BUILDER_ITEMS = [
 ]
 PROPERTY_MORTGAGE_ITEMS = [  # no draft agreement: the property is already owned
     "Conveyance deed",
-    "Sale agreement along with chain agreements, if any",
+    "Sale agreement along with chain agreements || If any",
     "Share certificate, Society registration certificate",
-    "Property card, Title certificate (if applicable)",
+    "Property card, Title certificate || If applicable",
     "CC, OC or sanctioned / approved plan copy",
     "Latest electricity bill, maintenance bill and property tax receipt",
 ]
@@ -165,18 +169,18 @@ HOME_LOAN_NRI = dict(
             "title": "NRI Document Checklist",
             "note": "Specific to NRI applicants",
             "items": [
-                "CIBIL — credit bureau report of that country (if applicable)",
+                "CIBIL — credit bureau report of that country || If applicable",
                 "CDC certificate (Continuous Discharge Certificate)",
                 "Resident Indian (should be a blood relative of the NRI) as co-applicant — co-applicant's "
                 "PAN card copy & residence address proof",
                 "Copy of valid Visa stamped on Passport",
                 "Copy of employment contract",
-                "Copy of last filed Income Tax Return — Form W2 (US) / P60 (UK) / ITR / Indian ITRs (if filed)",
+                "Copy of last filed Income Tax Return — Form W2 (US) / P60 (UK) / ITR / Indian ITRs || If filed",
                 "Customer should be a confirmed employee — contract copies",
                 "Embassy / Consulate / local specialised vendor in India",
                 "Details of HR person — name, contact no., designation and email ID",
-                "Copy of Leave & Licence agreement of shop (if applicable)",
-                "Copy of POA (to be allowed), if the customer is not in India to sign the agreement",
+                "Copy of Leave & Licence agreement of shop || If applicable",
+                "Copy of POA (to be allowed) || If the customer is not in India to sign the agreement",
                 "Obligation details",
             ],
         },
@@ -185,17 +189,15 @@ HOME_LOAN_NRI = dict(
             "title": "Income Documents",
             "note": "For salaried persons",
             "items": [
-                "Employment proof — Company ID / Offer letter / Appointment letter / Increment letter & "
-                "previous company relieving letter, if any. (require 3 year continuity proof)",
-                "Latest 6 months salary slips",
-                "Latest 12 months salary and savings account statements",
-                "12 months bank statements of salary account and other active accounts of the applicant, "
-                "including NRE / NRO accounts",
-                "Latest 2 years Form 16 (Part A & Part B) & Form 26AS",
-                "ITR of last 2 years (if income is taxable)",
-                "!Other rent income (if any) — rent agreement along with rent reflection in bank statements",
-                "!In case of any existing loan, require all loan sanction letters & Loan SOA "
-                "(EMI obligation & details sheet)",
+                EMPLOYMENT_PROOF,
+                "Salary slips || Latest 6 months",
+                "Salary and savings account statements || Latest 12 months",
+                "Bank statements of salary account and other active accounts of the applicant, including "
+                "NRE / NRO accounts || 12 months",
+                "Form 16 (Part A & Part B) & Form 26AS || Latest 2 years",
+                "ITR || Last 2 years | If income is taxable",
+                RENT_ITEM,
+                LOAN_ITEM,
             ],
         },
         balance_transfer(),
@@ -217,9 +219,7 @@ CAR_LOAN = dict(
     title="Car Loan",
     sections=[
         {**KYC_BUSINESS, "note": "Applicant & Co-Applicant(s)"},
-        {
-            **employment_income(6, title="Income — Salaried Persons", note=None),
-        },
+        employment_income(6, title="Income — Salaried Persons", note=None),
         self_employed_income(title="Income — Businessman / Self-Employed", note=None),
         BUSINESS_PROOF,
         RENT_AND_EXISTING_LOANS,
@@ -251,8 +251,8 @@ EDUCATION_LOAN = dict(
                 "Entrance exam marksheet (e.g. GMAT, GRE, IELTS, TOEFL, etc.)",
                 "University admission letter",
                 "Passport size photo",
-                "Latest 4 months salary slips ( if currently doing a job )",
-                "Experience letter ( if available )",
+                "Salary slips || Latest 4 months | If currently doing a job",
+                "Experience letter || If available",
                 "Updated CV",
             ],
         },
@@ -275,18 +275,11 @@ EDUCATION_LOAN = dict(
         {
             "title": "Collateral / Property Docs",
             "note": "Depends on loan amount — for secured cases",
-            "items": [
-                "Conveyance deed",
-                "Sale agreement along with chain agreements, if any",
-                "Share certificate, Society registration certificate",
-                "Property card, Title certificate (if applicable)",
-                "CC, OC or sanctioned / approved plan copy",
-                "Latest electricity bill, maintenance bill & property tax receipt",
-            ],
+            "items": PROPERTY_MORTGAGE_ITEMS,
         },
         {
             "callout": "<b>Note:</b> we may ask for some more documents after the credit review. "
-            "Please also fill in the Customer Details Sheet on the next page(s)."
+            "Please also fill in the Customer Details Sheet on the next page."
         },
         {
             "title": "Customer Details Sheet — Education Loan",
@@ -339,7 +332,7 @@ WCL_CC_OD_LC_BG = dict(
         KYC_BUSINESS,
         self_employed_income(
             extra=[
-                "List of Debtors & Creditors for the last year",
+                "List of Debtors & Creditors || Last year",
                 "CA attested Net worth certificate",
                 "Brief profile details of all companies",
             ],
@@ -382,7 +375,7 @@ BUSINESS_LOAN = dict(
             "title": "Additional Documents",
             "items": [
                 "Proof of business ownership",
-                "Existing loan sanction letter and latest SOA, if any",
+                "Existing loan sanction letter and latest SOA || If any",
             ],
         },
     ],
@@ -411,9 +404,9 @@ LEASE_RENTAL = dict(
             "title": "Lease & Rental Documents",
             "items": [
                 "Registered lease / rent agreement",
-                "Last 12 months rent receipts / bank statements showing rent credits",
+                "Rent receipts / bank statements showing rent credits || Last 12 months",
                 "Tenant details & residual lease tenure",
-                "Escrow account details, if the rent is routed through one",
+                "Escrow account details || If the rent is routed through one",
             ],
         },
         {"title": "Property Docs", "items": PROPERTY_RESALE_ITEMS},
@@ -458,7 +451,7 @@ LOAN_AGAINST_SECURITIES = dict(
                 "Demat holding statement",
                 "Portfolio / policy documents for the securities to be pledged",
                 "Latest Consolidated Account Statement (CAS)",
-                "*Confirmation that the securities are on the lender's approved list",
+                "Confirmation that the securities are on the lender's approved list",
             ],
         },
     ],
@@ -473,7 +466,7 @@ LOAN_AGAINST_MUTUAL_FUNDS = dict(
             "items": [
                 "Latest mutual fund statement / Consolidated Account Statement (CAS)",
                 "Folio details for the units to be pledged",
-                "*Confirmation that the scheme is on the lender's approved AMC / fund list",
+                "Confirmation that the scheme is on the lender's approved AMC / fund list",
             ],
         },
     ],
@@ -489,7 +482,7 @@ PROFESSIONAL_LOAN = dict(
             "title": "Professional Registration Documents",
             "items": [
                 "Professional registration / degree certificate (MBBS, CA, CS, architecture, etc.)",
-                "Practice licence (if applicable)",
+                "Practice licence || If applicable",
                 "Clinic / office ownership or rent agreement, for a self-employed practice",
             ],
         },
@@ -499,26 +492,28 @@ PROFESSIONAL_LOAN = dict(
 # Generic Home Loan list (shown when a profile isn't picked) — same facts as the three full lists
 HOME_LOAN_GENERIC = dict(
     title="Home Loan Checklist",
-    subtitle="Pick the section that matches your profile, then check “For Every Applicant”. "
-    "Choose Salaried, Self-Employed or NRI when downloading for the full list.",
+    subtitle="Pick the section that matches your profile. Choose Salaried, Self-Employed or NRI when "
+    "downloading for the full list.",
     sections=[
         {
             "title": "Salaried",
             "items": [
-                "Latest 4 months salary slips",
-                "Latest 12 months salary and savings account statements",
-                "Latest 2 years Form 16 (Part A & Part B) & Form 26AS",
-                "ITR of last 2 years (if income is taxable)",
+                "Salary slips || Latest 4 months",
+                "Salary and savings account statements || Latest 12 months",
+                "Form 16 (Part A & Part B) & Form 26AS || Latest 2 years",
+                "ITR || Last 2 years | If income is taxable",
                 "Employment proof — Company ID / Offer letter / Appointment letter "
-                "(require 3 year continuity proof)",
+                "|| 3 year continuity proof required",
             ],
         },
         {
             "title": "Self-Employed",
             "items": [
-                "Latest 3 years ITRs, BS & P&L statements and Computation of Income, certified / audited by CA",
-                "Latest 12 months business Current and Savings account bank statements",
-                "Latest 2 years Form 26AS and latest 12 months GSTR 3B",
+                "ITRs, BS & P&L statements and Computation of Income, certified / audited by CA "
+                "|| Latest 3 years",
+                "Business Current and Savings account bank statements || Latest 12 months",
+                "Form 26AS || Latest 2 years",
+                "GSTR 3B || Latest 12 months",
                 "Business proof — Shop Act, Udyam, GST, Partnership Deed or MOA & AOA, as applicable",
             ],
         },
@@ -526,10 +521,10 @@ HOME_LOAN_GENERIC = dict(
             "title": "NRI",
             "items": [
                 "Copy of valid Visa stamped on Passport & copy of employment contract",
-                "Latest 6 months salary slips",
-                "12 months bank statements of salary account and other active accounts, incl. NRE / NRO",
+                "Salary slips || Latest 6 months",
+                "Bank statements of salary account and other active accounts, incl. NRE / NRO || 12 months",
                 "Resident Indian blood relative as co-applicant — PAN card & residence address proof",
-                "Power of Attorney (POA), if the applicant can't be in India to sign the agreement",
+                "Power of Attorney (POA) || If the applicant can't be in India to sign the agreement",
             ],
         },
         {
