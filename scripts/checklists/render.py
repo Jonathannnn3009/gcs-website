@@ -41,6 +41,7 @@ from reportlab.platypus import (
 
 NAVY = colors.HexColor("#0B1849")
 NAVY_DEEP = colors.HexColor("#071230")
+NUM_COLOR = colors.HexColor("#A9812A")
 GOLD = colors.HexColor("#C8952A")
 INK = colors.HexColor("#222936")
 MUTED = colors.HexColor("#6B7280")
@@ -216,11 +217,14 @@ class TableRow(Flowable):
     SIZE = 8.4
     LEAD = 12.6
     VPAD = 2.0
-    CELL_W = 5.8 * mm
+    CELL_W = 5.0 * mm
     TAG_GAP = 1.6
 
-    def __init__(self, raw: str, details_w: float = 0.0):
+    NUM_W = 6.4 * mm
+
+    def __init__(self, raw: str, details_w: float = 0.0, num: str | None = None):
         super().__init__()
+        self.num = num
         self.mode = "check"
         text = raw
         if raw.startswith("!"):
@@ -241,7 +245,8 @@ class TableRow(Flowable):
         size = self.SIZE
         font = "Helvetica-Oblique" if self.mode == "note" else "Helvetica"
         bold = "Helvetica-Bold" if self.mode == "strong" else font
-        doc_w = aw - self.CELL_W - (self.details_w + 2.4 * mm if self.details_w else 0)
+        self.left = (self.NUM_W if self.num else 0.0)
+        doc_w = aw - self.left - self.CELL_W - (self.details_w + 2.4 * mm if self.details_w else 0)
         lines = [[]]
         x = 0.0
         for kind, s in self.tokens:
@@ -257,7 +262,8 @@ class TableRow(Flowable):
                         x += w
                         continue
                     w = stringWidth(piece, f, size)
-                    if x + w > doc_w and x > 0:
+                    glue = bool(lines[-1]) and lines[-1][-1][0] == "gap" and piece[0] in ",.;:"
+                    if x + w > doc_w and x > 0 and not glue:  # punctuation stays attached to a tag before it
                         if lines[-1] and lines[-1][-1][0] == "sp":
                             lines[-1].pop()
                         lines.append([])
@@ -307,14 +313,18 @@ class TableRow(Flowable):
             c.setStrokeColor(BOX_LINE)
             c.setFillColor(colors.white)
             c.setLineWidth(0.7)
-            c.rect(0.2, first_centre - sz / 2, sz, sz, fill=1, stroke=1)
-        elif self.mode == "bullet":
+            c.rect(self.left + 0.2, first_centre - sz / 2, sz, sz, fill=1, stroke=1)
+        elif self.mode == "bullet" and not self.num:
             c.setFillColor(GOLD)
             c.circle(1.4 * mm, first_centre, 0.9, fill=1, stroke=0)
+        if self.num:
+            c.setFillColor(NUM_COLOR)
+            c.setFont("Helvetica-Bold", max(self.SIZE - 1.2, 6.2))
+            c.drawString(0, first_centre - 0.34 * self.SIZE, self.num)
         for i, line in enumerate(self.lines):
             centre = h - self.VPAD - i * self.LEAD - self.LEAD / 2
             base = centre - 0.34 * size
-            x = self.CELL_W
+            x = self.left + self.CELL_W
             for part in line:
                 tag = part[0]
                 if tag in ("w", "sp"):
@@ -337,21 +347,22 @@ class TableRow(Flowable):
 class SectionBar(Flowable):
     """Small spaced heading, the section note beside it, a 'DETAILS' column label, and a thin rule."""
 
-    def __init__(self, title: str, note=None, details_w: float = 0.0):
+    def __init__(self, title: str, note=None, details_w: float = 0.0, num: str | None = None):
         super().__init__()
-        self.title, self.note, self.details_w = title, note, details_w
+        self.title, self.note, self.details_w, self.num = title, note, details_w, num
 
     def wrap(self, aw, ah):
         self.width = aw
         self.label = esc_rupee(self.title).upper()
-        avail = aw - (self.details_w + 2 * mm if self.details_w else 0)
+        self.indent = 6.4 * mm if self.num else 0.0
+        avail = aw - self.indent - (self.details_w + 2 * mm if self.details_w else 0)
         self.tsize = 8.0
         while spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7) > avail and self.tsize > 6.6:
             self.tsize -= 0.2
         # if the title still crowds the DETAILS label, leave the label off rather than overlap it
         self.show_details = bool(self.details_w) and spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7) <= avail
         if not self.show_details and self.details_w:
-            while spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7) > aw and self.tsize > 6.0:
+            while spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7) > aw - self.indent and self.tsize > 6.0:
                 self.tsize -= 0.2
         self.height = 6.6 * mm
         return aw, self.height
@@ -359,7 +370,11 @@ class SectionBar(Flowable):
     def draw(self):
         c = self.canv
         base = self.height - 3.8 * mm
-        t = c.beginText(0, base)
+        if self.num:
+            c.setFillColor(NUM_COLOR)
+            c.setFont("Helvetica-Bold", self.tsize + 1.6)
+            c.drawString(0, base - 0.3, self.num)
+        t = c.beginText(self.indent, base)
         t.setFont("Helvetica-Bold", self.tsize)
         t.setFillColor(NAVY)
         t.setCharSpace(0.7)
@@ -368,7 +383,7 @@ class SectionBar(Flowable):
         c.drawText(t)
         used = spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7)
         if self.note:
-            room = self.width - (self.details_w + 2 * mm if (self.details_w and self.show_details) else 0) - used - 4 * mm
+            room = self.width - self.indent - (self.details_w + 2 * mm if (self.details_w and self.show_details) else 0) - used - 4 * mm
             note = esc_rupee(self.note)
             size = 7.0
             while stringWidth(note, "Helvetica", size) > room and size > 5.8:
@@ -376,7 +391,7 @@ class SectionBar(Flowable):
             if stringWidth(note, "Helvetica", size) <= room:
                 c.setFillColor(FAINT)
                 c.setFont("Helvetica", size)
-                c.drawString(used + 4 * mm, base, note)
+                c.drawString(self.indent + used + 4 * mm, base, note)
         if self.details_w and self.show_details:
             c.setFillColor(FAINT)
             c.setFont("Helvetica-Bold", 6.4)
@@ -398,11 +413,11 @@ class SectionBar(Flowable):
 class SectionTable(Flowable):
     """Heading + rows as one block. If it must split, the next part repeats the heading."""
 
-    def __init__(self, title, note, items, details_w, cont=False):
+    def __init__(self, title, note, items, details_w, cont=False, num=None):
         super().__init__()
         self.title, self.note, self.items, self.cont = title, note, items, cont
-        self.details_w = details_w
-        self.bar = SectionBar(title + ("  (continued)" if cont else ""), None if cont else note, details_w)
+        self.details_w, self.num = details_w, num
+        self.bar = SectionBar(title + ("  (continued)" if cont else ""), None if cont else note, details_w, num)
 
     def wrap(self, aw, ah):
         self.width = aw
@@ -426,8 +441,8 @@ class SectionTable(Flowable):
         if len(self.items) - k == 1 and k > 2:  # don't strand a single row on its own
             k -= 1
         return [
-            SectionTable(self.title, self.note, self.items[:k], self.details_w, self.cont),
-            SectionTable(self.title, self.note, self.items[k:], self.details_w, cont=True),
+            SectionTable(self.title, self.note, self.items[:k], self.details_w, self.cont, self.num),
+            SectionTable(self.title, self.note, self.items[k:], self.details_w, cont=True, num=self.num),
         ]
 
     def draw(self):
@@ -648,20 +663,23 @@ def build_pdf(path, title, sections, subtitle=None, columns=1, size=None):
     col_w = (CONTENT_W - GAP) / 2 if two else CONTENT_W
     details_w = 30 * mm if two else 52 * mm
     base = size or (8.0 if two else 8.6)
-    TableRow.SIZE, TableRow.LEAD, TableRow.VPAD = base, base * 1.5, 1.7
+    TableRow.SIZE, TableRow.LEAD, TableRow.VPAD = base, base * 1.45, 1.3
 
-    def rows_for(items):
+    def rows_for(items, sec_no):
         has = any(" || " in it for it in items if not it.startswith("## "))
         dw = details_w if has else 0.0
         out = []
+        k = 0
         for raw in items:
             if raw.startswith("## "):
                 out.append(CondPageBreak(24 * mm))
                 out.append(SubHead(raw[3:].strip()))
             else:
-                out.append(TableRow(raw, dw))
+                k += 1
+                out.append(TableRow(raw, dw, f"{sec_no}.{k}"))
         return out, dw
 
+    sec_no = 0
     for sec in sections:
         if "callout" in sec:
             story.append(callout(sec["callout"], col_w))
@@ -672,7 +690,8 @@ def build_pdf(path, title, sections, subtitle=None, columns=1, size=None):
                 story.append(NextPageTemplate("single"))
                 story.append(PageBreak())
             story.append(CondPageBreak(34 * mm))
-            story.append(SectionBar(sec["title"], sec.get("note")))
+            sec_no += 1
+            story.append(SectionBar(sec["title"], sec.get("note"), num=str(sec_no)))
             story.append(Spacer(1, 2 * mm))
             compact = sec.get("cols", 2) == 3
             for gtitle, fields in sec["form"]:
@@ -683,8 +702,9 @@ def build_pdf(path, title, sections, subtitle=None, columns=1, size=None):
                 else:
                     story.append(FormGroup(gtitle, fields))
         else:
-            flows, dw = rows_for(sec["items"])
-            table = SectionTable(sec["title"], sec.get("note"), flows, dw)
+            sec_no += 1
+            flows, dw = rows_for(sec["items"], sec_no)
+            table = SectionTable(sec["title"], sec.get("note"), flows, dw, num=str(sec_no))
             if len(flows) <= (7 if two else 9):  # short section: keep it whole
                 story.append(KeepTogether([table]))
             else:

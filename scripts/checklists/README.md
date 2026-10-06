@@ -20,6 +20,7 @@ Each section is a table. Put an item's specifics in the Details column with ` ||
 
 Details become thin outlined tags: periods (gold), "If ..." conditions (grey), "... required"
 (navy), `tag:` (gold). Item prefixes: `!` bold, `*` note, `-` bullet, `## ` sub-heading.
+Sections are numbered 1, 2, 3… and their rows 1.1, 1.2… automatically.
 A section whose items have no details just shows the Document column.
 
 Lists use one full-width column when they fit a page that way, otherwise two columns (and a
