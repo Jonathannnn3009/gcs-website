@@ -58,10 +58,10 @@ MARGIN_R = 14 * mm
 CONTENT_X = SPINE_W + MARGIN_L
 CONTENT_W = PAGE_W - CONTENT_X - MARGIN_R
 
-LOGO_PATH = r"D:\CRM WEBSITE - GCS\secure-sums-site\public\brand\gcs-lockup.png"
-LOGO_RATIO = 545 / 870  # height / width
+MARK_PATH = r"D:\CRM WEBSITE - GCS\secure-sums-site\public\brand\gcs-mark.png"
 
 PHONE = "+91 88280 01700"
+PHONE2 = "+91 88280 03900"
 EMAIL = "growthcs17@gmail.com"
 FOOTER_NOTE = (
     "Send clear photos or scans of the documents that apply to you on WhatsApp. "
@@ -246,7 +246,7 @@ class TableRow(Flowable):
         font = "Helvetica-Oblique" if self.mode == "note" else "Helvetica"
         bold = "Helvetica-Bold" if self.mode == "strong" else font
         self.left = (self.NUM_W if self.num else 0.0)
-        doc_w = aw - self.left - self.CELL_W - (self.details_w + 2.4 * mm if self.details_w else 0)
+        doc_w = aw - self.left - (self.details_w + 2.4 * mm if self.details_w else 0)
         lines = [[]]
         x = 0.0
         for kind, s in self.tokens:
@@ -308,12 +308,8 @@ class TableRow(Flowable):
         if det_x is not None:
             c.line(det_x - 1.6 * mm, 0.0, det_x - 1.6 * mm, h)
         first_centre = h - self.VPAD - self.LEAD / 2
-        if self.mode in ("check", "strong"):
-            sz = 2.6 * mm
-            c.setStrokeColor(BOX_LINE)
-            c.setFillColor(colors.white)
-            c.setLineWidth(0.7)
-            c.rect(self.left + 0.2, first_centre - sz / 2, sz, sz, fill=1, stroke=1)
+        if False:
+            pass
         elif self.mode == "bullet" and not self.num:
             c.setFillColor(GOLD)
             c.circle(1.4 * mm, first_centre, 0.9, fill=1, stroke=0)
@@ -324,7 +320,7 @@ class TableRow(Flowable):
         for i, line in enumerate(self.lines):
             centre = h - self.VPAD - i * self.LEAD - self.LEAD / 2
             base = centre - 0.34 * size
-            x = self.left + self.CELL_W
+            x = self.left
             for part in line:
                 tag = part[0]
                 if tag in ("w", "sp"):
@@ -364,7 +360,12 @@ class SectionBar(Flowable):
         if not self.show_details and self.details_w:
             while spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7) > aw - self.indent and self.tsize > 6.0:
                 self.tsize -= 0.2
-        self.height = 6.6 * mm
+        self.note_below = False
+        if self.note:
+            used = spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7)
+            room = aw - self.indent - (self.details_w + 2 * mm if self.show_details else 0) - used - 4 * mm
+            self.note_below = stringWidth(esc_rupee(self.note), "Helvetica", 5.8) > room
+        self.height = 10.0 * mm if self.note_below else 6.6 * mm
         return aw, self.height
 
     def draw(self):
@@ -382,7 +383,11 @@ class SectionBar(Flowable):
         t.setCharSpace(0)  # otherwise the spacing leaks onto later text
         c.drawText(t)
         used = spaced_width(self.label, "Helvetica-Bold", self.tsize, 0.7)
-        if self.note:
+        if self.note and self.note_below:
+            c.setFillColor(FAINT)
+            c.setFont("Helvetica", 6.8)
+            c.drawString(self.indent, base - 3.6 * mm, esc_rupee(self.note))
+        elif self.note:
             room = self.width - self.indent - (self.details_w + 2 * mm if (self.details_w and self.show_details) else 0) - used - 4 * mm
             note = esc_rupee(self.note)
             size = 7.0
@@ -551,39 +556,49 @@ def draw_spine(c):
     c.restoreState()
 
 
-_LOGO_CACHE = []
+_MARK_CACHE = []
 
 
-def _logo():
-    """The brand lockup, downscaled once so each PDF stays small."""
-    if not _LOGO_CACHE:
+def _mark():
+    """The G mark on its own, trimmed to its drawing and downscaled once. Returns (image, width/height)."""
+    if not _MARK_CACHE:
         from PIL import Image
         from reportlab.lib.utils import ImageReader
 
-        img = Image.open(LOGO_PATH).convert("RGBA")
-        w = 400
-        img = img.resize((w, round(w * LOGO_RATIO)), Image.LANCZOS)
-        _LOGO_CACHE.append(ImageReader(img))
-    return _LOGO_CACHE[0]
+        img = Image.open(MARK_PATH).convert("RGBA")
+        img = img.crop(img.getchannel("A").getbbox())
+        ratio = img.width / img.height
+        w = 360
+        img = img.resize((w, round(w / ratio)), Image.LANCZOS)
+        _MARK_CACHE.append((ImageReader(img), ratio))
+    return _MARK_CACHE[0]
+
+
+def centred_spaced(c, cx, y, text, font, size, color, space):
+    t = c.beginText(cx - spaced_width(text, font, size, space) / 2, y)
+    t.setFont(font, size)
+    t.setFillColor(color)
+    t.setCharSpace(space)
+    t.textOut(text)
+    t.setCharSpace(0)  # otherwise the spacing leaks onto later text
+    c.drawText(t)
 
 
 def draw_first_header(c, meta):
     draw_spine(c)
     cx = CONTENT_X + CONTENT_W / 2
-    logo_h = 13 * mm
-    logo_w = logo_h / LOGO_RATIO
-    c.drawImage(_logo(), cx - logo_w / 2, PAGE_H - 9 * mm - logo_h, logo_w, logo_h, mask="auto")
+    img, ratio = _mark()
+    mark_h = 11 * mm
+    mark_w = mark_h * ratio
+    top = PAGE_H - 7 * mm
+    c.drawImage(img, cx - mark_w / 2, top - mark_h, mark_w, mark_h, mask="auto")
 
-    tag = "YOUR GROWTH, OUR FINANCIAL EXPERTISE"
-    t = c.beginText(cx - spaced_width(tag, "Helvetica-Bold", 6.8, 2.4) / 2, PAGE_H - 9 * mm - logo_h - 4 * mm)
-    t.setFont("Helvetica-Bold", 6.8)
-    t.setFillColor(GOLD)
-    t.setCharSpace(2.4)
-    t.textOut(tag)
-    t.setCharSpace(0)
-    c.drawText(t)
+    # the name is real text, set large enough to read
+    name_y = top - mark_h - 5.0 * mm
+    centred_spaced(c, cx, name_y, "GROWTH CAPITAL SERVICES", "Times-Bold", 12.5, NAVY_DEEP, 2.6)
+    centred_spaced(c, cx, name_y - 4.2 * mm, "YOUR GROWTH, OUR FINANCIAL EXPERTISE", "Helvetica-Bold", 6.2, GOLD, 2.2)
 
-    y = PAGE_H - 9 * mm - logo_h - 9 * mm
+    y = name_y - 8.2 * mm
     c.setStrokeColor(HAIR)
     c.setLineWidth(0.7)
     c.line(CONTENT_X, y, CONTENT_X + CONTENT_W, y)
@@ -602,9 +617,10 @@ def draw_first_header(c, meta):
 
     c.setFillColor(NAVY)
     c.setFont("Helvetica-Bold", 8.2)
-    c.drawRightString(CONTENT_X + CONTENT_W, y - 7.4 * mm, PHONE)
+    c.drawRightString(CONTENT_X + CONTENT_W, y - 6.2 * mm, PHONE)
+    c.drawRightString(CONTENT_X + CONTENT_W, y - 10.2 * mm, PHONE2)
     c.setFont("Helvetica", 8.2)
-    c.drawRightString(CONTENT_X + CONTENT_W, y - 11.6 * mm, EMAIL)
+    c.drawRightString(CONTENT_X + CONTENT_W, y - 14.2 * mm, EMAIL)
 
 
 def draw_later_header(c, meta):
@@ -663,7 +679,7 @@ def build_pdf(path, title, sections, subtitle=None, columns=1, size=None):
     col_w = (CONTENT_W - GAP) / 2 if two else CONTENT_W
     details_w = 30 * mm if two else 52 * mm
     base = size or (8.0 if two else 8.6)
-    TableRow.SIZE, TableRow.LEAD, TableRow.VPAD = base, base * 1.45, 1.3
+    TableRow.SIZE, TableRow.LEAD, TableRow.VPAD = base, base * 1.42, (1.0 if two else 1.5)
 
     def rows_for(items, sec_no):
         has = any(" || " in it for it in items if not it.startswith("## "))
@@ -713,7 +729,7 @@ def build_pdf(path, title, sections, subtitle=None, columns=1, size=None):
         story.append(Spacer(1, 4.2 * mm if two else 5.0 * mm))
 
     meta = {"title": title, "subtitle": subtitle}
-    first_top = 53 * mm
+    first_top = 51 * mm
     doc = BaseDocTemplate(
         path,
         pagesize=A4,

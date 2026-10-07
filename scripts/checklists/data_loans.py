@@ -49,8 +49,6 @@ def employment_income(slips: int, title="Income Documents", note="For salaried p
             "Salary and savings account statements || Latest 12 months",
             "Form 16 (Part A & Part B) & Form 26AS || Latest 2 years",
             "ITR || Last 2 years | If income is taxable",
-            RENT_ITEM,
-            LOAN_ITEM,
         ],
     }
 
@@ -102,20 +100,23 @@ def balance_transfer(with_lod=True):
     return {"title": "Balance Transfer Case", "note": "If you are moving an existing loan", "items": items}
 
 
+# CC (Commencement Certificate) is always needed; OC (Occupancy Certificate) only where it applies.
+CC_OC_ITEM = "CC & OC, or sanctioned / approved plan copy || tag:CC compulsory | If OC applicable"
+
 PROPERTY_RESALE_ITEMS = [
     "Draft agreement",
     "Conveyance deed",
     "Sale agreement along with chain agreements || If any",
     "Share certificate, Society registration certificate",
     "Property card, Title certificate || If applicable",
-    "CC, OC or sanctioned / approved plan copy",
+    CC_OC_ITEM,
     "Latest electricity bill, maintenance bill and property tax receipt",
 ]
 PROPERTY_BUILDER_ITEMS = [
     "Draft agreement",
     "Cost sheet provided by builder, OCR payment receipts",
     "Brochure of property, MAHA RERA No.",
-    "CC, approved plan copy",
+    "CC, approved plan copy || tag:CC compulsory",
     "APF details — list of banks and their APF number",
     "Builder contact person details — e.g. name and number",
 ]
@@ -124,7 +125,7 @@ PROPERTY_MORTGAGE_ITEMS = [  # no draft agreement: the property is already owned
     "Sale agreement along with chain agreements || If any",
     "Share certificate, Society registration certificate",
     "Property card, Title certificate || If applicable",
-    "CC, OC or sanctioned / approved plan copy",
+    CC_OC_ITEM,
     "Latest electricity bill, maintenance bill and property tax receipt",
 ]
 
@@ -143,6 +144,7 @@ HOME_LOAN_SALARIED = dict(
     sections=[
         KYC_INDIVIDUAL,
         employment_income(4),
+        RENT_AND_EXISTING_LOANS,
         balance_transfer(),
         property_resale(),
         property_builder(),
@@ -196,10 +198,9 @@ HOME_LOAN_NRI = dict(
                 "NRE / NRO accounts || 12 months",
                 "Form 16 (Part A & Part B) & Form 26AS || Latest 2 years",
                 "ITR || Last 2 years | If income is taxable",
-                RENT_ITEM,
-                LOAN_ITEM,
             ],
         },
+        RENT_AND_EXISTING_LOANS,
         balance_transfer(),
         property_resale(),
         property_builder(),
@@ -211,6 +212,7 @@ PERSONAL_LOAN = dict(
     sections=[
         KYC_INDIVIDUAL,
         employment_income(4),
+        RENT_AND_EXISTING_LOANS,
         balance_transfer(with_lod=False),
     ],
 )
@@ -248,7 +250,7 @@ EDUCATION_LOAN = dict(
         },
         {
             "title": "Financial Co-Applicant",
-            "note": "Mother & Father / Guardian",
+            "note": "Mother & Father / Guardian / Guarantor",
             "items": [
                 "PAN card, Aadhaar card & Passport",
                 "Ownership proof — Latest electricity bill / maintenance receipt etc.",
@@ -262,6 +264,7 @@ EDUCATION_LOAN = dict(
             note="For businessman / self-employed",
         ),
         BUSINESS_PROOF,
+        RENT_AND_EXISTING_LOANS,
         {
             "title": "Collateral / Property Docs",
             "note": "Depends on loan amount — for secured cases",
@@ -323,6 +326,7 @@ BALANCE_TRANSFER_PRODUCT = dict(
     sections=[
         KYC_INDIVIDUAL,
         employment_income(4, title="Employment & Income"),
+        RENT_AND_EXISTING_LOANS,
         balance_transfer(),
         {"title": "Property Docs (If Secured)", "items": PROPERTY_RESALE_ITEMS},
     ],
@@ -441,6 +445,7 @@ PROFESSIONAL_LOAN = dict(
         KYC_INDIVIDUAL,
         employment_income(4, title="Income — Salaried Professionals", note=None),
         self_employed_income(title="Income — Self-Employed / Own Practice", note=None),
+        RENT_AND_EXISTING_LOANS,
         {
             "title": "Professional Registration Documents",
             "items": [

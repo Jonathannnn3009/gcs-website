@@ -36,7 +36,7 @@ def pages_of(slug):
 
 
 # Try the most spacious layout first; only squeeze when a list won't fit one page.
-ATTEMPTS = [(1, 8.6), (2, 8.0), (2, 7.6), (2, 7.2), (2, 6.9)]
+ATTEMPTS = [(1, 8.6), (2, 8.0), (2, 7.8), (2, 7.6), (2, 7.4), (2, 7.2), (2, 6.9)]
 
 
 def build_fitting(slug, title, sections, subtitle=None):
