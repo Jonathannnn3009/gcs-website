@@ -130,7 +130,7 @@ function StepIndicator({ step }: { step: Step }) {
                   ? "bg-gold text-navy"
                   : active
                     ? "bg-navy text-gold-light"
-                    : "bg-secondary text-muted-foreground"
+                    : "bg-white text-muted-foreground ring-1 ring-navy/15"
               }`}
             >
               {done ? <Check className="h-3.5 w-3.5" /> : n}
@@ -142,7 +142,7 @@ function StepIndicator({ step }: { step: Step }) {
             >
               {label}
             </span>
-            {n < STEP_LABELS.length && <span className="h-px flex-1 bg-border" />}
+            {n < STEP_LABELS.length && <span className="h-0.5 flex-1 rounded-full bg-navy/20" />}
           </li>
         );
       })}
@@ -261,7 +261,7 @@ function CibilFlow() {
 
   if (done && bureau) {
     return (
-      <div className="flex flex-col items-center rounded-2xl border border-navy/15 bg-[color-mix(in_oklab,var(--navy)_11%,white)] p-8 text-center sm:p-10 dark:bg-card">
+      <div className="flex flex-col items-center rounded-2xl border border-[#BCCBEE] bg-[#E1EAFB] p-8 text-center sm:p-10 dark:bg-card">
         <span className="grid h-14 w-14 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
           <Check className="h-7 w-7" />
         </span>
@@ -294,7 +294,7 @@ function CibilFlow() {
   }
 
   return (
-    <div className="rounded-2xl border border-navy/15 bg-[color-mix(in_oklab,var(--navy)_11%,white)] p-5 shadow-[var(--shadow-lift)] sm:p-8 dark:bg-card">
+    <div className="rounded-2xl border border-[#BCCBEE] bg-[#E1EAFB] p-5 shadow-[var(--shadow-lift)] sm:p-8 dark:bg-card">
       <StepIndicator step={step} />
 
       {/* Step 1 — details */}
@@ -676,7 +676,7 @@ function CibilPage() {
                 ))}
               </ol>
             </div>
-            <div className="rounded-2xl border border-navy/15 bg-[color-mix(in_oklab,var(--navy)_11%,white)] p-6 dark:bg-card">
+            <div className="rounded-2xl border border-[#BCCBEE] bg-[#E1EAFB] p-6 dark:bg-card">
               <span className="grid h-10 w-10 place-items-center rounded-lg bg-white text-gold-dark dark:bg-card">
                 <FileSearch className="h-5 w-5" />
               </span>
@@ -690,6 +690,25 @@ function CibilPage() {
                   CRIF High Mark; their names only tell us which report you want.
                 </li>
               </ul>
+            </div>
+            <div className="rounded-2xl border border-[#BCCBEE] bg-[#E1EAFB] p-6">
+              <span className="grid h-10 w-10 place-items-center rounded-lg bg-white text-gold-dark">
+                <Gauge className="h-5 w-5" />
+              </span>
+              <h3 className="mt-3 text-sm font-extrabold text-navy dark:text-white">
+                Credit Score Estimator
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Not sure where you stand? Get an indicative score range in a minute, before you
+                request your report.
+              </p>
+              <Link
+                to="/tools"
+                hash="credit-score"
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-navy px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-navy-light"
+              >
+                Try the estimator <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
           </aside>
         </div>
