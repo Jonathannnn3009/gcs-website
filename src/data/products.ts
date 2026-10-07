@@ -35,7 +35,7 @@ export type ProductGroup =
   | "Vehicles & Special Cases";
 
 export type ChecklistIntakeField =
-  | { key: string; label: string; type: "text"; placeholder?: string }
+  | { key: string; label: string; type: "text"; placeholder?: string; format?: "amount" }
   | { key: string; label: string; type: "select"; options: string[] }
   | { key: string; label: string; type: "date" };
 
@@ -154,7 +154,7 @@ export const PRODUCTS: Product[] = [
         options: ["Builder Purchase", "Resale"],
       },
       { key: "possessionDate", label: "Possession Date", type: "date" },
-      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 50,00,000" },
+      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 50,00,000", format: "amount" },
     ],
   },
   {
@@ -705,7 +705,7 @@ export const PRODUCTS: Product[] = [
       "Academic records",
     ],
     checklistIntake: [
-      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 15,00,000" },
+      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 15,00,000", format: "amount" },
       { key: "courseName", label: "Course Name", type: "text" },
       { key: "courseDuration", label: "Course Duration", type: "text", placeholder: "e.g. 2 years" },
       { key: "courseStartDate", label: "Course Start Date", type: "date" },
@@ -741,7 +741,7 @@ export const PRODUCTS: Product[] = [
     documents: [KYC, INCOME, "Dealer's vehicle quotation"],
     checklistIntake: [
       { key: "purchaseFrom", label: "Purchase From", type: "select", options: ["Dealer", "Resale"] },
-      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 8,00,000" },
+      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 8,00,000", format: "amount" },
     ],
   },
   {
@@ -772,7 +772,7 @@ export const PRODUCTS: Product[] = [
     documents: [KYC, INCOME, "RC copy, insurance and valuation report"],
     checklistIntake: [
       { key: "purchaseFrom", label: "Purchase From", type: "select", options: ["Dealer", "Resale"] },
-      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 8,00,000" },
+      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 8,00,000", format: "amount" },
     ],
   },
   {
@@ -802,7 +802,7 @@ export const PRODUCTS: Product[] = [
     ],
     documents: [KYC, INCOME, "RC, insurance and any current loan statement"],
     checklistIntake: [
-      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 5,00,000" },
+      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 5,00,000", format: "amount" },
     ],
   },
   {

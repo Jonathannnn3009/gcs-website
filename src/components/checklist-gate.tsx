@@ -5,6 +5,12 @@ import type { ChecklistIntakeField } from "@/data/products";
 
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
 
+// Groups typed digits Indian-style as they type: 5000000 -> 50,00,000.
+function formatIndianAmount(raw: string) {
+  const digits = raw.replace(/\D/g, "");
+  return digits ? Number(digits).toLocaleString("en-IN") : "";
+}
+
 const THEMES = {
   dark: {
     field:
@@ -202,7 +208,15 @@ export function ChecklistGate({
                 id={`${uid}-${f.key}`}
                 type={f.type === "date" ? "date" : "text"}
                 value={intakeValues[f.key] ?? ""}
-                onChange={(e) => setIntakeValue(f.key, e.target.value)}
+                onChange={(e) =>
+                  setIntakeValue(
+                    f.key,
+                    f.type === "text" && f.format === "amount"
+                      ? formatIndianAmount(e.target.value)
+                      : e.target.value,
+                  )
+                }
+                inputMode={f.type === "text" && f.format === "amount" ? "numeric" : undefined}
                 className={t.field}
                 placeholder={f.type === "text" ? f.placeholder : undefined}
                 maxLength={100}
