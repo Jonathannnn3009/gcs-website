@@ -17,11 +17,13 @@ import { submitLead } from "@/lib/leads";
 import { CONTACT } from "@/data/site";
 import {
   BUREAUS,
+  LAST_PULLED_OPTIONS,
   REPORT_PRICE,
   UPI_IS_PLACEHOLDER,
   upiLink,
   type Bureau,
   type BureauId,
+  type LastPulled,
 } from "@/data/cibil";
 
 export const Route = createFileRoute("/cibil")({
@@ -54,9 +56,9 @@ const PIN_RE = /^[1-9]\d{5}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const UTR_RE = /^\d{12}$/;
 
-const STEP_LABELS = ["Your details", "Bureau", "Payment"];
+const STEP_LABELS = ["Your details", "Bureau", "Last report", "Payment"];
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2 | 3 | 4;
 
 type Details = {
   fullName: string;
@@ -164,6 +166,7 @@ function CibilFlow() {
   const uid = useId();
   const [step, setStep] = useState<Step>(1);
   const [bureauId, setBureauId] = useState<BureauId | null>(null);
+  const [lastPulled, setLastPulled] = useState<LastPulled | null>(null);
   const [utr, setUtr] = useState("");
   const [utrError, setUtrError] = useState("");
   const [details, setDetails] = useState<Details>(emptyDetails);
@@ -172,6 +175,7 @@ function CibilFlow() {
   const [done, setDone] = useState(false);
 
   const bureau: Bureau | undefined = BUREAUS.find((b) => b.id === bureauId);
+  const lastPulledLabel = LAST_PULLED_OPTIONS.find((o) => o.id === lastPulled)?.label ?? "";
 
   const setField =
     (key: keyof Details) =>
@@ -184,6 +188,7 @@ function CibilFlow() {
   const reset = () => {
     setStep(1);
     setBureauId(null);
+    setLastPulled(null);
     setUtr("");
     setUtrError("");
     setDetails(emptyDetails);
@@ -228,7 +233,7 @@ function CibilFlow() {
     setStep(2);
   };
 
-  // Step 3: payment done -> capture the lead again, now with bureau, amount and UTR.
+  // Step 4: payment done -> capture the lead again, now with bureau, amount and UTR.
   const confirmPayment = async () => {
     if (!bureau) return;
     if (!UTR_RE.test(utr.trim())) {
@@ -244,6 +249,7 @@ function CibilFlow() {
       detail: [
         "Stage: payment submitted",
         `Bureau: ${bureau.name}`,
+        `Last report taken: ${lastPulledLabel}`,
         `Paid: ₹${REPORT_PRICE}`,
         `UTR: ${utr.trim()}`,
         ...detailLines(),
@@ -255,7 +261,7 @@ function CibilFlow() {
 
   if (done && bureau) {
     return (
-      <div className="flex flex-col items-center rounded-2xl border border-gold/25 bg-gold-pale/30 p-8 text-center sm:p-10 dark:bg-card">
+      <div className="flex flex-col items-center rounded-2xl border border-navy/15 bg-[color-mix(in_oklab,var(--navy)_11%,white)] p-8 text-center sm:p-10 dark:bg-card">
         <span className="grid h-14 w-14 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
           <Check className="h-7 w-7" />
         </span>
@@ -288,7 +294,7 @@ function CibilFlow() {
   }
 
   return (
-    <div className="rounded-2xl border border-gold/25 bg-gold-pale/30 p-5 shadow-[var(--shadow-lift)] sm:p-8 dark:bg-card">
+    <div className="rounded-2xl border border-navy/15 bg-[color-mix(in_oklab,var(--navy)_11%,white)] p-5 shadow-[var(--shadow-lift)] sm:p-8 dark:bg-card">
       <StepIndicator step={step} />
 
       {/* Step 1 — details */}
@@ -483,6 +489,7 @@ function CibilFlow() {
                 type="button"
                 onClick={() => {
                   setBureauId(b.id);
+                  setLastPulled(null);
                   setStep(3);
                 }}
                 className="group flex items-start gap-3 rounded-xl border border-border bg-bg-light p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
@@ -504,10 +511,41 @@ function CibilFlow() {
         </div>
       )}
 
-      {/* Step 3 — payment */}
+      {/* Step 3 — when they last took a report (for our records) */}
       {step === 3 && bureau && (
         <div className="mt-8">
           <BackButton onClick={() => setStep(2)} />
+          <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
+            When did you last take your {bureau.name} report?
+          </h3>
+          <div className="mt-5 space-y-3">
+            {LAST_PULLED_OPTIONS.map((o) => (
+              <button
+                key={o.id}
+                type="button"
+                onClick={() => {
+                  setLastPulled(o.id);
+                  setStep(4);
+                }}
+                className="group flex w-full items-center justify-between gap-3 rounded-xl border border-border bg-white p-4 text-left transition-all duration-300 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
+              >
+                <span>
+                  <span className="block text-sm font-extrabold text-navy dark:text-white">
+                    {o.label}
+                  </span>
+                  <span className="mt-0.5 block text-xs text-muted-foreground">{o.hint}</span>
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-0.5" />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Step 4 — payment */}
+      {step === 4 && bureau && (
+        <div className="mt-8">
+          <BackButton onClick={() => setStep(3)} />
           <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
             Pay ₹{REPORT_PRICE} by UPI
           </h3>
@@ -576,6 +614,10 @@ const HOW_IT_WORKS = [
   },
   { title: "Choose your bureau", text: "TransUnion CIBIL, Experian, Equifax or CRIF High Mark." },
   {
+    title: "Tell us when you last took your report",
+    text: "A quick question so we have the full picture.",
+  },
+  {
     title: "Pay ₹500 by UPI QR",
     text: "One flat price for any bureau. We then pull your report and send it to you.",
   },
@@ -634,7 +676,7 @@ function CibilPage() {
                 ))}
               </ol>
             </div>
-            <div className="rounded-2xl border border-gold/20 bg-gold-pale/30 p-6 dark:bg-gold/8">
+            <div className="rounded-2xl border border-navy/15 bg-[color-mix(in_oklab,var(--navy)_11%,white)] p-6 dark:bg-card">
               <span className="grid h-10 w-10 place-items-center rounded-lg bg-white text-gold-dark dark:bg-card">
                 <FileSearch className="h-5 w-5" />
               </span>

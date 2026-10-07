@@ -32,6 +32,15 @@ export const BUREAUS: Bureau[] = [
   },
 ];
 
+export type LastPulled = "never" | "within-12-months" | "over-12-months";
+
+/** Asked for our own records — it does not change the price. */
+export const LAST_PULLED_OPTIONS: { id: LastPulled; label: string; hint: string }[] = [
+  { id: "never", label: "Never", hint: "I haven't taken a report from them" },
+  { id: "over-12-months", label: "More than 12 months ago", hint: "It's been over a year" },
+  { id: "within-12-months", label: "Within the last 12 months", hint: "I took one recently" },
+];
+
 /** One flat price for a report from any bureau, in rupees. */
 export const REPORT_PRICE = 500;
 
