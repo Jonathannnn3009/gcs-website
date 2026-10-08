@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
 import { Route as CibilRouteImport } from './routes/cibil'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as MumbaiRouteImport } from './routes/mumbai'
 import { Route as NaviMumbaiRouteImport } from './routes/navi-mumbai'
 import { Route as PartnerRouteImport } from './routes/partner'
@@ -27,6 +28,7 @@ import { Route as CaLegalServicesIndexRouteImport } from './routes/ca-legal-serv
 import { Route as CaLegalServicesSlugRouteImport } from './routes/ca-legal-services.$slug'
 import { Route as CaseStudiesIndexRouteImport } from './routes/case-studies.index'
 import { Route as CaseStudiesSlugRouteImport } from './routes/case-studies.$slug'
+import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 
@@ -53,6 +55,11 @@ const CibilRoute = CibilRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightsRoute = InsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MumbaiRoute = MumbaiRouteImport.update({
@@ -120,6 +127,11 @@ const CaseStudiesSlugRoute = CaseStudiesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => CaseStudiesRoute,
 } as any)
+const PSlugRoute = PSlugRouteImport.update({
+  id: '/p/$slug',
+  path: '/p/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesIndexRoute = ServicesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -137,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/case-studies': typeof CaseStudiesRouteWithChildren
   '/cibil': typeof CibilRoute
   '/contact': typeof ContactRoute
+  '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
   '/partner': typeof PartnerRoute
@@ -148,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/why-us': typeof WhyUsRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
+  '/p/$slug': typeof PSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/ca-legal-services/': typeof CaLegalServicesIndexRoute
   '/case-studies/': typeof CaseStudiesIndexRoute
@@ -158,6 +172,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/cibil': typeof CibilRoute
   '/contact': typeof ContactRoute
+  '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
   '/partner': typeof PartnerRoute
@@ -168,6 +183,7 @@ export interface FileRoutesByTo {
   '/why-us': typeof WhyUsRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
+  '/p/$slug': typeof PSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/ca-legal-services': typeof CaLegalServicesIndexRoute
   '/case-studies': typeof CaseStudiesIndexRoute
@@ -180,6 +196,7 @@ export interface FileRoutesById {
   '/case-studies': typeof CaseStudiesRouteWithChildren
   '/cibil': typeof CibilRoute
   '/contact': typeof ContactRoute
+  '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
   '/partner': typeof PartnerRoute
@@ -191,6 +208,7 @@ export interface FileRoutesById {
   '/why-us': typeof WhyUsRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
+  '/p/$slug': typeof PSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/ca-legal-services/': typeof CaLegalServicesIndexRoute
   '/case-studies/': typeof CaseStudiesIndexRoute
@@ -204,6 +222,7 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/cibil'
     | '/contact'
+    | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
     | '/partner'
@@ -215,6 +234,7 @@ export interface FileRouteTypes {
     | '/why-us'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
+    | '/p/$slug'
     | '/services/$slug'
     | '/ca-legal-services/'
     | '/case-studies/'
@@ -225,6 +245,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/cibil'
     | '/contact'
+    | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
     | '/partner'
@@ -235,6 +256,7 @@ export interface FileRouteTypes {
     | '/why-us'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
+    | '/p/$slug'
     | '/services/$slug'
     | '/ca-legal-services'
     | '/case-studies'
@@ -246,6 +268,7 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/cibil'
     | '/contact'
+    | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
     | '/partner'
@@ -257,6 +280,7 @@ export interface FileRouteTypes {
     | '/why-us'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
+    | '/p/$slug'
     | '/services/$slug'
     | '/ca-legal-services/'
     | '/case-studies/'
@@ -269,6 +293,7 @@ export interface RootRouteChildren {
   CaseStudiesRoute: typeof CaseStudiesRouteWithChildren
   CibilRoute: typeof CibilRoute
   ContactRoute: typeof ContactRoute
+  InsightsRoute: typeof InsightsRoute
   MumbaiRoute: typeof MumbaiRoute
   NaviMumbaiRoute: typeof NaviMumbaiRoute
   PartnerRoute: typeof PartnerRoute
@@ -279,6 +304,7 @@ export interface RootRouteChildren {
   ToolsRoute: typeof ToolsRoute
   WhyUsRoute: typeof WhyUsRoute
   CaLegalServicesSlugRoute: typeof CaLegalServicesSlugRoute
+  PSlugRoute: typeof PSlugRoute
   CaLegalServicesIndexRoute: typeof CaLegalServicesIndexRoute
 }
 
@@ -317,6 +343,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insights': {
+      id: '/insights'
+      path: '/insights'
+      fullPath: '/insights'
+      preLoaderRoute: typeof InsightsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mumbai': {
@@ -410,6 +443,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaseStudiesSlugRouteImport
       parentRoute: typeof CaseStudiesRoute
     }
+    '/p/$slug': {
+      id: '/p/$slug'
+      path: '/p/$slug'
+      fullPath: '/p/$slug'
+      preLoaderRoute: typeof PSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services/': {
       id: '/services/'
       path: '/'
@@ -461,6 +501,7 @@ const rootRouteChildren: RootRouteChildren = {
   CaseStudiesRoute: CaseStudiesRouteWithChildren,
   CibilRoute: CibilRoute,
   ContactRoute: ContactRoute,
+  InsightsRoute: InsightsRoute,
   MumbaiRoute: MumbaiRoute,
   NaviMumbaiRoute: NaviMumbaiRoute,
   PartnerRoute: PartnerRoute,
@@ -471,6 +512,7 @@ const rootRouteChildren: RootRouteChildren = {
   ToolsRoute: ToolsRoute,
   WhyUsRoute: WhyUsRoute,
   CaLegalServicesSlugRoute: CaLegalServicesSlugRoute,
+  PSlugRoute: PSlugRoute,
   CaLegalServicesIndexRoute: CaLegalServicesIndexRoute,
 }
 export const routeTree = rootRouteImport

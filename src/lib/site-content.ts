@@ -27,6 +27,21 @@ type SiteContent = {
   seo?: SeoMap;
   testimonials?: (ClientStory & { visible?: boolean })[];
   trustNumbers?: Record<string, string>;
+  customPages?: CustomPage[];
+};
+
+/** A page or article staff created in the CRM. */
+export type CustomPage = {
+  slug: string;
+  title: string;
+  /** "post" shows in Insights with a date; "page" is a stand-alone page. */
+  kind: "post" | "page";
+  summary?: string;
+  body: string;
+  date?: string;
+  /** Uploaded cover picture, as a CRM path such as /public/site-images/<id>. */
+  image?: string;
+  published?: boolean;
 };
 
 export type SiteInfo = SiteInfoContact & { reportPrice?: number; upiId?: string; upiName?: string };
@@ -196,4 +211,28 @@ export function useTestimonials(builtIn: ClientStory[]): ClientStory[] {
   if (!nonEmptyList<ClientStory & { visible?: boolean }>(list)) return builtIn;
   const shown = list.filter((t) => t.visible !== false && t.name && t.quote);
   return shown.length > 0 ? shown : builtIn;
+}
+
+export function formatPageDate(iso: string): string {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime())
+    ? iso
+    : d.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+}
+
+/** Pages and articles staff published from the CRM, plus whether the CRM has answered yet. */
+export function useCustomPages(): { pages: CustomPage[]; loaded: boolean } {
+  const list = useSiteContent().customPages;
+  const [loaded, setLoaded] = useState(cached !== null);
+  useEffect(() => {
+    let live = true;
+    void load().then(() => live && setLoaded(true));
+    return () => {
+      live = false;
+    };
+  }, []);
+  const pages = nonEmptyList<CustomPage>(list)
+    ? list.filter((p) => p.published !== false && p.slug && p.title)
+    : [];
+  return { pages, loaded };
 }
