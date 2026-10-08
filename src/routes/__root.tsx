@@ -19,6 +19,8 @@ import { ScrollProgress } from "@/components/scroll-progress";
 import { PromoPopup } from "@/components/promo-popup";
 import { flushPendingLeads } from "@/lib/leads";
 import { useApplySiteInfo } from "@/lib/site-content";
+import { usePageText } from "@/lib/page-text";
+import { InlineEditor } from "@/components/inline-editor";
 
 function NotFoundComponent() {
   return (
@@ -161,6 +163,8 @@ function RootComponent() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   // Contact details and CIBIL price/UPI come from the CRM; redraw once they are applied.
   const infoVersion = useApplySiteInfo();
+  // Wording staff edited in the CRM or directly on the site.
+  usePageText();
 
   // Re-send any enquiry that couldn't reach the CRM earlier (offline, CRM not live yet).
   useEffect(() => {
@@ -179,6 +183,7 @@ function RootComponent() {
         <SiteFooter />
         <WhatsAppButton />
         <PromoPopup />
+        <InlineEditor />
       </div>
     </QueryClientProvider>
   );

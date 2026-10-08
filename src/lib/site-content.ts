@@ -8,6 +8,7 @@ import type { Faq } from "@/data/faqs";
 import type { Product } from "@/data/products";
 import type { CaseStudy } from "@/data/case-studies";
 import type { ProfessionalService } from "@/data/professional-services";
+import type { PageTextMap } from "@/lib/page-text";
 import { applyContactInfo, type SiteInfoContact } from "@/data/site";
 import { applyCibilInfo } from "@/data/cibil";
 
@@ -17,6 +18,7 @@ type SiteContent = {
   caseStudies?: CaseStudyText[];
   services?: Record<string, Partial<ServiceText>>;
   siteInfo?: SiteInfo;
+  pageText?: PageTextMap;
 };
 
 export type SiteInfo = SiteInfoContact & { reportPrice?: number; upiId?: string; upiName?: string };
@@ -53,13 +55,24 @@ function load(): Promise<SiteContent> {
   return inflight;
 }
 
+const listeners = new Set<(c: SiteContent) => void>();
+
+/** Lets the admin text editor push a saved change to every page that is listening. */
+export function updateSiteContent(patch: Partial<SiteContent>) {
+  cached = { ...(cached ?? {}), ...patch };
+  for (const l of listeners) l(cached);
+}
+
 export function useSiteContent(): SiteContent {
   const [content, setContent] = useState<SiteContent>(cached ?? {});
   useEffect(() => {
     let live = true;
     void load().then((c) => live && setContent(c));
+    const listener = (c: SiteContent) => live && setContent(c);
+    listeners.add(listener);
     return () => {
       live = false;
+      listeners.delete(listener);
     };
   }, []);
   return content;
