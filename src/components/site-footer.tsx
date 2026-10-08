@@ -2,8 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { Clock, Mail, MapPin, Phone, ArrowRight } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
 import { PRODUCT_GROUPS } from "@/data/products";
+import { useMorePhones } from "@/lib/public-settings";
 
 export function SiteFooter() {
+  const morePhones = useMorePhones();
   return (
     <footer className="relative mt-24 overflow-hidden">
       {/* Gold accent line */}
@@ -118,6 +120,17 @@ export function SiteFooter() {
                   {CONTACT.phone}
                 </a>
               </li>
+              {morePhones.map((ph) => (
+                <li key={ph.href} className="flex gap-3">
+                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                  <a
+                    href={ph.href}
+                    className="text-ink/80 transition-colors hover:text-gold dark:text-white"
+                  >
+                    {ph.display}
+                  </a>
+                </li>
+              ))}
               <li className="flex gap-3">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                 <a

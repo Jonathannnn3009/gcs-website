@@ -1,6 +1,7 @@
 import { useEffect, useId, useState } from "react";
 import { ArrowRight, Download } from "lucide-react";
 import { submitLead } from "@/lib/leads";
+import { resolveChecklistHref, useChecklistDocuments } from "@/lib/checklist-documents";
 import type { ChecklistIntakeField } from "@/data/products";
 
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
@@ -65,6 +66,7 @@ export function ChecklistGate({
   intakeFields?: ChecklistIntakeField[];
 }) {
   const uid = useId();
+  const docs = useChecklistDocuments();
   const t = THEMES[theme];
   const [unlocked, setUnlocked] = useState(false);
   const [name, setName] = useState("");
@@ -116,7 +118,8 @@ export function ChecklistGate({
   };
 
   if (unlocked) {
-    const resolvedHref = (category && pdfHrefByCategory?.[category]) || pdfHref;
+    const baseHref = (category && pdfHrefByCategory?.[category]) || pdfHref;
+    const resolvedHref = resolveChecklistHref(docs, baseHref, category || undefined);
     return (
       <a href={resolvedHref} download className={t.unlockedLink}>
         <Download className="h-4 w-4" /> Download Now

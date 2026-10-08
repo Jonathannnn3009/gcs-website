@@ -5,6 +5,7 @@ import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { LeadForm } from "@/components/lead-form";
 import { CONTACT } from "@/data/site";
+import { useMorePhones } from "@/lib/public-settings";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -87,6 +88,7 @@ function FaqAccordion() {
 }
 
 function ContactPage() {
+  const morePhones = useMorePhones();
   return (
     <>
       {/* Split hero: navy intro (now carrying the reach-methods inline) + form */}
@@ -110,7 +112,16 @@ function ContactPage() {
 
                 {/* Reach methods, folded directly into the hero as chips */}
                 <div className="relative mt-7 grid grid-cols-3 gap-2.5">
-                  {REACH_METHODS.map((m) => (
+                  {[
+                    ...REACH_METHODS.slice(0, 1),
+                    ...morePhones.map((ph) => ({
+                      icon: Phone,
+                      label: "Call",
+                      value: ph.display,
+                      href: ph.href,
+                    })),
+                    ...REACH_METHODS.slice(1),
+                  ].map((m) => (
                     <a
                       key={m.label}
                       href={m.href}
