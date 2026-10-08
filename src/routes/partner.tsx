@@ -24,6 +24,7 @@ import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { CONTACT } from "@/data/site";
 import { submitLead } from "@/lib/leads";
+import { useCommissionStructure } from "@/lib/commission";
 
 export const Route = createFileRoute("/partner")({
   head: () => ({
@@ -113,9 +114,8 @@ const STEPS: { icon: LucideIcon; title: string; body: string }[] = [
   },
 ];
 
-// Mirrors backend/prisma/seed.ts RATE_CARDS in the CRM (served publicly at
-// /crm/api/public/commission-structure once the site is wired to the CRM) —
-// kept as static data here until that connection goes live.
+// Fallback copy of the CRM's rate card (backend/prisma/seed.ts RATE_CARDS). The page shows the
+// live card from /crm/api/public/commission-structure and uses this if the CRM is unreachable.
 const COMMISSION_STRUCTURE = [
   { product: "Home Loan", range: "0.2% – 0.5%", avgAmount: "₹30L – ₹1Cr", earning: "₹6,000 – ₹50,000" },
   {
@@ -504,6 +504,7 @@ function Accordion({ items }: { items: { q: string; a: string }[] }) {
 }
 
 function PartnerPage() {
+  const commissionRows = useCommissionStructure(COMMISSION_STRUCTURE);
   return (
     <>
       {/* Hero: navy panel with stats + the registration form */}
@@ -668,7 +669,7 @@ function PartnerPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {COMMISSION_STRUCTURE.map((row) => (
+                  {commissionRows.map((row) => (
                     <tr key={row.product} className="transition-colors hover:bg-bg-light/50">
                       <td className="px-6 py-4 font-bold text-navy">{row.product}</td>
                       <td className="px-6 py-4 text-muted-foreground">{row.range}</td>
