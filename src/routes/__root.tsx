@@ -20,6 +20,7 @@ import { PromoPopup } from "@/components/promo-popup";
 import { flushPendingLeads } from "@/lib/leads";
 import { useApplySiteInfo } from "@/lib/site-content";
 import { usePageText } from "@/lib/page-text";
+import { useSeo } from "@/lib/seo";
 import { InlineEditor } from "@/components/inline-editor";
 
 function NotFoundComponent() {
@@ -165,6 +166,8 @@ function RootComponent() {
   const infoVersion = useApplySiteInfo();
   // Wording staff edited in the CRM or directly on the site.
   usePageText();
+  // Page titles and Google descriptions staff set in the CRM.
+  useSeo();
 
   // Re-send any enquiry that couldn't reach the CRM earlier (offline, CRM not live yet).
   useEffect(() => {

@@ -10,6 +10,7 @@ import type { CaseStudy } from "@/data/case-studies";
 import type { ProfessionalService } from "@/data/professional-services";
 import type { ImageMap, PageTextMap } from "@/lib/page-text";
 import { DEFAULT_RATES, type RatesContent } from "@/data/rates";
+import type { SeoMap } from "@/lib/seo";
 import { applyContactInfo, type SiteInfoContact } from "@/data/site";
 import { applyCibilInfo } from "@/data/cibil";
 
@@ -22,6 +23,7 @@ type SiteContent = {
   pageText?: PageTextMap;
   images?: ImageMap;
   bankRates?: Partial<RatesContent>;
+  seo?: SeoMap;
 };
 
 export type SiteInfo = SiteInfoContact & { reportPrice?: number; upiId?: string; upiName?: string };
