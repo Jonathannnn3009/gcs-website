@@ -4,6 +4,7 @@ import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { CASE_STUDIES } from "../src/data/case-studies";
 import { REPORT_PRICE, UPI } from "../src/data/cibil";
 import { DEFAULT_RATES } from "../src/data/rates";
+import { CLIENT_STORIES } from "../src/data/testimonials";
 import { CONTACT_FAQS, PARTNER_FAQS } from "../src/data/faqs";
 import { LOCATIONS } from "../src/data/locations";
 import { PRODUCTS } from "../src/data/products";
@@ -115,7 +116,17 @@ const seoPages = [
 writeFileSync(
   out,
   JSON.stringify(
-    { faqs, products, caseStudies, services, siteInfo, bankRates: DEFAULT_RATES, seoPages },
+    {
+      faqs,
+      products,
+      caseStudies,
+      services,
+      siteInfo,
+      bankRates: DEFAULT_RATES,
+      seoPages,
+      testimonials: CLIENT_STORIES.map((t) => ({ ...t, visible: true })),
+      trustNumbers: { "75+": "75+", "25+": "25+", "2017": "2017", "100%": "100%" },
+    },
     null,
     2,
   ) + "\n",

@@ -11,6 +11,7 @@ import type { ProfessionalService } from "@/data/professional-services";
 import type { ImageMap, PageTextMap } from "@/lib/page-text";
 import { DEFAULT_RATES, type RatesContent } from "@/data/rates";
 import type { SeoMap } from "@/lib/seo";
+import type { ClientStory } from "@/data/testimonials";
 import { applyContactInfo, type SiteInfoContact } from "@/data/site";
 import { applyCibilInfo } from "@/data/cibil";
 
@@ -24,6 +25,8 @@ type SiteContent = {
   images?: ImageMap;
   bankRates?: Partial<RatesContent>;
   seo?: SeoMap;
+  testimonials?: (ClientStory & { visible?: boolean })[];
+  trustNumbers?: Record<string, string>;
 };
 
 export type SiteInfo = SiteInfoContact & { reportPrice?: number; upiId?: string; upiName?: string };
@@ -185,4 +188,12 @@ export function useBankRates(): RatesContent {
         : DEFAULT_RATES.defaultEmiRate,
     rows: nonEmptyList<RatesContent["rows"][number]>(saved.rows) ? saved.rows : DEFAULT_RATES.rows,
   };
+}
+
+/** Client stories: the CRM's list when staff set one (hidden ones dropped), else the built-in ones. */
+export function useTestimonials(builtIn: ClientStory[]): ClientStory[] {
+  const list = useSiteContent().testimonials;
+  if (!nonEmptyList<ClientStory & { visible?: boolean }>(list)) return builtIn;
+  const shown = list.filter((t) => t.visible !== false && t.name && t.quote);
+  return shown.length > 0 ? shown : builtIn;
 }

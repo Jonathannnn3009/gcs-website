@@ -133,7 +133,7 @@ export function InlineEditor() {
     if (Object.keys(bucket).length === 0) delete base[scope];
     setDraft(base);
     // Show it now, on this page, before saving.
-    applyOverrides(document.body, overridesFor(base, pathname));
+    applyOverrides(document.body, overridesFor(base, pathname), content.trustNumbers ?? {});
     setTarget(null);
   }, [target, draftText, allPages, pathname, content.pageText]);
 
@@ -204,7 +204,11 @@ export function InlineEditor() {
     setTarget(null);
     setEditing(false);
     // Redraw with what is saved.
-    applyOverrides(document.body, overridesFor(content.pageText, pathname));
+    applyOverrides(
+      document.body,
+      overridesFor(content.pageText, pathname),
+      content.trustNumbers ?? {},
+    );
     applyImages(document.body, content.images ?? {});
   };
 

@@ -2,7 +2,7 @@
 // wording to the new wording, per page ("/about") or for every page ("*"). Visitors get the edited
 // wording applied to the page after it draws; anything not edited is untouched.
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { CRM_API } from "@/lib/crm";
 import { useSiteContent } from "@/lib/site-content";
@@ -82,7 +82,15 @@ export function originalOf(node: Text): string {
   return originals.get(node) ?? current;
 }
 
-export function applyOverrides(root: Node, overrides: Record<string, string>) {
+/** Figures swapped everywhere they appear, e.g. "75+" -> "90+". */
+export type Replacements = Record<string, string>;
+
+export function applyOverrides(
+  root: Node,
+  overrides: Record<string, string>,
+  replacements: Replacements = {},
+) {
+  const swaps = Object.entries(replacements).filter(([from, to]) => from && from !== to);
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {
     const node = n as Text;
@@ -90,9 +98,11 @@ export function applyOverrides(root: Node, overrides: Record<string, string>) {
     const current = node.nodeValue ?? "";
     const orig = originalOf(node);
     const key = orig.trim();
-    const next = key ? overrides[key] : undefined;
-    if (next !== undefined) {
-      const out = orig.replace(key, () => next);
+    const exact = key ? overrides[key] : undefined;
+    let out = orig;
+    if (exact !== undefined) out = orig.replace(key, () => exact);
+    else for (const [from, to] of swaps) if (out.includes(from)) out = out.split(from).join(to);
+    if (out !== orig) {
       if (current !== out) {
         originals.set(node, orig);
         lastSet.set(node, out);
@@ -105,19 +115,41 @@ export function applyOverrides(root: Node, overrides: Record<string, string>) {
   }
 }
 
+/**
+ * True once the page has finished loading and hydrating. Changing text before React has taken
+ * over the server's HTML makes it throw the page away and redraw it, so the first application
+ * waits until the router is idle and a moment has passed.
+ */
+function useBooted(): boolean {
+  const status = useRouterState({ select: (s) => s.status });
+  const [booted, setBooted] = useState(false);
+  useEffect(() => {
+    if (booted || status !== "idle") return;
+    const timer = window.setTimeout(() => setBooted(true), 700);
+    return () => window.clearTimeout(timer);
+  }, [status, booted]);
+  return booted;
+}
+
 /** Applies the CRM's text edits to whatever page is showing, and to anything drawn later. */
 export function usePageText() {
+  const booted = useBooted();
   const content = useSiteContent();
   const map = content.pageText;
   const images = content.images;
+  const replacements = content.trustNumbers;
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   useEffect(() => {
+    if (!booted) return;
     const overrides = overridesFor(map, pathname);
-    const hasAny = Object.keys(overrides).length > 0 || Object.keys(images ?? {}).length > 0;
+    const hasAny =
+      Object.keys(overrides).length > 0 ||
+      Object.keys(images ?? {}).length > 0 ||
+      Object.keys(replacements ?? {}).length > 0;
     let frame = 0;
     const run = () => {
       frame = 0;
-      applyOverrides(document.body, overrides);
+      applyOverrides(document.body, overrides, replacements ?? {});
       applyImages(document.body, images ?? {});
     };
     run();
@@ -136,5 +168,5 @@ export function usePageText() {
       observer.disconnect();
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [map, images, pathname]);
+  }, [booted, map, images, replacements, pathname]);
 }

@@ -28,6 +28,8 @@ import { BankMarquee } from "@/components/bank-marquee";
 import { LeadForm } from "@/components/lead-form";
 import { ConsultationBackdrop } from "@/components/consultation-backdrop";
 import { CONTACT } from "@/data/site";
+import { CLIENT_STORIES, type ClientStory } from "@/data/testimonials";
+import { useTestimonials } from "@/lib/site-content";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -138,68 +140,6 @@ const STEPS = [
   },
 ];
 
-/** Illustrative client experiences — anonymized composites, not verbatim testimonials. */
-const CLIENT_STORIES = [
-  {
-    name: "Priya Deshmukh",
-    city: "Mumbai",
-    product: "Home Loan Balance Transfer",
-    rating: 5,
-    quote:
-      "Switched our home loan and shaved ₹3,800 off the EMI within three weeks. Wish we'd called sooner.",
-  },
-  {
-    name: "Rohan Mehta",
-    city: "Thane",
-    product: "Business Loan",
-    rating: 4.5,
-    quote:
-      "Working capital sanctioned in 9 days flat — right when a big order needed raw materials.",
-  },
-  {
-    name: "Anjali Kulkarni",
-    city: "Pune",
-    product: "Personal Loan",
-    rating: 4,
-    quote: "Needed funds fast for a family emergency. Disbursed in two days, no drama at all.",
-  },
-  {
-    name: "Sameer Iyer",
-    city: "Navi Mumbai",
-    product: "Loan Against Property",
-    rating: 5,
-    quote:
-      "Unlocked funds against our property without touching our savings. Clean process, clear terms.",
-  },
-  {
-    name: "Neha Joshi",
-    city: "Mumbai",
-    product: "Education Loan",
-    rating: 4.5,
-    quote: "Got my daughter's admission abroad funded end-to-end, tuition and living costs both.",
-  },
-  {
-    name: "Vikram Shah",
-    city: "Pune",
-    product: "CGTMSE Funding",
-    rating: 4,
-    quote: "No collateral, no problem. They found the right scheme for my two-year-old business.",
-  },
-  {
-    name: "Arjun Nair",
-    city: "Thane",
-    product: "New Car Loan",
-    rating: 4.5,
-    quote: "100% on-road funding on my first car — didn't touch my savings for the down payment.",
-  },
-  {
-    name: "Kavita Rao",
-    city: "Navi Mumbai",
-    product: "Balance Transfer",
-    rating: 5,
-    quote: "One phone call, and my home loan rate dropped by over a full percentage point.",
-  },
-];
 
 function WhatsAppIcon() {
   return (
@@ -316,7 +256,7 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 /** Letter-style testimonial card — name up top like a signature, quote read as a note, not a spec sheet. */
-function StoryCard({ story }: { story: (typeof CLIENT_STORIES)[number] }) {
+function StoryCard({ story }: { story: ClientStory }) {
   const initials = story.name
     .split(" ")
     .map((w) => w[0])
@@ -346,7 +286,8 @@ function StoryCard({ story }: { story: (typeof CLIENT_STORIES)[number] }) {
 
 /** Horizontally scrollable strip of client experiences — idles into a slow auto-drift, but drag or scroll takes over instantly. */
 function ClientStoriesMarquee() {
-  const doubled = [...CLIENT_STORIES, ...CLIENT_STORIES];
+  const stories = useTestimonials(CLIENT_STORIES);
+  const doubled = [...stories, ...stories];
   const trackRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const dragStartX = useRef(0);
