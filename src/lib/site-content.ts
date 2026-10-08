@@ -8,7 +8,7 @@ import type { Faq } from "@/data/faqs";
 import type { Product } from "@/data/products";
 import type { CaseStudy } from "@/data/case-studies";
 import type { ProfessionalService } from "@/data/professional-services";
-import type { PageTextMap } from "@/lib/page-text";
+import type { ImageMap, PageTextMap } from "@/lib/page-text";
 import { applyContactInfo, type SiteInfoContact } from "@/data/site";
 import { applyCibilInfo } from "@/data/cibil";
 
@@ -19,6 +19,7 @@ type SiteContent = {
   services?: Record<string, Partial<ServiceText>>;
   siteInfo?: SiteInfo;
   pageText?: PageTextMap;
+  images?: ImageMap;
 };
 
 export type SiteInfo = SiteInfoContact & { reportPrice?: number; upiId?: string; upiName?: string };

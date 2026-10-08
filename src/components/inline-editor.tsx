@@ -3,10 +3,14 @@ import { useRouterState } from "@tanstack/react-router";
 import { Check, Loader2, Pencil, X } from "lucide-react";
 import { CRM_API } from "@/lib/crm";
 import {
+  applyImages,
   applyOverrides,
+  imageKey,
   normalizePath,
   originalOf,
+  originalSrc,
   overridesFor,
+  type ImageMap,
   type PageTextMap,
 } from "@/lib/page-text";
 import { updateSiteContent, useSiteContent } from "@/lib/site-content";
@@ -55,10 +59,15 @@ export function InlineEditor() {
   const [draftText, setDraftText] = useState("");
   const [allPages, setAllPages] = useState(false);
   const [draft, setDraft] = useState<PageTextMap | null>(null);
+  const [draftImages, setDraftImages] = useState<ImageMap | null>(null);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const draftRef = useRef<PageTextMap | null>(null);
   draftRef.current = draft;
+  const draftImagesRef = useRef<ImageMap | null>(null);
+  draftImagesRef.current = draftImages;
+  const fileInput = useRef<HTMLInputElement>(null);
+  const pickedImage = useRef<HTMLImageElement | null>(null);
 
   // Is the person signed in to the CRM as an admin?
   useEffect(() => {
@@ -77,7 +86,7 @@ export function InlineEditor() {
 
   const working = draft ?? content.pageText ?? {};
   const edits = Object.keys(overridesFor(draft ?? undefined, pathname)).length;
-  const dirty = draft !== null;
+  const dirty = draft !== null || draftImages !== null;
 
   // Edit mode: clicks pick text instead of following links or pressing buttons.
   useEffect(() => {
@@ -88,6 +97,13 @@ export function InlineEditor() {
       if (!el || el.closest("[data-gcs-edit-ui]")) return;
       e.preventDefault();
       e.stopPropagation();
+      // A picture: choose a replacement file.
+      const img = el.closest("img");
+      if (img && !textNodeAt(e.clientX, e.clientY, el)) {
+        pickedImage.current = img;
+        fileInput.current?.click();
+        return;
+      }
       const node = textNodeAt(e.clientX, e.clientY, el);
       if (!node) return;
       const original = originalOf(node);
@@ -121,20 +137,59 @@ export function InlineEditor() {
     setTarget(null);
   }, [target, draftText, allPages, pathname, content.pageText]);
 
+  /** Uploads the chosen picture to the CRM and shows it in place of the one that was clicked. */
+  const replaceImage = async (file: File) => {
+    const token = readToken();
+    const img = pickedImage.current;
+    if (!token || !img) return;
+    if (file.size > 2 * 1024 * 1024) {
+      setMessage("That picture is over 2 MB. Choose a smaller one.");
+      return;
+    }
+    setMessage("Uploading picture…");
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch(`${CRM_API}/settings/site-images`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body,
+      });
+      if (!res.ok) throw new Error(`${res.status}`);
+      const { path } = (await res.json()) as { path: string };
+      const next: ImageMap = { ...(draftImagesRef.current ?? content.images ?? {}) };
+      next[imageKey(originalSrc(img))] = path;
+      setDraftImages(next);
+      applyImages(document.body, next);
+      setMessage("Picture changed. Press Save to publish it.");
+    } catch {
+      setMessage("Could not upload the picture (PNG, JPG or WebP, up to 2 MB).");
+    }
+  };
+
+  const put = async (key: string, value: unknown, token: string) => {
+    const res = await fetch(`${CRM_API}/settings/site-content/${key}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ value }),
+    });
+    if (!res.ok) throw new Error(`${res.status}`);
+  };
+
   const save = async () => {
     const token = readToken();
-    if (!token || !draft) return;
+    if (!token || !dirty) return;
     setSaving(true);
     setMessage("");
     try {
-      const res = await fetch(`${CRM_API}/settings/site-content/pageText`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ value: draft }),
+      if (draft) await put("pageText", draft, token);
+      if (draftImages) await put("images", draftImages, token);
+      updateSiteContent({
+        ...(draft ? { pageText: draft } : {}),
+        ...(draftImages ? { images: draftImages } : {}),
       });
-      if (!res.ok) throw new Error(`${res.status}`);
-      updateSiteContent({ pageText: draft });
       setDraft(null);
+      setDraftImages(null);
       setMessage("Saved — live for every visitor.");
     } catch {
       setMessage("Could not save. Sign in to the CRM again and retry.");
@@ -145,16 +200,29 @@ export function InlineEditor() {
 
   const cancel = () => {
     setDraft(null);
+    setDraftImages(null);
     setTarget(null);
     setEditing(false);
     // Redraw with what is saved.
     applyOverrides(document.body, overridesFor(content.pageText, pathname));
+    applyImages(document.body, content.images ?? {});
   };
 
   if (!admin) return null;
 
   return (
     <div data-gcs-edit-ui className="fixed bottom-4 left-4 z-[70] font-sans text-sm">
+      <input
+        ref={fileInput}
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          e.target.value = "";
+          if (file) void replaceImage(file);
+        }}
+      />
       <style>{`body[data-gcs-editing] *:hover{outline:1px dashed #c9a24b;outline-offset:2px;cursor:text}body[data-gcs-editing] [data-gcs-edit-ui] *:hover{outline:none;cursor:auto}`}</style>
       {!editing ? (
         <button
@@ -169,7 +237,7 @@ export function InlineEditor() {
       ) : (
         <div className="w-72 rounded-xl bg-navy p-3 text-white shadow-2xl ring-1 ring-gold/40">
           <p className="text-xs leading-relaxed text-white/80">
-            Click any wording on this page to change it.{" "}
+            Click any wording to change it, or a picture to replace it.{" "}
             {edits > 0 && `${edits} change(s) on this page.`}
           </p>
           {message && <p className="mt-2 text-xs text-gold">{message}</p>}
