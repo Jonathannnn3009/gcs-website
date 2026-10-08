@@ -12,6 +12,7 @@ import { Reveal } from "@/components/reveal";
 import { LeadForm } from "@/components/lead-form";
 import { ChecklistGate } from "@/components/checklist-gate";
 import { PRODUCTS, getProduct } from "@/data/products";
+import { useProduct } from "@/lib/site-content";
 import { CONTACT, waLink } from "@/data/site";
 
 export const Route = createFileRoute("/services/$slug")({
@@ -86,7 +87,7 @@ function productCode(title: string): string {
 
 function ProductDetailPage() {
   const { slug } = Route.useParams();
-  const product = getProduct(slug);
+  const product = useProduct(getProduct(slug));
   const [presetCategory, setPresetCategory] = useState<string | null>(null);
   useEffect(() => setPresetCategory(null), [slug]);
   if (!product) return <NotFoundBlock />;

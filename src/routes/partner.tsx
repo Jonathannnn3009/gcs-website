@@ -23,6 +23,8 @@ import {
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { CONTACT } from "@/data/site";
+import { PARTNER_FAQS } from "@/data/faqs";
+import { useFaqs } from "@/lib/site-content";
 import { submitLead } from "@/lib/leads";
 import { useCommissionStructure } from "@/lib/commission";
 
@@ -203,28 +205,6 @@ const MORE_REASONS = [
   },
 ];
 
-const PARTNER_FAQS = [
-  {
-    q: "Who can become a referral partner?",
-    a: "Anyone with a network — Chartered Accountants, property consultants, brokers, insurance advisors, business consultants, or simply someone whose contacts occasionally need a loan.",
-  },
-  {
-    q: "Is there a joining fee?",
-    a: "No. There's no cost to register or refer — you only earn, you never pay.",
-  },
-  {
-    q: "How and when do I get paid?",
-    a: "Your referral fee is calculated once the loan is disbursed and settled directly to your account — no invoicing required from you.",
-  },
-  {
-    q: "Do I need a license or certification to refer clients?",
-    a: "No. As a referral partner, you introduce us to the client — our licensed advisors handle eligibility, documentation and lender matching.",
-  },
-  {
-    q: "Is there a limit on how many clients I can refer?",
-    a: "None. There's no cap on referrals or earnings — refer as many clients as you like.",
-  },
-];
 
 const fieldClass =
   "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20 dark:bg-card dark:text-white";
@@ -504,6 +484,7 @@ function Accordion({ items }: { items: { q: string; a: string }[] }) {
 }
 
 function PartnerPage() {
+  const partnerFaqs = useFaqs("partner", PARTNER_FAQS);
   const commissionRows = useCommissionStructure(COMMISSION_STRUCTURE);
   return (
     <>
@@ -723,7 +704,7 @@ function PartnerPage() {
               The questions that come up most before someone sends their first referral.
             </p>
             <div className="mt-6">
-              <Accordion items={PARTNER_FAQS} />
+              <Accordion items={partnerFaqs} />
             </div>
           </Reveal>
           <Reveal delay={80}>

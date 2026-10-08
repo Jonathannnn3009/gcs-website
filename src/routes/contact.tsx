@@ -4,6 +4,8 @@ import { ChevronDown, Clock, Mail, MapPin, MessageCircle, Navigation, Phone } fr
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { LeadForm } from "@/components/lead-form";
+import { CONTACT_FAQS } from "@/data/faqs";
+import { useFaqs } from "@/lib/site-content";
 import { CONTACT } from "@/data/site";
 import { useMorePhones } from "@/lib/public-settings";
 
@@ -44,30 +46,13 @@ const REACH_METHODS = [
   { icon: Mail, label: "Email", value: "Send a query", href: `mailto:${CONTACT.email}` },
 ];
 
-const CONTACT_FAQS = [
-  {
-    q: "How long until I hear back?",
-    a: "A senior advisor typically calls back within one business day, with an indicative offer following shortly after.",
-  },
-  {
-    q: "Are there any upfront charges?",
-    a: "No advisory fee for customers — we're paid by the lender only on successful disbursal.",
-  },
-  {
-    q: "Can you help if my application was rejected elsewhere?",
-    a: "Often, yes. We review why it was declined and place the file with a lender better suited to the profile.",
-  },
-  {
-    q: "Do you offer in-person consultations?",
-    a: "Yes, by appointment at our Ghatkopar West office, Monday to Saturday.",
-  },
-];
 
 function FaqAccordion() {
+  const faqs = useFaqs("contact", CONTACT_FAQS);
   const [open, setOpen] = useState<number | null>(0);
   return (
     <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-white dark:bg-card">
-      {CONTACT_FAQS.map((f, i) => (
+      {faqs.map((f, i) => (
         <div key={f.q}>
           <button
             onClick={() => setOpen(open === i ? null : i)}

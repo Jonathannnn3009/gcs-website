@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { ArrowRight, Calculator, LayoutGrid } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { CASE_STUDIES, CASE_STUDY_GROUPS, type CaseStudyGroup } from "@/data/case-studies";
+import { useCaseStudies } from "@/lib/site-content";
 import { CONTACT } from "@/data/site";
 
 export const Route = createFileRoute("/case-studies/")({
@@ -28,11 +29,12 @@ export const Route = createFileRoute("/case-studies/")({
 type Filter = "All" | CaseStudyGroup;
 
 function CaseStudiesPage() {
+  const allStudies = useCaseStudies(CASE_STUDIES);
   const [filter, setFilter] = useState<Filter>("All");
 
   const visible = useMemo(
-    () => (filter === "All" ? CASE_STUDIES : CASE_STUDIES.filter((c) => c.group === filter)),
-    [filter],
+    () => (filter === "All" ? allStudies : allStudies.filter((c) => c.group === filter)),
+    [filter, allStudies],
   );
 
   return (
@@ -96,11 +98,11 @@ function CaseStudiesPage() {
             <LayoutGrid className="h-3.5 w-3.5" />
             All Cases
             <span className={filter === "All" ? "text-gold-light" : "text-gold-dark"}>
-              {CASE_STUDIES.length}
+              {allStudies.length}
             </span>
           </button>
           {CASE_STUDY_GROUPS.map((group) => {
-            const count = CASE_STUDIES.filter((c) => c.group === group).length;
+            const count = allStudies.filter((c) => c.group === group).length;
             const active = filter === group;
             return (
               <button

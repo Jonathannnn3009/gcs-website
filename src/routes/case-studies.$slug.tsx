@@ -4,6 +4,7 @@ import { AlertTriangle, ArrowRight, Calculator, Compass, MapPin, Trophy } from "
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { CASE_STUDIES, getCaseStudy, type CaseStudy } from "@/data/case-studies";
+import { useCaseStudies } from "@/lib/site-content";
 import { getProduct } from "@/data/products";
 import { waLink } from "@/data/site";
 
@@ -129,11 +130,12 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
 
 function CaseStudyDetailPage() {
   const { slug } = Route.useParams();
-  const study = getCaseStudy(slug);
+  const allStudies = useCaseStudies(CASE_STUDIES);
+  const study = allStudies.find((c) => c.slug === slug);
   if (!study) return <NotFoundBlock />;
 
   const product = getProduct(study.productSlug);
-  const similar = CASE_STUDIES.filter(
+  const similar = allStudies.filter(
     (c) => c.group === study.group && c.slug !== study.slug,
   ).slice(0, 3);
 

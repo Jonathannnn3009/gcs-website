@@ -4,6 +4,7 @@ import { ArrowRight, Building2, ChevronDown, Clock, MapPin, Phone } from "lucide
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { PRODUCT_GROUPS, PRODUCTS } from "@/data/products";
+import { useFaqs } from "@/lib/site-content";
 import { CONTACT } from "@/data/site";
 import type { LocationContent } from "@/data/locations";
 
@@ -32,6 +33,7 @@ function FaqAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
 }
 
 export function LocationPage({ location }: { location: LocationContent }) {
+  const faqs = useFaqs(location.slug, location.faqs);
   const otherCities = CONTACT.cities.filter((c) => c !== location.city);
   const citySlug = (c: string) => c.toLowerCase().replace(/\s+/g, "-");
 
@@ -190,7 +192,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
           </h2>
         </Reveal>
         <Reveal delay={100} className="mx-auto mt-8 max-w-2xl">
-          <FaqAccordion faqs={location.faqs} />
+          <FaqAccordion faqs={faqs} />
         </Reveal>
       </Section>
 
