@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { ServiceEnquiryForm } from "@/components/service-enquiry-form";
 import { PROFESSIONAL_SERVICES, SERVICE_DIVISIONS, type ServiceDivision } from "@/data/professional-services";
+import { useProfessionalServices } from "@/lib/site-content";
 
 const divisionId = (division: ServiceDivision) => division.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
@@ -26,6 +27,7 @@ export const Route = createFileRoute("/ca-legal-services/")({
 });
 
 function CaLegalServicesPage() {
+  const allServices = useProfessionalServices(PROFESSIONAL_SERVICES);
   return (
     <>
       {/* Hero */}
@@ -55,7 +57,7 @@ function CaLegalServicesPage() {
 
           <Reveal delay={80} className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
             {SERVICE_DIVISIONS.map(({ division }) => {
-              const count = PROFESSIONAL_SERVICES.filter((s) => s.division === division).length;
+              const count = allServices.filter((s) => s.division === division).length;
               return (
                 <a
                   key={division}
@@ -75,7 +77,7 @@ function CaLegalServicesPage() {
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
         <div className="space-y-10">
           {SERVICE_DIVISIONS.map(({ division }, di) => {
-            const services = PROFESSIONAL_SERVICES.filter((s) => s.division === division);
+            const services = allServices.filter((s) => s.division === division);
             const isLegal = division === "Sheetal Associates";
             return (
               <Reveal key={division} delay={di * 80}>

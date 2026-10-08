@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "918828001700";
+let WHATSAPP_NUMBER = "918828001700";
 
 /** Builds a wa.me link pre-filled with a ready-to-send message, so visitors don't land on a blank chat. */
 export function waLink(message?: string): string {
@@ -24,6 +24,36 @@ export const CONTACT = {
   hours: "Monday to Saturday · 10:00 AM – 6:00 PM",
   cities: ["Mumbai", "Thane", "Navi Mumbai", "Pune"],
 };
+
+/** Contact details staff change in the CRM (Settings -> Website content). Applied once, at load. */
+export type SiteInfoContact = {
+  phone?: string;
+  whatsapp?: string;
+  email?: string;
+  address?: string;
+  hours?: string;
+};
+
+export function applyContactInfo(info: SiteInfoContact) {
+  const digits = (info.phone ?? "").replace(/\D/g, "");
+  if (info.phone?.trim() && digits.length >= 10) {
+    CONTACT.phone = info.phone.trim();
+    CONTACT.phoneHref = `tel:+${digits.length === 10 ? "91" + digits : digits}`;
+  }
+  const wa = (info.whatsapp ?? "").replace(/\D/g, "");
+  if (wa.length >= 10) {
+    WHATSAPP_NUMBER = wa.length === 10 ? `91${wa}` : wa;
+    CONTACT.whatsapp = WHATSAPP_NUMBER;
+    CONTACT.whatsappLink = waLink();
+  }
+  if (info.email?.trim()) CONTACT.email = info.email.trim();
+  if (info.hours?.trim()) CONTACT.hours = info.hours.trim();
+  if (info.address?.trim()) {
+    CONTACT.address = info.address.trim();
+    CONTACT.mapsLink =
+      "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONTACT.address);
+  }
+}
 
 export type Service = {
   id: string;

@@ -35,7 +35,7 @@ const BENEFITS = [
   "Full confidentiality on profile, file and amount",
 ];
 
-const REACH_METHODS = [
+const reachMethods = () => [
   { icon: Phone, label: "Call", value: CONTACT.phone, href: CONTACT.phoneHref },
   {
     icon: MessageCircle,
@@ -73,6 +73,7 @@ function FaqAccordion() {
 }
 
 function ContactPage() {
+  const REACH_METHODS = reachMethods();
   const morePhones = useMorePhones();
   return (
     <>

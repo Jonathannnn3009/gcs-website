@@ -18,6 +18,7 @@ import { WhatsAppButton } from "@/components/whatsapp-button";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { PromoPopup } from "@/components/promo-popup";
 import { flushPendingLeads } from "@/lib/leads";
+import { useApplySiteInfo } from "@/lib/site-content";
 
 function NotFoundComponent() {
   return (
@@ -158,6 +159,8 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // Contact details and CIBIL price/UPI come from the CRM; redraw once they are applied.
+  const infoVersion = useApplySiteInfo();
 
   // Re-send any enquiry that couldn't reach the CRM earlier (offline, CRM not live yet).
   useEffect(() => {
@@ -166,7 +169,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col">
+      <div key={infoVersion} className="flex min-h-screen flex-col">
         <ScrollProgress />
         <SiteHeader />
         <main key={pathname} className="flex-1 animate-fade-in">

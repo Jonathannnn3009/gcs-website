@@ -6,6 +6,7 @@ import { ServiceEnquiryForm } from "@/components/service-enquiry-form";
 import { ChecklistGate } from "@/components/checklist-gate";
 import { CONTACT } from "@/data/site";
 import { PROFESSIONAL_SERVICES, getProfessionalService } from "@/data/professional-services";
+import { useProfessionalService } from "@/lib/site-content";
 
 export const Route = createFileRoute("/ca-legal-services/$slug")({
   head: ({ params }) => {
@@ -41,7 +42,7 @@ function NotFoundBlock() {
 
 function ProfessionalServiceDetailPage() {
   const { slug } = Route.useParams();
-  const service = getProfessionalService(slug);
+  const service = useProfessionalService(getProfessionalService(slug));
   if (!service) return <NotFoundBlock />;
 
   const similar = PROFESSIONAL_SERVICES.filter(

@@ -609,7 +609,7 @@ function CibilFlow() {
   );
 }
 
-const HOW_IT_WORKS = [
+const howItWorks = () => [
   {
     title: "Share your details",
     text: "PAN, date of birth and address — exactly as on your records.",
@@ -620,12 +620,13 @@ const HOW_IT_WORKS = [
     text: "A quick question so we have the full picture.",
   },
   {
-    title: "Pay ₹500 by UPI QR",
+    title: `Pay ₹${REPORT_PRICE} by UPI QR`,
     text: "One flat price for any bureau. We then pull your report and send it to you.",
   },
 ];
 
 function CibilPage() {
+  const HOW_IT_WORKS = howItWorks();
   return (
     <>
       <section className="relative overflow-hidden hero-light border-b border-gold/15 py-16 sm:py-20">

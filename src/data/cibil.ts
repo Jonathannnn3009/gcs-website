@@ -42,7 +42,7 @@ export const LAST_PULLED_OPTIONS: { id: LastPulled; label: string; hint: string 
 ];
 
 /** One flat price for a report from any bureau, in rupees. */
-export const REPORT_PRICE = 500;
+export let REPORT_PRICE = 500;
 
 /**
  * UPI details the payment QR is generated from.
@@ -54,7 +54,17 @@ export const UPI = {
 };
 
 /** Flip to false once the real UPI ID above is in. Only controls the dev-mode warning. */
-export const UPI_IS_PLACEHOLDER = true;
+export let UPI_IS_PLACEHOLDER = true;
+
+/** Report price and UPI details staff set in the CRM. Applied once, at load. */
+export function applyCibilInfo(info: { reportPrice?: number; upiId?: string; upiName?: string }) {
+  if (typeof info.reportPrice === "number" && info.reportPrice > 0) REPORT_PRICE = info.reportPrice;
+  if (info.upiId?.trim() && /^[\w.\-]{2,}@[a-zA-Z]{2,}$/.test(info.upiId.trim())) {
+    UPI.id = info.upiId.trim();
+    UPI_IS_PLACEHOLDER = false;
+  }
+  if (info.upiName?.trim()) UPI.payeeName = info.upiName.trim();
+}
 
 export function upiLink(amount: number, note: string): string {
   const params = new URLSearchParams({

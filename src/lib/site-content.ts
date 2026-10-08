@@ -7,12 +7,25 @@ import { CRM_API } from "@/lib/crm";
 import type { Faq } from "@/data/faqs";
 import type { Product } from "@/data/products";
 import type { CaseStudy } from "@/data/case-studies";
+import type { ProfessionalService } from "@/data/professional-services";
+import { applyContactInfo, type SiteInfoContact } from "@/data/site";
+import { applyCibilInfo } from "@/data/cibil";
 
 type SiteContent = {
   faqs?: Record<string, Faq[]>;
   products?: Record<string, Partial<ProductText>>;
   caseStudies?: CaseStudyText[];
+  services?: Record<string, Partial<ServiceText>>;
+  siteInfo?: SiteInfo;
 };
+
+export type SiteInfo = SiteInfoContact & { reportPrice?: number; upiId?: string; upiName?: string };
+
+/** The CA & legal service fields staff may change. */
+export type ServiceText = Pick<
+  ProfessionalService,
+  "title" | "summary" | "whoNeedsIt" | "process" | "documents"
+>;
 
 /** The product fields staff may change. Icons, grouping and checklist forms stay in the code. */
 export type ProductText = Pick<
@@ -86,4 +99,54 @@ export function useCaseStudies(builtIn: CaseStudy[]): CaseStudy[] {
   return list
     .filter((c) => c.visible !== false && c.slug && c.headline)
     .map((c) => ({ ...c, icon: iconFor(c.slug, fallbackIcon) }));
+}
+
+function mergeService(
+  service: ProfessionalService,
+  text?: Partial<ServiceText>,
+): ProfessionalService {
+  if (!text) return service;
+  return {
+    ...service,
+    ...(typeof text.title === "string" && text.title ? { title: text.title } : {}),
+    ...(typeof text.summary === "string" && text.summary ? { summary: text.summary } : {}),
+    ...(typeof text.whoNeedsIt === "string" && text.whoNeedsIt
+      ? { whoNeedsIt: text.whoNeedsIt }
+      : {}),
+    ...(nonEmptyList<string>(text.process) ? { process: text.process } : {}),
+    ...(nonEmptyList<string>(text.documents) ? { documents: text.documents } : {}),
+  };
+}
+
+/** A CA & legal service with the CRM's text laid over the built-in one. */
+export function useProfessionalService(
+  service: ProfessionalService | undefined,
+): ProfessionalService | undefined {
+  const text = useSiteContent().services?.[service?.slug ?? ""];
+  return service ? mergeService(service, text) : service;
+}
+
+/** The whole CA & legal list, each service with the CRM's text laid over it. */
+export function useProfessionalServices(list: ProfessionalService[]): ProfessionalService[] {
+  const services = useSiteContent().services;
+  return services ? list.map((s) => mergeService(s, services[s.slug])) : list;
+}
+
+let appliedInfo = false;
+
+/**
+ * Applies the contact details and CIBIL price/UPI staff set in the CRM. Returns a number that
+ * changes once they are applied, so the root can redraw the page with the new values.
+ */
+export function useApplySiteInfo(): number {
+  const info = useSiteContent().siteInfo;
+  const [version, setVersion] = useState(0);
+  useEffect(() => {
+    if (!info || appliedInfo) return;
+    appliedInfo = true;
+    applyContactInfo(info);
+    applyCibilInfo(info);
+    setVersion(1);
+  }, [info]);
+  return version;
 }
