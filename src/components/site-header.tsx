@@ -1,3 +1,4 @@
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { Menu, Phone, X, ChevronDown, ArrowRight } from "lucide-react";
@@ -235,6 +236,8 @@ export function SiteHeader() {
             })}
           </nav>
 
+          <LanguageSwitcher className="hidden sm:inline-flex" />
+
           {/* Apply CTA */}
           <Link to="/contact" className="gold-btn hidden py-2.5 whitespace-nowrap sm:inline-flex">
             Apply Now
@@ -272,6 +275,7 @@ export function SiteHeader() {
                 {link.label}
               </Link>
             ))}
+            <LanguageSwitcher className="mt-1 self-start" />
             <Link
               to="/contact"
               onClick={() => setMobileOpen(false)}

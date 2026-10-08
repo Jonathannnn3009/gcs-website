@@ -16,8 +16,8 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -194,14 +194,14 @@
   --color-bg-light: var(--bg-light);
   --color-ink: var(--ink);
   /* Serif display face for headings; Cinzel echoes the logo's wordmark */
-  --font-heading: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-heading: "Playfair Display", "Noto Serif Devanagari", Georgia, "Times New Roman", serif;
   --font-brand: "Cinzel", "Trajan Pro", Georgia, serif;
 }
 
 @layer base {
   h1,
   h2 {
-    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-family: "Playfair Display", "Noto Serif Devanagari", Georgia, "Times New Roman", serif;
     letter-spacing: -0.01em;
   }
 }

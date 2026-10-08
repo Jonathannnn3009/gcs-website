@@ -28,6 +28,9 @@ type SiteContent = {
   testimonials?: (ClientStory & { visible?: boolean })[];
   trustNumbers?: Record<string, string>;
   customPages?: CustomPage[];
+  /** Hindi and Marathi wording, keyed like pageText by the original English. */
+  "pageText:hi"?: PageTextMap;
+  "pageText:mr"?: PageTextMap;
 };
 
 /** A page or article staff created in the CRM. */

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { Check, Loader2, Pencil, X } from "lucide-react";
 import { CRM_API } from "@/lib/crm";
+import { LANGUAGES, useLanguage } from "@/lib/language";
 import {
   applyImages,
   applyOverrides,
@@ -53,6 +54,15 @@ function textNodeAt(x: number, y: number, el: Element): Text | null {
 export function InlineEditor() {
   const pathname = normalizePath(useRouterState({ select: (s) => s.location.pathname }));
   const content = useSiteContent();
+  const lang = useLanguage();
+  const contentKey = lang === "en" ? "pageText" : (`pageText:${lang}` as const);
+  const savedText = content[contentKey];
+  const langName = LANGUAGES.find((l) => l.code === lang)?.name ?? "";
+  // English edits underneath, with the translations for the chosen language laid over them.
+  const visibleOverrides = (map: PageTextMap | undefined) =>
+    lang === "en"
+      ? overridesFor(map, pathname)
+      : { ...overridesFor(content.pageText, pathname), ...overridesFor(map, pathname) };
   const [admin, setAdmin] = useState(false);
   const [editing, setEditing] = useState(false);
   const [target, setTarget] = useState<Target | null>(null);
@@ -69,6 +79,11 @@ export function InlineEditor() {
   const fileInput = useRef<HTMLInputElement>(null);
   const pickedImage = useRef<HTMLImageElement | null>(null);
 
+  useEffect(() => {
+    setDraft(null);
+    setTarget(null);
+  }, [lang]);
+
   // Is the person signed in to the CRM as an admin?
   useEffect(() => {
     const token = readToken();
@@ -84,7 +99,7 @@ export function InlineEditor() {
     return () => ctrl.abort();
   }, []);
 
-  const working = draft ?? content.pageText ?? {};
+  const working = draft ?? savedText ?? {};
   const edits = Object.keys(overridesFor(draft ?? undefined, pathname)).length;
   const dirty = draft !== null || draftImages !== null;
 
@@ -123,9 +138,7 @@ export function InlineEditor() {
     const key = target.original.trim();
     const value = draftText.trim();
     if (!key || !value) return;
-    const base: PageTextMap = JSON.parse(
-      JSON.stringify(draftRef.current ?? content.pageText ?? {}),
-    );
+    const base: PageTextMap = JSON.parse(JSON.stringify(draftRef.current ?? savedText ?? {}));
     const scope = allPages ? "*" : pathname;
     const bucket = (base[scope] ??= {});
     if (value === key) delete bucket[key];
@@ -133,9 +146,9 @@ export function InlineEditor() {
     if (Object.keys(bucket).length === 0) delete base[scope];
     setDraft(base);
     // Show it now, on this page, before saving.
-    applyOverrides(document.body, overridesFor(base, pathname), content.trustNumbers ?? {});
+    applyOverrides(document.body, visibleOverrides(base), content.trustNumbers ?? {});
     setTarget(null);
-  }, [target, draftText, allPages, pathname, content.pageText]);
+  }, [target, draftText, allPages, pathname, savedText, lang, content.pageText]);
 
   /** Uploads the chosen picture to the CRM and shows it in place of the one that was clicked. */
   const replaceImage = async (file: File) => {
@@ -182,10 +195,10 @@ export function InlineEditor() {
     setSaving(true);
     setMessage("");
     try {
-      if (draft) await put("pageText", draft, token);
+      if (draft) await put(contentKey, draft, token);
       if (draftImages) await put("images", draftImages, token);
       updateSiteContent({
-        ...(draft ? { pageText: draft } : {}),
+        ...(draft ? { [contentKey]: draft } : {}),
         ...(draftImages ? { images: draftImages } : {}),
       });
       setDraft(null);
@@ -204,11 +217,7 @@ export function InlineEditor() {
     setTarget(null);
     setEditing(false);
     // Redraw with what is saved.
-    applyOverrides(
-      document.body,
-      overridesFor(content.pageText, pathname),
-      content.trustNumbers ?? {},
-    );
+    applyOverrides(document.body, visibleOverrides(savedText), content.trustNumbers ?? {});
     applyImages(document.body, content.images ?? {});
   };
 
@@ -241,7 +250,9 @@ export function InlineEditor() {
       ) : (
         <div className="w-72 rounded-xl bg-navy p-3 text-white shadow-2xl ring-1 ring-gold/40">
           <p className="text-xs leading-relaxed text-white/80">
-            Click any wording to change it, or a picture to replace it.{" "}
+            {lang === "en"
+              ? "Click any wording to change it, or a picture to replace it."
+              : `Translating to ${langName}: click any wording to write it in ${langName}.`}{" "}
             {edits > 0 && `${edits} change(s) on this page.`}
           </p>
           {message && <p className="mt-2 text-xs text-gold">{message}</p>}

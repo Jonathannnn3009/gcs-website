@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { CRM_API } from "@/lib/crm";
+import { useLanguage } from "@/lib/language";
 import { useSiteContent } from "@/lib/site-content";
 
 export type PageTextMap = Record<string, Record<string, string>>;
@@ -135,13 +136,15 @@ function useBooted(): boolean {
 export function usePageText() {
   const booted = useBooted();
   const content = useSiteContent();
+  const lang = useLanguage();
+  const translations = lang === "en" ? undefined : content[`pageText:${lang}`];
   const map = content.pageText;
   const images = content.images;
   const replacements = content.trustNumbers;
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   useEffect(() => {
     if (!booted) return;
-    const overrides = overridesFor(map, pathname);
+    const overrides = { ...overridesFor(map, pathname), ...overridesFor(translations, pathname) };
     const hasAny =
       Object.keys(overrides).length > 0 ||
       Object.keys(images ?? {}).length > 0 ||
@@ -168,5 +171,5 @@ export function usePageText() {
       observer.disconnect();
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [booted, map, images, replacements, pathname]);
+  }, [booted, map, translations, images, replacements, pathname]);
 }
