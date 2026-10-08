@@ -378,6 +378,7 @@ function ProductDetailPage() {
                         : undefined
                     }
                     productTitle={product.title}
+                    productSlug={product.slug}
                     categories={product.documentCategories?.map((c) => c.label)}
                     presetCategory={presetCategory}
                     intakeFields={product.checklistIntake}
@@ -391,7 +392,7 @@ function ProductDetailPage() {
 
           {/* RIGHT: sticky apply card */}
           <Reveal animate={false} delay={100} className="lg:sticky lg:top-28">
-            <LeadForm defaultLoanType={product.title} />
+            <LeadForm defaultLoanType={product.title} source={`service-enquiry-${product.slug}`} />
           </Reveal>
         </div>
       </Section>

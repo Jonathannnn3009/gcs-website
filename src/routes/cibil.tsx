@@ -226,6 +226,7 @@ function CibilFlow() {
     await submitLead({
       name: details.fullName.trim(),
       phone: details.phone.trim(),
+      email: details.email.trim(),
       source: "cibil-report-request",
       detail: ["Stage: details captured, payment pending", ...detailLines()].join(" | "),
     });
@@ -245,6 +246,7 @@ function CibilFlow() {
     await submitLead({
       name: details.fullName.trim(),
       phone: details.phone.trim(),
+      email: details.email.trim(),
       source: "cibil-report-request",
       detail: [
         "Stage: payment submitted",

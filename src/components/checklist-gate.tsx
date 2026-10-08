@@ -44,6 +44,7 @@ export function ChecklistGate({
   pdfHref,
   pdfHrefByCategory,
   productTitle,
+  productSlug,
   categories,
   presetCategory,
   theme = "dark",
@@ -53,6 +54,8 @@ export function ChecklistGate({
   /** When the checklist itself differs by category (e.g. Home Loan's Salaried/Self-Employed/NRI each have their own PDF), map category label to its PDF path — takes priority over `pdfHref` once a category is picked. */
   pdfHrefByCategory?: Record<string, string>;
   productTitle: string;
+  /** The product's slug, so the CRM files the lead under that loan product. */
+  productSlug?: string;
   categories?: string[];
   /** Set when the user already picked their category elsewhere on the page (e.g. a profile card) — locks that category in. */
   presetCategory?: string | null;
@@ -104,6 +107,8 @@ export function ChecklistGate({
       name: name.trim(),
       phone: phone.trim(),
       source: "checklist-download",
+      ...(productSlug ? { productSlug } : {}),
+      amount: intakeValues["loanAmount"] ?? "",
       detail: detailParts.join(" | "),
     });
     setSubmitting(false);

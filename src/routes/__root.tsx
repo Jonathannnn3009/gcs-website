@@ -17,6 +17,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { PromoPopup } from "@/components/promo-popup";
+import { flushPendingLeads } from "@/lib/leads";
 
 function NotFoundComponent() {
   return (
@@ -157,6 +158,11 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  // Re-send any enquiry that couldn't reach the CRM earlier (offline, CRM not live yet).
+  useEffect(() => {
+    void flushPendingLeads();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

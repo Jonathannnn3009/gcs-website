@@ -1,7 +1,8 @@
 import { useId, useState, type ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
-import { APPLICANT_CATEGORY_LABELS } from "@/data/products";
+import { APPLICANT_CATEGORY_LABELS, PRODUCTS } from "@/data/products";
+import { submitLead } from "@/lib/leads";
 import { Toast } from "@/components/toast";
 
 // Paperwork genuinely differs by applicant type for these two — ask early.
@@ -80,7 +81,10 @@ function formatIndianAmount(raw: string) {
   return digits ? Number(digits).toLocaleString("en-IN") : "";
 }
 
-export function LeadForm({ defaultLoanType = "" }: { defaultLoanType?: string } = {}) {
+export function LeadForm({
+  defaultLoanType = "",
+  source = "website-enquiry",
+}: { defaultLoanType?: string; source?: string } = {}) {
   const uid = useId();
   // Only pre-select a loan type the dropdown actually offers.
   const initial: Fields = {
@@ -90,6 +94,7 @@ export function LeadForm({ defaultLoanType = "" }: { defaultLoanType?: string } 
   const [values, setValues] = useState<Fields>(initial);
   const [errors, setErrors] = useState<Partial<Fields>>({});
   const [showToast, setShowToast] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const set = (key: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setValues((v) => ({ ...v, [key]: e.target.value }));
@@ -127,9 +132,37 @@ export function LeadForm({ defaultLoanType = "" }: { defaultLoanType?: string } 
     return Object.keys(next).length === 0;
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
+
+    // Hand the enquiry to the CRM. Loan types that match a product page carry its slug,
+    // so the CRM files the lead under the right loan product.
+    const service = SERVICES.find((s) => s.title === values.loanType);
+    const productSlug =
+      service && PRODUCTS.some((p) => p.slug === service.id) ? service.id : undefined;
+    const loanType = values.loanType === "Other" ? values.loanTypeOther.trim() : values.loanType;
+    const city = values.city === "Other" ? values.cityOther.trim() : values.city;
+    const detail = [
+      `Loan type: ${loanType}`,
+      values.applicantCategory ? `Applicant: ${values.applicantCategory}` : "",
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    setSubmitting(true);
+    await submitLead({
+      name: values.name.trim(),
+      phone: values.phone.trim(),
+      email: values.email.trim(),
+      city,
+      ...(productSlug ? { productSlug } : {}),
+      amount: values.loanAmount,
+      source,
+      detail,
+    });
+    setSubmitting(false);
+
     setValues(initial);
     setErrors({});
     setShowToast(true);
@@ -290,7 +323,8 @@ export function LeadForm({ defaultLoanType = "" }: { defaultLoanType?: string } 
 
           <button
             type="submit"
-            className="group mt-6 flex w-full items-center justify-center gap-3 rounded-lg bg-navy py-3.5 text-sm font-bold text-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-soft"
+            disabled={submitting}
+            className="group mt-6 flex w-full items-center justify-center gap-3 disabled:opacity-70 rounded-lg bg-navy py-3.5 text-sm font-bold text-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-soft"
           >
             Apply Now
             <span className="grid h-7 w-7 place-items-center rounded-full bg-gold text-navy transition-transform duration-300 group-hover:translate-x-0.5">

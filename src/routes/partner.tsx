@@ -265,6 +265,7 @@ function PartnerForm() {
     await submitLead({
       name: values.name.trim(),
       phone: values.phone.trim(),
+      email: values.email.trim(),
       source: "partner-enquiry",
       detail: detailParts.join(" — "),
     });
