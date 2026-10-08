@@ -18,6 +18,7 @@ import { Route as MumbaiRouteImport } from './routes/mumbai'
 import { Route as NaviMumbaiRouteImport } from './routes/navi-mumbai'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as PuneRouteImport } from './routes/pune'
+import { Route as RatesRouteImport } from './routes/rates'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ThaneRouteImport } from './routes/thane'
 import { Route as ToolsRouteImport } from './routes/tools'
@@ -72,6 +73,11 @@ const PartnerRoute = PartnerRouteImport.update({
 const PuneRoute = PuneRouteImport.update({
   id: '/pune',
   path: '/pune',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RatesRoute = RatesRouteImport.update({
+  id: '/rates',
+  path: '/rates',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/navi-mumbai': typeof NaviMumbaiRoute
   '/partner': typeof PartnerRoute
   '/pune': typeof PuneRoute
+  '/rates': typeof RatesRoute
   '/services': typeof ServicesRouteWithChildren
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/navi-mumbai': typeof NaviMumbaiRoute
   '/partner': typeof PartnerRoute
   '/pune': typeof PuneRoute
+  '/rates': typeof RatesRoute
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/why-us': typeof WhyUsRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/navi-mumbai': typeof NaviMumbaiRoute
   '/partner': typeof PartnerRoute
   '/pune': typeof PuneRoute
+  '/rates': typeof RatesRoute
   '/services': typeof ServicesRouteWithChildren
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/navi-mumbai'
     | '/partner'
     | '/pune'
+    | '/rates'
     | '/services'
     | '/thane'
     | '/tools'
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/navi-mumbai'
     | '/partner'
     | '/pune'
+    | '/rates'
     | '/thane'
     | '/tools'
     | '/why-us'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/navi-mumbai'
     | '/partner'
     | '/pune'
+    | '/rates'
     | '/services'
     | '/thane'
     | '/tools'
@@ -261,6 +273,7 @@ export interface RootRouteChildren {
   NaviMumbaiRoute: typeof NaviMumbaiRoute
   PartnerRoute: typeof PartnerRoute
   PuneRoute: typeof PuneRoute
+  RatesRoute: typeof RatesRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   ThaneRoute: typeof ThaneRoute
   ToolsRoute: typeof ToolsRoute
@@ -332,6 +345,13 @@ declare module '@tanstack/react-router' {
       path: '/pune'
       fullPath: '/pune'
       preLoaderRoute: typeof PuneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rates': {
+      id: '/rates'
+      path: '/rates'
+      fullPath: '/rates'
+      preLoaderRoute: typeof RatesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -445,6 +465,7 @@ const rootRouteChildren: RootRouteChildren = {
   NaviMumbaiRoute: NaviMumbaiRoute,
   PartnerRoute: PartnerRoute,
   PuneRoute: PuneRoute,
+  RatesRoute: RatesRoute,
   ServicesRoute: ServicesRouteWithChildren,
   ThaneRoute: ThaneRoute,
   ToolsRoute: ToolsRoute,

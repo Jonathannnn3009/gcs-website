@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useBankRates } from "@/lib/site-content";
 import { SliderField } from "@/components/slider-field";
 
 function formatCurrency(n: number): string {
@@ -12,8 +13,17 @@ function formatINR(n: number): string {
 }
 
 export function EmiCalculator() {
+  const { defaultEmiRate } = useBankRates();
   const [principal, setPrincipal] = useState(5000000);
-  const [rate, setRate] = useState(9.5);
+  const [rate, setRateValue] = useState(defaultEmiRate);
+  const rateTouched = useRef(false);
+  const setRate = (v: number) => {
+    rateTouched.current = true;
+    setRateValue(v);
+  };
+  useEffect(() => {
+    if (!rateTouched.current) setRateValue(defaultEmiRate);
+  }, [defaultEmiRate]);
   const [tenure, setTenure] = useState(20);
 
   const result = useMemo(() => {
@@ -95,16 +105,28 @@ export function EmiCalculator() {
           {/* Result Cards */}
           <div className="grid grid-cols-3 gap-3">
             <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
-              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">Monthly EMI</p>
-              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">{formatINR(result.emi)}</p>
+              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+                Monthly EMI
+              </p>
+              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
+                {formatINR(result.emi)}
+              </p>
             </div>
             <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
-              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">Total Interest</p>
-              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">{formatCurrency(result.totalInterest)}</p>
+              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+                Total Interest
+              </p>
+              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
+                {formatCurrency(result.totalInterest)}
+              </p>
             </div>
             <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
-              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">Total Payment</p>
-              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">{formatCurrency(result.totalAmount)}</p>
+              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+                Total Payment
+              </p>
+              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
+                {formatCurrency(result.totalAmount)}
+              </p>
             </div>
           </div>
         </div>
@@ -160,7 +182,9 @@ export function EmiCalculator() {
             {/* Center text */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-xs font-bold text-muted-foreground uppercase">EMI</span>
-              <span className="text-lg font-extrabold text-foreground">{formatINR(result.emi)}</span>
+              <span className="text-lg font-extrabold text-foreground">
+                {formatINR(result.emi)}
+              </span>
               <span className="text-[10px] text-muted-foreground">per month</span>
             </div>
           </div>
@@ -168,12 +192,19 @@ export function EmiCalculator() {
           {/* Legend */}
           <div className="mt-4 flex gap-6">
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full" style={{ background: "var(--gradient-gold)" }}></span>
-              <span className="text-xs font-semibold">Principal ({principalPercent.toFixed(0)}%)</span>
+              <span
+                className="h-3 w-3 rounded-full"
+                style={{ background: "var(--gradient-gold)" }}
+              ></span>
+              <span className="text-xs font-semibold">
+                Principal ({principalPercent.toFixed(0)}%)
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full bg-navy"></span>
-              <span className="text-xs font-semibold">Interest ({interestPercent.toFixed(0)}%)</span>
+              <span className="text-xs font-semibold">
+                Interest ({interestPercent.toFixed(0)}%)
+              </span>
             </div>
           </div>
         </div>

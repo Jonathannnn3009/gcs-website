@@ -3,6 +3,7 @@
 import { writeFileSync } from "node:fs";
 import { CASE_STUDIES } from "../src/data/case-studies";
 import { REPORT_PRICE, UPI } from "../src/data/cibil";
+import { DEFAULT_RATES } from "../src/data/rates";
 import { CONTACT_FAQS, PARTNER_FAQS } from "../src/data/faqs";
 import { LOCATIONS } from "../src/data/locations";
 import { PRODUCTS } from "../src/data/products";
@@ -62,7 +63,11 @@ const siteInfo = {
 
 writeFileSync(
   out,
-  JSON.stringify({ faqs, products, caseStudies, services, siteInfo }, null, 2) + "\n",
+  JSON.stringify(
+    { faqs, products, caseStudies, services, siteInfo, bankRates: DEFAULT_RATES },
+    null,
+    2,
+  ) + "\n",
 );
 console.log(
   `faqs: ${Object.keys(faqs).length} pages, products: ${PRODUCTS.length}, case studies: ${caseStudies.length}`,

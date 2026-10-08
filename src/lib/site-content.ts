@@ -9,6 +9,7 @@ import type { Product } from "@/data/products";
 import type { CaseStudy } from "@/data/case-studies";
 import type { ProfessionalService } from "@/data/professional-services";
 import type { ImageMap, PageTextMap } from "@/lib/page-text";
+import { DEFAULT_RATES, type RatesContent } from "@/data/rates";
 import { applyContactInfo, type SiteInfoContact } from "@/data/site";
 import { applyCibilInfo } from "@/data/cibil";
 
@@ -20,6 +21,7 @@ type SiteContent = {
   siteInfo?: SiteInfo;
   pageText?: PageTextMap;
   images?: ImageMap;
+  bankRates?: Partial<RatesContent>;
 };
 
 export type SiteInfo = SiteInfoContact & { reportPrice?: number; upiId?: string; upiName?: string };
@@ -163,4 +165,22 @@ export function useApplySiteInfo(): number {
     setVersion(1);
   }, [info]);
   return version;
+}
+
+/** Interest rates: the CRM's table when staff have set one, else the one built from the loan pages. */
+export function useBankRates(): RatesContent {
+  const saved = useSiteContent().bankRates;
+  if (!saved) return DEFAULT_RATES;
+  return {
+    asOf: typeof saved.asOf === "string" ? saved.asOf : DEFAULT_RATES.asOf,
+    disclaimer:
+      typeof saved.disclaimer === "string" && saved.disclaimer
+        ? saved.disclaimer
+        : DEFAULT_RATES.disclaimer,
+    defaultEmiRate:
+      typeof saved.defaultEmiRate === "number" && saved.defaultEmiRate > 0
+        ? saved.defaultEmiRate
+        : DEFAULT_RATES.defaultEmiRate,
+    rows: nonEmptyList<RatesContent["rows"][number]>(saved.rows) ? saved.rows : DEFAULT_RATES.rows,
+  };
 }

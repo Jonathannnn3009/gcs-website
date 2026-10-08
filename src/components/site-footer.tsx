@@ -67,6 +67,7 @@ export function SiteFooter() {
                 { to: "/about", label: "About Us" },
                 { to: "/services", label: "Our Services" },
                 { to: "/tools", label: "EMI Calculator" },
+                { to: "/rates", label: "Interest Rates" },
                 { to: "/cibil", label: "CIBIL Report" },
                 { to: "/case-studies", label: "Case Studies" },
                 { to: "/ca-legal-services", label: "CA & Legal Services" },
