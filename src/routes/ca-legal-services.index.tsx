@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { ServiceEnquiryForm } from "@/components/service-enquiry-form";
-import { PROFESSIONAL_SERVICES, SERVICE_DIVISIONS, type ServiceDivision } from "@/data/professional-services";
+import { PROFESSIONAL_SERVICES, SERVICE_DIVISIONS, divisionLabel, type ServiceDivision } from "@/data/professional-services";
 import { useProfessionalServices } from "@/lib/site-content";
 
 const divisionId = (division: ServiceDivision) => division.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -64,7 +64,7 @@ function CaLegalServicesPage() {
                   href={`#${divisionId(division)}`}
                   className="inline-flex items-center gap-1.5 rounded-full border border-gold/25 bg-white px-4 py-2 text-xs font-bold text-navy transition-all hover:-translate-y-0.5 hover:border-gold hover:bg-gold-pale/30 dark:bg-card dark:text-white dark:hover:bg-gold/15"
                 >
-                  {division}
+                  {divisionLabel(division)}
                   <span className="text-gold-dark">{count}</span>
                 </a>
               );
@@ -89,7 +89,7 @@ function CaLegalServicesPage() {
                 >
                   <div className="flex flex-wrap items-baseline justify-between gap-3">
                     <div>
-                      <p className="eyebrow">{division}</p>
+                      <p className="eyebrow">{divisionLabel(division)}</p>
                       <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
                         {isLegal
                           ? "Property, society and legal documentation."

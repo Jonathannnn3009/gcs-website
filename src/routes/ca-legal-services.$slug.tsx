@@ -5,7 +5,7 @@ import { Reveal } from "@/components/reveal";
 import { ServiceEnquiryForm } from "@/components/service-enquiry-form";
 import { ChecklistGate } from "@/components/checklist-gate";
 import { CONTACT } from "@/data/site";
-import { PROFESSIONAL_SERVICES, getProfessionalService } from "@/data/professional-services";
+import { PROFESSIONAL_SERVICES, divisionLabel, getProfessionalService } from "@/data/professional-services";
 import { useProfessionalService } from "@/lib/site-content";
 
 export const Route = createFileRoute("/ca-legal-services/$slug")({
@@ -75,7 +75,7 @@ function ProfessionalServiceDetailPage() {
                   <service.icon className="h-7 w-7" />
                 </span>
                 <span className="rounded-full border border-gold/30 px-3 py-1 text-xs font-bold tracking-wide text-gold-light">
-                  {service.division}
+                  {divisionLabel(service.division)}
                 </span>
               </div>
 

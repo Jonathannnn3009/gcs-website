@@ -24,6 +24,10 @@ import {
 
 export type ServiceDivision = "CA Services" | "Sheetal Associates";
 
+/** What visitors see as the division's heading; the key above stays as the internal id. */
+export const divisionLabel = (division: ServiceDivision): string =>
+  division === "Sheetal Associates" ? "Legal Services" : division;
+
 export type ProfessionalService = {
   slug: string;
   icon: LucideIcon;
