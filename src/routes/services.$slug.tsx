@@ -13,6 +13,7 @@ import { LeadForm } from "@/components/lead-form";
 import { ChecklistGate } from "@/components/checklist-gate";
 import { PRODUCTS, getProduct } from "@/data/products";
 import { useProduct } from "@/lib/site-content";
+import { useIntakeFields } from "@/lib/page-lists";
 import { CONTACT, waLink } from "@/data/site";
 
 export const Route = createFileRoute("/services/$slug")({
@@ -88,6 +89,7 @@ function productCode(title: string): string {
 function ProductDetailPage() {
   const { slug } = Route.useParams();
   const product = useProduct(getProduct(slug));
+  const intakeFields = useIntakeFields(slug, product?.checklistIntake);
   const [presetCategory, setPresetCategory] = useState<string | null>(null);
   useEffect(() => setPresetCategory(null), [slug]);
   if (!product) return <NotFoundBlock />;
@@ -382,7 +384,7 @@ function ProductDetailPage() {
                     productSlug={product.slug}
                     categories={product.documentCategories?.map((c) => c.label)}
                     presetCategory={presetCategory}
-                    intakeFields={product.checklistIntake}
+                    intakeFields={intakeFields}
                   />
                 </div>
               </div>

@@ -3,14 +3,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ICONS } from "@/lib/icon-map";
-import { PRODUCT_GROUPS } from "@/data/products";
+import { PRODUCT_GROUPS, PRODUCTS } from "@/data/products";
 import type { LocationContent } from "@/data/locations";
+import type { ChecklistIntakeField } from "@/data/products";
 import { STAMP_DUTY_RATES } from "@/lib/finance";
 import {
   CALC_ASSUMPTIONS,
   CIBIL_BUREAUS,
   CIBIL_LAST_PULLED,
   CITY_PAGES,
+  FORM_APPLICANTS,
   FORM_CITIES,
   LIST_SPECS,
   SERVICES_GROUPS,
@@ -74,16 +76,65 @@ export function useFixedList<T extends Record<string, string>>(
   return ordered;
 }
 
+/** The extra questions on a loan's checklist-download form: the CRM's list when staff have set one, else the built-in questions. */
+export function useIntakeFields(
+  slug: string,
+  builtIn: ChecklistIntakeField[] | undefined,
+): ChecklistIntakeField[] | undefined {
+  const saved = useSiteContent().lists?.["intake.fields"];
+  if (!Array.isArray(saved)) return builtIn;
+  const mine = saved.filter((r) => r["slug"] === slug && (r["label"] ?? "").trim() !== "");
+  if (mine.length === 0) return saved.length > 0 || builtIn === undefined ? undefined : builtIn;
+  return mine.map((r, i): ChecklistIntakeField => {
+    const label = (r["label"] ?? "").trim();
+    const key =
+      (r["key"] ?? "").trim() ||
+      label
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim()
+        .replace(/ (\w)/g, (_, c: string) => c.toUpperCase()) ||
+      `field${i}`;
+    if (r["type"] === "select") {
+      const options = (r["options"] ?? "")
+        .split(",")
+        .map((o) => o.trim())
+        .filter(Boolean);
+      return { key, label, type: "select", options: options.length > 0 ? options : ["Other"] };
+    }
+    if (r["type"] === "date") return { key, label, type: "date" };
+    return {
+      key,
+      label,
+      type: "text",
+      ...(r["placeholder"] ? { placeholder: r["placeholder"] } : {}),
+      ...(r["amount"] === "yes" ? { format: "amount" as const } : {}),
+    };
+  });
+}
+
+/** The applicant options in the enquiry form (the checklist's own categories are separate and fixed). */
+export function useApplicantOptions(): string[] {
+  const list = useList("form.applicants", FORM_APPLICANTS);
+  return list.map((a) => String(a["label"]));
+}
+
 /** Loan groups (heading and description) with the CRM's wording. */
 export function useProductGroups() {
   const groups = useFixedList("services.groups", SERVICES_GROUPS, "name");
-  return PRODUCT_GROUPS.map((g) => {
-    const o = groups.find((x) => x.name === g.name);
-    return { ...g, heading: o?.heading || g.heading, description: o?.description || g.description };
-  }).sort(
-    (a, b) =>
-      groups.findIndex((x) => x.name === a.name) - groups.findIndex((x) => x.name === b.name),
-  );
+  return PRODUCT_GROUPS.filter((g) => PRODUCTS.some((p) => p.group === g.name))
+    .map((g) => {
+      const o = groups.find((x) => x.name === g.name);
+      return {
+        ...g,
+        heading: o?.heading || g.heading,
+        description: o?.description || g.description,
+      };
+    })
+    .sort(
+      (a, b) =>
+        groups.findIndex((x) => x.name === a.name) - groups.findIndex((x) => x.name === b.name),
+    );
 }
 
 /** Cities we serve (enquiry form, footer, city pages). */

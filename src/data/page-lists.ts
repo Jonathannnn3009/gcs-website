@@ -54,11 +54,15 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
-import { PRODUCTS } from "@/data/products";
 import { BANK_PARTNERS, CONTACT, PAIN_POINTS, SERVICES } from "@/data/site";
 import { BUREAUS, LAST_PULLED_OPTIONS } from "@/data/cibil";
 import { LOCATIONS } from "@/data/locations";
-import { PRODUCT_GROUPS } from "@/data/products";
+import {
+  APPLICANT_CATEGORY_LABELS,
+  PRODUCT_GROUPS,
+  PRODUCTS,
+  type ChecklistIntakeField,
+} from "@/data/products";
 import { STAMP_DUTY_RATES } from "@/lib/finance";
 
 export const HOME_HERO_POINTS = [
@@ -544,10 +548,30 @@ export const CALC_ASSUMPTIONS = [
   { key: "cgFee", label: "CGTMSE: starting fee rate, %", value: "1" },
 ];
 
+export const FORM_APPLICANTS = APPLICANT_CATEGORY_LABELS.map((label) => ({ label }));
+
+export const PRODUCTS_VISIBILITY = PRODUCTS.map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  visible: "yes",
+}));
+
+export const INTAKE_FIELDS = PRODUCTS.flatMap((p) =>
+  (p.checklistIntake ?? []).map((f: ChecklistIntakeField) => ({
+    slug: p.slug,
+    key: f.key,
+    label: f.label,
+    type: f.type,
+    options: f.type === "select" ? f.options.join(", ") : "",
+    placeholder: f.type === "text" ? (f.placeholder ?? "") : "",
+    amount: f.type === "text" && f.format === "amount" ? "yes" : "",
+  })),
+);
+
 export type FieldSpec = {
   key: string;
   label: string;
-  kind: "text" | "textarea" | "icon" | "image" | "readonly";
+  kind: "text" | "textarea" | "icon" | "image" | "readonly" | "yesno";
 };
 export type ListItem = Record<string, string | LucideIcon>;
 export type ListSpec = {
@@ -566,6 +590,7 @@ const A = (key: string, label: string): FieldSpec => ({ key, label, kind: "texta
 const I = (key: string, label: string): FieldSpec => ({ key, label, kind: "icon" });
 const G = (key: string, label: string): FieldSpec => ({ key, label, kind: "image" });
 const R = (key: string, label: string): FieldSpec => ({ key, label, kind: "readonly" });
+const Y = (key: string, label: string): FieldSpec => ({ key, label, kind: "yesno" });
 
 /**
  * Every repeated block on a page that staff can add to, remove from, reorder and reword in the
@@ -768,7 +793,7 @@ export const LIST_SPECS: ListSpec[] = [
     page: "Home",
     label: "Bank and lender logos",
     hint: "The scrolling strip. Upload a logo (PNG, JPG or WebP); tick Small for very wide logos.",
-    fields: [T("name", "Bank or lender"), G("logo", "Logo"), T("small", "Small? type yes")],
+    fields: [T("name", "Bank or lender"), G("logo", "Logo"), Y("small", "Small logo (very wide)")],
     items: BANKS,
   },
   {
@@ -783,7 +808,7 @@ export const LIST_SPECS: ListSpec[] = [
       T("product", "Loan name"),
       T("slug", "Loan page slug"),
       A("line", "One-line description"),
-      T("featured", "Most popular? type yes"),
+      Y("featured", "Most popular"),
     ],
     items: HOME_GOALS,
   },
@@ -834,7 +859,7 @@ export const LIST_SPECS: ListSpec[] = [
       T("city", "City"),
       A("intro", "Introduction"),
       A("serviceNote", "Service note"),
-      T("hasOffice", "Office there? yes or no"),
+      Y("hasOffice", "We have an office there"),
     ],
     items: CITY_PAGES,
   },
@@ -859,5 +884,38 @@ export const LIST_SPECS: ListSpec[] = [
     fixed: true,
     fields: [R("label", "Setting"), T("value", "Value")],
     items: CALC_ASSUMPTIONS,
+  },
+  {
+    key: "form.applicants",
+    page: "Forms",
+    label: "Enquiry form: applicant types",
+    hint: "The 'applicant' choices in the enquiry form. (The checklist download keeps its own fixed Salaried / Self-Employed / NRI choices, which decide which PDF is served.)",
+    fields: [T("label", "Choice")],
+    items: FORM_APPLICANTS,
+  },
+  {
+    key: "products.visibility",
+    page: "Services",
+    label: "Show or hide loan products",
+    hint: "Untick a loan to take it off the website: its page, menu entries and cards disappear. Tick it again to bring it back.",
+    fixed: true,
+    fields: [R("title", "Loan"), R("slug", "Page"), Y("visible", "Show on the website")],
+    items: PRODUCTS_VISIBILITY,
+  },
+  {
+    key: "intake.fields",
+    page: "Forms",
+    label: "Checklist download: extra questions",
+    hint: "Extra questions asked before a checklist downloads. Put the loan's website slug in each row (e.g. education-loan). Type is text, select or date; for select, list the options separated by commas. Keep the id (key) of an existing question unchanged; leave it empty on new ones.",
+    fields: [
+      T("slug", "Loan page slug"),
+      T("label", "Question"),
+      T("type", "Type: text, select or date"),
+      T("options", "Options for select, separated by commas"),
+      T("placeholder", "Example answer (text only)"),
+      Y("amount", "Format as a rupee amount"),
+      T("key", "Id (leave empty on new)"),
+    ],
+    items: INTAKE_FIELDS,
   },
 ];

@@ -78,6 +78,8 @@ export function LoanGoals() {
   const goalItems = useList("home.goals", HOME_GOALS);
   const CATEGORIES: Category[] = [];
   for (const g of goalItems) {
+    // a loan staff have hidden should not keep a card
+    if (!PRODUCTS.some((p) => p.slug === String(g["slug"]))) continue;
     const name = String(g["category"]);
     let cat = CATEGORIES.find((c) => c.name === name);
     if (!cat) {

@@ -5,7 +5,7 @@ import { APPLICANT_CATEGORY_LABELS, PRODUCTS } from "@/data/products";
 import { submitLead } from "@/lib/leads";
 import { Toast } from "@/components/toast";
 import { FORM_LOAN_TYPES } from "@/data/page-lists";
-import { useCities, useList } from "@/lib/page-lists";
+import { useApplicantOptions, useCities, useList } from "@/lib/page-lists";
 
 // Paperwork genuinely differs by applicant type for these two — ask early.
 const LOAN_TYPES_WITH_CATEGORY = new Set(["Home Loan", "Loan Against Property"]);
@@ -89,6 +89,7 @@ export function LeadForm({
 }: { defaultLoanType?: string; source?: string } = {}) {
   const loanTypes = useList("form.loanTypes", FORM_LOAN_TYPES);
   const cities = useCities();
+  const applicants = useApplicantOptions();
   const uid = useId();
   // Only pre-select a loan type the dropdown actually offers.
   const initial: Fields = {
@@ -267,7 +268,7 @@ export function LeadForm({
                   onChange={set("applicantCategory")}
                 >
                   <option value="">Select one</option>
-                  {APPLICANT_CATEGORY_LABELS.map((c) => (
+                  {applicants.map((c) => (
                     <option key={c} value={c}>
                       {c}
                     </option>

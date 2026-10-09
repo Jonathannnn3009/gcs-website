@@ -13,6 +13,7 @@ import { DEFAULT_RATES, type RatesContent } from "@/data/rates";
 import type { SeoMap } from "@/lib/seo";
 import type { ClientStory } from "@/data/testimonials";
 import { applyContactInfo, type SiteInfoContact } from "@/data/site";
+import { setHiddenProducts } from "@/data/products";
 import { applyCibilInfo } from "@/data/cibil";
 
 type SiteContent = {
@@ -190,15 +191,25 @@ let appliedInfo = false;
  * changes once they are applied, so the root can redraw the page with the new values.
  */
 export function useApplySiteInfo(): number {
-  const info = useSiteContent().siteInfo;
+  const content = useSiteContent();
+  const info = content.siteInfo;
+  const hidden = (content.lists?.["products.visibility"] ?? [])
+    .filter((row) => row["visible"] === "no")
+    .map((row) => row["slug"] ?? "")
+    .filter(Boolean);
+  const hiddenKey = hidden.join(",");
   const [version, setVersion] = useState(0);
   useEffect(() => {
-    if (!info || appliedInfo) return;
+    if (appliedInfo || (!info && hiddenKey === "")) return;
     appliedInfo = true;
-    applyContactInfo(info);
-    applyCibilInfo(info);
+    if (info) {
+      applyContactInfo(info);
+      applyCibilInfo(info);
+    }
+    setHiddenProducts(hiddenKey === "" ? [] : hiddenKey.split(","));
     setVersion(1);
-  }, [info]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [info, hiddenKey]);
   return version;
 }
 

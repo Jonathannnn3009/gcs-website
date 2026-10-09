@@ -154,7 +154,13 @@ export const PRODUCTS: Product[] = [
         options: ["Builder Purchase", "Resale"],
       },
       { key: "possessionDate", label: "Possession Date", type: "date" },
-      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 50,00,000", format: "amount" },
+      {
+        key: "loanAmount",
+        label: "Loan Amount Required",
+        type: "text",
+        placeholder: "e.g. 50,00,000",
+        format: "amount",
+      },
     ],
   },
   {
@@ -705,9 +711,20 @@ export const PRODUCTS: Product[] = [
       "Academic records",
     ],
     checklistIntake: [
-      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 15,00,000", format: "amount" },
+      {
+        key: "loanAmount",
+        label: "Loan Amount Required",
+        type: "text",
+        placeholder: "e.g. 15,00,000",
+        format: "amount",
+      },
       { key: "courseName", label: "Course Name", type: "text" },
-      { key: "courseDuration", label: "Course Duration", type: "text", placeholder: "e.g. 2 years" },
+      {
+        key: "courseDuration",
+        label: "Course Duration",
+        type: "text",
+        placeholder: "e.g. 2 years",
+      },
       { key: "courseStartDate", label: "Course Start Date", type: "date" },
       { key: "universityName", label: "University Name", type: "text" },
       { key: "country", label: "Country", type: "text" },
@@ -740,8 +757,19 @@ export const PRODUCTS: Product[] = [
     ],
     documents: [KYC, INCOME, "Dealer's vehicle quotation"],
     checklistIntake: [
-      { key: "purchaseFrom", label: "Purchase From", type: "select", options: ["Dealer", "Resale"] },
-      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 8,00,000", format: "amount" },
+      {
+        key: "purchaseFrom",
+        label: "Purchase From",
+        type: "select",
+        options: ["Dealer", "Resale"],
+      },
+      {
+        key: "loanAmount",
+        label: "Loan Amount Required",
+        type: "text",
+        placeholder: "e.g. 8,00,000",
+        format: "amount",
+      },
     ],
   },
   {
@@ -771,8 +799,19 @@ export const PRODUCTS: Product[] = [
     ],
     documents: [KYC, INCOME, "RC copy, insurance and valuation report"],
     checklistIntake: [
-      { key: "purchaseFrom", label: "Purchase From", type: "select", options: ["Dealer", "Resale"] },
-      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 8,00,000", format: "amount" },
+      {
+        key: "purchaseFrom",
+        label: "Purchase From",
+        type: "select",
+        options: ["Dealer", "Resale"],
+      },
+      {
+        key: "loanAmount",
+        label: "Loan Amount Required",
+        type: "text",
+        placeholder: "e.g. 8,00,000",
+        format: "amount",
+      },
     ],
   },
   {
@@ -802,7 +841,13 @@ export const PRODUCTS: Product[] = [
     ],
     documents: [KYC, INCOME, "RC, insurance and any current loan statement"],
     checklistIntake: [
-      { key: "loanAmount", label: "Loan Amount Required", type: "text", placeholder: "e.g. 5,00,000", format: "amount" },
+      {
+        key: "loanAmount",
+        label: "Loan Amount Required",
+        type: "text",
+        placeholder: "e.g. 5,00,000",
+        format: "amount",
+      },
     ],
   },
   {
@@ -836,6 +881,19 @@ export const PRODUCTS: Product[] = [
     minimalDisclosure: true,
   },
 ];
+
+/** Every product, including any staff have hidden. PRODUCTS itself holds only the visible ones. */
+const ALL_PRODUCTS: Product[] = [...PRODUCTS];
+
+/**
+ * Hides loan products staff switched off in the CRM. Edits the PRODUCTS list in place so every
+ * page, menu and link that reads it drops them at once; their pages become "not found".
+ */
+export function setHiddenProducts(hiddenSlugs: string[]) {
+  const hidden = new Set(hiddenSlugs);
+  PRODUCTS.length = 0;
+  PRODUCTS.push(...ALL_PRODUCTS.filter((p) => !hidden.has(p.slug)));
+}
 
 export const PRODUCT_GROUPS: {
   name: ProductGroup;

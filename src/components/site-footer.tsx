@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Clock, Mail, MapPin, Phone, ArrowRight } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
-import { PRODUCT_GROUPS } from "@/data/products";
+import { PRODUCT_GROUPS, PRODUCTS } from "@/data/products";
 import { useMorePhones } from "@/lib/public-settings";
 import { FOOTER_EXPLORE, FOOTER_PRODUCTS } from "@/data/page-lists";
 import { useCities, useList } from "@/lib/page-lists";
@@ -84,7 +84,6 @@ export function SiteFooter() {
                   </a>
                 ) : null,
               )}
-
             </div>
           </div>
 
@@ -113,16 +112,21 @@ export function SiteFooter() {
               Loan Products
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
-              {productLinks.map((s) => (
-                <li key={String(s["to"])}>
-                  <SiteLink
-                    to={String(s["to"])}
-                    className="text-muted-foreground transition-colors hover:text-gold"
-                  >
-                    {String(s["label"])}
-                  </SiteLink>
-                </li>
-              ))}
+              {productLinks
+                .filter((s) => {
+                  const slug = String(s["to"]).split("#")[1];
+                  return !slug || PRODUCTS.some((p) => p.slug === slug);
+                })
+                .map((s) => (
+                  <li key={String(s["to"])}>
+                    <SiteLink
+                      to={String(s["to"])}
+                      className="text-muted-foreground transition-colors hover:text-gold"
+                    >
+                      {String(s["label"])}
+                    </SiteLink>
+                  </li>
+                ))}
             </ul>
           </div>
 
@@ -191,7 +195,9 @@ export function SiteFooter() {
         <div className="border-t border-gold/15">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
             <span className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-              <span>© {new Date().getFullYear()} Growth Capital Services. All rights reserved.</span>
+              <span>
+                © {new Date().getFullYear()} Growth Capital Services. All rights reserved.
+              </span>
               {legalPages.map((p) => (
                 <Link
                   key={p.slug}
