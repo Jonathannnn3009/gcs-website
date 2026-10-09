@@ -6,6 +6,7 @@ import { CONTACT } from "@/data/site";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { ABOUT_PROCESS, ABOUT_STATS, ABOUT_WHY } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
+import { useProductGroups } from "@/lib/page-lists";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   const PROCESS = useList("about.process", ABOUT_PROCESS);
   const WHY_CHOOSE = useList("about.why", ABOUT_WHY);
+  const PRODUCT_GROUPS = useProductGroups();
   const STATS = useList("about.stats", ABOUT_STATS);
   return (
     <>

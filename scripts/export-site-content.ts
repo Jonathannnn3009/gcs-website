@@ -12,6 +12,7 @@ import { LOCATIONS } from "../src/data/locations";
 import { PRODUCTS } from "../src/data/products";
 import { PROFESSIONAL_SERVICES } from "../src/data/professional-services";
 import { CONTACT } from "../src/data/site";
+import { LEGAL_DRAFTS } from "../src/data/legal-drafts";
 
 const out = process.argv[2];
 if (!out) throw new Error("Pass the output file path");
@@ -62,6 +63,13 @@ const siteInfo = {
   reportPrice: REPORT_PRICE,
   upiId: "",
   upiName: UPI.payeeName,
+  facebook: "",
+  instagram: "",
+  linkedin: "",
+  youtube: "",
+  x: "",
+  googleAnalyticsId: "",
+  metaPixelId: "",
 };
 
 // Every page staff can write a search listing for, with the title and description it ships with.
@@ -144,6 +152,7 @@ writeFileSync(
       bankRates: DEFAULT_RATES,
       seoPages,
       testimonials: CLIENT_STORIES.map((t) => ({ ...t, visible: true })),
+      customPages: LEGAL_DRAFTS,
       lists,
       listSpecs,
       iconNames: ICON_NAMES,

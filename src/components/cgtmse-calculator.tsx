@@ -1,11 +1,12 @@
 import { useState, useMemo } from "react";
 import { formatCurrency, formatINR } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
+import { useCalcState } from "@/lib/page-lists";
 
 export function CgtmseCalculator() {
   const [loanAmount, setLoanAmount] = useState(5000000);
-  const [coverPct, setCoverPct] = useState(75);
-  const [feeRate, setFeeRate] = useState(1);
+  const [coverPct, setCoverPct] = useCalcState("cgCover", 75);
+  const [feeRate, setFeeRate] = useCalcState("cgFee", 1);
 
   const result = useMemo(() => {
     const guaranteedAmount = (loanAmount * coverPct) / 100;

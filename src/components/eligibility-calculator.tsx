@@ -1,18 +1,20 @@
 import { useState, useMemo } from "react";
 import { formatCurrency, principalFromEmi } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
+import { useCalc, useCalcState } from "@/lib/page-lists";
 
 export function EligibilityCalculator() {
   const [monthlyIncome, setMonthlyIncome] = useState(100000);
   const [existingEmi, setExistingEmi] = useState(0);
-  const [rate, setRate] = useState(9);
+  const [rate, setRate] = useCalcState("eligRate", 9);
+  const foirPct = useCalc("foir", 50);
   const [tenure, setTenure] = useState(20);
 
   const result = useMemo(() => {
-    const maxEmi = (monthlyIncome - existingEmi) * 0.5; // 50% FOIR
+    const maxEmi = (monthlyIncome - existingEmi) * (foirPct / 100);
     if (maxEmi <= 0) return { maxLoan: 0, maxEmi: 0 };
     return { maxLoan: principalFromEmi(maxEmi, rate, tenure), maxEmi };
-  }, [monthlyIncome, existingEmi, rate, tenure]);
+  }, [monthlyIncome, existingEmi, rate, tenure, foirPct]);
 
   return (
     <div className="glass-card p-6 sm:p-8">
@@ -105,11 +107,11 @@ export function EligibilityCalculator() {
               </div>
               <div>
                 <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">FOIR Used</p>
-                <p className="mt-1 text-lg font-extrabold text-gold">50%</p>
+                <p className="mt-1 text-lg font-extrabold text-gold">{foirPct}%</p>
               </div>
             </div>
             <p className="relative mt-5 text-[11px] text-muted-foreground">
-              Based on 50% Fixed Obligation to Income Ratio. Actual eligibility may vary.
+              Based on {foirPct}% Fixed Obligation to Income Ratio. Actual eligibility may vary.
             </p>
           </div>
         </div>

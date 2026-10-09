@@ -5,45 +5,19 @@ import { Menu, Phone, X, ChevronDown, ArrowRight } from "lucide-react";
 import { CONTACT } from "@/data/site";
 import { BrandLogo } from "@/components/brand-logo";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
+import { NAV_HEADER, NAV_TOOLS } from "@/data/page-lists";
+import { useList, useProductGroups } from "@/lib/page-lists";
 
-const NAV = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About Us" },
-  { to: "/services", label: "Our Services", dropdown: "services" },
-  { to: "/tools", label: "Tools", dropdown: "tools" },
-  { to: "/cibil", label: "CIBIL" },
-  { to: "/case-studies", label: "Case Studies" },
-  { to: "/ca-legal-services", label: "CA & Legal" },
-  { to: "/partner", label: "Become Partner" },
-  { to: "/contact", label: "Contact Us" },
-] as const;
 
-const TOOL_ITEMS = [
-  { label: "EMI Calculator", desc: "Estimate your monthly EMI", hash: "emi" },
-  { label: "Eligibility Calculator", desc: "Find your max loan amount", hash: "eligibility" },
-  { label: "Stamp Duty Calculator", desc: "State-wise registration costs", hash: "stamp-duty" },
-  { label: "Prepayment Calculator", desc: "Tenure & interest you'll save", hash: "prepayment" },
-  {
-    label: "Balance Transfer Calculator",
-    desc: "Is switching lenders worth it",
-    hash: "balance-transfer",
-  },
-  { label: "Loan Comparison", desc: "Compare offers side by side", hash: "loan-comparison" },
-  {
-    label: "Working Capital Estimator",
-    desc: "MSME limit, GCS exclusive",
-    hash: "working-capital",
-  },
-  { label: "CGTMSE Guarantee Fee", desc: "Fee on a collateral-free loan", hash: "cgtmse" },
-  { label: "Loan Against Property LTV", desc: "What your property can unlock", hash: "lap-ltv" },
-  {
-    label: "Credit Score Estimator",
-    desc: "Indicative range, not a bureau pull",
-    hash: "credit-score",
-  },
-];
 
 export function SiteHeader() {
+  const NAV = useList("nav.header", NAV_HEADER).map((l) => ({
+    to: String(l["to"]),
+    label: String(l["label"]),
+    dropdown: l["to"] === "/services" ? ("services" as const) : l["to"] === "/tools" ? ("tools" as const) : undefined,
+  }));
+  const TOOL_ITEMS = useList("nav.tools", NAV_TOOLS);
+  const PRODUCT_GROUPS_LIVE = useProductGroups();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -98,7 +72,7 @@ export function SiteHeader() {
                     onMouseLeave={closeDropdown}
                   >
                     <Link
-                      to={link.to}
+                      to={link.to as "/"}
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
@@ -133,7 +107,7 @@ export function SiteHeader() {
                           </div>
                           {/* Every product, segregated by category */}
                           <div className="grid grid-cols-5 gap-4 p-5">
-                            {PRODUCT_GROUPS.map((group) => (
+                            {PRODUCT_GROUPS_LIVE.map((group) => (
                               <div key={group.name}>
                                 <p className="border-b border-gold/20 pb-2 text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
                                   {group.name}
@@ -224,7 +198,7 @@ export function SiteHeader() {
               return (
                 <Link
                   key={link.to}
-                  to={link.to}
+                  to={link.to as "/"}
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
@@ -266,7 +240,7 @@ export function SiteHeader() {
             {NAV.map((link) => (
               <Link
                 key={link.to}
-                to={link.to}
+                to={link.to as "/"}
                 onClick={() => setMobileOpen(false)}
                 activeOptions={{ exact: link.to === "/" }}
                 activeProps={{ className: "text-gold" }}

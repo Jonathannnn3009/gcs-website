@@ -1,16 +1,20 @@
 import { useState, useMemo } from "react";
 import { formatCurrency } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
+import { useCalc } from "@/lib/page-lists";
 
 export function WorkingCapitalCalculator() {
   const [turnover, setTurnover] = useState(20000000);
+  const gapPct = useCalc("wcGap", 25);
+  const marginPct = useCalc("wcMargin", 5);
+  const bankPct = useCalc("wcBank", 20);
 
   const result = useMemo(() => {
-    const workingCapitalGap = turnover * 0.25;
-    const marginMoney = turnover * 0.05;
-    const bankFinance = turnover * 0.2;
+    const workingCapitalGap = (turnover * gapPct) / 100;
+    const marginMoney = (turnover * marginPct) / 100;
+    const bankFinance = (turnover * bankPct) / 100;
     return { workingCapitalGap, marginMoney, bankFinance };
-  }, [turnover]);
+  }, [turnover, gapPct, marginPct, bankPct]);
 
   return (
     <div className="glass-card p-6 sm:p-8" id="working-capital">
@@ -46,14 +50,14 @@ export function WorkingCapitalCalculator() {
               <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
                 {formatCurrency(result.workingCapitalGap)}
               </p>
-              <p className="mt-1 text-[10px] text-muted-foreground">25% of turnover</p>
+              <p className="mt-1 text-[10px] text-muted-foreground">{gapPct}% of turnover</p>
             </div>
             <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
               <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">Your Margin Money</p>
               <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
                 {formatCurrency(result.marginMoney)}
               </p>
-              <p className="mt-1 text-[10px] text-muted-foreground">5% of turnover</p>
+              <p className="mt-1 text-[10px] text-muted-foreground">{marginPct}% of turnover</p>
             </div>
           </div>
         </div>
@@ -69,7 +73,7 @@ export function WorkingCapitalCalculator() {
             </p>
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>
             <p className="relative mt-5 text-[11px] text-muted-foreground">
-              20% of projected turnover — the portion typically financeable via Cash Credit, Overdraft or a
+              {bankPct}% of projected turnover — the portion typically financeable via Cash Credit, Overdraft or a
               Working Capital Term Loan. Actual sanction depends on financials, banking history and lender policy.
             </p>
           </div>

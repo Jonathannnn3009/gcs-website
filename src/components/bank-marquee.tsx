@@ -1,10 +1,13 @@
-import { BANK_PARTNERS, type BankPartner } from "@/data/site";
+import { BANKS } from "@/data/page-lists";
+import type { BankPartner } from "@/data/site";
+import { crmAsset } from "@/lib/crm";
+import { useList } from "@/lib/page-lists";
 
 // Plain logo, no card border — the clean look, just in motion.
 function LogoItem({ bank }: { bank: BankPartner }) {
   return (
     <img
-      src={bank.logo}
+      src={crmAsset(bank.logo ?? "")}
       alt={bank.name}
       title={bank.name}
       className={`w-auto shrink-0 object-contain ${bank.small ? "h-5 sm:h-6" : "h-9 sm:h-11"}`}
@@ -13,7 +16,10 @@ function LogoItem({ bank }: { bank: BankPartner }) {
 }
 
 export function BankMarquee() {
-  const partners = BANK_PARTNERS.filter((b) => b.logo);
+  const banks = useList("home.banks", BANKS);
+  const partners: BankPartner[] = banks
+    .map((b) => ({ name: String(b["name"]), logo: String(b["logo"] ?? ""), small: b["small"] === "yes" }))
+    .filter((b) => b.logo);
   const mid = Math.ceil(partners.length / 2);
   const row1 = [...partners.slice(0, mid), ...partners.slice(0, mid)];
   const row2 = [...partners.slice(mid), ...partners.slice(mid)];

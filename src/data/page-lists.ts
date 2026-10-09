@@ -35,6 +35,7 @@ import {
   PhoneCall,
   PiggyBank,
   Receipt,
+  RefreshCw,
   Rocket,
   Scale,
   ShieldCheck,
@@ -54,7 +55,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { PRODUCTS } from "@/data/products";
-import { PAIN_POINTS } from "@/data/site";
+import { BANK_PARTNERS, CONTACT, PAIN_POINTS, SERVICES } from "@/data/site";
+import { BUREAUS, LAST_PULLED_OPTIONS } from "@/data/cibil";
+import { LOCATIONS } from "@/data/locations";
+import { PRODUCT_GROUPS } from "@/data/products";
+import { STAMP_DUTY_RATES } from "@/lib/finance";
 
 export const HOME_HERO_POINTS = [
   { icon: BadgeCheck, title: "Every Loan Type,", sub: "Under One Roof" },
@@ -329,7 +334,221 @@ export const SERVICES_STATS = [
   { value: "2017", label: "Arranging Loans Since" },
 ];
 
-export type FieldSpec = { key: string; label: string; kind: "text" | "textarea" | "icon" };
+// ---- menu, footer, forms, banks ------------------------------------------------------------
+
+export const NAV_HEADER = [
+  { label: "Home", to: "/" },
+  { label: "About Us", to: "/about" },
+  { label: "Our Services", to: "/services" },
+  { label: "Tools", to: "/tools" },
+  { label: "CIBIL", to: "/cibil" },
+  { label: "Case Studies", to: "/case-studies" },
+  { label: "CA & Legal", to: "/ca-legal-services" },
+  { label: "Become Partner", to: "/partner" },
+  { label: "Contact Us", to: "/contact" },
+];
+
+export const NAV_TOOLS = [
+  { label: "EMI Calculator", desc: "Estimate your monthly EMI", hash: "emi" },
+  { label: "Eligibility Calculator", desc: "Find your max loan amount", hash: "eligibility" },
+  { label: "Stamp Duty Calculator", desc: "State-wise registration costs", hash: "stamp-duty" },
+  { label: "Prepayment Calculator", desc: "Tenure & interest you'll save", hash: "prepayment" },
+  {
+    label: "Balance Transfer Calculator",
+    desc: "Is switching lenders worth it",
+    hash: "balance-transfer",
+  },
+  { label: "Loan Comparison", desc: "Compare offers side by side", hash: "loan-comparison" },
+  {
+    label: "Working Capital Estimator",
+    desc: "MSME limit, GCS exclusive",
+    hash: "working-capital",
+  },
+  { label: "CGTMSE Guarantee Fee", desc: "Fee on a collateral-free loan", hash: "cgtmse" },
+  { label: "Loan Against Property LTV", desc: "What your property can unlock", hash: "lap-ltv" },
+  {
+    label: "Credit Score Estimator",
+    desc: "Indicative range, not a bureau pull",
+    hash: "credit-score",
+  },
+];
+
+export const FOOTER_EXPLORE = [
+  { label: "Home", to: "/" },
+  { label: "About Us", to: "/about" },
+  { label: "Our Services", to: "/services" },
+  { label: "EMI Calculator", to: "/tools" },
+  { label: "Interest Rates", to: "/rates" },
+  { label: "Insights", to: "/insights" },
+  { label: "CIBIL Report", to: "/cibil" },
+  { label: "Case Studies", to: "/case-studies" },
+  { label: "CA & Legal Services", to: "/ca-legal-services" },
+  { label: "Become Partner", to: "/partner" },
+  { label: "Contact Us", to: "/contact" },
+];
+
+export const FOOTER_PRODUCTS = SERVICES.slice(0, 8).map((s) => ({
+  label: s.title,
+  to: `/services#${s.id}`,
+}));
+
+export const FORM_LOAN_TYPES = SERVICES.map((s) => ({ title: s.title, slug: s.id }));
+
+export const FORM_CITIES = CONTACT.cities.map((city) => ({ city }));
+
+export const BANKS = BANK_PARTNERS.map((b) => ({
+  name: b.name,
+  logo: b.logo ?? "",
+  small: b.small ? "yes" : "",
+}));
+
+// ---- other pages ---------------------------------------------------------------------------
+
+export const HOME_GOALS = [
+  {
+    category: "Home & Property",
+    slug: "home-loan",
+    icon: Home,
+    goal: "Buy or build your home",
+    product: "Home Loan",
+    line: "Ready flat, under-construction, plot or self-build — we line up the lender most likely to say yes.",
+    featured: "yes",
+  },
+  {
+    category: "Home & Property",
+    slug: "loan-against-property",
+    icon: Building2,
+    goal: "Unlock your property's value",
+    product: "Loan Against Property",
+    line: "Raise serious funds and keep using the property.",
+    featured: "",
+  },
+  {
+    category: "Home & Property",
+    slug: "balance-transfer",
+    icon: TrendingDown,
+    goal: "Shrink your EMI",
+    product: "Balance Transfer",
+    line: "Move to a sharper rate, with a top-up if you need one.",
+    featured: "",
+  },
+  {
+    category: "Business & Cash Flow",
+    slug: "business-loan",
+    icon: Briefcase,
+    goal: "Grow your business",
+    product: "Business Loan",
+    line: "Stock, staff or a new branch — no collateral needed.",
+    featured: "",
+  },
+  {
+    category: "Business & Cash Flow",
+    slug: "working-capital",
+    icon: RefreshCw,
+    goal: "Keep cash flowing",
+    product: "Working Capital",
+    line: "Cash credit, overdraft and bill discounting sized to your business cycle.",
+    featured: "",
+  },
+  {
+    category: "Personal Goals",
+    slug: "personal-loan",
+    icon: Wallet,
+    goal: "Fund a personal plan",
+    product: "Personal Loan",
+    line: "Wedding, travel, medical or a makeover — sorted in days.",
+    featured: "",
+  },
+  {
+    category: "Personal Goals",
+    slug: "new-car-loan",
+    icon: Car,
+    goal: "Drive home a new car",
+    product: "Car Loan",
+    line: "Up to 100% on-road funding, new or pre-owned.",
+    featured: "",
+  },
+  {
+    category: "Personal Goals",
+    slug: "education-loan",
+    icon: GraduationCap,
+    goal: "Study anywhere",
+    product: "Education Loan",
+    line: "Tuition, stay and travel — with tax benefits on interest.",
+    featured: "",
+  },
+];
+
+export const TOOLS_CARDS = [
+  { id: "emi", label: "EMI Calculator", sub: "Estimate your monthly EMI" },
+  { id: "eligibility", label: "Eligibility Calculator", sub: "Find your maximum loan amount" },
+  { id: "stamp-duty", label: "Stamp Duty Calculator", sub: "State-wise registration costs" },
+  { id: "prepayment", label: "Prepayment Calculator", sub: "Tenure & interest you'll save" },
+  {
+    id: "balance-transfer",
+    label: "Balance Transfer Calculator",
+    sub: "Is switching lenders worth it",
+  },
+  { id: "loan-comparison", label: "Loan Comparison", sub: "Compare offers side by side" },
+  {
+    id: "working-capital",
+    label: "Working Capital Estimator",
+    sub: "MSME limit — exclusive to GCS",
+  },
+  { id: "cgtmse", label: "CGTMSE Guarantee Fee", sub: "Fee on a collateral-free business loan" },
+  { id: "lap-ltv", label: "Loan Against Property LTV", sub: "What your property can unlock" },
+  {
+    id: "credit-score",
+    label: "Credit Score Estimator",
+    sub: "Indicative range, not a bureau pull",
+  },
+];
+
+export const SERVICES_GROUPS = PRODUCT_GROUPS.map((g) => ({
+  name: g.name,
+  heading: g.heading,
+  description: g.description,
+}));
+
+export const CIBIL_BUREAUS = BUREAUS.map((b) => ({ id: b.id, name: b.name, blurb: b.blurb }));
+
+export const CIBIL_LAST_PULLED = LAST_PULLED_OPTIONS.map((o) => ({
+  id: o.id,
+  label: o.label,
+  hint: o.hint,
+}));
+
+export const CITY_PAGES = LOCATIONS.map((l) => ({
+  slug: l.slug,
+  city: l.city,
+  intro: l.intro,
+  serviceNote: l.serviceNote,
+  hasOffice: l.hasOffice ? "yes" : "no",
+}));
+
+export const CALC_STAMP_DUTY = Object.entries(STAMP_DUTY_RATES).map(([state, r]) => ({
+  state,
+  stampDuty: String(r.stampDuty),
+  stampDutyFemale: r.stampDutyFemale === undefined ? "" : String(r.stampDutyFemale),
+  registration: String(r.registration),
+}));
+
+export const CALC_ASSUMPTIONS = [
+  { key: "foir", label: "Eligibility: share of income that can go to EMIs (FOIR), %", value: "50" },
+  { key: "eligRate", label: "Eligibility: starting interest rate, %", value: "9" },
+  { key: "wcGap", label: "Working capital: gap as % of turnover", value: "25" },
+  { key: "wcMargin", label: "Working capital: margin money as % of turnover", value: "5" },
+  { key: "wcBank", label: "Working capital: bank finance as % of turnover", value: "20" },
+  { key: "ltv", label: "Loan against property: starting LTV, %", value: "60" },
+  { key: "cgCover", label: "CGTMSE: starting guarantee cover, %", value: "75" },
+  { key: "cgFee", label: "CGTMSE: starting fee rate, %", value: "1" },
+];
+
+export type FieldSpec = {
+  key: string;
+  label: string;
+  kind: "text" | "textarea" | "icon" | "image" | "readonly";
+};
 export type ListItem = Record<string, string | LucideIcon>;
 export type ListSpec = {
   key: string;
@@ -337,12 +556,16 @@ export type ListSpec = {
   label: string;
   hint: string;
   fields: FieldSpec[];
+  /** Items cannot be added or removed (the page is built around a fixed set), only reworded and reordered. */
+  fixed?: boolean;
   items: ListItem[];
 };
 
 const T = (key: string, label: string): FieldSpec => ({ key, label, kind: "text" });
 const A = (key: string, label: string): FieldSpec => ({ key, label, kind: "textarea" });
 const I = (key: string, label: string): FieldSpec => ({ key, label, kind: "icon" });
+const G = (key: string, label: string): FieldSpec => ({ key, label, kind: "image" });
+const R = (key: string, label: string): FieldSpec => ({ key, label, kind: "readonly" });
 
 /**
  * Every repeated block on a page that staff can add to, remove from, reorder and reword in the
@@ -491,5 +714,150 @@ export const LIST_SPECS: ListSpec[] = [
     hint: "The flip cards: the worry on the front, how we handle it on the back.",
     fields: [T("question", "Worry"), A("answer", "How we handle it")],
     items: PAIN_POINTS,
+  },
+  {
+    key: "nav.header",
+    page: "Menu & footer",
+    label: "Top menu",
+    hint: "The links in the top menu. Our Services and Tools keep their drop-down panels.",
+    fields: [T("label", "Name"), T("to", "Page address, e.g. /about")],
+    items: NAV_HEADER,
+  },
+  {
+    key: "nav.tools",
+    page: "Menu & footer",
+    label: "Tools drop-down",
+    hint: "The calculators listed under Tools.",
+    fields: [T("label", "Name"), T("desc", "Short line"), T("hash", "Calculator id")],
+    items: NAV_TOOLS,
+  },
+  {
+    key: "footer.explore",
+    page: "Menu & footer",
+    label: "Footer: Explore links",
+    hint: "The Explore column in the footer.",
+    fields: [T("label", "Name"), T("to", "Page address, e.g. /about")],
+    items: FOOTER_EXPLORE,
+  },
+  {
+    key: "footer.products",
+    page: "Menu & footer",
+    label: "Footer: Loan products",
+    hint: "The Loan Products column in the footer.",
+    fields: [T("label", "Name"), T("to", "Page address, e.g. /services#home-loan")],
+    items: FOOTER_PRODUCTS,
+  },
+  {
+    key: "form.loanTypes",
+    page: "Forms",
+    label: "Enquiry form: loan types",
+    hint: "The loan types in the enquiry form. The website slug (e.g. home-loan) files the enquiry under that loan in the CRM.",
+    fields: [T("title", "Name shown"), T("slug", "Website slug")],
+    items: FORM_LOAN_TYPES,
+  },
+  {
+    key: "form.cities",
+    page: "Forms",
+    label: "Cities we serve",
+    hint: "Used in the enquiry form drop-down and the footer.",
+    fields: [T("city", "City")],
+    items: FORM_CITIES,
+  },
+  {
+    key: "home.banks",
+    page: "Home",
+    label: "Bank and lender logos",
+    hint: "The scrolling strip. Upload a logo (PNG, JPG or WebP); tick Small for very wide logos.",
+    fields: [T("name", "Bank or lender"), G("logo", "Logo"), T("small", "Small? type yes")],
+    items: BANKS,
+  },
+  {
+    key: "home.goals",
+    page: "Home",
+    label: "What are you planning? (goal cards)",
+    hint: "Cards are grouped by the category name; the order here is the order shown.",
+    fields: [
+      T("category", "Category"),
+      I("icon", "Icon"),
+      T("goal", "Goal"),
+      T("product", "Loan name"),
+      T("slug", "Loan page slug"),
+      A("line", "One-line description"),
+      T("featured", "Most popular? type yes"),
+    ],
+    items: HOME_GOALS,
+  },
+  {
+    key: "tools.cards",
+    page: "Tools",
+    label: "Calculator cards",
+    hint: "Reword or reorder the calculators. They cannot be added or removed here.",
+    fixed: true,
+    fields: [R("id", "Calculator"), T("label", "Name"), T("sub", "Short line")],
+    items: TOOLS_CARDS,
+  },
+  {
+    key: "services.groups",
+    page: "Services",
+    label: "Loan groups",
+    hint: "The heading and description above each group of loans.",
+    fixed: true,
+    fields: [R("name", "Group"), T("heading", "Heading"), A("description", "Description")],
+    items: SERVICES_GROUPS,
+  },
+  {
+    key: "cibil.bureaus",
+    page: "CIBIL",
+    label: "Credit bureaus",
+    hint: "Names and one-line descriptions on the CIBIL page.",
+    fixed: true,
+    fields: [R("id", "Bureau"), T("name", "Name"), T("blurb", "Description")],
+    items: CIBIL_BUREAUS,
+  },
+  {
+    key: "cibil.lastPulled",
+    page: "CIBIL",
+    label: "'When did you last take a report?' options",
+    hint: "The wording of the three choices.",
+    fixed: true,
+    fields: [R("id", "Option"), T("label", "Choice"), T("hint", "Helper text")],
+    items: CIBIL_LAST_PULLED,
+  },
+  {
+    key: "cities.pages",
+    page: "City pages",
+    label: "City pages",
+    hint: "Intro and service note for Mumbai, Thane, Navi Mumbai and Pune. Type yes or no for whether we have an office there.",
+    fixed: true,
+    fields: [
+      R("slug", "Page"),
+      T("city", "City"),
+      A("intro", "Introduction"),
+      A("serviceNote", "Service note"),
+      T("hasOffice", "Office there? yes or no"),
+    ],
+    items: CITY_PAGES,
+  },
+  {
+    key: "calc.stampDuty",
+    page: "Calculators",
+    label: "Stamp duty by state",
+    hint: "Percentages. Leave the women's rate empty if there is none.",
+    fields: [
+      T("state", "State"),
+      T("stampDuty", "Stamp duty %"),
+      T("stampDutyFemale", "Women's stamp duty %"),
+      T("registration", "Registration %"),
+    ],
+    items: CALC_STAMP_DUTY,
+  },
+  {
+    key: "calc.assumptions",
+    page: "Calculators",
+    label: "Calculator assumptions",
+    hint: "Numbers the calculators start from or assume.",
+    fixed: true,
+    fields: [R("label", "Setting"), T("value", "Value")],
+    items: CALC_ASSUMPTIONS,
   },
 ];

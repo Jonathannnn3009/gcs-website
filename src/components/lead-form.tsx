@@ -4,6 +4,8 @@ import { CONTACT, SERVICES } from "@/data/site";
 import { APPLICANT_CATEGORY_LABELS, PRODUCTS } from "@/data/products";
 import { submitLead } from "@/lib/leads";
 import { Toast } from "@/components/toast";
+import { FORM_LOAN_TYPES } from "@/data/page-lists";
+import { useCities, useList } from "@/lib/page-lists";
 
 // Paperwork genuinely differs by applicant type for these two — ask early.
 const LOAN_TYPES_WITH_CATEGORY = new Set(["Home Loan", "Loan Against Property"]);
@@ -85,11 +87,13 @@ export function LeadForm({
   defaultLoanType = "",
   source = "website-enquiry",
 }: { defaultLoanType?: string; source?: string } = {}) {
+  const loanTypes = useList("form.loanTypes", FORM_LOAN_TYPES);
+  const cities = useCities();
   const uid = useId();
   // Only pre-select a loan type the dropdown actually offers.
   const initial: Fields = {
     ...empty,
-    loanType: SERVICES.some((s) => s.title === defaultLoanType) ? defaultLoanType : "",
+    loanType: loanTypes.some((s) => s.title === defaultLoanType) ? defaultLoanType : "",
   };
   const [values, setValues] = useState<Fields>(initial);
   const [errors, setErrors] = useState<Partial<Fields>>({});
@@ -138,9 +142,9 @@ export function LeadForm({
 
     // Hand the enquiry to the CRM. Loan types that match a product page carry its slug,
     // so the CRM files the lead under the right loan product.
-    const service = SERVICES.find((s) => s.title === values.loanType);
+    const service = loanTypes.find((s) => s.title === values.loanType);
     const productSlug =
-      service && PRODUCTS.some((p) => p.slug === service.id) ? service.id : undefined;
+      service && PRODUCTS.some((p) => p.slug === service.slug) ? service.slug : undefined;
     const loanType = values.loanType === "Other" ? values.loanTypeOther.trim() : values.loanType;
     const city = values.city === "Other" ? values.cityOther.trim() : values.city;
     const detail = [
@@ -230,8 +234,8 @@ export function LeadForm({
                 onChange={setLoanType}
               >
                 <option value="">Select loan type</option>
-                {SERVICES.map((s) => (
-                  <option key={s.id} value={s.title}>
+                {loanTypes.map((s) => (
+                  <option key={s.slug || s.title} value={s.title}>
                     {s.title}
                   </option>
                 ))}
@@ -280,7 +284,7 @@ export function LeadForm({
                 onChange={setCity}
               >
                 <option value="">Select city</option>
-                {CONTACT.cities.map((c) => (
+                {cities.map((c) => (
                   <option key={c} value={c}>
                     {c}
                   </option>

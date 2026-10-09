@@ -25,6 +25,7 @@ import {
   type BureauId,
   type LastPulled,
 } from "@/data/cibil";
+import { useBureaus, useLastPulled } from "@/lib/page-lists";
 
 export const Route = createFileRoute("/cibil")({
   head: () => ({
@@ -163,6 +164,8 @@ function BackButton({ onClick }: { onClick: () => void }) {
 }
 
 function CibilFlow() {
+  const BUREAU_LIST = useBureaus();
+  const LAST_PULLED_LIST = useLastPulled();
   const uid = useId();
   const [step, setStep] = useState<Step>(1);
   const [bureauId, setBureauId] = useState<BureauId | null>(null);
@@ -174,8 +177,8 @@ function CibilFlow() {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
 
-  const bureau: Bureau | undefined = BUREAUS.find((b) => b.id === bureauId);
-  const lastPulledLabel = LAST_PULLED_OPTIONS.find((o) => o.id === lastPulled)?.label ?? "";
+  const bureau: Bureau | undefined = BUREAU_LIST.find((b) => b.id === bureauId) as Bureau | undefined;
+  const lastPulledLabel = LAST_PULLED_LIST.find((o) => o.id === lastPulled)?.label ?? "";
 
   const setField =
     (key: keyof Details) =>
@@ -485,7 +488,7 @@ function CibilFlow() {
             Pick the credit bureau whose report you want.
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            {BUREAUS.map((b) => (
+            {BUREAU_LIST.map((b) => (
               <button
                 key={b.id}
                 type="button"
@@ -521,7 +524,7 @@ function CibilFlow() {
             When did you last take your {bureau.name} report?
           </h3>
           <div className="mt-5 space-y-3">
-            {LAST_PULLED_OPTIONS.map((o) => (
+            {LAST_PULLED_LIST.map((o) => (
               <button
                 key={o.id}
                 type="button"

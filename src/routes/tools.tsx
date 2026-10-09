@@ -25,6 +25,8 @@ import { WorkingCapitalCalculator } from "@/components/working-capital-calculato
 import { CgtmseCalculator } from "@/components/cgtmse-calculator";
 import { LapLtvCalculator } from "@/components/lap-ltv-calculator";
 import { CreditScoreEstimator } from "@/components/credit-score-estimator";
+import { TOOLS_CARDS } from "@/data/page-lists";
+import { useFixedList } from "@/lib/page-lists";
 
 export const Route = createFileRoute("/tools")({
   head: () => ({
@@ -100,6 +102,12 @@ function useHashAccordion(defaultId: string) {
 }
 
 function ToolsPage() {
+  const tools = useFixedList("tools.cards", TOOLS_CARDS, "id")
+    .map((c) => {
+      const base = TOOLS.find((t) => t.id === c.id);
+      return base ? { ...base, label: c.label, sub: c.sub } : null;
+    })
+    .filter((t): t is Tool => t !== null);
   const [openId, toggle] = useHashAccordion("emi");
 
   return (
@@ -124,7 +132,7 @@ function ToolsPage() {
       {/* Accordion */}
       <Section>
         <div className="space-y-3">
-          {TOOLS.map((t, i) => {
+          {tools.map((t, i) => {
             const isOpen = openId === t.id;
             return (
               <Reveal key={t.id} delay={Math.min(i * 40, 240)}>

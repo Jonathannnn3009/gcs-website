@@ -3,8 +3,17 @@ import { Clock, Mail, MapPin, Phone, ArrowRight } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
 import { PRODUCT_GROUPS } from "@/data/products";
 import { useMorePhones } from "@/lib/public-settings";
+import { FOOTER_EXPLORE, FOOTER_PRODUCTS } from "@/data/page-lists";
+import { useCities, useList } from "@/lib/page-lists";
+import { useCustomPages } from "@/lib/site-content";
+import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
+import { SiteLink } from "@/components/site-link";
 
 export function SiteFooter() {
+  const exploreLinks = useList("footer.explore", FOOTER_EXPLORE);
+  const productLinks = useList("footer.products", FOOTER_PRODUCTS);
+  const cities = useCities();
+  const legalPages = useCustomPages().pages.filter((p) => p.showInFooter);
   const morePhones = useMorePhones();
   return (
     <footer className="relative mt-24 overflow-hidden">
@@ -53,6 +62,29 @@ export function SiteFooter() {
               >
                 <Mail className="h-4 w-4" />
               </a>
+              {(
+                [
+                  ["facebook", Facebook, "Facebook"],
+                  ["instagram", Instagram, "Instagram"],
+                  ["linkedin", Linkedin, "LinkedIn"],
+                  ["youtube", Youtube, "YouTube"],
+                  ["x", Twitter, "X"],
+                ] as const
+              ).map(([key, Icon, label]) =>
+                CONTACT.social[key] ? (
+                  <a
+                    key={key}
+                    href={CONTACT.social[key]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="grid h-10 w-10 place-items-center rounded-lg bg-gold/10 text-gold transition-colors hover:bg-gold/20"
+                    aria-label={label}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                ) : null,
+              )}
+
             </div>
           </div>
 
@@ -62,26 +94,14 @@ export function SiteFooter() {
               Explore
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
-              {[
-                { to: "/", label: "Home" },
-                { to: "/about", label: "About Us" },
-                { to: "/services", label: "Our Services" },
-                { to: "/tools", label: "EMI Calculator" },
-                { to: "/rates", label: "Interest Rates" },
-                { to: "/insights", label: "Insights" },
-                { to: "/cibil", label: "CIBIL Report" },
-                { to: "/case-studies", label: "Case Studies" },
-                { to: "/ca-legal-services", label: "CA & Legal Services" },
-                { to: "/partner", label: "Become Partner" },
-                { to: "/contact", label: "Contact Us" },
-              ].map((l) => (
-                <li key={l.to}>
-                  <Link
-                    to={l.to}
+              {exploreLinks.map((l) => (
+                <li key={String(l["to"])}>
+                  <SiteLink
+                    to={String(l["to"])}
                     className="text-muted-foreground transition-colors hover:text-gold"
                   >
-                    {l.label}
-                  </Link>
+                    {String(l["label"])}
+                  </SiteLink>
                 </li>
               ))}
             </ul>
@@ -93,15 +113,14 @@ export function SiteFooter() {
               Loan Products
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
-              {SERVICES.slice(0, 8).map((s) => (
-                <li key={s.id}>
-                  <Link
-                    to="/services"
-                    hash={s.id}
+              {productLinks.map((s) => (
+                <li key={String(s["to"])}>
+                  <SiteLink
+                    to={String(s["to"])}
                     className="text-muted-foreground transition-colors hover:text-gold"
                   >
-                    {s.title}
-                  </Link>
+                    {String(s["label"])}
+                  </SiteLink>
                 </li>
               ))}
             </ul>
@@ -171,10 +190,22 @@ export function SiteFooter() {
         {/* Bottom bar */}
         <div className="border-t border-gold/15">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
-            <span>© {new Date().getFullYear()} Growth Capital Services. All rights reserved.</span>
+            <span className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+              <span>© {new Date().getFullYear()} Growth Capital Services. All rights reserved.</span>
+              {legalPages.map((p) => (
+                <Link
+                  key={p.slug}
+                  to="/p/$slug"
+                  params={{ slug: p.slug }}
+                  className="text-muted-foreground underline-offset-2 hover:text-gold hover:underline"
+                >
+                  {p.title}
+                </Link>
+              ))}
+            </span>
             <span className="flex flex-wrap items-center justify-center gap-1.5">
               Serving
-              {CONTACT.cities.map((city, i) => (
+              {cities.map((city, i) => (
                 <span key={city}>
                   <Link
                     to={`/${city.toLowerCase().replace(/\s+/g, "-")}`}
@@ -182,7 +213,7 @@ export function SiteFooter() {
                   >
                     {city}
                   </Link>
-                  {i < CONTACT.cities.length - 1 && " · "}
+                  {i < cities.length - 1 && " · "}
                 </span>
               ))}
             </span>

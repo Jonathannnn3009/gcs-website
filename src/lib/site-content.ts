@@ -47,9 +47,19 @@ export type CustomPage = {
   /** Uploaded cover picture, as a CRM path such as /public/site-images/<id>. */
   image?: string;
   published?: boolean;
+  /** Link this page from the footer (privacy policy, terms...). */
+  showInFooter?: boolean;
 };
 
-export type SiteInfo = SiteInfoContact & { reportPrice?: number; upiId?: string; upiName?: string };
+export type SiteInfo = SiteInfoContact & {
+  reportPrice?: number;
+  upiId?: string;
+  upiName?: string;
+  /** Google Analytics 4 measurement ID, e.g. G-XXXXXXXXXX. */
+  googleAnalyticsId?: string;
+  /** Meta (Facebook) Pixel ID, digits only. */
+  metaPixelId?: string;
+};
 
 /** The CA & legal service fields staff may change. */
 export type ServiceText = Pick<

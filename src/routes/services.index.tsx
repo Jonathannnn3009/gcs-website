@@ -7,6 +7,7 @@ import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { CONTACT } from "@/data/site";
 import { SERVICES_STATS } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
+import { useProductGroups } from "@/lib/page-lists";
 
 export const Route = createFileRoute("/services/")({
   head: () => ({
@@ -29,6 +30,7 @@ export const Route = createFileRoute("/services/")({
 
 
 function ServicesPage() {
+  const PRODUCT_GROUPS = useProductGroups();
   const SERVICE_STATS = useList("services.stats", SERVICES_STATS);
   const groupsWithCounts = PRODUCT_GROUPS.map((g) => ({
     ...g,

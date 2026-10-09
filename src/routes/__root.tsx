@@ -21,6 +21,7 @@ import { flushPendingLeads } from "@/lib/leads";
 import { useApplySiteInfo } from "@/lib/site-content";
 import { usePageText } from "@/lib/page-text";
 import { useSeo } from "@/lib/seo";
+import { useTracking } from "@/lib/tracking";
 import { InlineEditor } from "@/components/inline-editor";
 
 function NotFoundComponent() {
@@ -168,6 +169,8 @@ function RootComponent() {
   usePageText();
   // Page titles and Google descriptions staff set in the CRM.
   useSeo();
+  // Analytics, only when staff have saved an ID in the CRM.
+  useTracking();
 
   // Re-send any enquiry that couldn't reach the CRM earlier (offline, CRM not live yet).
   useEffect(() => {

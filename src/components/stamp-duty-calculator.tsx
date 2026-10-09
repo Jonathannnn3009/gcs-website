@@ -1,16 +1,17 @@
 import { useState, useMemo } from "react";
-import { formatCurrency, STAMP_DUTY_RATES } from "@/lib/finance";
+import { formatCurrency } from "@/lib/finance";
+import { useStampDutyRates } from "@/lib/page-lists";
 import { SliderField } from "@/components/slider-field";
 
-const STATES = Object.keys(STAMP_DUTY_RATES);
-
 export function StampDutyCalculator() {
+  const STAMP_DUTY_RATES = useStampDutyRates();
+  const STATES = Object.keys(STAMP_DUTY_RATES);
   const [propertyValue, setPropertyValue] = useState(6000000);
   const [state, setState] = useState("Maharashtra");
   const [buyer, setBuyer] = useState<"male" | "female">("male");
 
   const result = useMemo(() => {
-    const rates = STAMP_DUTY_RATES[state];
+    const rates = STAMP_DUTY_RATES[state] ?? Object.values(STAMP_DUTY_RATES)[0]!;
     const hasFemaleRate = rates.stampDutyFemale !== undefined;
     const stampDutyPercent = buyer === "female" && hasFemaleRate ? rates.stampDutyFemale! : rates.stampDuty;
     const stampDuty = (propertyValue * stampDutyPercent) / 100;
@@ -23,7 +24,7 @@ export function StampDutyCalculator() {
       stampDutyPercent,
       hasFemaleRate,
     };
-  }, [propertyValue, state, buyer]);
+  }, [propertyValue, state, buyer, STAMP_DUTY_RATES]);
 
   return (
     <div className="glass-card p-6 sm:p-8" id="stamp-duty">

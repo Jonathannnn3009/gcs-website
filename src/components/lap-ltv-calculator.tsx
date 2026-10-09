@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
 import { emi, formatCurrency, formatINR } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
+import { useCalcState } from "@/lib/page-lists";
 
 export function LapLtvCalculator() {
   const [propertyValue, setPropertyValue] = useState(10000000);
-  const [ltv, setLtv] = useState(60);
+  const [ltv, setLtv] = useCalcState("ltv", 60);
   const [rate, setRate] = useState(10);
   const [tenure, setTenure] = useState(15);
 

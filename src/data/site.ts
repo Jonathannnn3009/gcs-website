@@ -23,6 +23,8 @@ export const CONTACT = {
     ),
   hours: "Monday to Saturday · 10:00 AM – 6:00 PM",
   cities: ["Mumbai", "Thane", "Navi Mumbai", "Pune"],
+  /** Social media pages; empty until staff add them in the CRM. */
+  social: { facebook: "", instagram: "", linkedin: "", youtube: "", x: "" } as Record<string, string>,
 };
 
 /** Contact details staff change in the CRM (Settings -> Website content). Applied once, at load. */
@@ -32,6 +34,11 @@ export type SiteInfoContact = {
   email?: string;
   address?: string;
   hours?: string;
+  facebook?: string;
+  instagram?: string;
+  linkedin?: string;
+  youtube?: string;
+  x?: string;
 };
 
 export function applyContactInfo(info: SiteInfoContact) {
@@ -45,6 +52,10 @@ export function applyContactInfo(info: SiteInfoContact) {
     WHATSAPP_NUMBER = wa.length === 10 ? `91${wa}` : wa;
     CONTACT.whatsapp = WHATSAPP_NUMBER;
     CONTACT.whatsappLink = waLink();
+  }
+  for (const k of ["facebook", "instagram", "linkedin", "youtube", "x"] as const) {
+    const v = info[k]?.trim();
+    if (v && /^https?:\/\//i.test(v)) CONTACT.social[k] = v;
   }
   if (info.email?.trim()) CONTACT.email = info.email.trim();
   if (info.hours?.trim()) CONTACT.hours = info.hours.trim();

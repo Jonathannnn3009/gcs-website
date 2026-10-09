@@ -7,6 +7,7 @@ import { PRODUCT_GROUPS, PRODUCTS } from "@/data/products";
 import { useFaqs } from "@/lib/site-content";
 import { CONTACT } from "@/data/site";
 import type { LocationContent } from "@/data/locations";
+import { useCities, useCityPage, useProductGroups } from "@/lib/page-lists";
 
 function FaqAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
   const [open, setOpen] = useState<number | null>(0);
@@ -32,9 +33,11 @@ function FaqAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
   );
 }
 
-export function LocationPage({ location }: { location: LocationContent }) {
+export function LocationPage({ location: builtInLocation }: { location: LocationContent }) {
+  const location = useCityPage(builtInLocation);
+  const GROUPS = useProductGroups();
   const faqs = useFaqs(location.slug, location.faqs);
-  const otherCities = CONTACT.cities.filter((c) => c !== location.city);
+  const otherCities = useCities().filter((c) => c !== location.city);
   const citySlug = (c: string) => c.toLowerCase().replace(/\s+/g, "-");
 
   return (
@@ -157,7 +160,7 @@ export function LocationPage({ location }: { location: LocationContent }) {
           />
         </Reveal>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {PRODUCT_GROUPS.map((group, i) => {
+          {GROUPS.map((group, i) => {
             const first = PRODUCTS.find((p) => p.group === group.name);
             if (!first) return null;
             return (

@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { PRODUCTS } from "@/data/products";
+import { HOME_GOALS } from "@/data/page-lists";
+import { useList } from "@/lib/page-lists";
 
 type Goal = {
   slug: string;
@@ -32,80 +34,6 @@ type Category = {
 
 // Grouped so the grid reads as three short, scannable rows instead of one
 // long wall of identical cards.
-const CATEGORIES: Category[] = [
-  {
-    name: "Home & Property",
-    goals: [
-      {
-        slug: "home-loan",
-        icon: Home,
-        goal: "Buy or build your home",
-        product: "Home Loan",
-        line: "Ready flat, under-construction, plot or self-build — we line up the lender most likely to say yes.",
-        featured: true,
-      },
-      {
-        slug: "loan-against-property",
-        icon: Building2,
-        goal: "Unlock your property's value",
-        product: "Loan Against Property",
-        line: "Raise serious funds and keep using the property.",
-      },
-      {
-        slug: "balance-transfer",
-        icon: TrendingDown,
-        goal: "Shrink your EMI",
-        product: "Balance Transfer",
-        line: "Move to a sharper rate, with a top-up if you need one.",
-      },
-    ],
-  },
-  {
-    name: "Business & Cash Flow",
-    goals: [
-      {
-        slug: "business-loan",
-        icon: Briefcase,
-        goal: "Grow your business",
-        product: "Business Loan",
-        line: "Stock, staff or a new branch — no collateral needed.",
-      },
-      {
-        slug: "working-capital",
-        icon: RefreshCw,
-        goal: "Keep cash flowing",
-        product: "Working Capital",
-        line: "Cash credit, overdraft and bill discounting sized to your business cycle.",
-      },
-    ],
-  },
-  {
-    name: "Personal Goals",
-    goals: [
-      {
-        slug: "personal-loan",
-        icon: Wallet,
-        goal: "Fund a personal plan",
-        product: "Personal Loan",
-        line: "Wedding, travel, medical or a makeover — sorted in days.",
-      },
-      {
-        slug: "new-car-loan",
-        icon: Car,
-        goal: "Drive home a new car",
-        product: "Car Loan",
-        line: "Up to 100% on-road funding, new or pre-owned.",
-      },
-      {
-        slug: "education-loan",
-        icon: GraduationCap,
-        goal: "Study anywhere",
-        product: "Education Loan",
-        line: "Tuition, stay and travel — with tax benefits on interest.",
-      },
-    ],
-  },
-];
 
 function GoalCard({ goal: g, index }: { goal: Goal; index: number }) {
   return (
@@ -147,6 +75,24 @@ function GoalCard({ goal: g, index }: { goal: Goal; index: number }) {
 /** "What are you planning?" goal grid used on the Home and Services pages. */
 export function LoanGoals() {
   let cardIndex = 0;
+  const goalItems = useList("home.goals", HOME_GOALS);
+  const CATEGORIES: Category[] = [];
+  for (const g of goalItems) {
+    const name = String(g["category"]);
+    let cat = CATEGORIES.find((c) => c.name === name);
+    if (!cat) {
+      cat = { name, goals: [] };
+      CATEGORIES.push(cat);
+    }
+    cat.goals.push({
+      slug: String(g["slug"]),
+      icon: g["icon"] as LucideIcon,
+      goal: String(g["goal"]),
+      product: String(g["product"]),
+      line: String(g["line"]),
+      ...(g["featured"] === "yes" ? { featured: true } : {}),
+    });
+  }
 
   return (
     <div className="mt-10 space-y-10">
