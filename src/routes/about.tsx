@@ -4,6 +4,8 @@ import { Reveal } from "@/components/reveal";
 import { BankMarquee } from "@/components/bank-marquee";
 import { CONTACT } from "@/data/site";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
+import { ABOUT_PROCESS, ABOUT_STATS, ABOUT_WHY } from "@/data/page-lists";
+import { useList } from "@/lib/page-lists";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -24,50 +26,13 @@ export const Route = createFileRoute("/about")({
   component: AboutPage,
 });
 
-const STATS = [
-  { value: "2017", label: "Established" },
-  { value: "75+", label: "Bank & NBFC Partners" },
-  { value: "25+", label: "Loan Products" },
-  { value: "100%", label: "Transparent Process" },
-];
 
-const WHY_CHOOSE = [
-  {
-    num: "01",
-    title: "Real Choice, Not One Bank",
-    body: "75+ banks and NBFCs in our network, so your file gets more than one shot at approval.",
-  },
-  {
-    num: "02",
-    title: "Senior Advisors, Not a Call Centre",
-    body: "The same experienced advisor stays with your file from the first call to disbursal.",
-  },
-  {
-    num: "03",
-    title: "Built For Speed",
-    body: "Documentation and structuring done right the first time, so approvals don't stall.",
-  },
-  {
-    num: "04",
-    title: "Nothing Hidden",
-    body: "Rate, fees and terms — all in writing, before you sign anything.",
-  },
-  {
-    num: "05",
-    title: "Structured Around You",
-    body: "Your loan packaged around your actual profile, not squeezed into a lender's template.",
-  },
-];
 
-const PROCESS = [
-  { num: "1", title: "Consultation", body: "Understanding your financial needs." },
-  { num: "2", title: "Product Matching", body: "Identifying the right fit across our partners." },
-  { num: "3", title: "Documentation Support", body: "Simplifying the paperwork." },
-  { num: "4", title: "Loan Processing", body: "Liaising with lenders for fast approvals." },
-  { num: "5", title: "Post-Disbursal Support", body: "Continued assistance even after disbursal." },
-];
 
 function AboutPage() {
+  const PROCESS = useList("about.process", ABOUT_PROCESS);
+  const WHY_CHOOSE = useList("about.why", ABOUT_WHY);
+  const STATS = useList("about.stats", ABOUT_STATS);
   return (
     <>
       {/* Banner */}
@@ -194,10 +159,10 @@ function AboutPage() {
           </Reveal>
           <div className="mt-12 border-t border-border">
             {WHY_CHOOSE.map((w, i) => (
-              <Reveal key={w.num} delay={i * 70}>
+              <Reveal key={i} delay={i * 70}>
                 <div className="flex flex-col gap-2 border-b border-border py-6 sm:flex-row sm:items-baseline sm:gap-10 sm:py-7">
                   <span className="font-heading shrink-0 text-2xl italic text-gold-dark sm:w-16">
-                    № {w.num}
+                    № {String(i + 1).padStart(2, "0")}
                   </span>
                   <div>
                     <h3 className="text-lg font-extrabold text-navy dark:text-white">{w.title}</h3>
@@ -292,10 +257,10 @@ function AboutPage() {
           {/* A spec-sheet row — no icons or shapes, just a clean divided strip */}
           <ol className="mt-14 grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-5 sm:divide-x sm:divide-y-0">
             {PROCESS.map((step, i) => (
-              <Reveal key={step.num} delay={i * 80}>
+              <Reveal key={i} delay={i * 80}>
                 <li className="p-6 text-center sm:p-5">
                   <span className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-                    Step {step.num}
+                    Step {i + 1}
                   </span>
                   <h3 className="mt-2 text-base font-extrabold text-navy dark:text-white">{step.title}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">

@@ -11,6 +11,7 @@ import {
 import { Reveal } from "@/components/reveal";
 import { PAIN_POINTS } from "@/data/site";
 import { cn } from "@/lib/utils";
+import { useList } from "@/lib/page-lists";
 
 // One icon per concern, in PAIN_POINTS order
 const ICONS = [Compass, ArrowLeftRight, Calculator, Gauge, ReceiptText, Timer];
@@ -18,10 +19,11 @@ const ICONS = [Compass, ArrowLeftRight, Calculator, Gauge, ReceiptText, Timer];
 /** Flip cards: the question on the front, how we handle it on the back (hover on desktop, tap on touch). */
 export function ConcernCards() {
   const [flipped, setFlipped] = useState<number | null>(null);
+  const concerns = useList("home.concerns", PAIN_POINTS);
 
   return (
     <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {PAIN_POINTS.map((p, i) => {
+      {concerns.map((p, i) => {
         const Icon = ICONS[i % ICONS.length]!;
         const isOpen = flipped === i;
         return (

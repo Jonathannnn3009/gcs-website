@@ -27,6 +27,15 @@ import { PARTNER_FAQS } from "@/data/faqs";
 import { useFaqs } from "@/lib/site-content";
 import { submitLead } from "@/lib/leads";
 import { useCommissionStructure } from "@/lib/commission";
+import {
+  PARTNER_BENEFITS,
+  PARTNER_HIGHLIGHTS,
+  PARTNER_REASONS,
+  PARTNER_SEGMENTS,
+  PARTNER_STATS,
+  PARTNER_STEPS,
+} from "@/data/page-lists";
+import { useList } from "@/lib/page-lists";
 
 export const Route = createFileRoute("/partner")({
   head: () => ({
@@ -47,74 +56,9 @@ export const Route = createFileRoute("/partner")({
   component: PartnerPage,
 });
 
-const PARTNER_STATS = [
-  { value: "2017", label: "Growth Capital Since" },
-  { value: "75+", label: "Bank & NBFC Partners" },
-  { value: "₹0", label: "Investment Required" },
-  { value: "No Cap", label: "On Referral Earnings" },
-];
 
-const HERO_HIGHLIGHTS = [
-  "No paperwork or compliance work on your end",
-  "Track every referral's status in real time",
-  "Payout settled as soon as the loan disburses",
-];
 
-const SEGMENTS = [
-  {
-    icon: Scale,
-    title: "Chartered Accountants",
-    body: "Your clients ask you about loans already — send us the ones that need one.",
-  },
-  {
-    icon: Building2,
-    title: "Property Consultants",
-    body: "Every property deal has a financing question somewhere in it.",
-  },
-  {
-    icon: Landmark,
-    title: "Real Estate Brokers",
-    body: "Help your buyer close faster with financing lined up in parallel.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Insurance Advisors",
-    body: "A natural extension of the financial conversations you're already having.",
-  },
-  {
-    icon: Briefcase,
-    title: "Business Consultants",
-    body: "Working capital and business loan needs come up constantly in your work.",
-  },
-  {
-    icon: UserCheck,
-    title: "Lawyers & Company Secretaries",
-    body: "Refer clients navigating property, business or personal finance decisions.",
-  },
-];
 
-const STEPS: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: FileText,
-    title: "Tell Us About the Client",
-    body: "Share their name, contact and loan requirement — a two-minute form.",
-  },
-  {
-    icon: PhoneCall,
-    title: "We Take It From There",
-    body: "A senior advisor reaches out, assesses eligibility and manages the file.",
-  },
-  {
-    icon: Calendar,
-    title: "You Stay Updated",
-    body: "We keep you posted as the file moves through sanction and disbursal.",
-  },
-  {
-    icon: Wallet,
-    title: "You Get Paid",
-    body: "Your referral fee is settled once the loan is disbursed.",
-  },
-];
 
 // Fallback copy of the CRM's rate card (backend/prisma/seed.ts RATE_CARDS). The page shows the
 // live card from /crm/api/public/commission-structure and uses this if the CRM is unreachable.
@@ -153,57 +97,7 @@ const COMMISSION_STRUCTURE = [
   },
 ];
 
-const BENEFITS = [
-  {
-    icon: Wallet,
-    title: "Zero Investment",
-    body: "No franchise fee, no office, no upfront cost — just refer and earn.",
-  },
-  {
-    icon: Zap,
-    title: "Uncapped Earnings",
-    body: "No ceiling on how much you can earn — more referrals, more income.",
-  },
-  {
-    icon: Check,
-    title: "Fast, Transparent Payouts",
-    body: "Your referral fee is settled as soon as the loan disburses — no chasing.",
-  },
-  {
-    icon: UserCheck,
-    title: "A Dedicated Relationship Manager",
-    body: "One point of contact who keeps you updated at every stage.",
-  },
-  {
-    icon: Landmark,
-    title: "75+ Bank & NBFC Network",
-    body: "Your client gets more shots at approval than going to a single bank.",
-  },
-  {
-    icon: Award,
-    title: "You Stay the Trusted Expert",
-    body: "We work behind the scenes — your client relationship stays yours.",
-  },
-];
 
-const MORE_REASONS = [
-  {
-    q: "No License or Certification Needed",
-    a: "Unlike a registered loan agent, you don't need any certification to refer clients to us — just an introduction and a phone number. Our licensed advisors handle the lending process end to end.",
-  },
-  {
-    q: "No Exclusivity Required",
-    a: "Refer as much or as little as suits you — there's no minimum commitment, no lock-in and no target to hit.",
-  },
-  {
-    q: "Full Visibility, Start to Finish",
-    a: "You'll know exactly where your referral's file stands — from the first call through to sanction and disbursal.",
-  },
-  {
-    q: "Grow Your Professional Network",
-    a: "Every successful referral builds a track record with senior advisors across our network of 75+ banks and NBFCs.",
-  },
-];
 
 
 const fieldClass =
@@ -391,6 +285,7 @@ function PartnerForm() {
 
 /** Click-through process stepper, same interaction pattern as the home page's "How It Works". */
 function PartnerStepper() {
+  const STEPS = useList("partner.steps", PARTNER_STEPS);
   const [active, setActive] = useState(0);
   const step = STEPS[active] ?? STEPS[0]!;
 
@@ -484,6 +379,11 @@ function Accordion({ items }: { items: { q: string; a: string }[] }) {
 }
 
 function PartnerPage() {
+  const MORE_REASONS = useList("partner.reasons", PARTNER_REASONS);
+  const BENEFITS = useList("partner.benefits", PARTNER_BENEFITS);
+  const SEGMENTS = useList("partner.segments", PARTNER_SEGMENTS);
+  const HERO_HIGHLIGHTS = useList("partner.highlights", PARTNER_HIGHLIGHTS);
+  const PARTNER_STATS_LIST = useList("partner.stats", PARTNER_STATS);
   const partnerFaqs = useFaqs("partner", PARTNER_FAQS);
   const commissionRows = useCommissionStructure(COMMISSION_STRUCTURE);
   return (
@@ -509,7 +409,7 @@ function PartnerPage() {
                 </p>
 
                 <div className="relative mt-8 grid grid-cols-2 gap-5 sm:grid-cols-4">
-                  {PARTNER_STATS.map((s, i) => (
+                  {PARTNER_STATS_LIST.map((s, i) => (
                     <div
                       key={s.label}
                       style={{ animationDelay: `${i * 100}ms` }}
@@ -527,9 +427,9 @@ function PartnerPage() {
 
                 <div className="relative mt-8 space-y-3 border-t border-white/10 pt-6">
                   {HERO_HIGHLIGHTS.map((h) => (
-                    <div key={h} className="flex items-start gap-2.5 text-sm text-white/75">
+                    <div key={h.text} className="flex items-start gap-2.5 text-sm text-white/75">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" />
-                      <span>{h}</span>
+                      <span>{h.text}</span>
                     </div>
                   ))}
                 </div>

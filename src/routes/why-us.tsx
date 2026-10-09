@@ -11,6 +11,8 @@ import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { MissionVision } from "@/components/mission-vision";
 import { PAIN_POINTS, CONTACT } from "@/data/site";
+import { WHYUS_ADVANTAGES, WHYUS_PILLARS } from "@/data/page-lists";
+import { useList } from "@/lib/page-lists";
 
 export const Route = createFileRoute("/why-us")({
   head: () => ({
@@ -31,40 +33,12 @@ export const Route = createFileRoute("/why-us")({
   component: WhyUsPage,
 });
 
-const PILLARS = [
-  {
-    icon: ShieldCheck,
-    title: "Trust & Transparency",
-    body: "Every quote lists rate, processing fee, legal and technical charges and foreclosure terms in writing.",
-  },
-  {
-    icon: Timer,
-    title: "Quick, Paperless Process",
-    body: "Digital documentation and daily file tracking through login, sanction and disbursal.",
-  },
-  {
-    icon: Compass,
-    title: "End-to-End Guidance",
-    body: "Our own case-management CRM tracks every file from lead to disbursal, so nothing falls through the cracks.",
-  },
-  {
-    icon: Sparkles,
-    title: "Better Deals Than Direct",
-    body: "Our volume across banks and NBFCs earns pricing and fee waivers an individual rarely gets alone.",
-  },
-];
 
-const ADVANTAGES = [
-  "We compare live policies across 75+ lenders",
-  "Zero advisory fee — we're paid by the lender",
-  "Daily file tracking from login to disbursal",
-  "Complex profiles handled that banks return",
-  "Written savings comparison before you commit",
-  "Single point of contact for the full lifecycle",
-  "In-house CRM tracks your file end-to-end, from lead to disbursal",
-];
 
 function WhyUsPage() {
+  const CONCERNS = useList("home.concerns", PAIN_POINTS);
+  const ADVANTAGES = useList("whyus.advantages", WHYUS_ADVANTAGES);
+  const PILLARS = useList("whyus.pillars", WHYUS_PILLARS);
   return (
     <>
       {/* Hero */}
@@ -129,9 +103,9 @@ function WhyUsPage() {
               <div className="flex items-center p-8 sm:p-10">
                 <div className="space-y-3">
                   {ADVANTAGES.map((adv) => (
-                    <div key={adv} className="flex items-center gap-3">
+                    <div key={adv.text} className="flex items-center gap-3">
                       <CheckCircle2 className="h-5 w-5 shrink-0 text-gold" />
-                      <span className="text-sm font-medium">{adv}</span>
+                      <span className="text-sm font-medium">{adv.text}</span>
                     </div>
                   ))}
                 </div>
@@ -151,7 +125,7 @@ function WhyUsPage() {
           />
         </Reveal>
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
-          {PAIN_POINTS.map((p, i) => (
+          {CONCERNS.map((p, i) => (
             <Reveal key={p.question} delay={i * 60}>
               <div className="surface-card h-full p-6">
                 <h3 className="text-base font-extrabold">{p.question}</h3>

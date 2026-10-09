@@ -2,6 +2,8 @@
 // editor to start from. Run:  npx tsx scripts/export-site-content.ts <output.json>
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { CASE_STUDIES } from "../src/data/case-studies";
+import { LIST_SPECS } from "../src/data/page-lists";
+import { ICON_NAMES, iconName } from "../src/lib/icon-map";
 import { REPORT_PRICE, UPI } from "../src/data/cibil";
 import { DEFAULT_RATES } from "../src/data/rates";
 import { CLIENT_STORIES } from "../src/data/testimonials";
@@ -113,6 +115,23 @@ const seoPages = [
   })),
 ];
 
+// Repeated page blocks: the items the website ships with (icons as picker names) and the field
+// definitions the CRM editor builds its forms from.
+const lists = Object.fromEntries(
+  LIST_SPECS.map((spec) => [
+    spec.key,
+    spec.items.map((item) =>
+      Object.fromEntries(
+        spec.fields.map((f) => {
+          const v = item[f.key];
+          return [f.key, f.kind === "icon" ? iconName(v as never) : String(v ?? "")];
+        }),
+      ),
+    ),
+  ]),
+);
+const listSpecs = LIST_SPECS.map(({ items: _items, ...rest }) => rest);
+
 writeFileSync(
   out,
   JSON.stringify(
@@ -125,6 +144,9 @@ writeFileSync(
       bankRates: DEFAULT_RATES,
       seoPages,
       testimonials: CLIENT_STORIES.map((t) => ({ ...t, visible: true })),
+      lists,
+      listSpecs,
+      iconNames: ICON_NAMES,
       trustNumbers: { "75+": "75+", "25+": "25+", "2017": "2017", "100%": "100%" },
     },
     null,

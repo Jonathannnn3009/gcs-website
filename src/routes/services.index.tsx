@@ -5,6 +5,8 @@ import { Reveal } from "@/components/reveal";
 import { LoanGoals } from "@/components/loan-goals";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { CONTACT } from "@/data/site";
+import { SERVICES_STATS } from "@/data/page-lists";
+import { useList } from "@/lib/page-lists";
 
 export const Route = createFileRoute("/services/")({
   head: () => ({
@@ -25,14 +27,9 @@ export const Route = createFileRoute("/services/")({
   component: ServicesPage,
 });
 
-const SERVICE_STATS = [
-  { value: `${PRODUCTS.length}+`, label: "Loan Products" },
-  { value: "75+", label: "Bank & NBFC Partners" },
-  { value: "100%", label: "Transparent Process" },
-  { value: "2017", label: "Arranging Loans Since" },
-];
 
 function ServicesPage() {
+  const SERVICE_STATS = useList("services.stats", SERVICES_STATS);
   const groupsWithCounts = PRODUCT_GROUPS.map((g) => ({
     ...g,
     count: PRODUCTS.filter((p) => p.group === g.name).length,

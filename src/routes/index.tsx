@@ -30,6 +30,13 @@ import { ConsultationBackdrop } from "@/components/consultation-backdrop";
 import { CONTACT } from "@/data/site";
 import { CLIENT_STORIES, type ClientStory } from "@/data/testimonials";
 import { useTestimonials } from "@/lib/site-content";
+import {
+  HOME_HERO_POINTS,
+  HOME_PERSONAS,
+  HOME_STEPS,
+  HOME_TRUST,
+} from "@/data/page-lists";
+import { useList } from "@/lib/page-lists";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,88 +64,10 @@ export const Route = createFileRoute("/")({
 const WA_PATH =
   "M12.04 2A10 10 0 0 0 2 12.04a9.94 9.94 0 0 0 1.34 4.99L2 22l5.13-1.34A9.95 9.95 0 0 0 12.04 22 10 10 0 0 0 22 12.04 10 10 0 0 0 12.04 2zm5.82 14.12c-.24.67-1.42 1.24-1.96 1.32-.5.07-1.14.1-1.84-.12a16.84 16.84 0 0 1-1.67-.62c-2.93-1.27-4.84-4.23-4.99-4.43-.15-.2-1.2-1.6-1.2-3.06 0-1.45.76-2.17 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.02.9 2.17.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.13.99 2.09 1.3 2.39 1.44.3.15.47.13.64-.07.17-.21.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z";
 
-const HERO_POINTS = [
-  { icon: BadgeCheck, title: "Every Loan Type,", sub: "Under One Roof" },
-  { icon: Timer, title: "Days, Not Weeks,", sub: "To Sanction" },
-  { icon: Landmark, title: "75+ Lenders,", sub: "Compared For You" },
-];
 
-const TRUST = [
-  { icon: Landmark, label: "75+ Banking Partners" },
-  { icon: Timer, label: "Speed to Sanction" },
-  { icon: TrendingUp, label: "Large-Ticket Specialists" },
-  { icon: Sparkles, label: "Custom-built Loans" },
-  { icon: BadgeCheck, label: "Zero Advisory Fee" },
-  { icon: Globe, label: "PAN India Service" },
-  { icon: LayoutDashboard, label: "In-House CRM Tracking" },
-];
 
 /** Each persona pairs one "who we help" story with one "why us" differentiator. */
-const PERSONAS = [
-  {
-    icon: Users,
-    title: "Salaried & Self-Employed",
-    body: "Home, personal and education loans shaped around your income.",
-    why: {
-      icon: ShieldCheck,
-      title: "Trust & Transparency",
-      body: "Rate, fees and foreclosure terms — all in writing, upfront.",
-    },
-  },
-  {
-    icon: Briefcase,
-    title: "Entrepreneurs & SMEs",
-    body: "Business, working-capital and collateral-free funding that fits your cycle.",
-    why: {
-      icon: Zap,
-      title: "Quick, Paperless Process",
-      body: "Digital documents and daily updates, from login to disbursal.",
-    },
-  },
-  {
-    icon: TrendingDown,
-    title: "Lower-EMI Seekers",
-    body: "Move an existing loan to a better rate — top-up included.",
-    why: {
-      icon: Target,
-      title: "End-to-End Guidance",
-      body: "One advisor from picking the product to after the money lands.",
-    },
-  },
-  {
-    icon: Landmark,
-    title: "Property Owners",
-    body: "Turn residential or commercial property into ready capital.",
-    why: {
-      icon: BadgeCheck,
-      title: "Better Deals Than Direct",
-      body: "Our volume with lenders gets you pricing you'd rarely get alone.",
-    },
-  },
-];
 
-const STEPS = [
-  {
-    icon: Phone,
-    title: "Free Consultation",
-    body: "Tell us what you need. We map your eligibility and goals — free.",
-  },
-  {
-    icon: Building2,
-    title: "Lender Matching",
-    body: "We compare live offers and shortlist the lenders that fit you best.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Documentation",
-    body: "Paperwork collected digitally; legal and technical checks handled.",
-  },
-  {
-    icon: Timer,
-    title: "Sanction & Disbursal",
-    body: "We chase the file daily until the money lands in your account.",
-  },
-];
 
 
 function WhatsAppIcon() {
@@ -151,6 +80,7 @@ function WhatsAppIcon() {
 
 /** Persona selector: replaces two separate "who we help" / "why us" grids with one interactive panel. */
 function PersonaPanel() {
+  const PERSONAS = useList("home.personas", HOME_PERSONAS);
   const [active, setActive] = useState(0);
   const persona = PERSONAS[active] ?? PERSONAS[0]!;
 
@@ -218,15 +148,15 @@ function PersonaPanel() {
 
         <div className="relative mt-6 flex items-start gap-3 rounded-xl border border-gold/15 bg-white/70 p-4 dark:bg-white/5">
           <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
-            <persona.why.icon className="h-4 w-4" />
+            <persona.whyIcon className="h-4 w-4" />
           </span>
           <div>
             <p className="text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
               Why clients like this choose us
             </p>
-            <p className="mt-1 text-sm font-bold text-navy dark:text-white">{persona.why.title}</p>
+            <p className="mt-1 text-sm font-bold text-navy dark:text-white">{persona.whyTitle}</p>
             <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-              {persona.why.body}
+              {persona.whyBody}
             </p>
           </div>
         </div>
@@ -351,6 +281,7 @@ function ClientStoriesMarquee() {
 
 /** Click-through process stepper: one big active panel instead of four static columns. */
 function ProcessStepper() {
+  const STEPS = useList("home.steps", HOME_STEPS);
   const [active, setActive] = useState(0);
   const step = STEPS[active] ?? STEPS[0]!;
 
@@ -419,6 +350,8 @@ function ProcessStepper() {
 }
 
 function HomePage() {
+  const TRUST = useList("home.trust", HOME_TRUST);
+  const HERO_POINTS = useList("home.hero", HOME_HERO_POINTS);
   return (
     <>
       {/* ─── HERO ─────────────────────────────────────── */}

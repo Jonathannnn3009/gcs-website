@@ -28,6 +28,8 @@ type SiteContent = {
   testimonials?: (ClientStory & { visible?: boolean })[];
   trustNumbers?: Record<string, string>;
   customPages?: CustomPage[];
+  /** Repeated blocks on the pages, keyed by list name (see data/page-lists.ts). */
+  lists?: Record<string, Record<string, string>[]>;
   /** Hindi and Marathi wording, keyed like pageText by the original English. */
   "pageText:hi"?: PageTextMap;
   "pageText:mr"?: PageTextMap;
