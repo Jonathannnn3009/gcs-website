@@ -33,7 +33,18 @@ function CaLegalServicesPage() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-bg-light py-14 sm:py-20 dark:bg-background">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8">
+          {/* picture on the left; the heading block moves to the right, otherwise unchanged */}
+          <Reveal className="order-2 lg:order-1">
+            <img
+              src="/illustrations/ca-services.webp"
+              alt="A chartered accountant reviewing accounts and charts at her desk"
+              width={1024}
+              height={1024}
+              className="mx-auto aspect-square w-full max-w-md rounded-3xl object-cover shadow-[var(--shadow-lift)]"
+            />
+          </Reveal>
+          <div className="order-1 lg:order-2">
           <Reveal className="text-center">
             <p className="flex items-center justify-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               <Link to="/" className="hover:text-navy dark:text-white">
@@ -70,6 +81,7 @@ function CaLegalServicesPage() {
               );
             })}
           </Reveal>
+          </div>
         </div>
       </section>
 
@@ -137,7 +149,7 @@ function CaLegalServicesPage() {
 
       {/* CTA / Enquiry */}
       <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 sm:pb-20 lg:px-8">
-        <div className="grid gap-8 rounded-2xl border border-gold/25 panel-light p-8 sm:p-12 lg:grid-cols-[1fr_420px] lg:items-center">
+        <div className="grid gap-8 rounded-2xl border border-gold/25 panel-light p-8 sm:p-12 lg:grid-cols-[1fr_480px] lg:items-stretch">
           <Reveal>
             <p className="eyebrow">Not Sure Where to Start?</p>
             <h3 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
@@ -147,9 +159,18 @@ function CaLegalServicesPage() {
               Whether it's a tax filing, a GST question or a property document, share your
               requirement and our team will connect you with the right associated professional.
             </p>
+            <img
+              src="/illustrations/legal-services.webp"
+              alt="An adviser talking through documents with a family in front of their housing society"
+              width={1024}
+              height={1024}
+              loading="lazy"
+              className="mt-8 aspect-square w-full max-w-xl rounded-2xl object-cover shadow-[var(--shadow-card)]"
+            />
           </Reveal>
-          <Reveal delay={100}>
+          <Reveal delay={100} className="h-full">
             <ServiceEnquiryForm
+              roomy
               heading="Get Professional Assistance"
               description="Share your requirement and our team will guide you on the next steps."
             />

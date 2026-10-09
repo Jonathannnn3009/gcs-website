@@ -40,6 +40,8 @@ type Props = {
   serviceTitle?: string;
   /** CA Services filings vary by income type — ask upfront there; skip for Sheetal Associates legal work. */
   showIncomeType?: boolean;
+  /** A larger card that stretches to the height of whatever sits beside it. */
+  roomy?: boolean;
 };
 
 export function ServiceEnquiryForm({
@@ -47,6 +49,7 @@ export function ServiceEnquiryForm({
   description = "Tell us your requirement and our team will guide you on the process, documents and next steps.",
   serviceTitle,
   showIncomeType = false,
+  roomy = false,
 }: Props) {
   const uid = useId();
   const [values, setValues] = useState<Fields>(empty);
@@ -101,11 +104,11 @@ export function ServiceEnquiryForm({
     <form
       onSubmit={onSubmit}
       noValidate
-      className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-lift)] sm:p-7 dark:bg-card"
+      className={`rounded-2xl border border-border bg-white shadow-[var(--shadow-lift)] dark:bg-card ${roomy ? "flex h-full flex-col p-7 sm:p-10" : "p-6 sm:p-7"}`}
     >
-      <h3 className="text-xl font-extrabold text-navy dark:text-white">{heading}</h3>
-      <p className="mt-2 text-sm text-muted-foreground">{description}</p>
-      <div className="mt-5 space-y-4">
+      <h3 className={`font-extrabold text-navy dark:text-white ${roomy ? "text-2xl" : "text-xl"}`}>{heading}</h3>
+      <p className={`mt-2 text-muted-foreground ${roomy ? "text-base" : "text-sm"}`}>{description}</p>
+      <div className={`${roomy ? "mt-7 flex flex-1 flex-col space-y-6" : "mt-5 space-y-4"}`}>
         <div>
           <label
             htmlFor={`${uid}-name`}
@@ -197,7 +200,7 @@ export function ServiceEnquiryForm({
             ) : null}
           </>
         ) : null}
-        <div>
+        <div className={roomy ? "flex flex-1 flex-col" : ""}>
           <label
             htmlFor={`${uid}-message`}
             className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white"
@@ -206,7 +209,7 @@ export function ServiceEnquiryForm({
           </label>
           <textarea
             id={`${uid}-message`}
-            className={`${fieldClass} min-h-[80px] resize-none`}
+            className={`${fieldClass} resize-none ${roomy ? "min-h-[140px] flex-1" : "min-h-[80px]"}`}
             value={values.message}
             onChange={set("message")}
             placeholder="Briefly describe your requirement"
@@ -216,7 +219,7 @@ export function ServiceEnquiryForm({
       </div>
       <button
         type="submit"
-        className="group mt-6 flex w-full items-center justify-center gap-3 rounded-lg bg-navy py-3.5 text-sm font-bold text-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-soft"
+        className={`group flex w-full items-center justify-center gap-3 rounded-lg bg-navy font-bold text-white ${roomy ? "mt-8 py-4 text-base" : "mt-6 py-3.5 text-sm"} shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-soft`}
       >
         Send Enquiry
         <span className="grid h-7 w-7 place-items-center rounded-full bg-gold text-navy transition-transform duration-300 group-hover:translate-x-0.5">
