@@ -33,6 +33,7 @@ import {
   PhoneCall,
   PiggyBank,
   Receipt,
+  RefreshCw,
   Rocket,
   Scale,
   ShieldCheck,
@@ -53,6 +54,7 @@ import {
 } from "lucide-react";
 
 export const ICONS: Record<string, LucideIcon> = {
+  RefreshCw,
   Award,
   BadgeCheck,
   Banknote,
