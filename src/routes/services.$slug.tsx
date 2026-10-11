@@ -6,6 +6,8 @@ import {
   FileCheck2,
   FileText,
   Landmark,
+  ListChecks,
+  UserCheck,
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
@@ -13,6 +15,8 @@ import { LeadForm } from "@/components/lead-form";
 import { ChecklistGate } from "@/components/checklist-gate";
 import { PRODUCTS, getProduct } from "@/data/products";
 import { useProduct } from "@/lib/site-content";
+import { FactsStrip } from "@/components/facts-strip";
+import { CheckBadge, TopicHeader } from "@/components/topic-header";
 import { useIntakeFields } from "@/lib/page-lists";
 import { CONTACT, waLink } from "@/data/site";
 
@@ -136,16 +140,7 @@ function ProductDetailPage() {
                   {product.tagline}
                 </p>
 
-                <div className="relative mt-8 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/10 pt-6">
-                  {product.facts.map((fact) => (
-                    <div key={fact.label}>
-                      <span className="block text-[10px] font-bold tracking-wide text-white/40 uppercase">
-                        {fact.label}
-                      </span>
-                      <span className="block text-sm font-bold text-gold-light">{fact.value}</span>
-                    </div>
-                  ))}
-                </div>
+                <FactsStrip facts={product.facts} />
 
                 <div className="relative mt-8 flex flex-wrap items-center gap-5">
                   <Link to="/contact" className="gold-btn py-3.5 text-base">
@@ -272,14 +267,14 @@ function ProductDetailPage() {
               <div className="border-t border-dashed border-border" />
 
               <div className="p-7 sm:p-9">
-                <p className="eyebrow">What's Included</p>
-                <ul className="mt-5 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+                <TopicHeader icon={ListChecks} title="What's included" />
+                <ul className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
                   {product.features.map((item) => (
                     <li
                       key={item}
-                      className="flex items-start gap-2.5 text-sm leading-relaxed text-foreground"
+                      className="flex items-start gap-3 text-[15px] leading-relaxed text-foreground"
                     >
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                      <CheckBadge />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -290,14 +285,14 @@ function ProductDetailPage() {
 
               <div className="grid sm:grid-cols-2 sm:divide-x sm:divide-border">
                 <div className="p-7 sm:p-9">
-                  <p className="eyebrow">Do You Qualify</p>
-                  <ul className="mt-5 space-y-2.5">
+                  <TopicHeader icon={UserCheck} title="Do you qualify?" />
+                  <ul className="mt-6 space-y-3.5">
                     {product.eligibility.map((item) => (
                       <li
                         key={item}
-                        className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground"
+                        className="flex items-start gap-3 text-[15px] leading-relaxed text-muted-foreground"
                       >
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                        <CheckBadge />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -322,9 +317,7 @@ function ProductDetailPage() {
                   ) : null}
                 </div>
                 <div className="navy-panel p-7 sm:p-9">
-                  <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
-                    Paperwork You'll Need
-                  </p>
+                  <TopicHeader icon={FileText} title="Paperwork you'll need" dark />
 
                   {product.documentCategories ? (
                     <>
@@ -350,13 +343,13 @@ function ProductDetailPage() {
                     </>
                   ) : null}
 
-                  <ul className="mt-4 space-y-2.5">
+                  <ul className="mt-6 space-y-3.5">
                     {product.documents.map((item) => (
                       <li
                         key={item}
-                        className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70"
+                        className="flex items-start gap-3 text-[15px] leading-relaxed text-white/75"
                       >
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" />
+                        <CheckBadge dark />
                         <span>{item}</span>
                       </li>
                     ))}

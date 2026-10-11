@@ -7,6 +7,7 @@ import { ChecklistGate } from "@/components/checklist-gate";
 import { CONTACT } from "@/data/site";
 import { PROFESSIONAL_SERVICES, divisionLabel, getProfessionalService } from "@/data/professional-services";
 import { useProfessionalService } from "@/lib/site-content";
+import { FactsStrip } from "@/components/facts-strip";
 
 export const Route = createFileRoute("/ca-legal-services/$slug")({
   head: ({ params }) => {
@@ -85,6 +86,16 @@ function ProfessionalServiceDetailPage() {
               <p className="relative mt-4 max-w-2xl text-sm leading-relaxed text-white/70">
                 {service.summary}
               </p>
+
+              <FactsStrip
+                wide
+                facts={[
+                  { label: "Division", value: divisionLabel(service.division) },
+                  { label: "Category", value: service.category },
+                  { label: "How it works", value: `${service.process.length} steps` },
+                  { label: "Documents", value: `${service.documents.length} items` },
+                ]}
+              />
             </div>
           </Reveal>
         </div>
