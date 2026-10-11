@@ -698,21 +698,3 @@ input[type="range"]::-moz-range-thumb {
 }
 
 
-/* The thin gold line that sweeps under whichever key fact the glow is resting on. */
-@keyframes fact-sweep {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-.fact-sweep {
-  transform-origin: left;
-  animation: fact-sweep 1.8s linear forwards;
-}
-@media (prefers-reduced-motion: reduce) {
-  .fact-sweep {
-    animation: none;
-  }
-}

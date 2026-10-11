@@ -88,7 +88,6 @@ function ProfessionalServiceDetailPage() {
               </p>
 
               <FactsStrip
-                wide
                 facts={[
                   { label: "Division", value: divisionLabel(service.division) },
                   { label: "Category", value: service.category },

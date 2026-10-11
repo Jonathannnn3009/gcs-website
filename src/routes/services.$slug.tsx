@@ -108,7 +108,13 @@ function ProductDetailPage() {
       <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal animate={false}>
-            <div className="grid gap-0 overflow-hidden rounded-3xl lg:grid-cols-[1.4fr_1fr]">
+            <div className={`grid gap-0 overflow-hidden rounded-3xl ${
+                product.facts.length >= 5
+                  ? "lg:grid-cols-[2.9fr_1fr]"
+                  : product.facts.length === 4
+                    ? "lg:grid-cols-[2.3fr_1fr]"
+                    : "lg:grid-cols-[1.4fr_1fr]"
+              }`}>
               {/* Navy card */}
               <div className="navy-panel relative overflow-hidden p-8 sm:p-12">
                 <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />

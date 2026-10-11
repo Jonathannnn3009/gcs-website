@@ -1,48 +1,29 @@
-import { useEffect, useState } from "react";
-import {
-  Banknote,
-  CalendarClock,
-  FileText,
-  Layers,
-  ListOrdered,
-  Percent,
-  Sparkles,
-  Wallet,
-  type LucideIcon,
-} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-/** A small gold icon that suits the fact's label. */
-function iconFor(label: string): LucideIcon {
-  const l = label.toLowerCase();
-  if (/(division|category)/.test(l)) return Layers;
-  if (/(steps|process|works)/.test(l)) return ListOrdered;
-  if (/(document|paper)/.test(l)) return FileText;
-  if (/(rate|interest|roi)/.test(l)) return Percent;
-  if (/(tenure|tenor|term|period|duration|years|time)/.test(l)) return CalendarClock;
-  if (/(amount|ticket|limit|loan|funding|finance|value|ltv|cover)/.test(l)) return Banknote;
-  if (/(fee|charge|cost|margin)/.test(l)) return Wallet;
-  return Sparkles;
-}
+/** How long the light rests on each fact before gliding to the next. */
+const SLOT_MS = 2200;
+/** How long the glide itself takes. */
+const GLIDE_MS = 1000;
 
-/** How long the glow rests on each fact before it moves on to the next. */
-const SLOT_MS = 1800;
+type Box = { x: number; y: number; w: number; h: number };
 
 /**
- * A loan's key facts (interest rate, amount, tenure...) as a clean strip with a hairline above and
- * below, hairline dividers between the columns, small spaced capitals for each label and a large
- * serif gold value. A soft gold glow travels through the facts one by one, in order, and loops;
- * it is switched off for visitors who prefer reduced motion. Three facts sit in one row, more
- * fall into rows of two (or `wide` for four across); long values are sized down to stay tidy.
+ * A loan's key facts (interest rate, amount, tenure...) as a clean strip: a hairline above and
+ * below, hairline dividers between the facts, small spaced capitals for each label and a large
+ * serif gold value. The facts always sit in ONE row (on phones, too narrow for that, they fall
+ * into two columns).
+ *
+ * A thin gold line glides smoothly along the top edge from one fact to the next, in order, and
+ * loops; the fact it rests on brightens a little. Nothing is laid over the text, so every value
+ * stays crisp and easy to read. It is switched off for visitors who prefer reduced motion.
  */
-export function FactsStrip({
-  facts,
-  wide = false,
-}: {
-  facts: { label: string; value: string }[];
-  wide?: boolean;
-}) {
+export function FactsStrip({ facts }: { facts: { label: string; value: string }[] }) {
+  const listRef = useRef<HTMLDListElement>(null);
+  const cellRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [active, setActive] = useState(0);
   const [animate, setAnimate] = useState(false);
+  const [single, setSingle] = useState(true); // one row (sm and up) vs two columns (phones)
+  const [box, setBox] = useState<Box | null>(null);
 
   useEffect(() => {
     if (facts.length < 2) return;
@@ -52,64 +33,81 @@ export function FactsStrip({
     return () => window.clearInterval(timer);
   }, [facts.length]);
 
+  // follow the active fact: measure where it sits so the light can glide there
+  useEffect(() => {
+    if (!animate) return;
+    const measure = () => {
+      const el = cellRefs.current[active];
+      setSingle(window.matchMedia("(min-width: 640px)").matches);
+      if (el) setBox({ x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight });
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [active, animate, facts.length]);
+
   if (facts.length === 0) return null;
-  const cols = wide ? Math.min(facts.length, 4) : facts.length === 3 ? 3 : 2;
-  const grid =
-    cols === 4 ? "grid-cols-2 sm:grid-cols-4" : cols === 3 ? "grid-cols-3" : "grid-cols-2";
+  const n = facts.length;
+  // the more facts share the row, the smaller the type
+  const valueSize =
+    n <= 3
+      ? "text-[1.2rem] sm:text-[1.4rem]"
+      : n === 4
+        ? "text-[1.05rem] sm:text-[1.2rem]"
+        : "text-[0.95rem] sm:text-[1.05rem]";
+  const labelSize = n <= 3 ? "text-[11px] tracking-[0.2em]" : "text-[10px] tracking-[0.14em]";
+  const glide = `${GLIDE_MS}ms cubic-bezier(0.65, 0, 0.35, 1)`;
+
   return (
-    <dl className={`relative mt-8 grid border-y border-white/12 ${grid}`}>
+    <dl ref={listRef} className="relative mt-8 grid grid-cols-2 border-y border-white/12 sm:flex">
+      {/* the gliding line (one row only): a thin gold line along the top edge, nothing over the text */}
+      {animate && single && box ? (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute top-[-1px] left-0 h-[3px] rounded-full bg-gradient-to-r from-[#e4b028] via-[#ffd66b] to-[#e4b028] shadow-[0_0_10px_rgba(255,206,92,0.75)]"
+          style={{
+            width: box.w,
+            transform: `translateX(${box.x}px)`,
+            transition: `transform ${glide}, width ${glide}`,
+          }}
+        />
+      ) : null}
+
       {facts.map((fact, i) => {
-        const Icon = iconFor(fact.label);
-        const colIndex = i % cols;
-        const lastOdd = cols === 2 && facts.length % 2 === 1 && i === facts.length - 1;
         const on = animate && active === i;
         return (
           <div
             key={fact.label}
+            ref={(el) => {
+              cellRefs.current[i] = el;
+            }}
             className={[
-              "relative overflow-hidden py-5 pr-4",
-              colIndex > 0 ? "border-l border-white/12 pl-5 sm:pl-6" : "pl-0",
-              i >= cols ? "border-t border-white/12" : "",
-              lastOdd ? "col-span-2" : "",
-              cols === 4
-                ? "max-sm:[&:nth-child(even)]:border-l max-sm:[&:nth-child(odd)]:border-l-0"
-                : "",
+              "relative overflow-hidden py-5 sm:min-w-0 sm:flex-1",
+              n <= 3 ? "pr-4 pl-4 sm:pl-6" : "pr-3 pl-4 sm:pl-5",
+              i === 0 ? "pl-0 sm:pl-0" : "",
+              i % 2 === 1 ? "border-l border-white/12" : "",
+              i >= 2 ? "border-t border-white/12" : "",
+              i > 0 ? "sm:border-l sm:border-white/12" : "",
+              "sm:border-t-0",
+              i === n - 1 && n % 2 === 1 ? "max-sm:col-span-2" : "",
             ].join(" ")}
           >
-            {/* the glow: a soft gold wash behind the fact it is resting on */}
-            <span
-              aria-hidden
-              className={`pointer-events-none absolute inset-0 bg-[radial-gradient(90%_130%_at_20%_0%,rgba(228,176,40,0.22),transparent_72%)] transition-opacity duration-700 ${
-                on ? "opacity-100" : "opacity-0"
-              }`}
-            />
-            {/* and a thin gold line that sweeps along the bottom while it rests there */}
-            {on ? (
-              <span
-                aria-hidden
-                key={`sweep-${active}`}
-                className="fact-sweep pointer-events-none absolute bottom-0 left-0 h-[2px] w-full bg-gradient-to-r from-gold/0 via-gold to-gold-light"
-              />
-            ) : null}
             <dt
-              className={`relative flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase transition-colors duration-700 ${
-                on ? "text-gold-light" : "text-white/50"
+              className={`relative flex items-center gap-2 font-bold uppercase transition-colors duration-700 ${labelSize} ${
+                on ? "text-white" : "text-white/50"
               }`}
             >
-              <Icon className="h-3.5 w-3.5 shrink-0 text-gold/80" />
               {fact.label}
             </dt>
             <dd
-              className={`relative mt-2 font-heading leading-snug text-gold-light transition-[text-shadow] duration-700 ${
-                on
-                  ? "[text-shadow:0_0_22px_rgba(228,176,40,0.7)]"
-                  : "[text-shadow:0_0_0_rgba(228,176,40,0)]"
+              className={`relative mt-2 font-heading leading-snug text-gold-light transition-colors duration-700 ${
+                on ? "text-[#ffe08a]" : ""
               } ${
                 fact.value.length > 40
-                  ? "text-[0.95rem]"
+                  ? "text-[0.9rem]"
                   : fact.value.length > 24
-                    ? "text-[1.05rem]"
-                    : "text-[1.2rem] sm:text-[1.4rem]"
+                    ? "text-[0.95rem]"
+                    : valueSize
               }`}
             >
               {fact.value}
