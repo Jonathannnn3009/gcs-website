@@ -35,11 +35,11 @@ export function WorkingCapitalCalculator() {
             label="Projected Annual Turnover"
             value={turnover}
             onChange={setTurnover}
-            min={1000000}
+            min={100000}
             max={500000000}
-            step={500000}
+            step={100000}
             format={formatCurrency}
-            minLabel="₹10 L"
+            minLabel="₹1 L"
             maxLabel="₹50 Cr"
             ariaLabel="Projected annual turnover"
           />

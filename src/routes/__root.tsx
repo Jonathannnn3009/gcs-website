@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppButton } from "@/components/whatsapp-button";
+import { ChatAssistant } from "@/components/chat-assistant";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { PromoPopup } from "@/components/promo-popup";
 import { flushPendingLeads } from "@/lib/leads";
@@ -188,6 +189,7 @@ function RootComponent() {
         </main>
         <SiteFooter />
         <WhatsAppButton />
+        <ChatAssistant />
         <PromoPopup />
         <InlineEditor />
       </div>

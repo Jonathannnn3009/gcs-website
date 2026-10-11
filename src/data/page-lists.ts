@@ -81,6 +81,23 @@ export const HOME_TRUST = [
   { icon: LayoutDashboard, label: "In-House CRM Tracking" },
 ];
 
+// "Banks & Lenders vs Growth Capital Services" comparison on the home page.
+export const HOME_COMPARE_BANKS = [
+  { text: "Only their own loan products on the table" },
+  { text: "One standard answer for every borrower" },
+  { text: "You chase the paperwork and the updates yourself" },
+  { text: "Charges tucked away in the sanction letter" },
+  { text: "Sales targets shape the advice" },
+];
+
+export const HOME_COMPARE_US = [
+  { text: "Offers compared across 75+ banks and NBFCs" },
+  { text: "A loan shaped around your income and goals" },
+  { text: "One dedicated manager from login to disbursal" },
+  { text: "Every charge shared in writing before you sign" },
+  { text: "Zero advisory fee, independent advice" },
+];
+
 export const HOME_PERSONAS = [
   {
     icon: Users,
@@ -352,6 +369,12 @@ export const NAV_HEADER = [
   { label: "Contact Us", to: "/contact" },
 ];
 
+export const NAV_PARTNER = [
+  { icon: Handshake, label: "Agent", desc: "CAs, brokers, consultants and DSAs", to: "/partner" },
+  { icon: Building2, label: "Builder", desc: "Buyer financing and project approvals", to: "/partner/builder" },
+  { icon: Users, label: "Freelancer", desc: "Earn on your own time, no investment", to: "/partner/freelancer" },
+];
+
 export const NAV_TOOLS = [
   { label: "EMI Calculator", desc: "Estimate your monthly EMI", hash: "emi" },
   { label: "Eligibility Calculator", desc: "Find your max loan amount", hash: "eligibility" },
@@ -614,6 +637,22 @@ export const LIST_SPECS: ListSpec[] = [
     items: HOME_TRUST,
   },
   {
+    key: "home.compare.banks",
+    page: "Home",
+    label: "Comparison: Banks & Lenders column",
+    hint: "The points in the left column of the 'Banks & Lenders vs us' block.",
+    fields: [T("text", "Point")],
+    items: HOME_COMPARE_BANKS,
+  },
+  {
+    key: "home.compare.us",
+    page: "Home",
+    label: "Comparison: Growth Capital column",
+    hint: "The points in the highlighted right column.",
+    fields: [T("text", "Point")],
+    items: HOME_COMPARE_US,
+  },
+  {
     key: "home.personas",
     page: "Home",
     label: "Who we help",
@@ -747,6 +786,14 @@ export const LIST_SPECS: ListSpec[] = [
     hint: "The links in the top menu. Our Services and Tools keep their drop-down panels.",
     fields: [T("label", "Name"), T("to", "Page address, e.g. /about")],
     items: NAV_HEADER,
+  },
+  {
+    key: "nav.partner",
+    page: "Menu & footer",
+    label: "Become Partner drop-down",
+    hint: "The partner types listed under Become Partner. Page address is e.g. /partner/builder.",
+    fields: [I("icon", "Icon"), T("label", "Name"), T("desc", "Short line"), T("to", "Page address")],
+    items: NAV_PARTNER,
   },
   {
     key: "nav.tools",

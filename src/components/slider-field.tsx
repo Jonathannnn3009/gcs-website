@@ -12,6 +12,7 @@ export function SliderField({
   minLabel,
   maxLabel,
   ariaLabel,
+  presets,
 }: {
   label: string;
   value: number;
@@ -26,6 +27,8 @@ export function SliderField({
   minLabel?: string;
   maxLabel?: string;
   ariaLabel: string;
+  /** Quick-pick chips under the slider, e.g. ₹50 L, ₹1 Cr. */
+  presets?: { label: string; value: number }[];
 }) {
   // The slider itself stays bounded to [min, max] — sliders need a fixed
   // range to be usable. Typing a number, though, can go past max (someone
@@ -73,6 +76,25 @@ export function SliderField({
         <div className="mt-1 flex justify-between text-xs text-muted-foreground">
           <span>{minLabel}</span>
           <span>{maxLabel}</span>
+        </div>
+      ) : null}
+      {presets?.length ? (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {presets.map((p) => (
+            <button
+              key={p.label}
+              type="button"
+              onClick={() => onChange(p.value)}
+              aria-pressed={value === p.value}
+              className={`rounded-md border px-2.5 py-1 text-xs font-semibold transition-colors ${
+                value === p.value
+                  ? "border-navy bg-navy text-white"
+                  : "border-border bg-white text-muted-foreground hover:border-gold hover:text-navy"
+              }`}
+            >
+              {p.label}
+            </button>
+          ))}
         </div>
       ) : null}
     </div>

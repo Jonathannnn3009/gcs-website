@@ -17,18 +17,21 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as MumbaiRouteImport } from './routes/mumbai'
 import { Route as NaviMumbaiRouteImport } from './routes/navi-mumbai'
-import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as PuneRouteImport } from './routes/pune'
 import { Route as RatesRouteImport } from './routes/rates'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ThaneRouteImport } from './routes/thane'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as WhyUsRouteImport } from './routes/why-us'
+import { Route as ApiChatRouteImport } from './routes/api.chat'
 import { Route as CaLegalServicesIndexRouteImport } from './routes/ca-legal-services.index'
 import { Route as CaLegalServicesSlugRouteImport } from './routes/ca-legal-services.$slug'
 import { Route as CaseStudiesIndexRouteImport } from './routes/case-studies.index'
 import { Route as CaseStudiesSlugRouteImport } from './routes/case-studies.$slug'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
+import { Route as PartnerIndexRouteImport } from './routes/partner.index'
+import { Route as PartnerBuilderRouteImport } from './routes/partner.builder'
+import { Route as PartnerFreelancerRouteImport } from './routes/partner.freelancer'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 
@@ -72,11 +75,6 @@ const NaviMumbaiRoute = NaviMumbaiRouteImport.update({
   path: '/navi-mumbai',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PartnerRoute = PartnerRouteImport.update({
-  id: '/partner',
-  path: '/partner',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PuneRoute = PuneRouteImport.update({
   id: '/pune',
   path: '/pune',
@@ -107,6 +105,11 @@ const WhyUsRoute = WhyUsRouteImport.update({
   path: '/why-us',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CaLegalServicesIndexRoute = CaLegalServicesIndexRouteImport.update({
   id: '/ca-legal-services/',
   path: '/ca-legal-services/',
@@ -132,6 +135,21 @@ const PSlugRoute = PSlugRouteImport.update({
   path: '/p/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PartnerIndexRoute = PartnerIndexRouteImport.update({
+  id: '/partner/',
+  path: '/partner/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnerBuilderRoute = PartnerBuilderRouteImport.update({
+  id: '/partner/builder',
+  path: '/partner/builder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnerFreelancerRoute = PartnerFreelancerRouteImport.update({
+  id: '/partner/freelancer',
+  path: '/partner/freelancer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesIndexRoute = ServicesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -152,19 +170,22 @@ export interface FileRoutesByFullPath {
   '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
-  '/partner': typeof PartnerRoute
   '/pune': typeof PuneRoute
   '/rates': typeof RatesRoute
   '/services': typeof ServicesRouteWithChildren
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/why-us': typeof WhyUsRoute
+  '/api/chat': typeof ApiChatRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/p/$slug': typeof PSlugRoute
+  '/partner/builder': typeof PartnerBuilderRoute
+  '/partner/freelancer': typeof PartnerFreelancerRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/ca-legal-services/': typeof CaLegalServicesIndexRoute
   '/case-studies/': typeof CaseStudiesIndexRoute
+  '/partner/': typeof PartnerIndexRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -175,18 +196,21 @@ export interface FileRoutesByTo {
   '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
-  '/partner': typeof PartnerRoute
   '/pune': typeof PuneRoute
   '/rates': typeof RatesRoute
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/why-us': typeof WhyUsRoute
+  '/api/chat': typeof ApiChatRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/p/$slug': typeof PSlugRoute
+  '/partner/builder': typeof PartnerBuilderRoute
+  '/partner/freelancer': typeof PartnerFreelancerRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/ca-legal-services': typeof CaLegalServicesIndexRoute
   '/case-studies': typeof CaseStudiesIndexRoute
+  '/partner': typeof PartnerIndexRoute
   '/services': typeof ServicesIndexRoute
 }
 export interface FileRoutesById {
@@ -199,19 +223,22 @@ export interface FileRoutesById {
   '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
-  '/partner': typeof PartnerRoute
   '/pune': typeof PuneRoute
   '/rates': typeof RatesRoute
   '/services': typeof ServicesRouteWithChildren
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/why-us': typeof WhyUsRoute
+  '/api/chat': typeof ApiChatRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/p/$slug': typeof PSlugRoute
+  '/partner/builder': typeof PartnerBuilderRoute
+  '/partner/freelancer': typeof PartnerFreelancerRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/ca-legal-services/': typeof CaLegalServicesIndexRoute
   '/case-studies/': typeof CaseStudiesIndexRoute
+  '/partner/': typeof PartnerIndexRoute
   '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
@@ -225,19 +252,22 @@ export interface FileRouteTypes {
     | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
-    | '/partner'
     | '/pune'
     | '/rates'
     | '/services'
     | '/thane'
     | '/tools'
     | '/why-us'
+    | '/api/chat'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/p/$slug'
+    | '/partner/builder'
+    | '/partner/freelancer'
     | '/services/$slug'
     | '/ca-legal-services/'
     | '/case-studies/'
+    | '/partner/'
     | '/services/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -248,18 +278,21 @@ export interface FileRouteTypes {
     | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
-    | '/partner'
     | '/pune'
     | '/rates'
     | '/thane'
     | '/tools'
     | '/why-us'
+    | '/api/chat'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/p/$slug'
+    | '/partner/builder'
+    | '/partner/freelancer'
     | '/services/$slug'
     | '/ca-legal-services'
     | '/case-studies'
+    | '/partner'
     | '/services'
   id:
     | '__root__'
@@ -271,19 +304,22 @@ export interface FileRouteTypes {
     | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
-    | '/partner'
     | '/pune'
     | '/rates'
     | '/services'
     | '/thane'
     | '/tools'
     | '/why-us'
+    | '/api/chat'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/p/$slug'
+    | '/partner/builder'
+    | '/partner/freelancer'
     | '/services/$slug'
     | '/ca-legal-services/'
     | '/case-studies/'
+    | '/partner/'
     | '/services/'
   fileRoutesById: FileRoutesById
 }
@@ -296,16 +332,19 @@ export interface RootRouteChildren {
   InsightsRoute: typeof InsightsRoute
   MumbaiRoute: typeof MumbaiRoute
   NaviMumbaiRoute: typeof NaviMumbaiRoute
-  PartnerRoute: typeof PartnerRoute
   PuneRoute: typeof PuneRoute
   RatesRoute: typeof RatesRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   ThaneRoute: typeof ThaneRoute
   ToolsRoute: typeof ToolsRoute
   WhyUsRoute: typeof WhyUsRoute
+  ApiChatRoute: typeof ApiChatRoute
   CaLegalServicesSlugRoute: typeof CaLegalServicesSlugRoute
   PSlugRoute: typeof PSlugRoute
+  PartnerBuilderRoute: typeof PartnerBuilderRoute
+  PartnerFreelancerRoute: typeof PartnerFreelancerRoute
   CaLegalServicesIndexRoute: typeof CaLegalServicesIndexRoute
+  PartnerIndexRoute: typeof PartnerIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -366,13 +405,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NaviMumbaiRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/partner': {
-      id: '/partner'
-      path: '/partner'
-      fullPath: '/partner'
-      preLoaderRoute: typeof PartnerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/pune': {
       id: '/pune'
       path: '/pune'
@@ -415,6 +447,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WhyUsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ca-legal-services/': {
       id: '/ca-legal-services/'
       path: '/ca-legal-services'
@@ -448,6 +487,27 @@ declare module '@tanstack/react-router' {
       path: '/p/$slug'
       fullPath: '/p/$slug'
       preLoaderRoute: typeof PSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partner/': {
+      id: '/partner/'
+      path: '/partner'
+      fullPath: '/partner/'
+      preLoaderRoute: typeof PartnerIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partner/builder': {
+      id: '/partner/builder'
+      path: '/partner/builder'
+      fullPath: '/partner/builder'
+      preLoaderRoute: typeof PartnerBuilderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partner/freelancer': {
+      id: '/partner/freelancer'
+      path: '/partner/freelancer'
+      fullPath: '/partner/freelancer'
+      preLoaderRoute: typeof PartnerFreelancerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services/': {
@@ -504,16 +564,19 @@ const rootRouteChildren: RootRouteChildren = {
   InsightsRoute: InsightsRoute,
   MumbaiRoute: MumbaiRoute,
   NaviMumbaiRoute: NaviMumbaiRoute,
-  PartnerRoute: PartnerRoute,
   PuneRoute: PuneRoute,
   RatesRoute: RatesRoute,
   ServicesRoute: ServicesRouteWithChildren,
   ThaneRoute: ThaneRoute,
   ToolsRoute: ToolsRoute,
   WhyUsRoute: WhyUsRoute,
+  ApiChatRoute: ApiChatRoute,
   CaLegalServicesSlugRoute: CaLegalServicesSlugRoute,
   PSlugRoute: PSlugRoute,
+  PartnerBuilderRoute: PartnerBuilderRoute,
+  PartnerFreelancerRoute: PartnerFreelancerRoute,
   CaLegalServicesIndexRoute: CaLegalServicesIndexRoute,
+  PartnerIndexRoute: PartnerIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

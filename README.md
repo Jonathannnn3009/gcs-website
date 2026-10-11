@@ -49,3 +49,25 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## AI assistant ("Gia")
+
+A chat button in the corner of every page opens an AI assistant that answers loan questions, runs
+EMI / eligibility / stamp-duty / balance-transfer / prepayment numbers with the same maths as the
+calculators, shares the rates and contact details staff keep in the CRM, and turns "talk to an
+advisor" into a short callback form that arrives in the CRM as a lead (source `website-chat`).
+
+- **Name**: temporary. Change `ASSISTANT_NAME` in `src/lib/chat/config.ts`.
+- **Setup**: set `OPENAI_API_KEY` as a server secret (see `.env.example`). Locally, put it in `.env.local`.
+  It is read only on the server by `POST /api/chat` and never reaches the browser.
+- **What it knows**: `src/lib/chat/prompt.server.ts` builds its instructions from the site's own data
+  (loans, FAQs, contact details) with the CRM's edits laid over it; `src/lib/chat/tools.server.ts` holds the calculators and look-ups.
+- **Cost control**: each visitor is limited to 25 questions per 5 minutes and 150 a day (per server instance),
+  answers are capped at about 700 tokens, and the conversation sent is the last 14 messages. Also set a
+  monthly spending limit on the OpenAI account.
+- **Sign-in**: before any question, the visitor confirms their mobile number with a 6-digit code texted to
+  them (`src/components/chat-gate.tsx`). The CRM sends and checks the code (`backend/src/chat-auth`), keeps the
+  person as a lead marked a "Chatbot contact", and hands the browser a 7-day pass. `/api/chat` refuses requests
+  without a pass the CRM approves. The live CRM needs an SMS provider (`SMS_PROVIDER`, `MSG91_AUTH_KEY`,
+  `MSG91_TEMPLATE_ID`); without one, codes can't be sent and the chat stays closed.
+- Other parts of the site can open it: `window.dispatchEvent(new CustomEvent("gcs:open-chat", { detail: { message: "..." } }))`.

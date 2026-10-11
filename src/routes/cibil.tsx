@@ -12,6 +12,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import { Section } from "@/components/section";
+import { PageCalculators } from "@/components/page-calculators";
 import { Reveal } from "@/components/reveal";
 import { submitLead } from "@/lib/leads";
 import { CONTACT } from "@/data/site";
@@ -719,6 +720,14 @@ function CibilPage() {
           </aside>
         </div>
       </Section>
+
+      <PageCalculators
+        ids={["credit-score", "emi", "eligibility"]}
+        eyebrow="Before you request a report"
+        title="Get a feel for your score and what it can borrow"
+        description="An indicative score range, and what that means for your EMI and eligibility. A quick estimate, not a bureau pull."
+        className="pt-0"
+      />
     </>
   );
 }

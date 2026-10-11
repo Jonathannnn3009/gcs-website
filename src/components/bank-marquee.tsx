@@ -10,7 +10,7 @@ function LogoItem({ bank }: { bank: BankPartner }) {
       src={crmAsset(bank.logo ?? "")}
       alt={bank.name}
       title={bank.name}
-      className={`w-auto shrink-0 object-contain ${bank.small ? "h-5 sm:h-6" : "h-9 sm:h-11"}`}
+      className={`w-auto max-w-[8.5rem] shrink-0 object-contain sm:max-w-[10.5rem] ${bank.small ? "h-5 sm:h-6" : "h-9 sm:h-11"}`}
     />
   );
 }

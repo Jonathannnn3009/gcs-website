@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowRight, Calculator } from "lucide-react";
 import { Reveal } from "@/components/reveal";
+import { PageCalculators } from "@/components/page-calculators";
 import { CONTACT } from "@/data/site";
 import { useBankRates } from "@/lib/site-content";
 
@@ -139,6 +140,14 @@ function RatesPage() {
           </a>
         </div>
       </section>
+
+      <PageCalculators
+        ids={["emi", "loan-comparison", "eligibility"]}
+        eyebrow="Put a rate to work"
+        title="See what these rates mean for your EMI"
+        description="Pick a rate from the table above and try it here."
+        className="pt-4"
+      />
     </>
   );
 }

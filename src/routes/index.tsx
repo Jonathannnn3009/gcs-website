@@ -25,6 +25,7 @@ import { Reveal } from "@/components/reveal";
 import { LoanGoals } from "@/components/loan-goals";
 import { ConcernCards } from "@/components/concern-cards";
 import { BankMarquee } from "@/components/bank-marquee";
+import { CompareColumns } from "@/components/compare-columns";
 import { LeadForm } from "@/components/lead-form";
 import { ConsultationBackdrop } from "@/components/consultation-backdrop";
 import { CONTACT } from "@/data/site";
@@ -222,23 +223,38 @@ function ClientStoriesMarquee() {
   const dragging = useRef(false);
   const dragStartX = useRef(0);
   const dragStartScroll = useRef(0);
-  const [autoDrift, setAutoDrift] = useState(true);
+  const hovering = useRef(false);
 
+  // Slow, steady drift. The position is kept as a float: writing +0.5px straight into scrollLeft
+  // gets rounded away by the browser and the strip never moves. Any drag, swipe or wheel scroll
+  // is noticed (scrollLeft no longer matches what we last set) and pauses the drift for a moment.
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
-    let raf: number;
-    const step = () => {
-      if (autoDrift && !dragging.current) {
-        el.scrollLeft += 0.5;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const PX_PER_SEC = 42;
+    let raf = 0;
+    let last = performance.now();
+    let pos = el.scrollLeft;
+    let pausedUntil = 0;
+    const step = (now: number) => {
+      const dt = Math.min(now - last, 250);
+      last = now;
+      if (Math.abs(el.scrollLeft - pos) > 1.5) {
+        pos = el.scrollLeft; // the visitor moved it
+        pausedUntil = now + 2500;
+      }
+      if (!dragging.current && !hovering.current && now >= pausedUntil) {
+        pos += (PX_PER_SEC * dt) / 1000;
         const half = el.scrollWidth / 2;
-        if (el.scrollLeft >= half) el.scrollLeft -= half;
+        if (half > 0 && pos >= half) pos -= half;
+        el.scrollLeft = pos;
       }
       raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [autoDrift]);
+  }, []);
 
   const onPointerDown = (e: React.PointerEvent) => {
     const el = trackRef.current;
@@ -267,8 +283,12 @@ function ClientStoriesMarquee() {
         onPointerUp={endDrag}
         onPointerLeave={endDrag}
         onPointerCancel={endDrag}
-        onMouseEnter={() => setAutoDrift(false)}
-        onMouseLeave={() => setAutoDrift(true)}
+        onMouseEnter={() => {
+          hovering.current = true;
+        }}
+        onMouseLeave={() => {
+          hovering.current = false;
+        }}
         className="flex w-full cursor-grab gap-5 overflow-x-auto py-1 select-none active:cursor-grabbing [-ms-overflow-style:none] [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {doubled.map((story, i) => (
@@ -515,6 +535,20 @@ function HomePage() {
         </Reveal>
       </Section>
 
+      {/* ─── BANKS VS US ──────────────────────────────── */}
+      <Section className="pt-0">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Why Growth Capital"
+            title="A lender offers you a loan. We help you pick the right one."
+            align="center"
+          />
+        </Reveal>
+        <Reveal delay={80} className="mt-12">
+          <CompareColumns />
+        </Reveal>
+      </Section>
+
       {/* ─── HOW IT WORKS (click-through stepper) ─────── */}
       <Section className="pt-0">
         <Reveal>
@@ -564,7 +598,7 @@ function HomePage() {
                   href={CONTACT.whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-[#25D366]/50 dark:text-white dark:bg-card"
+                  className="outline-btn hover:border-[#25D366]/60 dark:bg-card dark:text-white"
                 >
                   <span className="text-[#25D366]">
                     <WhatsAppIcon />

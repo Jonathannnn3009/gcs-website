@@ -22,11 +22,13 @@ import {
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
+import { ZoneTabs } from "@/components/partner-zones";
 import { CONTACT } from "@/data/site";
 import { PARTNER_FAQS } from "@/data/faqs";
 import { useFaqs } from "@/lib/site-content";
 import { submitLead } from "@/lib/leads";
 import { useCommissionStructure } from "@/lib/commission";
+import { COMMISSION_STRUCTURE } from "@/data/commission-fallback";
 import {
   PARTNER_BENEFITS,
   PARTNER_HIGHLIGHTS,
@@ -37,10 +39,10 @@ import {
 } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
 
-export const Route = createFileRoute("/partner")({
+export const Route = createFileRoute("/partner/")({
   head: () => ({
     meta: [
-      { title: "Partner With Us | Growth Capital Services" },
+      { title: "Agent Partner | Growth Capital Services" },
       {
         name: "description",
         content:
@@ -56,46 +58,6 @@ export const Route = createFileRoute("/partner")({
   component: PartnerPage,
 });
 
-
-
-
-
-// Fallback copy of the CRM's rate card (backend/prisma/seed.ts RATE_CARDS). The page shows the
-// live card from /crm/api/public/commission-structure and uses this if the CRM is unreachable.
-const COMMISSION_STRUCTURE = [
-  { product: "Home Loan", range: "0.2% – 0.5%", avgAmount: "₹30L – ₹1Cr", earning: "₹6,000 – ₹50,000" },
-  {
-    product: "Loan Against Property",
-    range: "0.5% – 1.0%",
-    avgAmount: "₹20L – ₹75L",
-    earning: "₹10,000 – ₹75,000",
-  },
-  {
-    product: "Business Loan",
-    range: "1.0% – 2.0%",
-    avgAmount: "₹10L – ₹50L",
-    earning: "₹10,000 – ₹1,00,000",
-  },
-  { product: "Personal Loan", range: "1.0% – 2.5%", avgAmount: "₹2L – ₹25L", earning: "₹2,000 – ₹62,500" },
-  {
-    product: "Working Capital Loan",
-    range: "0.5% – 1.5%",
-    avgAmount: "₹10L – ₹1Cr",
-    earning: "₹5,000 – ₹1,50,000",
-  },
-  {
-    product: "Loan Against Securities",
-    range: "0.3% – 0.8%",
-    avgAmount: "₹10L – ₹5Cr",
-    earning: "₹3,000 – ₹4,00,000",
-  },
-  {
-    product: "Project Funding",
-    range: "0.5% – 1.0%",
-    avgAmount: "₹50L – ₹10Cr",
-    earning: "₹25,000 – ₹10,00,000",
-  },
-];
 
 
 
@@ -388,6 +350,7 @@ function PartnerPage() {
   const commissionRows = useCommissionStructure(COMMISSION_STRUCTURE);
   return (
     <>
+      <ZoneTabs current="/partner" />
       {/* Hero: navy panel with stats + the registration form */}
       <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -396,7 +359,7 @@ function PartnerPage() {
               <div className="navy-panel relative flex flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
                 <div className="float-animation absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
                 <p className="relative text-xs font-bold tracking-[0.2em] text-gold uppercase">
-                  Partner With Us
+                  Agent Partner
                 </p>
                 <h1 className="relative mt-3 font-heading text-3xl font-bold text-white sm:text-4xl">
                   Turn your network into{" "}
@@ -637,7 +600,7 @@ function PartnerPage() {
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white dark:bg-card"
+                className="outline-btn dark:bg-card dark:text-white"
               >
                 WhatsApp Us
               </a>

@@ -1,11 +1,11 @@
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
-import { Menu, Phone, X, ChevronDown, ArrowRight } from "lucide-react";
+import { Menu, Phone, X, ChevronDown, ArrowRight, type LucideIcon } from "lucide-react";
 import { CONTACT } from "@/data/site";
 import { BrandLogo } from "@/components/brand-logo";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
-import { NAV_HEADER, NAV_TOOLS } from "@/data/page-lists";
+import { NAV_HEADER, NAV_PARTNER, NAV_TOOLS } from "@/data/page-lists";
 import { useList, useProductGroups } from "@/lib/page-lists";
 
 
@@ -14,8 +14,16 @@ export function SiteHeader() {
   const NAV = useList("nav.header", NAV_HEADER).map((l) => ({
     to: String(l["to"]),
     label: String(l["label"]),
-    dropdown: l["to"] === "/services" ? ("services" as const) : l["to"] === "/tools" ? ("tools" as const) : undefined,
+    dropdown:
+      l["to"] === "/services"
+        ? ("services" as const)
+        : l["to"] === "/tools"
+          ? ("tools" as const)
+          : l["to"] === "/partner"
+            ? ("partner" as const)
+            : undefined,
   }));
+  const PARTNER_ITEMS = useList("nav.partner", NAV_PARTNER);
   const TOOL_ITEMS = useList("nav.tools", NAV_TOOLS);
   const PRODUCT_GROUPS_LIVE = useProductGroups();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -47,7 +55,7 @@ export function SiteHeader() {
           : "border-transparent bg-white/80 backdrop-blur-md dark:bg-card/80"
       }`}
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)] items-center gap-4 px-5 py-5 sm:px-8 lg:px-10">
+      <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-5 py-5 sm:px-8 lg:px-6 xl:gap-4 2xl:max-w-[90rem] 2xl:px-10">
         {/* Logo — fixed width, never shrinks even if the nav grows */}
         <Link
           to="/"
@@ -59,7 +67,7 @@ export function SiteHeader() {
         </Link>
 
         {/* Right side */}
-        <div className="flex items-center justify-end gap-4">
+        <div className="flex items-center justify-end gap-3 2xl:gap-4">
           {/* Desktop nav */}
           <nav className="hidden items-center xl:flex">
             {NAV.map((link) => {
@@ -76,7 +84,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-1 rounded-md px-2.5 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors hover:text-foreground"
+                      className="group relative flex items-center gap-1 rounded-md px-2 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors hover:text-foreground 2xl:px-3 2xl:text-[15px]"
                     >
                       {link.label}
                       <ChevronDown
@@ -135,6 +143,43 @@ export function SiteHeader() {
                               </div>
                             ))}
                           </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Become Partner Dropdown */}
+                    {link.dropdown === "partner" && activeDropdown === "partner" && (
+                      <div
+                        className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
+                        style={{ animation: "gcs-scale-in 200ms ease both" }}
+                      >
+                        <div className="w-[320px] overflow-hidden rounded-xl border border-gold/10 bg-white p-3 shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)] dark:bg-card">
+                          <p className="mb-2 px-2 text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+                            Partner With Us
+                          </p>
+                          {PARTNER_ITEMS.map((item) => {
+                            const Icon = item["icon"] as LucideIcon;
+                            return (
+                              <Link
+                                key={String(item["to"])}
+                                to={String(item["to"]) as "/"}
+                                onClick={() => setActiveDropdown(null)}
+                                className="group/partner flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gold/5"
+                              >
+                                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-secondary text-gold transition-colors duration-300 group-hover/partner:animate-[gcs-wiggle_600ms_ease-in-out] group-hover/partner:bg-gold group-hover/partner:text-navy">
+                                  <Icon className="h-4 w-4" />
+                                </span>
+                                <span className="min-w-0">
+                                  <span className="block text-sm font-semibold text-foreground">
+                                    {String(item["label"])}
+                                  </span>
+                                  <span className="block text-[11px] text-muted-foreground">
+                                    {String(item["desc"])}
+                                  </span>
+                                </span>
+                              </Link>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -202,7 +247,7 @@ export function SiteHeader() {
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
-                  className="relative rounded-md px-2.5 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-2.5 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-1.25rem)]"
+                  className="relative rounded-md px-2 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-2 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-1rem)] 2xl:px-3 2xl:text-[15px] 2xl:after:left-3 2xl:hover:after:w-[calc(100%-1.5rem)]"
                 >
                   {link.label}
                 </Link>
@@ -213,7 +258,7 @@ export function SiteHeader() {
           <LanguageSwitcher className="hidden sm:inline-flex" />
 
           {/* Apply CTA */}
-          <Link to="/contact" className="gold-btn hidden py-2.5 whitespace-nowrap sm:inline-flex">
+          <Link to="/contact" className="gold-btn hidden py-2.5 whitespace-nowrap sm:inline-flex xl:px-5 2xl:px-7">
             Apply Now
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
@@ -238,16 +283,28 @@ export function SiteHeader() {
         >
           <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
             {NAV.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to as "/"}
-                onClick={() => setMobileOpen(false)}
-                activeOptions={{ exact: link.to === "/" }}
-                activeProps={{ className: "text-gold" }}
-                className="rounded-md px-2 py-3 text-sm font-semibold text-foreground transition-colors hover:text-gold"
-              >
-                {link.label}
-              </Link>
+              <div key={link.to} className="flex flex-col">
+                <Link
+                  to={link.to as "/"}
+                  onClick={() => setMobileOpen(false)}
+                  activeOptions={{ exact: link.to === "/" }}
+                  activeProps={{ className: "text-gold" }}
+                  className="rounded-md px-2 py-3 text-sm font-semibold text-foreground transition-colors hover:text-gold"
+                >
+                  {link.label}
+                </Link>
+                {link.dropdown === "partner" &&
+                  PARTNER_ITEMS.map((item) => (
+                    <Link
+                      key={String(item["to"])}
+                      to={String(item["to"]) as "/"}
+                      onClick={() => setMobileOpen(false)}
+                      className="ml-4 rounded-md border-l-2 border-gold/30 px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-gold"
+                    >
+                      {String(item["label"])}
+                    </Link>
+                  ))}
+              </div>
             ))}
             <LanguageSwitcher className="mt-1 self-start" />
             <Link

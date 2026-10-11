@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Building2, ChevronDown, Clock, MapPin, Phone } from "lucide-react";
+import { PageCalculators } from "@/components/page-calculators";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { PRODUCT_GROUPS, PRODUCTS } from "@/data/products";
@@ -67,7 +68,7 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white dark:bg-card"
+                className="outline-btn dark:bg-card dark:text-white"
               >
                 WhatsApp Us
               </a>
@@ -186,6 +187,13 @@ export function LocationPage({ location: builtInLocation }: { location: Location
         </div>
       </Section>
 
+      <PageCalculators
+        ids={["emi", "eligibility", "stamp-duty"]}
+        eyebrow={`Plan your loan in ${location.city}`}
+        title="Work out your EMI, eligibility and stamp duty"
+        description="Quick estimates before you speak to us — nothing is saved or sent."
+      />
+
       {/* FAQ */}
       <Section className="pt-0">
         <Reveal>
@@ -218,7 +226,7 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white dark:bg-card"
+                className="outline-btn dark:bg-card dark:text-white"
               >
                 WhatsApp Us
               </a>

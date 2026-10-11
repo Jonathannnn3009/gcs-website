@@ -19,6 +19,8 @@ import { FactsStrip } from "@/components/facts-strip";
 import { CheckBadge, TopicHeader } from "@/components/topic-header";
 import { useIntakeFields } from "@/lib/page-lists";
 import { CONTACT, waLink } from "@/data/site";
+import { PageCalculators } from "@/components/page-calculators";
+import { PRODUCT_CALCULATORS } from "@/data/page-calculators";
 
 export const Route = createFileRoute("/services/$slug")({
   head: ({ params }) => {
@@ -399,6 +401,16 @@ function ProductDetailPage() {
         </div>
       </Section>
 
+      {/* Calculators that suit this loan */}
+      {(PRODUCT_CALCULATORS[product.slug] ?? []).length > 0 && (
+        <PageCalculators
+          ids={PRODUCT_CALCULATORS[product.slug] ?? []}
+          eyebrow="Run the numbers"
+          title={`Calculators for your ${product.title}`}
+          description="Try your own figures before you apply — nothing is saved or sent."
+        />
+      )}
+
       {/* Process */}
       <Section className="pt-0">
         <Reveal animate={false}>
@@ -489,7 +501,7 @@ function ProductDetailPage() {
                 href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-navy/20 bg-white px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white dark:bg-card"
+                className="outline-btn dark:bg-card dark:text-white"
               >
                 WhatsApp Us
               </a>

@@ -33,11 +33,11 @@ export function LapLtvCalculator() {
             label="Property Market Value"
             value={propertyValue}
             onChange={setPropertyValue}
-            min={1000000}
+            min={100000}
             max={200000000}
-            step={500000}
+            step={100000}
             format={formatCurrency}
-            minLabel="₹10 L"
+            minLabel="₹1 L"
             maxLabel="₹20 Cr"
             ariaLabel="Property market value"
           />

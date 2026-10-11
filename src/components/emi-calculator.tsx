@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useBankRates } from "@/lib/site-content";
 import { SliderField } from "@/components/slider-field";
@@ -7,6 +9,14 @@ function formatCurrency(n: number): string {
   if (n >= 100000) return `₹${(n / 100000).toFixed(2)} L`;
   return `₹${n.toLocaleString("en-IN")}`;
 }
+
+const LOAN_PRESETS = [
+  { label: "₹30 L", value: 3000000 },
+  { label: "₹50 L", value: 5000000 },
+  { label: "₹75 L", value: 7500000 },
+  { label: "₹1 Cr", value: 10000000 },
+  { label: "₹2 Cr", value: 20000000 },
+];
 
 function formatINR(n: number): string {
   return `₹${Math.round(n).toLocaleString("en-IN")}`;
@@ -60,9 +70,9 @@ export function EmiCalculator() {
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_auto]">
+      <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,22rem)] lg:items-stretch">
         {/* Sliders */}
-        <div className="space-y-7">
+        <div className="flex flex-col justify-between gap-7">
           <SliderField
             label="Loan Amount"
             value={principal}
@@ -74,6 +84,7 @@ export function EmiCalculator() {
             minLabel="₹1 L"
             maxLabel="₹10 Cr"
             ariaLabel="Loan amount"
+            presets={LOAN_PRESETS}
           />
 
           <SliderField
@@ -101,112 +112,112 @@ export function EmiCalculator() {
             maxLabel="30 Yrs"
             ariaLabel="Loan tenure in years"
           />
-
-          {/* Result Cards */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
-              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
-                Monthly EMI
-              </p>
-              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
-                {formatINR(result.emi)}
-              </p>
-            </div>
-            <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
-              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
-                Total Interest
-              </p>
-              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
-                {formatCurrency(result.totalInterest)}
-              </p>
-            </div>
-            <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
-              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
-                Total Payment
-              </p>
-              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
-                {formatCurrency(result.totalAmount)}
-              </p>
-            </div>
-          </div>
         </div>
 
-        {/* Donut Chart */}
-        <div className="flex flex-col items-center justify-center">
-          <div className="relative">
-            <svg width="200" height="200" viewBox="0 0 200 200" className="drop-shadow-lg">
-              {/* Background circle */}
-              <circle
-                cx="100"
-                cy="100"
-                r={radius}
-                fill="none"
-                stroke="oklch(0.91 0.012 255)"
-                strokeWidth="20"
-              />
-              {/* Interest arc */}
-              <circle
-                cx="100"
-                cy="100"
-                r={radius}
-                fill="none"
-                stroke="oklch(0.15 0.04 264)"
-                strokeWidth="20"
-                strokeDasharray={`${interestArc} ${circumference - interestArc}`}
-                strokeDashoffset={0}
-                transform="rotate(-90 100 100)"
-                className="transition-all duration-700 ease-out"
-                strokeLinecap="round"
-              />
-              {/* Principal arc */}
-              <circle
-                cx="100"
-                cy="100"
-                r={radius}
-                fill="none"
-                stroke="url(#goldGradient)"
-                strokeWidth="20"
-                strokeDasharray={`${principalArc} ${circumference - principalArc}`}
-                strokeDashoffset={-interestArc}
-                transform="rotate(-90 100 100)"
-                className="transition-all duration-700 ease-out"
-                strokeLinecap="round"
-              />
-              <defs>
-                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="oklch(0.70 0.14 68)" />
-                  <stop offset="100%" stopColor="oklch(0.82 0.12 80)" />
-                </linearGradient>
-              </defs>
-            </svg>
-            {/* Center text */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-xs font-bold text-muted-foreground uppercase">EMI</span>
-              <span className="text-lg font-extrabold text-foreground">
+        {/* Results: the figures lead, then the split, then the call to action */}
+        <div className="flex flex-col rounded-2xl border border-gold/25 bg-gold-pale/25 p-5 sm:p-6">
+          <dl className="space-y-3 border-b border-gold/25 pb-5">
+            <div className="flex items-baseline justify-between gap-3">
+              <dt className="text-sm text-muted-foreground">Monthly EMI</dt>
+              <dd className="text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
                 {formatINR(result.emi)}
-              </span>
-              <span className="text-[10px] text-muted-foreground">per month</span>
+              </dd>
+            </div>
+            <div className="flex items-baseline justify-between gap-3">
+              <dt className="text-sm text-muted-foreground">Total interest</dt>
+              <dd className="text-base font-bold text-navy dark:text-white">
+                {formatINR(result.totalInterest)}
+              </dd>
+            </div>
+            <div className="flex items-baseline justify-between gap-3">
+              <dt className="text-sm text-muted-foreground">Total payable amount</dt>
+              <dd className="text-base font-bold text-navy dark:text-white">
+                {formatINR(result.totalAmount)}
+              </dd>
+            </div>
+          </dl>
+
+          <div className="flex flex-1 flex-col items-center justify-center py-6">
+            <div className="relative">
+              <svg width="200" height="200" viewBox="0 0 200 200" className="drop-shadow-lg">
+                {/* Background circle */}
+                <circle
+                  cx="100"
+                  cy="100"
+                  r={radius}
+                  fill="none"
+                  stroke="oklch(0.91 0.012 255)"
+                  strokeWidth="20"
+                />
+                {/* Interest arc */}
+                <circle
+                  cx="100"
+                  cy="100"
+                  r={radius}
+                  fill="none"
+                  stroke="oklch(0.15 0.04 264)"
+                  strokeWidth="20"
+                  strokeDasharray={`${interestArc} ${circumference - interestArc}`}
+                  strokeDashoffset={0}
+                  transform="rotate(-90 100 100)"
+                  className="transition-all duration-700 ease-out"
+                  strokeLinecap="round"
+                />
+                {/* Principal arc */}
+                <circle
+                  cx="100"
+                  cy="100"
+                  r={radius}
+                  fill="none"
+                  stroke="url(#goldGradient)"
+                  strokeWidth="20"
+                  strokeDasharray={`${principalArc} ${circumference - principalArc}`}
+                  strokeDashoffset={-interestArc}
+                  transform="rotate(-90 100 100)"
+                  className="transition-all duration-700 ease-out"
+                  strokeLinecap="round"
+                />
+                <defs>
+                  <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="oklch(0.70 0.14 68)" />
+                    <stop offset="100%" stopColor="oklch(0.82 0.12 80)" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              {/* Center text */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-xs font-bold text-muted-foreground uppercase">EMI</span>
+                <span className="text-lg font-extrabold text-foreground">
+                  {formatINR(result.emi)}
+                </span>
+                <span className="text-[10px] text-muted-foreground">per month</span>
+              </div>
+            </div>
+
+            {/* Legend */}
+            <div className="mt-4 flex gap-6">
+              <div className="flex items-center gap-2">
+                <span
+                  className="h-3 w-3 rounded-full"
+                  style={{ background: "var(--gradient-gold)" }}
+                ></span>
+                <span className="text-xs font-semibold">
+                  Principal ({principalPercent.toFixed(0)}%)
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-navy"></span>
+                <span className="text-xs font-semibold">
+                  Interest ({interestPercent.toFixed(0)}%)
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Legend */}
-          <div className="mt-4 flex gap-6">
-            <div className="flex items-center gap-2">
-              <span
-                className="h-3 w-3 rounded-full"
-                style={{ background: "var(--gradient-gold)" }}
-              ></span>
-              <span className="text-xs font-semibold">
-                Principal ({principalPercent.toFixed(0)}%)
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-navy"></span>
-              <span className="text-xs font-semibold">
-                Interest ({interestPercent.toFixed(0)}%)
-              </span>
-            </div>
-          </div>
+          <Link to="/contact" className="gold-btn group w-full justify-center py-3.5">
+            Talk to an Advisor
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
     </div>

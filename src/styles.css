@@ -412,10 +412,19 @@
 
 /* ─── Button Utilities ─────────────────────────────── */
 
+/* A flex squeeze must never collapse a button's icon; that is what pushed the label off-centre. */
+.gold-btn > svg,
+.navy-btn > svg,
+.outline-btn > svg {
+  flex-shrink: 0;
+}
+
 @utility gold-btn {
   position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   gap: 0.5rem;
   padding: 0.75rem 1.75rem;
   font-size: 0.875rem;
@@ -447,11 +456,23 @@
   &:hover::before {
     left: 100%;
   }
+
+  &:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: none;
+    transition-duration: 90ms;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--gold-dark);
+    outline-offset: 3px;
+  }
 }
 
 @utility navy-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.75rem;
   font-size: 0.875rem;
@@ -467,6 +488,62 @@
     transform: translateY(-2px);
     box-shadow: var(--shadow-lift);
     border-color: oklch(0.75 0.14 75 / 0.5);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: none;
+    transition-duration: 90ms;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--gold-dark);
+    outline-offset: 3px;
+  }
+}
+
+/* Secondary button: white with a navy outline. Lifts and warms to gold on hover, presses in on click. */
+@utility outline-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--navy);
+  background-color: #fff;
+  border: 1px solid oklch(0.25 0.06 265 / 0.2);
+  border-radius: var(--radius-md);
+  transition:
+    transform 300ms ease,
+    box-shadow 300ms ease,
+    border-color 300ms ease,
+    background-color 300ms ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--gold);
+    background-color: color-mix(in oklab, var(--gold-pale) 45%, white);
+    box-shadow: var(--shadow-card);
+  }
+
+  &:hover svg:first-child,
+  &:hover > span:first-child svg {
+    animation: gcs-wiggle 600ms ease-in-out;
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: none;
+    transition-duration: 90ms;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--gold-dark);
+    outline-offset: 3px;
   }
 }
 

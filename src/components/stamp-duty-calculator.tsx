@@ -75,11 +75,11 @@ export function StampDutyCalculator() {
             label="Property Value"
             value={propertyValue}
             onChange={setPropertyValue}
-            min={500000}
+            min={100000}
             max={100000000}
             step={100000}
             format={formatCurrency}
-            minLabel="₹5 L"
+            minLabel="₹1 L"
             maxLabel="₹10 Cr"
             ariaLabel="Property value"
           />
