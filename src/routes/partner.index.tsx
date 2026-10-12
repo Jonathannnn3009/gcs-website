@@ -11,7 +11,14 @@ import {
   Compass,
   FileText,
   Handshake,
+  GraduationCap,
   Landmark,
+  Languages,
+  Layers,
+  Calculator,
+  ListChecks,
+  MapPin,
+  MessageCircle,
   PhoneCall,
   Scale,
   ShieldCheck,
@@ -22,9 +29,15 @@ import {
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
-import { ZoneTabs } from "@/components/partner-zones";
+import {
+  ZoneAssistant,
+  ZoneFeatureGrid,
+  ZoneGetStarted,
+  ZoneTabs,
+} from "@/components/partner-zones";
 import { CONTACT } from "@/data/site";
 import { PARTNER_FAQS } from "@/data/faqs";
+import { ASSISTANT_NAME } from "@/lib/chat/config";
 import { useFaqs } from "@/lib/site-content";
 import { submitLead } from "@/lib/leads";
 import { useCommissionStructure } from "@/lib/commission";
@@ -58,9 +71,84 @@ export const Route = createFileRoute("/partner/")({
   component: PartnerPage,
 });
 
+const WHAT_WE_DO: { icon: LucideIcon; title: string; body: string }[] = [
+  {
+    icon: Layers,
+    title: "75+ lenders, one desk",
+    body: "Offer your clients the right bank or NBFC for their profile, without sending them from branch to branch.",
+  },
+  {
+    icon: Wallet,
+    title: "Clear, written payouts",
+    body: "Commission by loan type is shown up front, and your share is settled once the loan disburses.",
+  },
+  {
+    icon: UserCheck,
+    title: "One contact who handles the file",
+    body: "A named advisor looks after login, documents and bank follow-ups, and keeps you informed.",
+  },
+  {
+    icon: GraduationCap,
+    title: "Guidance as you start",
+    body: "A short walk-through of our loan products and what to share, and answers whenever you need them.",
+  },
+];
 
+const WHY_CHOOSE: { icon: LucideIcon; title: string; body: string }[] = [
+  {
+    icon: Languages,
+    title: "In your clients' language",
+    body: "Our website reads in English, Hindi and Marathi, and we speak to clients in the language they are comfortable with.",
+  },
+  {
+    icon: Briefcase,
+    title: "Salaried and self-employed",
+    body: "Whether your clients draw a salary or run a business, we have loan options and lenders for both.",
+  },
+  {
+    icon: MapPin,
+    title: "Rooted in Mumbai, Thane & Pune",
+    body: "Advisors who know the local banks, builders and projects, so your clients are not treated as a number.",
+  },
+];
 
+const ASSISTANT_POINTS: { icon: LucideIcon; title: string; body: string }[] = [
+  {
+    icon: ListChecks,
+    title: "Check eligibility",
+    body: "A client's likely loan amount from their income and obligations, in a minute.",
+  },
+  {
+    icon: Calculator,
+    title: "Work out the EMI",
+    body: "EMI, total interest and the effect of a part-payment, worked out instantly.",
+  },
+  {
+    icon: FileText,
+    title: "Documents and rates",
+    body: "The documents each profile needs, and indicative rates and charges.",
+  },
+  {
+    icon: MessageCircle,
+    title: "Hand-off to an advisor",
+    body: "If a client wants a call, the request lands straight in our CRM with a short summary.",
+  },
+];
 
+const GET_STARTED = [
+  {
+    title: "Register with us",
+    body: "Fill the short form on this page. A member of our team calls you to set up your partnership.",
+  },
+  {
+    title: "Refer a case",
+    body: "Send your client's name, number and requirement. Our advisor checks eligibility and matches the case with suitable lenders from 75+.",
+  },
+  {
+    title: "Sit back and get paid",
+    body: "We run the loan process while you carry on with your work. Your payout follows each disbursal.",
+  },
+];
 
 const fieldClass =
   "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20 dark:bg-card dark:text-white";
@@ -115,7 +203,9 @@ function PartnerForm() {
         <span className="grid h-12 w-12 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
           <Check className="h-6 w-6" />
         </span>
-        <h3 className="mt-4 text-lg font-extrabold text-navy dark:text-white">Thanks — we'll be in touch.</h3>
+        <h3 className="mt-4 text-lg font-extrabold text-navy dark:text-white">
+          Thanks — we'll be in touch.
+        </h3>
         <p className="mt-2 text-sm text-muted-foreground">
           A member of our team will reach out to set up your referral partnership.
         </p>
@@ -129,7 +219,9 @@ function PartnerForm() {
       noValidate
       className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-lift)] sm:p-7 dark:bg-card"
     >
-      <h3 className="text-xl font-extrabold text-navy dark:text-white">Become a Referral Partner</h3>
+      <h3 className="text-xl font-extrabold text-navy dark:text-white">
+        Become a Referral Partner
+      </h3>
       <p className="mt-2 text-sm text-muted-foreground">
         Tell us a bit about yourself — we'll set up your partnership and walk you through how
         referrals work.
@@ -300,7 +392,9 @@ function PartnerStepper() {
           <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
             Step {active + 1} of {STEPS.length}
           </p>
-          <h3 className="mt-1 font-heading text-xl font-bold text-navy dark:text-white">{step.title}</h3>
+          <h3 className="mt-1 font-heading text-xl font-bold text-navy dark:text-white">
+            {step.title}
+          </h3>
           <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
         </div>
         <button
@@ -407,14 +501,24 @@ function PartnerPage() {
             </Reveal>
 
             <Reveal delay={100}>
-              <PartnerForm />
+              <div id="register" className="scroll-mt-24">
+                <PartnerForm />
+              </div>
             </Reveal>
           </div>
         </div>
       </section>
 
+      <ZoneFeatureGrid
+        first
+        eyebrow="What We Do"
+        title="Simple process. Clear payouts. Real earnings."
+        description="We bring banks, NBFCs and independent advisors onto one desk, so families and business owners can find the right loan without going from bank to bank. You make the introduction and we do the rest."
+        items={WHAT_WE_DO}
+      />
+
       {/* Who this is for */}
-      <Section>
+      <Section className="pt-0">
         <Reveal>
           <SectionHeading
             eyebrow="Built For"
@@ -429,7 +533,9 @@ function PartnerPage() {
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out] dark:bg-gold/15">
                   <s.icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">{s.title}</h3>
+                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">
+                  {s.title}
+                </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
               </div>
             </Reveal>
@@ -483,13 +589,22 @@ function PartnerPage() {
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out] dark:bg-gold/15">
                   <b.icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">{b.title}</h3>
+                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">
+                  {b.title}
+                </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{b.body}</p>
               </div>
             </Reveal>
           ))}
         </div>
       </Section>
+
+      <ZoneFeatureGrid
+        eyebrow="Why Choose Us"
+        title="A loan partner that is on your side."
+        description="We want partners to be able to serve their clients better and grow their earnings, with nothing hidden."
+        items={WHY_CHOOSE}
+      />
 
       {/* Commission structure — the concrete numbers behind "uncapped earnings" */}
       <Section className="pt-0">
@@ -531,6 +646,28 @@ function PartnerPage() {
         </Reveal>
       </Section>
 
+      <ZoneAssistant
+        eyebrow={`Meet ${ASSISTANT_NAME}`}
+        title="An AI assistant that answers your clients' first questions."
+        intro="Send clients to our site and let the assistant handle the basics: eligibility, EMI, documents and rates, any time of day. When they are ready to talk, it passes them to an advisor."
+        points={ASSISTANT_POINTS}
+        prompts={[
+          {
+            label: "Check eligibility",
+            message: "I'd like to check how much home loan I may be eligible for.",
+          },
+          { label: "Calculate EMI", message: "Help me calculate my EMI." },
+          { label: "Documents needed", message: "What documents do I need for a home loan?" },
+        ]}
+      />
+
+      <ZoneGetStarted
+        title="Ready to turn your network into a second income?"
+        description="Three steps, and the first one takes two minutes."
+        steps={GET_STARTED}
+        cta="Register as a Partner"
+      />
+
       {/* Reasons to partner — accordion beside an image */}
       <Section className="pt-0">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
@@ -562,7 +699,9 @@ function PartnerPage() {
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <Reveal>
             <p className="eyebrow">Before You Register</p>
-            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">Quick answers.</h2>
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
+              Quick answers.
+            </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               The questions that come up most before someone sends their first referral.
             </p>

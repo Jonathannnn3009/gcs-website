@@ -7,15 +7,19 @@ import {
   Handshake,
   Landmark,
   LayoutDashboard,
+  Calculator,
+  MessageCircle,
   Network,
+  Clock,
   Users,
   type LucideIcon,
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { BankMarquee } from "@/components/bank-marquee";
-import { ZoneFaq, ZoneForm, ZoneHero, ZoneTabs } from "@/components/partner-zones";
+import { ZoneAssistant, ZoneFaq, ZoneForm, ZoneHero, ZoneTabs } from "@/components/partner-zones";
 import { CONTACT } from "@/data/site";
+import { ASSISTANT_NAME } from "@/lib/chat/config";
 
 export const Route = createFileRoute("/partner/builder")({
   head: () => ({
@@ -67,10 +71,22 @@ const FOR_BUILDERS = [
 ];
 
 const STEPS: { title: string; body: string }[] = [
-  { title: "Share your project", body: "Tell us about the project, its stage, the units on offer and how you sell." },
-  { title: "We line up the lenders", body: "We approach suitable banks and NBFCs for project approval and buyer financing." },
-  { title: "Buyers get their loans", body: "Your buyers are guided from eligibility to sanction by one named advisor." },
-  { title: "Disbursals follow your milestones", body: "We track each file so releases line up with your construction and collection schedule." },
+  {
+    title: "Share your project",
+    body: "Tell us about the project, its stage, the units on offer and how you sell.",
+  },
+  {
+    title: "We line up the lenders",
+    body: "We approach suitable banks and NBFCs for project approval and buyer financing.",
+  },
+  {
+    title: "Buyers get their loans",
+    body: "Your buyers are guided from eligibility to sanction by one named advisor.",
+  },
+  {
+    title: "Disbursals follow your milestones",
+    body: "We track each file so releases line up with your construction and collection schedule.",
+  },
 ];
 
 const WHY: { title: string; body: string }[] = [
@@ -97,9 +113,44 @@ const WHY: { title: string; body: string }[] = [
 ];
 
 const MODELS: { icon: LucideIcon; title: string; body: string }[] = [
-  { icon: Handshake, title: "Direct", body: "We deal with your buyers directly once they book, and keep your team informed." },
-  { icon: Network, title: "Channel-partner led", body: "Your channel partners bring the buyer; we run the loan and keep everyone updated." },
-  { icon: Building2, title: "Hybrid", body: "A mix of both, set up project by project to fit how each launch is sold." },
+  {
+    icon: Handshake,
+    title: "Direct",
+    body: "We deal with your buyers directly once they book, and keep your team informed.",
+  },
+  {
+    icon: Network,
+    title: "Channel-partner led",
+    body: "Your channel partners bring the buyer; we run the loan and keep everyone updated.",
+  },
+  {
+    icon: Building2,
+    title: "Hybrid",
+    body: "A mix of both, set up project by project to fit how each launch is sold.",
+  },
+];
+
+const ASSISTANT_POINTS: { icon: LucideIcon; title: string; body: string }[] = [
+  {
+    icon: Clock,
+    title: "Answers at any hour",
+    body: "Buyers get replies on loans, documents and rates when they are browsing, not only in office hours.",
+  },
+  {
+    icon: Calculator,
+    title: "Instant eligibility and EMI",
+    body: "A buyer can see a likely loan amount and monthly EMI in a minute, before they visit your site office.",
+  },
+  {
+    icon: MessageCircle,
+    title: "A straight line to an advisor",
+    body: "When a buyer wants a call, the request reaches our team with a short summary of the chat.",
+  },
+  {
+    icon: LayoutDashboard,
+    title: "Tracked in our CRM",
+    body: "Each enquiry becomes a file in our CRM, so the follow-up is never lost between your sales desk and ours.",
+  },
 ];
 
 const FAQS = [
@@ -180,7 +231,9 @@ function BuilderPage() {
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out] dark:bg-gold/15">
                   <w.icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">{w.title}</h3>
+                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">
+                  {w.title}
+                </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{w.body}</p>
               </div>
             </Reveal>
@@ -237,10 +290,17 @@ function BuilderPage() {
       {/* How it works */}
       <Section className="pt-0">
         <Reveal>
-          <SectionHeading eyebrow="How It Works" title="From launch to disbursal, in four steps." align="center" />
+          <SectionHeading
+            eyebrow="How It Works"
+            title="From launch to disbursal, in four steps."
+            align="center"
+          />
         </Reveal>
         <div className="relative mt-12">
-          <span aria-hidden className="absolute top-5 right-[10%] left-[10%] hidden h-0.5 bg-gold/20 lg:block" />
+          <span
+            aria-hidden
+            className="absolute top-5 right-[10%] left-[10%] hidden h-0.5 bg-gold/20 lg:block"
+          />
           <ol className="relative grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((s, i) => (
               <Reveal key={s.title} delay={i * 80}>
@@ -248,8 +308,12 @@ function BuilderPage() {
                   <span className="relative z-10 mx-auto grid h-10 w-10 place-items-center rounded-full border-2 border-gold bg-white text-sm font-extrabold text-gold-dark dark:bg-card">
                     {i + 1}
                   </span>
-                  <h4 className="mt-4 text-base font-extrabold text-navy dark:text-white">{s.title}</h4>
-                  <p className="mx-auto mt-1.5 max-w-[16rem] text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+                  <h4 className="mt-4 text-base font-extrabold text-navy dark:text-white">
+                    {s.title}
+                  </h4>
+                  <p className="mx-auto mt-1.5 max-w-[16rem] text-sm leading-relaxed text-muted-foreground">
+                    {s.body}
+                  </p>
                 </li>
               </Reveal>
             ))}
@@ -278,10 +342,32 @@ function BuilderPage() {
         </div>
       </Section>
 
+      <ZoneAssistant
+        eyebrow={`${ASSISTANT_NAME}: the GCS advantage`}
+        title="Buyer questions answered without loading your sales team."
+        intro="Our AI assistant takes the first round of a buyer's loan questions, then hands over to an advisor when they are ready to move."
+        points={ASSISTANT_POINTS}
+        prompts={[
+          {
+            label: "Check eligibility",
+            message: "I'd like to check how much home loan I may be eligible for.",
+          },
+          {
+            label: "How do I know a project is bank-approved?",
+            message: "How do I check whether a housing project is bank-approved?",
+          },
+          { label: "Documents needed", message: "What documents do I need for a home loan?" },
+        ]}
+      />
+
       {/* Working models */}
       <Section className="pt-0">
         <Reveal>
-          <SectionHeading eyebrow="Ways to Work Together" title="Pick the set-up that fits your sales." align="center" />
+          <SectionHeading
+            eyebrow="Ways to Work Together"
+            title="Pick the set-up that fits your sales."
+            align="center"
+          />
         </Reveal>
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {MODELS.map((m, i) => (
@@ -290,7 +376,9 @@ function BuilderPage() {
                 <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out] dark:bg-card">
                   <m.icon className="h-6 w-6" />
                 </span>
-                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">{m.title}</h3>
+                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">
+                  {m.title}
+                </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{m.body}</p>
               </div>
             </Reveal>
@@ -303,7 +391,9 @@ function BuilderPage() {
         <div className="mx-auto max-w-3xl">
           <Reveal>
             <p className="eyebrow">Before You Reach Out</p>
-            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">Quick answers for builders.</h2>
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
+              Quick answers for builders.
+            </h2>
           </Reveal>
           <Reveal delay={80} className="mt-6">
             <ZoneFaq items={FAQS} />
@@ -327,7 +417,12 @@ function BuilderPage() {
               <a href={CONTACT.phoneHref} className="gold-btn py-3.5 text-base">
                 Call Us <ArrowRight className="h-4 w-4" />
               </a>
-              <a href={CONTACT.whatsappLink} target="_blank" rel="noopener noreferrer" className="outline-btn dark:bg-card dark:text-white">
+              <a
+                href={CONTACT.whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="outline-btn dark:bg-card dark:text-white"
+              >
                 WhatsApp Us
               </a>
             </div>

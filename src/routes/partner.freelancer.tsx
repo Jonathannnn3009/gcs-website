@@ -7,7 +7,10 @@ import {
   GraduationCap,
   Heart,
   Home,
+  Calculator,
+  FileText,
   Landmark,
+  MessageCircle,
   Rocket,
   Smartphone,
   Store,
@@ -18,9 +21,10 @@ import {
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { SliderField } from "@/components/slider-field";
-import { ZoneFaq, ZoneForm, ZoneHero, ZoneTabs } from "@/components/partner-zones";
+import { ZoneAssistant, ZoneFaq, ZoneForm, ZoneHero, ZoneTabs } from "@/components/partner-zones";
 import { COMMISSION_STRUCTURE } from "@/data/commission-fallback";
 import { CONTACT } from "@/data/site";
+import { ASSISTANT_NAME } from "@/lib/chat/config";
 import { useCommissionStructure } from "@/lib/commission";
 
 export const Route = createFileRoute("/partner/freelancer")({
@@ -35,7 +39,8 @@ export const Route = createFileRoute("/partner/freelancer")({
       { property: "og:title", content: "Freelance Associate | Growth Capital Services" },
       {
         property: "og:description",
-        content: "A flexible, zero-investment way to earn by connecting people with the right loan.",
+        content:
+          "A flexible, zero-investment way to earn by connecting people with the right loan.",
       },
     ],
   }),
@@ -43,12 +48,36 @@ export const Route = createFileRoute("/partner/freelancer")({
 });
 
 const WHO: { icon: LucideIcon; title: string; body: string }[] = [
-  { icon: Home, title: "Homemakers", body: "Earn from home, around your own schedule, using people you already know." },
-  { icon: GraduationCap, title: "Students & fresh graduates", body: "A first source of income and a real look at how finance works." },
-  { icon: Landmark, title: "Retired bankers & professionals", body: "Put your reputation and years of contacts to work again, without the 9-to-5." },
-  { icon: Smartphone, title: "Salaried, with time to spare", body: "Keep your job and add a second income from evenings and weekends." },
-  { icon: Store, title: "Shop & small-business owners", body: "Customers and neighbours ask about loans all the time. Now you can help them." },
-  { icon: Heart, title: "Community connectors", body: "Society members, tutors, tailors, agents of all kinds: anyone people trust and talk to." },
+  {
+    icon: Home,
+    title: "Homemakers",
+    body: "Earn from home, around your own schedule, using people you already know.",
+  },
+  {
+    icon: GraduationCap,
+    title: "Students & fresh graduates",
+    body: "A first source of income and a real look at how finance works.",
+  },
+  {
+    icon: Landmark,
+    title: "Retired bankers & professionals",
+    body: "Put your reputation and years of contacts to work again, without the 9-to-5.",
+  },
+  {
+    icon: Smartphone,
+    title: "Salaried, with time to spare",
+    body: "Keep your job and add a second income from evenings and weekends.",
+  },
+  {
+    icon: Store,
+    title: "Shop & small-business owners",
+    body: "Customers and neighbours ask about loans all the time. Now you can help them.",
+  },
+  {
+    icon: Heart,
+    title: "Community connectors",
+    body: "Society members, tutors, tailors, agents of all kinds: anyone people trust and talk to.",
+  },
 ];
 
 const YOU_WE: { you: string[]; we: string[] } = {
@@ -66,19 +95,72 @@ const YOU_WE: { you: string[]; we: string[] } = {
 };
 
 const STEPS: { title: string; body: string }[] = [
-  { title: "Sign up", body: "Fill in the short form. It takes about two minutes and costs nothing." },
-  { title: "Quick orientation", body: "A team member walks you through the loans we offer and exactly what to share." },
+  {
+    title: "Sign up",
+    body: "Fill in the short form. It takes about two minutes and costs nothing.",
+  },
+  {
+    title: "Quick orientation",
+    body: "A team member walks you through the loans we offer and exactly what to share.",
+  },
   { title: "Refer", body: "Send us a name, number and requirement whenever someone needs a loan." },
   { title: "Get paid", body: "Your payout is settled once the loan is disbursed." },
 ];
 
 const PERKS: { icon: LucideIcon; title: string; body: string }[] = [
-  { icon: Wallet, title: "Nothing to invest", body: "No joining fee, no deposit, no stock. Referring is free." },
-  { icon: Clock, title: "Your hours, no targets", body: "Refer one person a month or ten. There is no minimum and no lock-in." },
-  { icon: Check, title: "No licence needed", body: "Our advisors handle the lending side, so you only make the introduction." },
-  { icon: UserRound, title: "A person to call", body: "A dedicated contact answers your questions and updates you on each case." },
-  { icon: Landmark, title: "75+ lenders behind you", body: "The people you refer get more chances of approval than at a single bank." },
-  { icon: Rocket, title: "Room to grow", body: "Referring regularly? You can step up to our Agent partnership with a fuller set-up." },
+  {
+    icon: Wallet,
+    title: "Nothing to invest",
+    body: "No joining fee, no deposit, no stock. Referring is free.",
+  },
+  {
+    icon: Clock,
+    title: "Your hours, no targets",
+    body: "Refer one person a month or ten. There is no minimum and no lock-in.",
+  },
+  {
+    icon: Check,
+    title: "No licence needed",
+    body: "Our advisors handle the lending side, so you only make the introduction.",
+  },
+  {
+    icon: UserRound,
+    title: "A person to call",
+    body: "A dedicated contact answers your questions and updates you on each case.",
+  },
+  {
+    icon: Landmark,
+    title: "75+ lenders behind you",
+    body: "The people you refer get more chances of approval than at a single bank.",
+  },
+  {
+    icon: Rocket,
+    title: "Room to grow",
+    body: "Referring regularly? You can step up to our Agent partnership with a fuller set-up.",
+  },
+];
+
+const ASSISTANT_POINTS: { icon: LucideIcon; title: string; body: string }[] = [
+  {
+    icon: Calculator,
+    title: "Quick numbers for anyone you help",
+    body: "Work out a person's likely EMI or loan amount on the spot, so you can answer them with confidence.",
+  },
+  {
+    icon: FileText,
+    title: "What to ask for",
+    body: "See which documents and details a person needs before you pass their requirement to us.",
+  },
+  {
+    icon: UserRound,
+    title: "No finance background needed",
+    body: "Ask in plain words. It explains loan terms simply, so you never have to pretend to know.",
+  },
+  {
+    icon: MessageCircle,
+    title: "Hand over to our team",
+    body: "When the person is ready, the assistant passes their details to an advisor and we take it from there.",
+  },
 ];
 
 const FAQS = [
@@ -121,7 +203,9 @@ function parseRange(range: string): Range | null {
 
 const inr = (n: number) => `₹${Math.round(n).toLocaleString("en-IN")}`;
 const lakhs = (n: number) =>
-  n >= 10000000 ? `₹${(n / 10000000).toFixed(2)} Cr` : `₹${(n / 100000).toFixed(n % 100000 ? 1 : 0)} L`;
+  n >= 10000000
+    ? `₹${(n / 10000000).toFixed(2)} Cr`
+    : `₹${(n / 100000).toFixed(n % 100000 ? 1 : 0)} L`;
 
 const AMOUNT_PRESETS = [
   { label: "₹10 L", value: 1000000 },
@@ -225,8 +309,8 @@ function EarningsEstimator() {
           </div>
         </dl>
         <p className="mt-4 text-xs leading-relaxed text-muted-foreground italic">
-          An indicative estimate for loans that are disbursed, not a promise. The actual payout depends on the
-          lender and the loan amount.
+          An indicative estimate for loans that are disbursed, not a promise. The actual payout
+          depends on the lender and the loan amount.
         </p>
         <a href="#join" className="gold-btn group mt-5 w-full justify-center py-3.5">
           Start earning
@@ -247,7 +331,8 @@ function FreelancerPage() {
         eyebrow="Freelance Associate"
         title={
           <>
-            Earn on your own time, <span className="text-gold-light italic">by helping people borrow well.</span>
+            Earn on your own time,{" "}
+            <span className="text-gold-light italic">by helping people borrow well.</span>
           </>
         }
         intro="Know someone who needs a loan? Introduce them to us. We handle everything from eligibility to disbursal, and you get paid when the loan is disbursed. No investment, no licence and no targets."
@@ -293,7 +378,9 @@ function FreelancerPage() {
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out] dark:bg-gold/15">
                   <w.icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">{w.title}</h3>
+                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">
+                  {w.title}
+                </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{w.body}</p>
               </div>
             </Reveal>
@@ -313,7 +400,9 @@ function FreelancerPage() {
         <div className="mx-auto mt-10 grid max-w-4xl gap-5 md:grid-cols-2">
           <Reveal>
             <div className="h-full rounded-2xl border border-gold/25 bg-gold-pale/20 p-6 sm:p-7">
-              <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">Your part</p>
+              <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
+                Your part
+              </p>
               <ul className="mt-4 space-y-3">
                 {YOU_WE.you.map((t) => (
                   <li key={t} className="flex items-start gap-3 text-sm text-foreground">
@@ -358,10 +447,17 @@ function FreelancerPage() {
       {/* Steps */}
       <Section className="pt-0">
         <Reveal>
-          <SectionHeading eyebrow="Getting Started" title="Up and running in four steps." align="center" />
+          <SectionHeading
+            eyebrow="Getting Started"
+            title="Up and running in four steps."
+            align="center"
+          />
         </Reveal>
         <div className="relative mt-12">
-          <span aria-hidden className="absolute top-5 right-[10%] left-[10%] hidden h-0.5 bg-gold/20 lg:block" />
+          <span
+            aria-hidden
+            className="absolute top-5 right-[10%] left-[10%] hidden h-0.5 bg-gold/20 lg:block"
+          />
           <ol className="relative grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((s, i) => (
               <Reveal key={s.title} delay={i * 80}>
@@ -369,8 +465,12 @@ function FreelancerPage() {
                   <span className="relative z-10 mx-auto grid h-10 w-10 place-items-center rounded-full border-2 border-gold bg-white text-sm font-extrabold text-gold-dark dark:bg-card">
                     {i + 1}
                   </span>
-                  <h4 className="mt-4 text-base font-extrabold text-navy dark:text-white">{s.title}</h4>
-                  <p className="mx-auto mt-1.5 max-w-[16rem] text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+                  <h4 className="mt-4 text-base font-extrabold text-navy dark:text-white">
+                    {s.title}
+                  </h4>
+                  <p className="mx-auto mt-1.5 max-w-[16rem] text-sm leading-relaxed text-muted-foreground">
+                    {s.body}
+                  </p>
                 </li>
               </Reveal>
             ))}
@@ -390,7 +490,9 @@ function FreelancerPage() {
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out] dark:bg-gold/15">
                   <p.icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">{p.title}</h3>
+                <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">
+                  {p.title}
+                </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
               </div>
             </Reveal>
@@ -398,12 +500,29 @@ function FreelancerPage() {
         </div>
       </Section>
 
+      <ZoneAssistant
+        eyebrow={`${ASSISTANT_NAME}: your pocket guide`}
+        title="Not sure how to answer? Ask our AI assistant."
+        intro="You do not need to be a finance expert to help someone with a loan. Use the assistant to get quick answers, then pass the person on to us."
+        points={ASSISTANT_POINTS}
+        prompts={[
+          {
+            label: "How much loan can I get?",
+            message: "I'd like to check how much home loan I may be eligible for.",
+          },
+          { label: "Calculate EMI", message: "Help me calculate my EMI." },
+          { label: "Documents needed", message: "What documents do I need for a home loan?" },
+        ]}
+      />
+
       {/* FAQ */}
       <Section className="pt-0">
         <div className="mx-auto max-w-3xl">
           <Reveal>
             <p className="eyebrow">Before You Join</p>
-            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">Quick answers.</h2>
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
+              Quick answers.
+            </h2>
           </Reveal>
           <Reveal delay={80} className="mt-6">
             <ZoneFaq items={FAQS} />
@@ -427,7 +546,12 @@ function FreelancerPage() {
               <a href={CONTACT.phoneHref} className="gold-btn py-3.5 text-base">
                 Call Us <ArrowRight className="h-4 w-4" />
               </a>
-              <a href={CONTACT.whatsappLink} target="_blank" rel="noopener noreferrer" className="outline-btn dark:bg-card dark:text-white">
+              <a
+                href={CONTACT.whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="outline-btn dark:bg-card dark:text-white"
+              >
                 WhatsApp Us
               </a>
             </div>

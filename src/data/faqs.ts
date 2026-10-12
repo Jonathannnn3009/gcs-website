@@ -42,4 +42,16 @@ export const PARTNER_FAQS: Faq[] = [
     q: "Is there a limit on how many clients I can refer?",
     a: "None. There's no cap on referrals or earnings — refer as many clients as you like.",
   },
+  {
+    q: "What loans can I offer my clients?",
+    a: "Home loans, loan against property, balance transfers, business and working-capital loans, personal, education and vehicle loans, and more. You refer the need and our advisors pick the right product and lender.",
+  },
+  {
+    q: "What support do I get as a partner?",
+    a: "A named advisor who handles login, documents and bank follow-ups, a short walk-through of our products when you start, and updates on each referral as it moves towards disbursal.",
+  },
+  {
+    q: "How do I send a client's details and follow the case?",
+    a: "Share the client's name, number and requirement through the form on this page, or by call or WhatsApp. Your advisor keeps you updated on the status, approval and disbursal of every referral.",
+  },
 ];
