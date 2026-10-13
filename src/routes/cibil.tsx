@@ -129,22 +129,22 @@ function StepIndicator({ step }: { step: Step }) {
             <span
               className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold transition-colors ${
                 done
-                  ? "bg-gold text-navy"
+                  ? "bg-gold/25 text-gold-light"
                   : active
-                    ? "bg-navy text-gold-light"
-                    : "bg-white text-muted-foreground ring-1 ring-navy/15"
+                    ? "bg-gold text-[#0b1530]"
+                    : "bg-white/10 text-white/60 ring-1 ring-white/20"
               }`}
             >
               {done ? <Check className="h-3.5 w-3.5" /> : n}
             </span>
             <span
               className={`hidden truncate text-xs font-semibold sm:block ${
-                active ? "text-navy dark:text-white" : "text-muted-foreground"
+                active ? "font-bold text-white" : "text-white/55"
               }`}
             >
               {label}
             </span>
-            {n < STEP_LABELS.length && <span className="h-0.5 flex-1 rounded-full bg-navy/20" />}
+            {n < STEP_LABELS.length && <span className="h-0.5 flex-1 rounded-full bg-white/20" />}
           </li>
         );
       })}
@@ -267,11 +267,11 @@ function CibilFlow() {
 
   if (done && bureau) {
     return (
-      <div className="flex flex-col items-center rounded-2xl border border-[#BCCBEE] bg-[#E1EAFB] p-8 text-center sm:p-10 dark:bg-card">
-        <span className="grid h-14 w-14 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
+      <div className="flex flex-col items-center rounded-2xl navy-panel border border-white/10 [&_.text-navy]:text-white [&_.text-muted-foreground]:text-white/70 p-8 text-center sm:p-10">
+        <span className="grid h-14 w-14 place-items-center rounded-full bg-gold/15 text-gold-light ring-1 ring-gold/30">
           <Check className="h-7 w-7" />
         </span>
-        <h3 className="mt-5 text-xl font-extrabold text-navy dark:text-white">
+        <h3 className="tracking-normal mt-5 text-xl font-extrabold text-navy dark:text-white">
           Request received — we'll take it from here.
         </h3>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
@@ -283,14 +283,14 @@ function CibilFlow() {
             href={CONTACT.whatsappLink}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg bg-navy px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-navy-light"
+            className="gold-btn px-5 py-2.5"
           >
             <MessageCircle className="h-4 w-4" /> Message us on WhatsApp
           </a>
           <button
             type="button"
             onClick={reset}
-            className="rounded-lg border border-border px-5 py-2.5 text-sm font-bold text-navy transition-colors hover:bg-gold/5 dark:text-white"
+            className="rounded-lg border border-white/20 px-5 py-2.5 text-sm font-bold text-navy transition-colors hover:bg-white/10 dark:text-white"
           >
             Request another report
           </button>
@@ -300,13 +300,13 @@ function CibilFlow() {
   }
 
   return (
-    <div className="rounded-2xl border border-[#BCCBEE] bg-[#E1EAFB] p-5 shadow-[var(--shadow-lift)] sm:p-8 dark:bg-card">
+    <div className="rounded-2xl navy-panel border border-white/10 [&_.text-navy]:text-white [&_.text-muted-foreground]:text-white/70 p-5 shadow-[var(--shadow-lift)] sm:p-8">
       <StepIndicator step={step} />
 
       {/* Step 1 — details */}
       {step === 1 && (
         <form onSubmit={onSubmitDetails} noValidate className="mt-8">
-          <h3 className="text-xl font-extrabold text-navy dark:text-white">First, your details</h3>
+          <h3 className="tracking-normal text-xl font-extrabold text-navy dark:text-white">First, your details</h3>
           <p className="mt-2 text-sm text-muted-foreground">
             We need these to pull your report. Enter them exactly as they appear on your PAN card
             and records, or the bureau may not find your file.
@@ -468,7 +468,7 @@ function CibilFlow() {
           <button
             type="submit"
             disabled={submitting}
-            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-navy px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-navy-light disabled:opacity-60"
+            className="mt-6 gold-btn px-6 py-3 disabled:opacity-60"
           >
             {submitting ? "Saving…" : "Continue"} <ArrowRight className="h-4 w-4" />
           </button>
@@ -482,7 +482,7 @@ function CibilFlow() {
       {step === 2 && (
         <div className="mt-8">
           <BackButton onClick={() => setStep(1)} />
-          <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
+          <h3 className="tracking-normal mt-3 text-xl font-extrabold text-navy dark:text-white">
             Which credit bureau's report do you need?
           </h3>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -498,9 +498,9 @@ function CibilFlow() {
                   setLastPulled(null);
                   setStep(3);
                 }}
-                className="group flex items-start gap-3 rounded-xl border border-border bg-bg-light p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
+                className="group flex items-start gap-3 rounded-xl border border-white/15 bg-white/5 p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
               >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark transition-colors group-hover:bg-gold group-hover:text-navy dark:bg-gold/15">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold/15 text-gold-light ring-1 ring-gold/30 transition-colors group-hover:bg-gold group-hover:text-[#0b1530]">
                   <Gauge className="h-5 w-5" />
                 </span>
                 <span className="min-w-0">
@@ -521,7 +521,7 @@ function CibilFlow() {
       {step === 3 && bureau && (
         <div className="mt-8">
           <BackButton onClick={() => setStep(2)} />
-          <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
+          <h3 className="tracking-normal mt-3 text-xl font-extrabold text-navy dark:text-white">
             When did you last take your {bureau.name} report?
           </h3>
           <div className="mt-5 space-y-3">
@@ -533,7 +533,7 @@ function CibilFlow() {
                   setLastPulled(o.id);
                   setStep(4);
                 }}
-                className="group flex w-full items-center justify-between gap-3 rounded-xl border border-border bg-white p-4 text-left transition-all duration-300 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
+                className="group flex w-full items-center justify-between gap-3 rounded-xl border border-white/15 bg-white/5 p-4 text-left transition-all duration-300 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
               >
                 <span>
                   <span className="block text-sm font-extrabold text-navy dark:text-white">
@@ -552,7 +552,7 @@ function CibilFlow() {
       {step === 4 && bureau && (
         <div className="mt-8">
           <BackButton onClick={() => setStep(3)} />
-          <h3 className="mt-3 text-xl font-extrabold text-navy dark:text-white">
+          <h3 className="tracking-normal mt-3 text-xl font-extrabold text-navy dark:text-white">
             Pay ₹{REPORT_PRICE} by UPI
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -565,7 +565,7 @@ function CibilFlow() {
               <ol className="space-y-2 text-sm text-muted-foreground">
                 <li>1. Scan the QR with any UPI app (GPay, PhonePe, Paytm, BHIM…).</li>
                 <li>
-                  2. Pay exactly <strong className="text-foreground">₹{REPORT_PRICE}</strong>.
+                  2. Pay exactly <strong className="text-gold-light">₹{REPORT_PRICE}</strong>.
                 </li>
                 <li>3. Enter the 12-digit UTR / transaction ID below.</li>
               </ol>
@@ -602,7 +602,7 @@ function CibilFlow() {
             type="button"
             onClick={confirmPayment}
             disabled={submitting}
-            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-navy px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-navy-light disabled:opacity-60"
+            className="mt-5 gold-btn px-6 py-3 disabled:opacity-60"
           >
             {submitting ? "Sending…" : "I've paid — submit request"}{" "}
             <ArrowRight className="h-4 w-4" />
@@ -624,7 +624,7 @@ const howItWorks = () => [
     text: "A quick question so we have the full picture.",
   },
   {
-    title: `Pay ₹${REPORT_PRICE} by UPI QR`,
+    title: "Pay by UPI QR",
     text: "One flat price for any bureau. We then pull your report and send it to you.",
   },
 ];
@@ -633,33 +633,38 @@ function CibilPage() {
   const HOW_IT_WORKS = howItWorks();
   return (
     <>
-      <section className="relative overflow-hidden hero-light border-b border-gold/15 py-16 sm:py-20">
-        <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]"></div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal animate={false}>
-            <p className="eyebrow">CIBIL &amp; Credit Reports</p>
-            <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              Get Your Credit Report, <span className="gold-text">Without the Hassle.</span>
-            </h1>
-            <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Pick your credit bureau, pay by UPI QR and share a few details — our team pulls your
-              TransUnion CIBIL, Experian, Equifax or CRIF High Mark report and sends it to you.
-            </p>
-            <Link
-              to="/tools"
-              hash="credit-score"
-              className="mt-5 inline-flex items-center gap-2 rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 text-sm font-bold text-navy transition-colors hover:bg-gold/10 dark:bg-card dark:text-white"
-            >
-              <Gauge className="h-4 w-4 text-gold" />
-              Not sure where you stand? Try our Credit Score Estimator
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="navy-panel relative overflow-hidden rounded-3xl p-8 sm:p-12">
+              <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
+              <div className="relative">
+                <p className="eyebrow">CIBIL &amp; Credit Reports</p>
+                <h1 style={{ fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }} className="mt-4 text-3xl leading-tight font-extrabold text-white sm:text-5xl">
+                  Get Your Credit Report, <span className="gold-text">Without the Hassle.</span>
+                </h1>
+                <p className="mt-4 max-w-2xl text-base text-white/70">
+                  Pick your credit bureau, pay by UPI QR and share a few details — our team pulls
+                  your TransUnion CIBIL, Experian, Equifax or CRIF High Mark report and sends it to
+                  you.
+                </p>
+                <Link
+                  to="/tools"
+                  hash="credit-score"
+                  className="mt-5 inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2.5 text-sm font-bold text-white/85 transition-colors hover:border-gold/40 hover:text-white"
+                >
+                  <Gauge className="h-4 w-4 text-gold" />
+                  Not sure where you stand? Try our Credit Score Estimator
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
           </Reveal>
         </div>
       </section>
 
       <Section>
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
           <CibilFlow />
 
           <aside className="space-y-5">
@@ -683,11 +688,11 @@ function CibilPage() {
                 ))}
               </ol>
             </div>
-            <div className="rounded-2xl border border-[#BCCBEE] bg-[#E1EAFB] p-6 dark:bg-card">
+            <div className="rounded-2xl navy-panel border border-white/10 [&_.text-navy]:text-white [&_.text-muted-foreground]:text-white/70 p-6">
               <span className="grid h-10 w-10 place-items-center rounded-lg bg-white text-gold-dark dark:bg-card">
                 <FileSearch className="h-5 w-5" />
               </span>
-              <h3 className="mt-3 text-sm font-extrabold text-navy dark:text-white">
+              <h3 className="tracking-normal mt-3 text-sm font-extrabold text-navy dark:text-white">
                 Good to know
               </h3>
               <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted-foreground">
@@ -698,11 +703,11 @@ function CibilPage() {
                 </li>
               </ul>
             </div>
-            <div className="rounded-2xl border border-[#BCCBEE] bg-[#E1EAFB] p-6">
+            <div className="rounded-2xl navy-panel border border-white/10 [&_.text-navy]:text-white [&_.text-muted-foreground]:text-white/70 p-6">
               <span className="grid h-10 w-10 place-items-center rounded-lg bg-white text-gold-dark">
                 <Gauge className="h-5 w-5" />
               </span>
-              <h3 className="mt-3 text-sm font-extrabold text-navy dark:text-white">
+              <h3 className="tracking-normal mt-3 text-sm font-extrabold text-navy dark:text-white">
                 Credit Score Estimator
               </h3>
               <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
@@ -712,7 +717,7 @@ function CibilPage() {
               <Link
                 to="/tools"
                 hash="credit-score"
-                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-navy px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-navy-light"
+                className="mt-4 gold-btn px-4 py-2.5"
               >
                 Try the estimator <ArrowRight className="h-3.5 w-3.5" />
               </Link>

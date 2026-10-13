@@ -33,18 +33,7 @@ function CaLegalServicesPage() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-bg-light py-14 sm:py-20 dark:bg-background">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8">
-          {/* picture on the left; the heading block moves to the right, otherwise unchanged */}
-          <Reveal className="order-2 lg:order-1">
-            <img
-              src="/illustrations/ca-services.webp"
-              alt="A chartered accountant reviewing accounts and charts at her desk"
-              width={1024}
-              height={1024}
-              className="mx-auto aspect-square w-full max-w-md rounded-3xl object-cover shadow-[var(--shadow-lift)]"
-            />
-          </Reveal>
-          <div className="order-1 lg:order-2">
+        <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center">
             <p className="flex items-center justify-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               <Link to="/" className="hover:text-navy dark:text-white">
@@ -81,7 +70,6 @@ function CaLegalServicesPage() {
               );
             })}
           </Reveal>
-          </div>
         </div>
       </section>
 
@@ -99,18 +87,46 @@ function CaLegalServicesPage() {
                     isLegal ? "border-navy/15 bg-white dark:bg-card" : "border-gold/20 bg-gold-pale/15"
                   }`}
                 >
-                  <div className="flex flex-wrap items-baseline justify-between gap-3">
-                    <div>
+                  <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+                    <img
+                      src={isLegal ? "/illustrations/legal-services.webp" : "/illustrations/ca-services.webp"}
+                      alt={
+                        isLegal
+                          ? "An adviser talking through documents with a family in front of their housing society"
+                          : "A chartered accountant reviewing accounts and charts at her desk"
+                      }
+                      width={1024}
+                      height={1024}
+                      loading="lazy"
+                      className={`mx-auto aspect-[4/3] w-full max-w-xl rounded-2xl object-cover shadow-[var(--shadow-card)] ${
+                        isLegal ? "lg:order-2" : ""
+                      }`}
+                    />
+                    <div className={isLegal ? "lg:order-1" : ""}>
                       <p className="eyebrow">{divisionLabel(division)}</p>
                       <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
                         {isLegal
                           ? "Property, society and legal documentation."
                           : "Tax, GST, accounting and business registration."}
                       </h2>
+                      <p className="mt-4 text-sm font-bold text-navy dark:text-white">
+                        What's included · {services.length} services
+                      </p>
+                      <ul className="mt-3 flex flex-wrap gap-2">
+                        {services.map((s) => (
+                          <li key={s.slug}>
+                            <Link
+                              to="/ca-legal-services/$slug"
+                              params={{ slug: s.slug }}
+                              className="inline-flex items-center gap-1.5 rounded-full border border-gold/30 bg-white px-3 py-1.5 text-xs font-semibold text-navy transition-colors hover:border-gold hover:bg-gold-pale/40 dark:bg-card dark:text-white"
+                            >
+                              <s.icon className="h-3.5 w-3.5 text-gold-dark" />
+                              {s.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    <span className="text-xs font-bold tracking-wide text-muted-foreground">
-                      {services.length} services
-                    </span>
                   </div>
 
                   <div className="mt-8 border-t border-border/70">
@@ -159,14 +175,6 @@ function CaLegalServicesPage() {
               Whether it's a tax filing, a GST question or a property document, share your
               requirement and our team will connect you with the right associated professional.
             </p>
-            <img
-              src="/illustrations/legal-services.webp"
-              alt="An adviser talking through documents with a family in front of their housing society"
-              width={1024}
-              height={1024}
-              loading="lazy"
-              className="mt-8 aspect-square w-full max-w-xl rounded-2xl object-cover shadow-[var(--shadow-card)]"
-            />
           </Reveal>
           <Reveal delay={100} className="h-full">
             <ServiceEnquiryForm
