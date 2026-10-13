@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AiLoanAdvisorRouteImport } from './routes/ai-loan-advisor'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
 import { Route as CibilRouteImport } from './routes/cibil'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -43,6 +44,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiLoanAdvisorRoute = AiLoanAdvisorRouteImport.update({
+  id: '/ai-loan-advisor',
+  path: '/ai-loan-advisor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CaseStudiesRoute = CaseStudiesRouteImport.update({
@@ -164,6 +170,7 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai-loan-advisor': typeof AiLoanAdvisorRoute
   '/case-studies': typeof CaseStudiesRouteWithChildren
   '/cibil': typeof CibilRoute
   '/contact': typeof ContactRoute
@@ -191,6 +198,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai-loan-advisor': typeof AiLoanAdvisorRoute
   '/cibil': typeof CibilRoute
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
@@ -217,6 +225,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai-loan-advisor': typeof AiLoanAdvisorRoute
   '/case-studies': typeof CaseStudiesRouteWithChildren
   '/cibil': typeof CibilRoute
   '/contact': typeof ContactRoute
@@ -246,6 +255,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/ai-loan-advisor'
     | '/case-studies'
     | '/cibil'
     | '/contact'
@@ -273,6 +283,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/ai-loan-advisor'
     | '/cibil'
     | '/contact'
     | '/insights'
@@ -298,6 +309,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/ai-loan-advisor'
     | '/case-studies'
     | '/cibil'
     | '/contact'
@@ -326,6 +338,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AiLoanAdvisorRoute: typeof AiLoanAdvisorRoute
   CaseStudiesRoute: typeof CaseStudiesRouteWithChildren
   CibilRoute: typeof CibilRoute
   ContactRoute: typeof ContactRoute
@@ -361,6 +374,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-loan-advisor': {
+      id: '/ai-loan-advisor'
+      path: '/ai-loan-advisor'
+      fullPath: '/ai-loan-advisor'
+      preLoaderRoute: typeof AiLoanAdvisorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/case-studies': {
@@ -558,6 +578,7 @@ const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AiLoanAdvisorRoute: AiLoanAdvisorRoute,
   CaseStudiesRoute: CaseStudiesRouteWithChildren,
   CibilRoute: CibilRoute,
   ContactRoute: ContactRoute,

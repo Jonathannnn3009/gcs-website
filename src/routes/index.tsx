@@ -500,6 +500,28 @@ function HomePage() {
         </ul>
       </section>
 
+      {/* ─── LOAN ADVISOR ─────────────────────────────── */}
+      <Section className="pb-0">
+        <Reveal>
+          <div className="navy-panel relative flex flex-col items-start justify-between gap-5 overflow-hidden rounded-3xl p-7 sm:flex-row sm:items-center sm:p-9">
+            <div className="pointer-events-none absolute top-0 right-0 h-56 w-56 rounded-full bg-gold/10 blur-[90px]" />
+            <div className="relative max-w-2xl">
+              <p className="eyebrow">GCS Loan Advisor</p>
+              <h2 className="mt-2 text-xl font-bold text-white sm:text-2xl" style={{ fontFamily: "var(--font-sans)", letterSpacing: "0" }}>
+                Not sure which loan fits? Answer a few short questions.
+              </h2>
+              <p className="mt-2 text-sm text-white/70">
+                Tell us what you need and a GCS loan expert will look at the options that may suit your profile.
+              </p>
+            </div>
+            <Link to="/ai-loan-advisor" className="gold-btn relative shrink-0 px-6 py-3">
+              Start now
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </Reveal>
+      </Section>
+
       {/* ─── SERVICES ─────────────────────────────────── */}
       <Section>
         <Reveal>
