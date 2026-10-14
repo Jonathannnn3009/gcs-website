@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { GiaOrb, type GiaMood } from "@/components/gia-orb";
 import { useRouter, useRouterState } from "@tanstack/react-router";
 import { ArrowRight, Check, Phone, RotateCcw, Send, Square, X } from "lucide-react";
 import { ChatGate } from "@/components/chat-gate";
@@ -592,11 +593,41 @@ export function ChatAssistant() {
       .join(" | ")
       .slice(0, 700);
 
+  // Gia's flame follows the chat: a flare when a reply finishes (or the visitor says thanks),
+  // a swirl while thinking, a pulse while writing, a dim ember if something went wrong.
+  const [flare, setFlare] = useState(false);
+  const wasBusy = useRef(false);
+  useEffect(() => {
+    const lastMsg = messages[messages.length - 1];
+    const failed = !!lastMsg?.parts.some((p) => p.kind === "error");
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    if (wasBusy.current && !busy && !failed) {
+      setFlare(true);
+      timer = setTimeout(() => setFlare(false), 2200);
+    }
+    wasBusy.current = busy;
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [busy, messages]);
+
   if (!ready) return null;
 
   const last = messages[messages.length - 1];
   const waitingForText =
     busy && !!last && last.role === "assistant" && !last.parts.some((p) => p.kind === "text");
+  const lastUser = [...messages].reverse().find((m) => m.role === "user");
+  const lastUserText = lastUser?.parts.map((p) => (p.kind === "text" ? p.text : "")).join(" ") ?? "";
+  const thanked = !busy && last?.role === "assistant" && /(thanks?|thank you|thx|great|perfect|awesome|dhanyavad|shukriya)/i.test(lastUserText);
+  const mood: GiaMood = last?.parts.some((p) => p.kind === "error")
+    ? "concerned"
+    : waitingForText
+      ? "thinking"
+      : busy
+        ? "speaking"
+        : flare || thanked
+          ? "joy"
+          : "idle";
 
   return (
     // data-gcs-edit-ui keeps the site's text editor and translation swapper out of the chat.
@@ -610,7 +641,7 @@ export function ChatAssistant() {
           style={{ animation: "gcs-whatsapp-pop 600ms cubic-bezier(0.22,1,0.36,1) both" }}
         >
           <span className="relative">
-            <Avatar className="h-11 w-11" />
+            <GiaOrb mood={mood} className="h-11 w-11" />
             <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-navy bg-emerald-400" />
           </span>
           <span className="hidden text-left sm:block">
@@ -637,7 +668,7 @@ export function ChatAssistant() {
             style={{ animation: "gcs-scale-in 220ms ease both" }}
           >
             <header className="navy-panel flex items-center gap-3 px-4 py-3.5 text-white">
-              <Avatar className="h-10 w-10" />
+              <GiaOrb mood={mood} className="h-10 w-10" />
               <div className="min-w-0 flex-1">
                 <p className="font-heading text-base leading-tight font-bold">{ASSISTANT_NAME}</p>
                 <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-white/70">
