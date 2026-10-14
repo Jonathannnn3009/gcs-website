@@ -29,6 +29,7 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [menuTop, setMenuTop] = useState(72);
   const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -76,7 +77,10 @@ export function SiteHeader() {
                   <div
                     key={link.to}
                     className="relative"
-                    onMouseEnter={() => openDropdown(link.dropdown!)}
+                    onMouseEnter={(e) => {
+                      setMenuTop(e.currentTarget.getBoundingClientRect().bottom - 8);
+                      openDropdown(link.dropdown!);
+                    }}
                     onMouseLeave={closeDropdown}
                   >
                     <Link
@@ -97,26 +101,48 @@ export function SiteHeader() {
                     {/* Services Mega Dropdown */}
                     {link.dropdown === "services" && activeDropdown === "services" && (
                       <div
-                        className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
-                        style={{ animation: "gcs-scale-in 200ms ease both" }}
+                        className="pointer-events-none fixed inset-x-0 z-50 flex justify-center"
+                        style={{ top: menuTop }}
                       >
-                        <div className="w-[1180px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)] dark:bg-card">
-                          <div className="flex items-center justify-between border-b border-border px-6 py-3.5">
-                            <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
-                              {PRODUCTS.length} Loan Products, By Category
+                       <div className="pointer-events-auto pt-2" style={{ animation: "gcs-scale-in 200ms ease both" }}>
+                        <div className="flex max-w-[calc(100vw-2rem)] w-[1200px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card">
+                          {/* Left: the navy gradient panel */}
+                          <div className="navy-panel relative flex w-[250px] shrink-0 flex-col p-7">
+                            <div className="pointer-events-none absolute -top-10 -left-10 h-44 w-44 rounded-full bg-gold/15 blur-[60px]" />
+                            <p className="relative text-[10px] font-bold tracking-[0.22em] text-gold uppercase">
+                              Loan Products
+                            </p>
+                            <p
+                              className="relative mt-3 text-[22px] leading-snug font-bold text-white"
+                              style={{ fontFamily: "var(--font-heading)", letterSpacing: "0" }}
+                            >
+                              {PRODUCTS.length} loan products, one team.
+                            </p>
+                            <p className="relative mt-3 text-[13px] leading-relaxed text-white/70">
+                              We help you compare options from 75+ Banks and NBFCs, with support at every step.
                             </p>
                             <Link
                               to="/services"
                               onClick={() => setActiveDropdown(null)}
-                              className="inline-flex items-center gap-1.5 text-xs font-bold text-gold transition-colors hover:text-gold-light"
+                              className="gold-btn relative mt-5 self-start px-5 py-2.5 text-[13px]"
                             >
-                              Browse the full list <ArrowRight className="h-3 w-3" />
+                              Browse all services <ArrowRight className="h-3.5 w-3.5" />
                             </Link>
+                            <div className="relative mt-auto border-t border-white/15 pt-4">
+                              <p className="text-[11px] text-white/55">Prefer to talk?</p>
+                              <a
+                                href={CONTACT.phoneHref}
+                                className="mt-0.5 block text-[15px] font-bold text-gold-light hover:text-white"
+                              >
+                                {CONTACT.phone}
+                              </a>
+                            </div>
                           </div>
-                          {/* Every product, segregated by category */}
-                          <div className="grid grid-cols-5 gap-4 p-5">
+
+                          {/* Right: every product, by category */}
+                          <div className="grid min-w-0 flex-1 grid-cols-5 gap-3 p-5">
                             {PRODUCT_GROUPS_LIVE.map((group) => (
-                              <div key={group.name}>
+                              <div key={group.name} className="min-w-0">
                                 <p className="border-b border-gold/20 pb-2 text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
                                   {group.name}
                                 </p>
@@ -144,6 +170,7 @@ export function SiteHeader() {
                             ))}
                           </div>
                         </div>
+                       </div>
                       </div>
                     )}
 
@@ -187,14 +214,37 @@ export function SiteHeader() {
                     {/* Tools Dropdown */}
                     {link.dropdown === "tools" && activeDropdown === "tools" && (
                       <div
-                        className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
-                        style={{ animation: "gcs-scale-in 200ms ease both" }}
+                        className="pointer-events-none fixed inset-x-0 z-50 flex justify-center"
+                        style={{ top: menuTop }}
                       >
-                        <div className="w-[560px] overflow-hidden rounded-xl border border-gold/10 bg-white p-3 shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)] dark:bg-card">
-                          <p className="mb-2 px-2 text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
-                            Calculators
-                          </p>
-                          <div className="grid grid-cols-2 gap-1">
+                       <div className="pointer-events-auto pt-2" style={{ animation: "gcs-scale-in 200ms ease both" }}>
+                        <div className="flex max-w-[calc(100vw-2rem)] w-[820px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card">
+                          {/* Left: the navy gradient panel */}
+                          <div className="navy-panel relative flex w-[240px] shrink-0 flex-col p-7">
+                            <div className="pointer-events-none absolute -top-10 -left-10 h-44 w-44 rounded-full bg-gold/15 blur-[60px]" />
+                            <p className="relative text-[10px] font-bold tracking-[0.22em] text-gold uppercase">
+                              Calculators
+                            </p>
+                            <p
+                              className="relative mt-3 text-[22px] leading-snug font-bold text-white"
+                              style={{ fontFamily: "var(--font-heading)", letterSpacing: "0" }}
+                            >
+                              Run the numbers before you apply.
+                            </p>
+                            <p className="relative mt-3 text-[13px] leading-relaxed text-white/70">
+                              Free tools. Nothing you enter is saved or sent.
+                            </p>
+                            <Link
+                              to="/tools"
+                              onClick={() => setActiveDropdown(null)}
+                              className="gold-btn relative mt-5 self-start px-5 py-2.5 text-[13px]"
+                            >
+                              All calculators <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
+                          </div>
+
+                          {/* Right: the calculators */}
+                          <div className="grid min-w-0 flex-1 grid-cols-2 content-start gap-1 p-4">
                             {TOOL_ITEMS.map((tool) => (
                               <Link
                                 key={tool.hash}
@@ -203,7 +253,7 @@ export function SiteHeader() {
                                 onClick={() => setActiveDropdown(null)}
                                 className="group/tool flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gold/5"
                               >
-                                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-secondary text-gold transition-colors group-hover/tool:bg-gold/10">
+                                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gold-pale/50 text-gold-dark transition-colors group-hover/tool:bg-gold group-hover/tool:text-navy dark:bg-gold/12">
                                   <svg
                                     className="h-4 w-4"
                                     fill="none"
@@ -226,14 +276,8 @@ export function SiteHeader() {
                               </Link>
                             ))}
                           </div>
-                          <Link
-                            to="/tools"
-                            onClick={() => setActiveDropdown(null)}
-                            className="mt-1 flex items-center gap-1.5 rounded-lg px-3 py-2.5 text-xs font-bold text-gold transition-colors hover:bg-gold/5 hover:text-gold-light"
-                          >
-                            View all calculators <ArrowRight className="h-3 w-3" />
-                          </Link>
                         </div>
+                       </div>
                       </div>
                     )}
                   </div>
