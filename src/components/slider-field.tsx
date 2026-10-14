@@ -1,5 +1,11 @@
 // A range slider paired with a real number input for the same value — so
 // typing an exact figure works just as well as dragging.
+//
+// While typing, the box may be empty or hold 0 (so you can clear it and key in a new figure). The
+// calculator keeps using the last valid number, a warning explains what is needed, and when you
+// leave the box it goes back to that last valid number.
+import { useState } from "react";
+
 export function SliderField({
   label,
   value,
@@ -33,11 +39,22 @@ export function SliderField({
   // The slider itself stays bounded to [min, max] — sliders need a fixed
   // range to be usable. Typing a number, though, can go past max (someone
   // asking about a ₹15 Cr loan shouldn't be capped at the slider's ₹10 Cr
-  // ceiling); only floor it at min so it can't go negative or below zero.
-  const clampTyped = (v: number) => Math.max(min, v);
+  // ceiling); it only has to reach min to be used.
   // The range input's own value clamps visually at max even if the
   // underlying value is higher, so the thumb doesn't render past the track.
   const sliderValue = Math.min(value, max);
+
+  // What is being typed, while the box is in use (null = just show the current value).
+  const [draft, setDraft] = useState<string | null>(null);
+  const typed = draft === null ? null : draft.trim();
+  const typedNumber = typed === null || typed === "" ? NaN : Number(typed);
+  const invalid = typed !== null && (typed === "" || !Number.isFinite(typedNumber) || typedNumber < min);
+  const minText = format ? format(min) : String(min);
+
+  const change = (v: number) => {
+    setDraft(null);
+    onChange(v);
+  };
 
   return (
     <div>
@@ -48,27 +65,39 @@ export function SliderField({
           <div className="flex items-center gap-1 rounded-lg bg-secondary px-2.5 py-1">
             <input
               type="number"
-              value={value}
+              value={draft ?? String(value)}
               min={min}
               step={step}
               onChange={(e) => {
-                if (e.target.value === "") return;
-                onChange(clampTyped(Number(e.target.value)));
+                const text = e.target.value;
+                setDraft(text);
+                const n = Number(text);
+                if (text.trim() !== "" && Number.isFinite(n) && n >= min) onChange(n);
               }}
+              onBlur={() => setDraft(null)}
               className="w-28 bg-transparent text-right text-sm font-bold text-gold-dark outline-none"
               aria-label={`${ariaLabel} — type a value, no upper limit`}
+              aria-invalid={invalid}
             />
             {suffix ? <span className="text-sm font-bold text-gold-dark">{suffix}</span> : null}
           </div>
         </div>
       </div>
+      {invalid ? (
+        <p role="alert" className="mb-2 text-xs font-semibold text-red-600">
+          {typed === "" || !Number.isFinite(typedNumber)
+            ? "Please enter a number."
+            : `Please enter at least ${minText}.`}{" "}
+          Until then, the results use the last valid figure.
+        </p>
+      ) : null}
       <input
         type="range"
         min={min}
         max={max}
         step={step}
         value={sliderValue}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onChange={(e) => change(Number(e.target.value))}
         className="w-full"
         aria-label={ariaLabel}
       />
@@ -84,7 +113,7 @@ export function SliderField({
             <button
               key={p.label}
               type="button"
-              onClick={() => onChange(p.value)}
+              onClick={() => change(p.value)}
               aria-pressed={value === p.value}
               className={`rounded-md border px-2.5 py-1 text-xs font-semibold transition-colors ${
                 value === p.value
