@@ -3,12 +3,11 @@ import { Check, ArrowRight, Calculator } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { LoanGoals } from "@/components/loan-goals";
+import { ServiceCarousel, imageForGroup } from "@/components/service-carousel";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { CONTACT } from "@/data/site";
 import { CALCULATORS } from "@/components/page-calculators";
 import { PRODUCT_CALCULATORS } from "@/data/page-calculators";
-import { SERVICES_STATS } from "@/data/page-lists";
-import { useList } from "@/lib/page-lists";
 import { useProductGroups } from "@/lib/page-lists";
 
 export const Route = createFileRoute("/services/")({
@@ -32,7 +31,6 @@ export const Route = createFileRoute("/services/")({
 
 function ServicesPage() {
   const PRODUCT_GROUPS = useProductGroups();
-  const SERVICE_STATS = useList("services.stats", SERVICES_STATS);
   const groupsWithCounts = PRODUCT_GROUPS.map((g) => ({
     ...g,
     count: PRODUCTS.filter((p) => p.group === g.name).length,
@@ -64,37 +62,15 @@ function ServicesPage() {
             </p>
           </Reveal>
 
-          {/* Category pills */}
-          <Reveal delay={100} className="mt-8 flex flex-wrap justify-center gap-2.5">
-            {groupsWithCounts.map((g) => (
-              <a
-                key={g.name}
-                href={`#${g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
-                className="group/pill inline-flex items-center gap-2 rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-[var(--shadow-card)] active:scale-95 dark:text-white dark:bg-card"
-              >
-                {g.name}
-                <span className="grid h-5 w-5 place-items-center rounded-full bg-gold-pale/70 text-[11px] font-bold text-gold-dark transition-all duration-300 group-hover/pill:scale-125 group-hover/pill:bg-gold group-hover/pill:text-navy dark:bg-gold/15">
-                  {g.count}
-                </span>
-              </a>
-            ))}
-          </Reveal>
-
-          {/* Stats */}
-          <Reveal
-            delay={180}
-            className="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-x-10 gap-y-4 border-t border-border pt-8"
-          >
-            {SERVICE_STATS.map((s) => (
-              <div key={s.label} className="border-l-2 border-gold/40 pl-4 text-left">
-                <p className="font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
-                  {s.value}
-                </p>
-                <p className="mt-1 text-xs font-bold tracking-wide text-gold-dark uppercase">
-                  {s.label}
-                </p>
-              </div>
-            ))}
+          {/* Picture row: one card per category */}
+          <Reveal delay={100} className="mt-6">
+            <ServiceCarousel
+              items={groupsWithCounts.map((g) => ({
+                name: g.name,
+                count: g.count,
+                image: imageForGroup(g.name),
+              }))}
+            />
           </Reveal>
         </div>
       </section>
