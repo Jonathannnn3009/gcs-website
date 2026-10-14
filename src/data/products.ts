@@ -124,7 +124,7 @@ export const PRODUCTS: Product[] = [
       { label: "Minimum ticket size", value: "₹20 Lakh" },
     ],
     about:
-      "Whether it's a ready flat, an under-construction project, a self-build or a plot purchase, we shortlist the lender likely to sanction fastest for your profile — and push a stalled or declined file to someone better placed to say yes.",
+      "A home loan helps you buy a ready flat, a flat in an under-construction project, or a plot, or build your own house. We look at your income and documents, then compare options from different Banks and NBFCs that may suit your profile. If one lender delays or does not approve your file, we can explore other lenders that may be a better fit.",
     features: [
       "Choice of floating or fixed-rate options",
       "Pre-approved offers checked where your bank runs such a programme",
@@ -136,7 +136,7 @@ export const PRODUCTS: Product[] = [
       "Resident Indian, generally 21–65 (up to around 70 for self-employed) at loan maturity",
       "Salaried with take-home income from about ₹25,000/month, or self-employed with 2–3 years of ITR",
       "Cash salary accepted as income proof too, not just bank-credited salary",
-      "A CIBIL score near 700 gets the sharpest rate; lower scores are reviewed case by case, not auto-rejected",
+      "A CIBIL score near 700 or above may help you get a better rate; lower scores are reviewed case by case",
     ],
     documents: [KYC, PROPERTY_DOCS, PHOTOS],
     documentCategories: APPLICANT_DOC_CATEGORIES,
@@ -176,7 +176,7 @@ export const PRODUCTS: Product[] = [
       { label: "Minimum ticket size", value: "₹20 Lakh" },
     ],
     about:
-      "Borrow against a residential, commercial or industrial property you already own — for expansion, debt consolidation, a medical bill, or any need the bank doesn't need to approve of. You keep ownership and keep using the property throughout.",
+      "A loan against property lets you borrow money using a residential, commercial or industrial property that you already own. You can use it to grow your business, combine other loans, pay a medical bill or meet other needs. Lenders may have rules on how the money can be used. You keep ownership of the property and can continue to use it while you repay.",
     features: [
       "Residential, commercial and industrial property accepted as security",
       "Income-based, banking-based and GST-based assessment tracks",
@@ -203,10 +203,10 @@ export const PRODUCTS: Product[] = [
       { label: "Tenure", value: "Aligned to the lease, typically up to 15 years" },
     ],
     about:
-      "Get a lump sum upfront against a registered lease on commercial or retail space. The tenant's rent services the EMI, so your own cash flow stays untouched.",
+      "Lease rental discounting gives you a lump sum today against the rent you will receive from a registered lease on commercial or retail space. The tenant's rent is used to pay the EMI, so your own cash flow is not needed for it.",
     features: [
       "For registered commercial and retail leases",
-      "Sharper pricing when the tenant is a corporate or MNC covenant",
+      "Pricing may be better when the tenant is a well-known company",
       "Rent routed through an escrow arrangement",
       "Refinance of an LRD loan you already have",
     ],
@@ -229,7 +229,7 @@ export const PRODUCTS: Product[] = [
       { label: "Savings", value: "Shown in writing first" },
     ],
     about:
-      "We lay your current loan next to sharper offers from other lenders, in writing, before you decide — then run the switch end to end, adding a top-up if your profile qualifies.",
+      "A balance transfer means moving your current loan to another lender that may offer better terms. We put your existing loan next to offers from other lenders, in writing, so you can compare before you decide. If you choose to switch, we guide you through the whole process. A top-up may also be possible if your profile qualifies.",
     features: [
       "Better pricing available on home, LAP and business loans",
       "Top-up sanctioned at mortgage-linked pricing, not personal-loan pricing",
@@ -260,7 +260,7 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 9.75%* p.a. on the drawn balance" },
     ],
     about:
-      "A property-backed limit that steps down over the tenure, with interest charged only on what you actually draw — useful when your cash needs rise and fall through the year.",
+      "This is a limit against your property that reduces step by step over the loan period. You pay interest only on the amount you actually use. It can suit you if your need for cash goes up and down during the year.",
     features: [
       "Secured against a residential or commercial property",
       "The sanctioned limit reduces on a monthly or quarterly schedule",
@@ -289,7 +289,7 @@ export const PRODUCTS: Product[] = [
       { label: "Minimum ticket size", value: "₹2 Lakh" },
     ],
     about:
-      "Quick, collateral-free funding for expansion, inventory, hiring or new equipment, assessed mainly off your GST filings and bank statements rather than a stack of audited financials — so it moves fast.",
+      "A business loan without collateral for needs such as expansion, stock, hiring or new equipment. Lenders mainly look at your GST returns and bank statements, so you may not need a full set of audited financials. This can make the process quicker.",
     features: [
       "No collateral or third-party guarantee needed",
       "Assessed on GST returns, banking and financial statements",
@@ -315,7 +315,7 @@ export const PRODUCTS: Product[] = [
       { label: "Security", value: "Government guarantee cover" },
     ],
     about:
-      "Loans covered under the CGTMSE guarantee scheme, letting young MSMEs borrow meaningful amounts without pledging property or bringing in a guarantor.",
+      "These are loans covered by the CGTMSE guarantee scheme. The scheme helps young MSMEs borrow without giving property as security or arranging a guarantor. The amount you can borrow depends on the lender and the scheme rules.",
     features: [
       "Structured as a term loan, a working capital limit, or a blend of both",
       "No collateral and no third-party guarantor required",
@@ -342,7 +342,7 @@ export const PRODUCTS: Product[] = [
       { label: "Security", value: "None" },
     ],
     about:
-      "A larger, fully-financials-based term loan for businesses with clean audited numbers — fixed tenure, fixed EMI, priced off your bank turnover and filings rather than a quick GST-only scorecard.",
+      "A term loan without collateral for businesses with clean, audited financials. The loan has a fixed period and a fixed EMI. The lender decides the amount based on your bank turnover and filings, not only a quick GST check.",
     features: [
       "Fixed EMI on a defined repayment schedule",
       "Offers benchmarked across several lenders before you commit",
@@ -368,7 +368,7 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 13.50%* p.a. on the drawn balance" },
     ],
     about:
-      "A collateral-free overdraft that tapers down over its tenure — draw when the business needs it, repay when it doesn't, and pay interest only on the running balance.",
+      "An overdraft without collateral where the limit reduces over the loan period. Use the money when your business needs it and repay when you can. You pay interest only on the amount you have used.",
     features: [
       "Draw and repay as often as needed",
       "Interest charged only on the amount outstanding",
@@ -395,7 +395,7 @@ export const PRODUCTS: Product[] = [
       { label: "Release", value: "Stage by stage" },
     ],
     about:
-      "Construction and development funding sized to approvals, project cost and projected sales, released in stages as work progresses rather than as one upfront cheque.",
+      "Funding for construction and development projects. The amount depends on your approvals, project cost and expected sales. The money is released in stages as the work moves ahead, not all at once.",
     features: [
       "Residential, commercial and industrial developments",
       "Combined land-and-construction funding where needed",
@@ -426,7 +426,7 @@ export const PRODUCTS: Product[] = [
       { label: "Renewal", value: "Annual" },
     ],
     about:
-      "Limits sized around your stock, receivables and payroll cycle — new, enhanced, or simply taken over from your current bank if the terms there have gone stale.",
+      "Working capital is the money a business needs for its day-to-day running. The limit is set around your stock, the payments you are waiting for from customers, and your salary and payment cycle. You can get a new limit, increase an existing one, or move your account from your current bank if its terms no longer suit you.",
     features: [
       "Cash credit, overdraft and bill-discounting limits",
       "Enhancement or takeover of a limit you already run",
@@ -452,7 +452,7 @@ export const PRODUCTS: Product[] = [
       { label: "Security", value: "Hypothecation of current assets" },
     ],
     about:
-      "A revolving limit against your stock and receivables — draw it down, sell through, repay, and draw again as your operating cycle repeats.",
+      "A limit that you can use again and again, backed by your stock and the payments due from your customers. Draw money when you need it, repay it as sales come in, and draw again as your business cycle repeats.",
     features: [
       "Drawing power reassessed monthly against stock statements",
       "Interest charged only on the utilised portion",
@@ -478,7 +478,7 @@ export const PRODUCTS: Product[] = [
       { label: "Security", value: "Secured or unsecured" },
     ],
     about:
-      "A pre-approved cushion on your current account that absorbs the short gap between paying suppliers and getting paid by customers.",
+      "An overdraft is a ready limit on your current account. It helps cover the short gap between paying your suppliers and receiving payment from your customers.",
     features: [
       "Available secured (property, FDs, securities) or unsecured",
       "No EMI — just interest on the running balance each month",
@@ -504,7 +504,7 @@ export const PRODUCTS: Product[] = [
       { label: "Margin", value: "10% – 25% cash margin" },
     ],
     about:
-      "Your bank's written commitment to the counterparty that you'll pay or perform — so you can bid for and sign contracts with confidence.",
+      "A bank guarantee is a written promise from the bank to the other party that you will pay or complete the work as agreed. It helps you bid for and sign contracts with more confidence.",
     features: [
       "Financial and performance guarantees",
       "Bid bonds, EMDs, security deposits and advance-payment BGs",
@@ -530,7 +530,7 @@ export const PRODUCTS: Product[] = [
       { label: "Usance", value: "Sight or up to 180 days" },
     ],
     about:
-      "A bank-backed payment promise to your supplier — it usually gets you better credit terms without tying up your own working capital.",
+      "A letter of credit is a payment promise given by the bank to your supplier. It may help you get better credit terms without using your own working capital.",
     features: [
       "Inland and import LCs",
       "Sight or usance structures",
@@ -556,7 +556,7 @@ export const PRODUCTS: Product[] = [
       { label: "Use", value: "Cycle reset & consolidation" },
     ],
     about:
-      "Converts an overdrawn or irregular working-capital account into a term loan with a repayment schedule your cash flow can actually sustain.",
+      "This turns an overdrawn or irregular working-capital account into a term loan with a fixed repayment plan. The plan is set so that it matches what your cash flow can handle.",
     features: [
       "Regularises stretched cash-credit or overdraft accounts",
       "Consolidates several short-term dues into one facility",
@@ -585,7 +585,7 @@ export const PRODUCTS: Product[] = [
       { label: "Minimum ticket size", value: "₹2 Lakh" },
     ],
     about:
-      "Collateral-free funds for a wedding, medical bill, travel or clearing costlier debt — sized so the EMI actually fits your monthly budget, not just your eligibility limit.",
+      "A personal loan needs no collateral. You can use it for a wedding, a medical bill, travel, or to clear a more costly debt. We help you choose an amount and EMI that fit your monthly budget, not just the maximum you are eligible for.",
     features: [
       "No security or guarantor needed",
       "Minimal paperwork, handled fully online",
@@ -595,7 +595,7 @@ export const PRODUCTS: Product[] = [
     eligibility: [
       "Between roughly 21 and 60 years of age",
       "Salaried take-home from about ₹25,000/month, or 2 years of ITR if self-employed",
-      "A CIBIL score of 700+ for the best rate; scores from the mid-600s may still qualify at a higher rate",
+      "A CIBIL score of 700+ may help you get a better rate; scores from the mid-600s may still be considered at a higher rate",
     ],
     documents: [KYC, INCOME],
   },
@@ -611,12 +611,12 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 9.75%* p.a." },
     ],
     about:
-      "Pledge shares, bonds or insurance policies for an overdraft line instead of selling them — your holdings stay invested and keep compounding while the limit sits in reserve.",
+      "You can pledge shares, bonds or insurance policies to get an overdraft limit, instead of selling them. Your investments stay in place, and the limit is there when you need it. Lenders accept only certain securities and set their own limits.",
     features: [
       "Shares, bonds, insurance policies and debt instruments accepted",
       "The limit moves with the value of the pledged portfolio",
       "No EMI — interest applies only to what's drawn",
-      "Same-day setup on lender-approved securities",
+      "Quick setup on lender-approved securities",
     ],
     eligibility: [
       "Approved securities held in the applicant's own name",
@@ -637,7 +637,7 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 9.99%* p.a." },
     ],
     about:
-      "A lien gets marked on your mutual fund units through the RTA (CAMS or KFintech) — your SIPs and investments carry on undisturbed while you draw against the units as an overdraft.",
+      "The lender marks a lien on your mutual fund units through the registrar (CAMS or KFintech). Your SIPs and investments continue as before, and you can draw money against the units as an overdraft.",
     features: [
       "Equity, debt and hybrid schemes accepted as collateral",
       "Units remain invested and keep earning returns",
@@ -664,7 +664,7 @@ export const PRODUCTS: Product[] = [
       { label: "Collateral", value: "Usually unsecured" },
     ],
     about:
-      "An unsecured facility built specifically for doctors, CAs, architects and other registered professionals — for setting up or expanding a practice, buying equipment, or covering working capital — typically priced better than a plain personal loan on the strength of the qualification.",
+      "A loan without collateral for doctors, CAs, architects and other registered professionals. You can use it to start or grow a practice, buy equipment or meet working capital needs. Depending on the lender's policy, the terms may be better than a regular personal loan because of your professional qualification.",
     features: [
       "Preferential pricing tied to your professional registration",
       "No collateral for most ticket sizes",
@@ -692,7 +692,7 @@ export const PRODUCTS: Product[] = [
       { label: "Minimum ticket size", value: "₹8 Lakh" },
     ],
     about:
-      "Funding for study in India or abroad — tuition, living costs, travel and equipment. Collateral-backed loans get the lowest rates; unsecured loans for study abroad are priced higher but move faster.",
+      "Funding for studies in India or abroad, covering tuition, living costs, travel and equipment. Loans with collateral usually have lower interest rates. Loans without collateral for studying abroad usually cost more but can be quicker to process.",
     features: [
       "Available with or without collateral, depending on the amount",
       "No EMIs during the course, plus a moratorium/grace period after",
@@ -743,17 +743,17 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 8.75%* p.a." },
     ],
     about:
-      "On-road financing for new cars, with the dealer paperwork — invoice, insurance, RTO — handled from quotation through to delivery.",
+      "Financing for the on-road price of a new car. We help with the dealer paperwork, such as the invoice, insurance and RTO, from quotation to delivery.",
     features: [
       "Funding up to 100% of the on-road price for eligible profiles",
       "Dealer and insurance coordination handled on your behalf",
-      "Sharper pricing for salaried applicants with a stable employer",
+      "Pricing may be better for salaried applicants with a stable employer",
       "Fast sanction on light documentation",
     ],
     eligibility: [
       "Typically 21–65 years old, with a regular, documented income",
       "At least 1 year in the current job or business",
-      "A CIBIL score of 650+ is usually enough; 750+ unlocks the sharpest rates",
+      "A CIBIL score of 650+ is usually considered; 750+ may help you get better rates",
     ],
     documents: [KYC, INCOME, "Dealer's vehicle quotation"],
     checklistIntake: [
@@ -785,7 +785,7 @@ export const PRODUCTS: Product[] = [
       { label: "Tenure", value: "12 — 60 months" },
     ],
     about:
-      "Financing for a second-hand car bought from a dealer or a private seller, with an independent valuation arranged so both sides know the car is fairly priced.",
+      "Financing for a second-hand car from a dealer or a private seller. We arrange an independent valuation so both sides can check that the price is fair.",
     features: [
       "Dealer or private-seller purchases both financed",
       "Independent valuation arranged by the lender",
@@ -827,7 +827,7 @@ export const PRODUCTS: Product[] = [
       { label: "Tenure", value: "12 — 60 months" },
     ],
     about:
-      "Raise cash against a car you already own free and clear — strong income profiles can sometimes borrow above the car's current valuation — and keep driving it while you repay.",
+      "Raise money against a car you already own and have fully paid for. In some cases, strong income profiles may be able to borrow more than the car's current value. You keep driving the car while you repay.",
     features: [
       "Financing on a car with no existing loan against it",
       "Top-up above valuation available to well-qualified applicants",
@@ -864,9 +864,9 @@ export const PRODUCTS: Product[] = [
       { label: "Eligibility", value: "Self-employed, turnover up to ₹30 Cr" },
     ],
     about:
-      "Short-term, unsecured funds from vetted private lenders for self-employed profiles that need cash fast — every rate and repayment term set out in writing before you commit, since private credit is priced well above bank rates.",
+      "Short-term funds without collateral from private lenders, for self-employed people who need cash quickly. Private credit usually costs much more than bank loans, so we share every rate and repayment term in writing before you decide.",
     pullQuote:
-      "Whatever funding amount you require, we can provide the required amount with a fast 24–48 hour turnaround, subject to the business profile and documentation.",
+      "Whatever funding amount you need, we aim for a quick 24–48 hour turnaround. The amount and the timing depend on your business profile and documents.",
     features: [
       "Full funding amount — whatever your eligible business requirement calls for",
       "Fast turnaround — funding arranged within 24–48 hours",

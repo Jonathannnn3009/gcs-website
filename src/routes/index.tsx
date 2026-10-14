@@ -428,9 +428,8 @@ function HomePage() {
 
             <Reveal delay={200}>
               <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                Leading with integrity — your most ethical financial partner. As Authorized Business
-                Associates with top Banks and NBFCs, we&apos;re committed to your financial
-                well-being.
+                We help you compare loan options from 75+ Banks and NBFCs and guide you from the
+                first call to the final paperwork. Honest advice, in simple words.
               </p>
             </Reveal>
 

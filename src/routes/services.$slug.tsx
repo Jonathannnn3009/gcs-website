@@ -401,6 +401,42 @@ function ProductDetailPage() {
         </div>
       </Section>
 
+      {/* Why GCS, a next step, and the standard note on what depends on the lender */}
+      <Section className="pt-0">
+        <Reveal animate={false}>
+          <div className="rounded-2xl border border-gold/15 bg-white p-7 sm:p-9 dark:bg-card">
+            <p className="eyebrow">Why Growth Capital Services</p>
+            <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
+              One conversation, many lenders to compare.
+            </h2>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+              We are a loan consultant, not the lender. We help you compare options from 75+ Banks
+              and NBFCs, prepare your documents, and follow your application through each step.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Link to="/tools" hash="eligibility" className="gold-btn py-3 text-sm">
+                Check Your Eligibility <ArrowRight className="h-4 w-4" />
+              </Link>
+              <a
+                href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="outline-btn dark:bg-card dark:text-white"
+              >
+                Talk to Our Loan Expert
+              </a>
+            </div>
+            <p className="mt-6 border-t border-dashed border-border pt-4 text-xs leading-relaxed text-muted-foreground">
+              <span className="font-bold text-navy dark:text-white">Important note: </span>
+              Interest rate, loan amount, tenure, charges, eligibility, approval and disbursement
+              depend on the policy of the respective Bank or NBFC, your profile, credit assessment
+              and the applicable terms. Growth Capital Services is a loan consultant and does not
+              lend money itself. The details on this page are for general information.
+            </p>
+          </div>
+        </Reveal>
+      </Section>
+
       {/* Calculators that suit this loan */}
       {(PRODUCT_CALCULATORS[product.slug] ?? []).length > 0 && (
         <PageCalculators
@@ -495,7 +531,7 @@ function ProductDetailPage() {
             </p>
             <div className="relative mt-6 flex flex-wrap justify-center gap-3">
               <Link to="/contact" className="gold-btn py-3.5 text-base">
-                Get Free Consultation <ArrowRight className="h-4 w-4" />
+                Request a Call Back <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
