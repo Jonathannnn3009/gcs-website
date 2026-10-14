@@ -75,7 +75,7 @@ void main(){
 }
 `;
 
-// A ring of fire-coloured wisps that swirl and morph around the centre. The noise is sampled on
+// A ring of blue wisps with a little gold that swirl and morph around the centre. The noise is sampled on
 // a circle (cos / sin of the angle), so the ring closes up smoothly with no seam.
 const FRAGMENT = /* glsl */ `
 uniform float uTime;
@@ -107,15 +107,17 @@ void main(){
   float glow = exp(-d * 7.0) * 0.24 * (0.45 + 0.55 * gaps);
   float v = clamp(body * (0.35 + 0.65 * gaps) + specks * 0.5 + glow, 0.0, 1.4);
 
-  // colour: deep ember red at the thin edges, orange in the middle, gold where it is thickest
+  // colour: mostly blue (deep blue at the thin edges, bright blue in the middle, pale where it is
+  // strongest), with a little gold glinting in the sparks and the brightest wisps
   float heat = clamp(0.30 + v * 0.55 + n1 * 0.18 + (uHeat - 0.45) * 0.6, 0.0, 1.0);
-  vec3 ember  = vec3(0.60, 0.08, 0.02);
-  vec3 orange = vec3(1.00, 0.40, 0.06);
-  vec3 gold   = vec3(1.00, 0.76, 0.24);
-  vec3 hot    = vec3(1.00, 0.95, 0.76);
-  vec3 col = mix(ember, orange, smoothstep(0.0, 0.45, heat));
-  col = mix(col, gold, smoothstep(0.4, 0.8, heat));
-  col = mix(col, hot, smoothstep(0.85, 1.0, heat) * body);
+  vec3 deep  = vec3(0.04, 0.12, 0.50);
+  vec3 blue  = vec3(0.12, 0.46, 1.00);
+  vec3 pale  = vec3(0.72, 0.88, 1.00);
+  vec3 gold  = vec3(1.00, 0.78, 0.26);
+  vec3 col = mix(deep, blue, smoothstep(0.0, 0.5, heat));
+  col = mix(col, pale, smoothstep(0.7, 1.0, heat) * body);
+  float goldAmount = specks * 0.95 + smoothstep(0.55, 0.95, n2) * body * 0.5;
+  col = mix(col, gold, clamp(goldAmount * (0.6 + uHeat * 0.7), 0.0, 1.0));
 
   float alpha = clamp(v * uBright, 0.0, 1.0);
   gl_FragColor = vec4(col * uBright, alpha);
@@ -123,7 +125,7 @@ void main(){
 `;
 
 /**
- * Gia's 3D symbol: a dark round button with a bold "AI" and a ring of flame-coloured light
+ * Gia's 3D symbol: a dark round button with a bold "AI" and a ring of blue and gold light
  * swirling around it, drawn with three.js. Until the 3D code has loaded (it waits for the page to
  * settle), and for visitors who prefer reduced motion or whose browser cannot do WebGL, it shows
  * the dark button and "AI" without the moving ring.
@@ -285,11 +287,11 @@ export function GiaOrb({ mood = "idle", className = "h-11 w-11" }: { mood?: GiaM
       ref={host}
       aria-hidden="true"
       data-drawn={drawn}
-      className={`relative grid shrink-0 place-items-center overflow-hidden rounded-full bg-[radial-gradient(circle_at_50%_45%,#1a1410_0%,#0a0f22_78%)] ring-2 ring-gold/50 shadow-[0_0_14px_rgba(255,120,30,0.4)] [container-type:size] ${className}`}
+      className={`relative grid shrink-0 place-items-center overflow-hidden rounded-full bg-[radial-gradient(circle_at_50%_45%,#0d1a3d_0%,#060b1a_78%)] ring-2 ring-gold/50 shadow-[0_0_14px_rgba(60,130,255,0.45)] [container-type:size] ${className}`}
     >
       <span
         className="relative font-sans font-extrabold tracking-tight text-white"
-        style={{ fontSize: "28cqw", lineHeight: 1, textShadow: "0 0 8px rgba(255,170,60,0.55)" }}
+        style={{ fontSize: "28cqw", lineHeight: 1, textShadow: "0 0 8px rgba(110,170,255,0.6)" }}
       >
         AI
       </span>
