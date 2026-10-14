@@ -105,7 +105,7 @@ export function ServiceCarousel({ items }: { items: CarouselItem[] }) {
               width={640}
               height={640}
               loading="lazy"
-              className="absolute inset-x-0 top-6 h-[78%] w-full object-contain transition-transform duration-500 group-hover:scale-105"
+              className="absolute inset-0 h-full w-full object-cover object-[center_35%] transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0a1633] via-[#0a1633]/90 to-transparent px-5 pt-14 pb-5">
               <div className="flex items-end justify-between gap-3">
