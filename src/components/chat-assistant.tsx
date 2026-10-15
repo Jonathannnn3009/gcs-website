@@ -637,16 +637,16 @@ export function ChatAssistant() {
           type="button"
           onClick={() => setOpen(true)}
           aria-label={`Chat with ${ASSISTANT_NAME}, our AI assistant`}
-          className="fixed right-[5.5rem] bottom-5 z-50 flex h-[60px] items-center gap-2.5 rounded-full bg-white px-2 text-navy shadow-[0_6px_24px_oklch(0.13_0.04_265/0.3)] ring-1 ring-gold/50 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_32px_oklch(0.13_0.04_265/0.45)] active:scale-95 sm:pr-5"
+          className="fixed right-[5.5rem] bottom-5 z-50 flex h-[72px] items-center gap-2.5 rounded-full bg-navy px-2 text-white shadow-[0_6px_24px_oklch(0.13_0.04_265/0.35)] ring-1 ring-gold/50 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_32px_oklch(0.13_0.04_265/0.45)] active:scale-95 sm:pr-5"
           style={{ animation: "gcs-whatsapp-pop 600ms cubic-bezier(0.22,1,0.36,1) both" }}
         >
           <span className="relative">
-            <GiaOrb mood={mood} tone="light" className="h-12 w-12" />
-            <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-emerald-400" />
+            <GiaOrb mood={mood} tone="dark" className="h-16 w-16" />
+            <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-navy bg-emerald-400" />
           </span>
           <span className="hidden text-left sm:block">
             <span className="block text-sm leading-tight font-bold">Ask {ASSISTANT_NAME}</span>
-            <span className="block text-[10px] text-navy/60">AI assistant</span>
+            <span className="block text-[10px] text-white/70">AI assistant</span>
           </span>
         </button>
       )}
@@ -668,7 +668,7 @@ export function ChatAssistant() {
             style={{ animation: "gcs-scale-in 220ms ease both" }}
           >
             <header className="navy-panel flex items-center gap-3 px-4 py-3.5 text-white">
-              <GiaOrb mood={mood} tone="dark" className="h-11 w-11" />
+              <GiaOrb mood={mood} tone="dark" className="h-[52px] w-[52px]" />
               <div className="min-w-0 flex-1">
                 <p className="font-heading text-base leading-tight font-bold">{ASSISTANT_NAME}</p>
                 <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-white/70">

@@ -15,8 +15,8 @@ type Look = { speed: number; wisp: number; heat: number; pulse: number; size: nu
 const LOOKS: Record<GiaMood, Look> = {
   idle: { speed: 0.45, wisp: 1, heat: 0.45, pulse: 0, size: 1, bright: 0.95 },
   thinking: { speed: 1.7, wisp: 1.25, heat: 0.62, pulse: 0, size: 1, bright: 1.1 },
-  speaking: { speed: 0.9, wisp: 1.1, heat: 0.75, pulse: 0.05, size: 1.02, bright: 1.15 },
-  joy: { speed: 1.2, wisp: 1.5, heat: 1, pulse: 0.03, size: 1.1, bright: 1.45 },
+  speaking: { speed: 0.9, wisp: 1.1, heat: 0.75, pulse: 0.04, size: 1.01, bright: 1.15 },
+  joy: { speed: 1.2, wisp: 1.5, heat: 1, pulse: 0.02, size: 1.05, bright: 1.45 },
   concerned: { speed: 0.2, wisp: 0.6, heat: 0.1, pulse: 0, size: 0.92, bright: 0.55 },
 };
 
@@ -98,7 +98,7 @@ void main(){
   float n2 = snoise(vec3(cos(a - t * 0.7) * 2.8, sin(a - t * 0.7) * 2.8, t * 1.0 + 7.0));
   float n3 = snoise(vec3(cos(a + t * 1.6) * 5.0, sin(a + t * 1.6) * 5.0, t * 1.5 + 3.0));
 
-  float radius = (0.60 + n1 * 0.06 * uWisp + 0.02 * sin(t * 2.6 + a * 3.0)) * uSize;
+  float radius = (0.70 + n1 * 0.06 * uWisp + 0.02 * sin(t * 2.6 + a * 3.0)) * uSize;
   float d = abs(r - radius);
   // the ring is thick in some places and thin or broken in others
   float thick = 0.05 + 0.07 * (0.5 + 0.5 * n2) * uWisp;
@@ -126,19 +126,19 @@ void main(){
 `;
 
 /**
- * Gia's 3D symbol: the GCS logo with a ring of blue and gold light swirling around it, drawn with
- * three.js straight onto whatever it sits on (no disc, no border). Until the 3D code has loaded
+ * Gia's 3D symbol: the GCS logo on a small white disc, with a ring of blue and gold light swirling
+ * around it, drawn with three.js straight onto the dark button it sits on. Until the 3D code has loaded
  * (it waits for the page to settle), and for visitors who prefer reduced motion or whose browser
  * cannot do WebGL, just the logo shows.
  */
 export function GiaOrb({
   mood = "idle",
-  className = "h-12 w-12",
-  tone = "light",
+  className = "h-16 w-16",
+  tone = "dark",
 }: {
   mood?: GiaMood;
   className?: string;
-  /** "light" for a light background (the logo keeps its colours); "dark" for a dark one (the logo turns white). */
+  /** "dark" (the default) for the navy button and header; "light" tunes the ring for a white background. */
   tone?: "light" | "dark";
 }) {
   const host = useRef<HTMLSpanElement>(null);
@@ -301,12 +301,10 @@ export function GiaOrb({
       data-drawn={drawn}
       className={`relative grid shrink-0 place-items-center rounded-full ${className}`}
     >
-      <img
-        src="/brand/gcs-mark.png"
-        alt=""
-        className="relative h-auto w-[40%]"
-        style={tone === "dark" ? { filter: "brightness(0) invert(1) drop-shadow(0 0 4px rgba(120,170,255,0.6))" } : undefined}
-      />
+      {/* a white disc behind the G, so the logo shows on the dark button */}
+      <span className="relative grid h-[52%] w-[52%] place-items-center rounded-full bg-white shadow-[0_0_10px_rgba(90,150,255,0.45)]">
+        <img src="/brand/gcs-mark.png" alt="" className="h-auto w-[74%]" />
+      </span>
     </span>
   );
 }
