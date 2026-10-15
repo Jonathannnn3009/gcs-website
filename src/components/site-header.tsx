@@ -261,7 +261,7 @@ export function SiteHeader() {
                               Know your credit. Plan your next step.
                             </p>
                             <p className="relative mt-3 text-[13px] leading-relaxed text-white/70">
-                              Request your report, try the score estimator, or talk to our advisors.
+                              Request your report, try the score estimator, or talk to our experts.
                             </p>
                             <Link
                               to="/cibil-advisory"
