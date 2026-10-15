@@ -76,6 +76,11 @@ function ServicesPage() {
         </div>
       </section>
 
+      {/* How the kinds of lender differ */}
+      <Section className="pb-0">
+        <LenderComparison />
+      </Section>
+
       {/* Start with a goal */}
       <Section>
         <Reveal>
@@ -195,11 +200,6 @@ function ServicesPage() {
           </div>
         </Section>
       ))}
-
-      {/* How the kinds of lender differ */}
-      <Section className="pt-0">
-        <LenderComparison />
-      </Section>
 
       {/* CTA */}
       <Section className="pt-0">
