@@ -104,6 +104,10 @@ function ProductDetailPage() {
   const fallbackRelated =
     related.length > 0 ? related : PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
   const code = productCode(product.title);
+  // the applicant type whose documents the panel shows: the one picked, otherwise the first
+  const activeCategory =
+    product.documentCategories?.find((c) => c.label === presetCategory) ??
+    product.documentCategories?.[0];
 
   return (
     <>
@@ -183,14 +187,25 @@ function ProductDetailPage() {
                     ))}
                   </ul>
                 ) : (
-                  <ul className="space-y-4">
-                    {product.eligibility.slice(0, 3).map((item) => (
-                      <li key={item} className="flex items-start gap-2.5">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
-                        <span className="text-sm leading-snug text-foreground">{item}</span>
+                  <ul className="space-y-5">
+                    {product.eligibility.slice(0, 5).map((item) => (
+                      <li key={item} className="flex items-start gap-3">
+                        <Check className="mt-1 h-4 w-4 shrink-0 text-gold-dark" />
+                        <span className="text-[15px] leading-relaxed text-foreground">{item}</span>
                       </li>
                     ))}
                   </ul>
+                )}
+                {!product.minimalDisclosure && (
+                  <a
+                    href="#qualify"
+                    className="inline-flex items-center gap-1.5 self-start text-xs font-bold text-gold-dark transition-colors hover:text-navy dark:hover:text-white"
+                  >
+                    {product.eligibility.length > 5
+                      ? `See all ${product.eligibility.length} requirements`
+                      : "See what you will need"}
+                    <ArrowRight className="h-3.5 w-3.5 rotate-90" />
+                  </a>
                 )}
               </div>
             </div>
@@ -292,10 +307,12 @@ function ProductDetailPage() {
 
               <div className="border-t border-dashed border-border" />
 
-              <div className="grid sm:grid-cols-2 sm:divide-x sm:divide-border">
-                <div className="p-7 sm:p-9">
+              <div>
+                <div id="qualify" className="scroll-mt-28 p-7 sm:p-9">
                   <TopicHeader icon={UserCheck} title="Do you qualify?" />
-                  <ul className="mt-6 space-y-3.5">
+                  <ul
+                    className={`mt-6 grid gap-x-10 gap-y-3.5 ${product.eligibility.length > 4 ? "md:grid-cols-2" : ""}`}
+                  >
                     {product.eligibility.map((item) => (
                       <li
                         key={item}
@@ -308,70 +325,123 @@ function ProductDetailPage() {
                   </ul>
 
                   {product.documentCategories ? (
-                    <>
-                      <p className="mt-6 text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
+                    <div className="mt-8">
+                      <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
                         Which One Are You
                       </p>
-                      <div className="mt-3 space-y-3">
-                        {product.documentCategories.map((cat) => (
-                          <div key={cat.label}>
-                            <span className="block text-sm font-bold text-navy dark:text-white">{cat.label}</span>
-                            <span className="mt-0.5 block text-sm leading-relaxed text-muted-foreground">
+                      {/* one row per applicant type: the name on the left, what it means on the right */}
+                      <div className="mt-3 overflow-hidden rounded-xl border border-border">
+                        {product.documentCategories.map((cat, i) => (
+                          <div
+                            key={cat.label}
+                            className={`grid gap-1.5 bg-bg-light/50 px-5 py-4 sm:grid-cols-[11rem_1fr] sm:gap-6 dark:bg-white/5 ${
+                              i > 0 ? "border-t border-border" : ""
+                            }`}
+                          >
+                            <span className="text-sm font-bold text-navy dark:text-white">
+                              {cat.label}
+                            </span>
+                            <span className="text-sm leading-relaxed text-muted-foreground">
                               {cat.description}
                             </span>
                           </div>
                         ))}
                       </div>
-                    </>
+                    </div>
                   ) : null}
                 </div>
                 <div className="navy-panel p-7 sm:p-9">
                   <TopicHeader icon={FileText} title="Paperwork you'll need" dark />
 
-                  {product.documentCategories ? (
-                    <>
-                      <div className="mt-4 flex flex-wrap gap-1.5">
-                        {product.documentCategories.map((cat) => (
-                          <button
-                            key={cat.label}
-                            type="button"
-                            onClick={() => setPresetCategory(cat.label)}
-                            className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
-                              presetCategory === cat.label
-                                ? "border-gold bg-gold text-navy"
-                                : "border-white/20 text-white/60 hover:border-gold/40 hover:text-white"
-                            }`}
+                  <div className="mt-2 grid gap-y-6">
+                    <div>
+                      {product.documentCategories ? (
+                        <>
+                          <div
+                            className="mt-4 flex flex-wrap gap-1.5"
+                            role="tablist"
+                            aria-label="Applicant type"
                           >
-                            {cat.label}
-                          </button>
-                        ))}
-                      </div>
-                      <p className="mt-4 text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
-                        For Every Applicant
+                            {product.documentCategories.map((cat) => (
+                              <button
+                                key={cat.label}
+                                type="button"
+                                role="tab"
+                                aria-selected={activeCategory?.label === cat.label}
+                                onClick={() => setPresetCategory(cat.label)}
+                                className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
+                                  activeCategory?.label === cat.label
+                                    ? "border-gold bg-gold text-navy"
+                                    : "border-white/20 text-white/60 hover:border-gold/40 hover:text-white"
+                                }`}
+                              >
+                                {cat.label}
+                              </button>
+                            ))}
+                          </div>
+                          {activeCategory ? (
+                            <>
+                              <p className="mt-5 text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
+                                For {activeCategory.label}
+                              </p>
+                              <ul className="mt-3 space-y-3">
+                                {activeCategory.items.map((item) => (
+                                  <li
+                                    key={item}
+                                    className="flex items-start gap-3 text-[14px] leading-relaxed text-white/75"
+                                  >
+                                    <CheckBadge dark />
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </>
+                          ) : null}
+                        </>
+                      ) : (
+                        <ul className="mt-4 space-y-3.5">
+                          {product.documents.map((item) => (
+                            <li
+                              key={item}
+                              className="flex items-start gap-3 text-[15px] leading-relaxed text-white/75"
+                            >
+                              <CheckBadge dark />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+
+                    <div>
+                      {product.documentCategories ? (
+                        <>
+                          <p className="mt-4 text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
+                            For Every Applicant
+                          </p>
+                          <ul className="mt-3 space-y-3">
+                            {product.documents.map((item) => (
+                              <li
+                                key={item}
+                                className="flex items-start gap-3 text-[14px] leading-relaxed text-white/75"
+                              >
+                                <CheckBadge dark />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      ) : null}
+
+                      <p className="mt-5 text-xs leading-relaxed text-white/50">
+                        {product.documentCategories
+                          ? "This is the usual list for each type of applicant. "
+                          : ""}
+                        Get the exact checklist for {product.title.toLowerCase()}, sent as a PDF you
+                        can save or print.
                       </p>
-                    </>
-                  ) : null}
 
-                  <ul className="mt-6 space-y-3.5">
-                    {product.documents.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-start gap-3 text-[15px] leading-relaxed text-white/75"
-                      >
-                        <CheckBadge dark />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {!product.documentCategories && (
-                    <p className="mt-4 text-xs leading-relaxed text-white/50">
-                      Get the exact checklist for {product.title.toLowerCase()}, sent as a PDF you
-                      can save or print.
-                    </p>
-                  )}
-
-                  <ChecklistGate
+                      <ChecklistGate
                     pdfHref={`/checklists/${product.slug}-checklist.pdf`}
                     pdfHrefByCategory={
                       product.slug === "home-loan"
@@ -385,9 +455,11 @@ function ProductDetailPage() {
                     productTitle={product.title}
                     productSlug={product.slug}
                     categories={product.documentCategories?.map((c) => c.label)}
-                    presetCategory={presetCategory}
+                    presetCategory={activeCategory?.label ?? presetCategory}
                     intakeFields={intakeFields}
                   />
+                    </div>
+                  </div>
                 </div>
               </div>
 

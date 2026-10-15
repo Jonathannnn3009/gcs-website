@@ -25,6 +25,7 @@ import { Route as RatesRouteImport } from './routes/rates'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ThaneRouteImport } from './routes/thane'
 import { Route as ToolsRouteImport } from './routes/tools'
+import { Route as TrackApplicationRouteImport } from './routes/track-application'
 import { Route as WhyUsRouteImport } from './routes/why-us'
 import { Route as ApiChatRouteImport } from './routes/api.chat'
 import { Route as CaLegalServicesIndexRouteImport } from './routes/ca-legal-services.index'
@@ -118,6 +119,11 @@ const ToolsRoute = ToolsRouteImport.update({
   path: '/tools',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrackApplicationRoute = TrackApplicationRouteImport.update({
+  id: '/track-application',
+  path: '/track-application',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WhyUsRoute = WhyUsRouteImport.update({
   id: '/why-us',
   path: '/why-us',
@@ -196,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRouteWithChildren
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
+  '/track-application': typeof TrackApplicationRoute
   '/why-us': typeof WhyUsRoute
   '/api/chat': typeof ApiChatRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
@@ -224,6 +231,7 @@ export interface FileRoutesByTo {
   '/rates': typeof RatesRoute
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
+  '/track-application': typeof TrackApplicationRoute
   '/why-us': typeof WhyUsRoute
   '/api/chat': typeof ApiChatRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
@@ -255,6 +263,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRouteWithChildren
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
+  '/track-application': typeof TrackApplicationRoute
   '/why-us': typeof WhyUsRoute
   '/api/chat': typeof ApiChatRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
@@ -287,6 +296,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/thane'
     | '/tools'
+    | '/track-application'
     | '/why-us'
     | '/api/chat'
     | '/ca-legal-services/$slug'
@@ -315,6 +325,7 @@ export interface FileRouteTypes {
     | '/rates'
     | '/thane'
     | '/tools'
+    | '/track-application'
     | '/why-us'
     | '/api/chat'
     | '/ca-legal-services/$slug'
@@ -345,6 +356,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/thane'
     | '/tools'
+    | '/track-application'
     | '/why-us'
     | '/api/chat'
     | '/ca-legal-services/$slug'
@@ -376,6 +388,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRouteWithChildren
   ThaneRoute: typeof ThaneRoute
   ToolsRoute: typeof ToolsRoute
+  TrackApplicationRoute: typeof TrackApplicationRoute
   WhyUsRoute: typeof WhyUsRoute
   ApiChatRoute: typeof ApiChatRoute
   CaLegalServicesSlugRoute: typeof CaLegalServicesSlugRoute
@@ -498,6 +511,13 @@ declare module '@tanstack/react-router' {
       path: '/tools'
       fullPath: '/tools'
       preLoaderRoute: typeof ToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/track-application': {
+      id: '/track-application'
+      path: '/track-application'
+      fullPath: '/track-application'
+      preLoaderRoute: typeof TrackApplicationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/why-us': {
@@ -632,6 +652,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRouteWithChildren,
   ThaneRoute: ThaneRoute,
   ToolsRoute: ToolsRoute,
+  TrackApplicationRoute: TrackApplicationRoute,
   WhyUsRoute: WhyUsRoute,
   ApiChatRoute: ApiChatRoute,
   CaLegalServicesSlugRoute: CaLegalServicesSlugRoute,

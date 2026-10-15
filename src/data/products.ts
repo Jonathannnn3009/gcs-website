@@ -95,12 +95,16 @@ const SALARIED_DOCS = [
   "Last 6 months' bank statement showing salary credits",
   "Latest Form 16, or last 2 years' Form 16",
   "Offer or appointment letter, if under 1 year with the current employer",
+  "Last 2 years' ITR and Form 26AS, if your income is taxable",
+  "Details of existing loans, with EMIs and statements",
 ];
 const SELF_EMPLOYED_DOCS = [
   "Last 3 years' ITR with computation of income",
   "Last 3 years' audited financials — P&L and balance sheet, where applicable",
   "Last 12 months' bank statements (savings and current account)",
   "Business proof — GST registration, shop licence, partnership deed or MOA/AOA as applicable",
+  "GST returns for the last 12 months, where registered",
+  "Details of existing loans, with EMIs and statements",
 ];
 const NRI_DOCS = [
   "Valid passport, and your visa, work permit or residence permit (OCI or PIO card, if you hold one)",
@@ -119,20 +123,126 @@ const APPLICANT_DOC_CATEGORIES = [
   {
     label: "Salaried",
     description:
-      "You draw a fixed monthly salary from an employer. Lenders mainly check salary slips, Form 16 and bank credits.",
+      "You draw a fixed monthly salary from an employer, in a private company, a government job or a public-sector unit. Lenders mainly check your salary slips, Form 16 and the salary credits in your bank account, and how long you have been with your employer. A steady job and a regular record of salary credits usually make the process simpler.",
     items: SALARIED_DOCS,
   },
   {
     label: "Self-Employed",
     description:
-      "You run a business, practice a profession, or freelance. Lenders look at ITRs, audited financials and business banking.",
+      "You run a business, practise a profession such as medicine, accountancy or architecture, or work as a freelancer. Lenders look at your ITRs, your financial statements, your GST returns and your business bank statements to judge how steady your income is. Returns filed on time and accounts in order make approval easier.",
     items: SELF_EMPLOYED_DOCS,
   },
   {
     label: "NRI",
     description:
-      "You live and work outside India. Lenders check your passport, visa, overseas job or business and NRE/NRO account, and some ask for a resident Indian co-applicant. See the NRI section below for how it works.",
+      "You live and work outside India, for example in the Gulf, the UK, the US or Singapore. Lenders check your passport, visa, your job or business abroad and your NRE or NRO account, and some ask for a resident Indian co-applicant. The paperwork can be completed from abroad with a Power of Attorney. See the NRI section below for how it works.",
     items: NRI_DOCS,
+  },
+];
+
+/** Salaried and self-employed only, for loans lenders do not usually offer to NRIs. */
+const RESIDENT_DOC_CATEGORIES = APPLICANT_DOC_CATEGORIES.filter((c) => c.label !== "NRI");
+
+const PROPRIETOR_DOCS = [
+  "Proprietor's KYC: PAN, Aadhaar and address proof",
+  "Business proof: GST registration, Udyam, shop licence or equivalent",
+  "Last 3 years' ITR with computation of income",
+  "Last 3 years' financial statements (P&L and balance sheet), audited where applicable",
+  "Last 12 months' current and savings account statements",
+  "GST returns for the last 12 months, where registered",
+  "Details of existing loans, with EMIs and statements",
+];
+const PARTNERSHIP_DOCS = [
+  "Partnership deed or LLP agreement, and registration proof",
+  "PAN of the firm or LLP, and KYC of every partner",
+  "Last 3 years' ITR of the firm and of the partners",
+  "Last 3 years' audited financial statements of the firm",
+  "Last 12 months' bank statements of the firm",
+  "GST returns for the last 12 months",
+  "Details of existing loans, with EMIs and statements",
+];
+const COMPANY_DOCS = [
+  "Certificate of incorporation, MOA and AOA",
+  "Company PAN, and KYC of every director and promoter",
+  "List of directors and the shareholding pattern",
+  "Last 3 years' audited financial statements and ITR of the company",
+  "Last 12 months' current account statements",
+  "GST returns for the last 12 months",
+  "Board resolution authorising the loan, and details of existing loans",
+];
+/** For business loans, where the paperwork follows how the business is set up. */
+const BUSINESS_DOC_CATEGORIES = [
+  {
+    label: "Proprietor / Professional",
+    description:
+      "You run a business in your own name, or practise a profession such as medicine, law, accountancy or architecture. There is no separate company, so the lender looks at you and the business together: your ITRs, your financial statements and your business bank account. Clear books and returns filed on time help a lot.",
+    items: PROPRIETOR_DOCS,
+  },
+  {
+    label: "Partnership / LLP",
+    description:
+      "The business is a partnership firm or an LLP. The lender checks the firm's registration, its financials and its bank statements, and also the standing of each partner, so every partner's KYC and tax returns are usually needed. A signed partnership deed that allows borrowing keeps things smooth.",
+    items: PARTNERSHIP_DOCS,
+  },
+  {
+    label: "Company",
+    description:
+      "The business is a private or public limited company. The lender checks the incorporation papers, the directors and the shareholding, the company's audited financials and its bank statements. A board resolution authorising the loan is usually needed, and directors may be asked to stand as guarantors.",
+    items: COMPANY_DOCS,
+  },
+];
+const LRD_DOC_CATEGORIES = [
+  {
+    label: "Individual owner",
+    description: "You own the let-out property in your own name, or jointly with family. The lender looks at the lease, the rent you receive and your income tax returns. A registered lease with a reliable tenant, and rent paid regularly into your bank account, makes the file strong.",
+    items: [
+      "Owner's KYC: PAN, Aadhaar and address proof",
+      "Registered lease deed and the tenant's KYC",
+      "Last 12 months' rent receipts and the bank statement showing the rent",
+      "Last 3 years' ITR showing the rental income",
+      "Property title documents and the latest property tax receipt",
+    ],
+  },
+  {
+    label: "Company / Firm",
+    description: "The property is owned by a company, firm or LLP. The lender checks the entity's papers, the lease and the tenant, the rent received and the financials. The loan is usually repaid from the rent, so a long lease with a well-known tenant is a big plus.",
+    items: [
+      "Constitution papers: incorporation certificate, MOA and AOA, or partnership deed",
+      "KYC of the company or firm and of its directors or partners",
+      "Registered lease deed and the tenant's KYC",
+      "Last 12 months' rent receipts and the bank statement showing the rent",
+      "Last 3 years' audited financials and ITR",
+      "Property title documents and the latest property tax receipt",
+    ],
+  },
+  {
+    label: "NRI",
+    description: "You live and work outside India and own the let-out property in India. The lender checks the lease, the rent paid into your NRO account, and your overseas income and documents. A Power of Attorney can complete the signing in India for you.",
+    items: NRI_DOCS,
+  },
+];
+const EDUCATION_DOC_CATEGORIES = [
+  {
+    label: "Student",
+    description: "The person who will study. The lender looks at the course and the institution, the total cost and your academic record, along with a co-applicant who shares the loan. Having your admission letter and fee details ready speeds things up, and for study abroad your visa papers come in later.",
+    items: [
+      "Student's KYC: PAN or Aadhaar, and passport for study abroad",
+      "Admission letter or offer letter from the institution",
+      "Fee structure and the cost of the course, with living costs if you want them covered",
+      "Mark sheets and certificates from the last two qualifications",
+      "Entrance or language test score card, where applicable (for example GRE, GMAT, IELTS)",
+      "Visa or I-20, once you have it, for study abroad",
+    ],
+  },
+  {
+    label: "Co-applicant: Salaried",
+    description: "A parent or guardian in India who earns a salary and shares the loan. The lender looks at their salary slips, bank statements, tax returns and credit history, because they are the main source of repayment during and after the course.",
+    items: SALARIED_DOCS,
+  },
+  {
+    label: "Co-applicant: Self-Employed",
+    description: "A parent or guardian in India who runs a business or practises a profession. The lender looks at their tax returns, financial statements, business bank statements and credit history, because they are the main source of repayment during and after the course.",
+    items: SELF_EMPLOYED_DOCS,
   },
 ];
 
@@ -273,11 +383,6 @@ const CHARGES_PROPERTY: ChargesInfo = {
         "Stamp duty and registration follow your state's rules. Property or loan insurance is charged only where you take it.",
     },
     {
-      label: "Late payment and penal interest",
-      value:
-        "If an EMI is late, the lender adds a penalty on the overdue amount, and a missed EMI can also lower your credit score. Each lender sets its own rate.",
-    },
-    {
       label: "Foreclosure and part-prepayment",
       value:
         "Floating-rate loans to individuals generally carry no prepayment or foreclosure charge under RBI rules. A fixed-rate loan may charge a small percentage of the amount you prepay.",
@@ -297,11 +402,6 @@ const CHARGES_UNSECURED: ChargesInfo = {
     {
       label: "Documentation and other charges",
       value: "Some lenders add a small fixed fee for documentation or a statement of account.",
-    },
-    {
-      label: "Late payment and penal interest",
-      value:
-        "If an EMI is late, the lender adds a penalty on the overdue amount, and a missed EMI can also lower your credit score. Each lender sets its own rate.",
     },
     {
       label: "Foreclosure and part-prepayment",
@@ -326,11 +426,6 @@ const CHARGES_VEHICLE: ChargesInfo = {
         "A small fee for the paperwork, and for recording the lender's charge on the vehicle's registration (RC).",
     },
     {
-      label: "Late payment and penal interest",
-      value:
-        "If an EMI is late, the lender adds a penalty on the overdue amount, and a missed EMI can also lower your credit score. Each lender sets its own rate.",
-    },
-    {
       label: "Foreclosure and part-prepayment",
       value:
         "Closing early may carry a charge, usually a percentage of the outstanding amount, depending on the lender and how long you have held the loan.",
@@ -342,11 +437,6 @@ const CHARGES_VEHICLE: ChargesInfo = {
 
 const CHARGES_INTRO =
   "Besides interest, a lender may charge a few fees. It helps to know them before you apply, so there are no surprises.";
-const LATE_PAYMENT_ROW = {
-  label: "Late payment and penal interest",
-  value:
-    "If an EMI or interest payment is late, the lender adds a penalty on the overdue amount, and a missed payment can also lower your credit score. Each lender sets its own rate.",
-};
 const CHARGES_LIMIT: ChargesInfo = {
   intro: CHARGES_INTRO,
   rows: [
@@ -390,7 +480,6 @@ const CHARGES_COMMERCIAL: ChargesInfo = {
       label: "Stamp duty and registration",
       value: "These follow your state's rules and apply when the loan documents and mortgage are registered.",
     },
-    LATE_PAYMENT_ROW,
     {
       label: "Foreclosure and part-prepayment",
       value:
@@ -437,7 +526,6 @@ const CHARGES_CGTMSE: ChargesInfo = {
       label: "Processing fee",
       value: "The lender may charge its normal processing fee plus GST on the loan.",
     },
-    LATE_PAYMENT_ROW,
     {
       label: "Foreclosure and part-prepayment",
       value:
@@ -464,7 +552,6 @@ const CHARGES_SECURITIES: ChargesInfo = {
       value:
         "If the value of what you pledged falls, the lender may ask you to add more or repay part of the loan. This is not a fee, but it is worth knowing about.",
     },
-    LATE_PAYMENT_ROW,
   ],
   note: CHARGES_NOTE,
 };
@@ -486,7 +573,6 @@ const CHARGES_EDUCATION: ChargesInfo = {
       value:
         "Where the loan is backed by property, the lender may charge for a legal check and a valuation. Loan insurance is charged only where you take it.",
     },
-    LATE_PAYMENT_ROW,
     {
       label: "Foreclosure and part-prepayment",
       value:
@@ -702,6 +788,7 @@ export const PRODUCTS: Product[] = [
     documents: [KYC, "Registered lease deed and rent receipts", PROPERTY_DOCS],
     charges: CHARGES_COMMERCIAL,
     nri: NRI_LRD,
+    documentCategories: LRD_DOC_CATEGORIES,
   },
   {
     slug: "balance-transfer",
@@ -734,12 +821,12 @@ export const PRODUCTS: Product[] = [
     ],
     documents: [
       KYC,
-      INCOME,
       "Current loan statement, sanction letter and foreclosure letter",
       PROPERTY_DOCS,
     ],
     charges: CHARGES_PROPERTY,
     nri: NRI_BALANCE_TRANSFER,
+    documentCategories: APPLICANT_DOC_CATEGORIES,
   },
   {
     slug: "dlod",
@@ -768,8 +855,9 @@ export const PRODUCTS: Product[] = [
       "Residential, commercial or industrial property that can be pledged as security",
       "A good credit history; a CIBIL score of around 700 or above may help",
     ],
-    documents: [KYC, BUSINESS_DOCS, PROPERTY_DOCS],
+    documents: [KYC, PROPERTY_DOCS],
     charges: CHARGES_LIMIT,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
 
   {
@@ -801,8 +889,9 @@ export const PRODUCTS: Product[] = [
       "A steady business income that shows in your bank statements",
       "A CIBIL score of around 700 or above for the owner may help you get better terms; lower scores are reviewed case by case",
     ],
-    documents: [KYC, BUSINESS_DOCS, "Proof of business ownership"],
+    documents: [KYC, "Proof of business ownership"],
     charges: CHARGES_UNSECURED,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "cgtmse",
@@ -830,8 +919,9 @@ export const PRODUCTS: Product[] = [
       "A business in India in manufacturing or services; some activities, such as retail trade, may not be covered",
       "Proprietorship, partnership, LLP or company",
     ],
-    documents: [KYC, BUSINESS_DOCS, "Udyam registration and project report"],
+    documents: [KYC, "Udyam registration and project report"],
     charges: CHARGES_CGTMSE,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "unsecured-term-loan",
@@ -860,8 +950,9 @@ export const PRODUCTS: Product[] = [
       "Business owner or self-employed professional with a steady business income",
       "Proprietorship, partnership, LLP or company",
     ],
-    documents: [KYC, BUSINESS_DOCS],
+    documents: [KYC],
     charges: CHARGES_UNSECURED,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "unsecured-dod",
@@ -889,8 +980,9 @@ export const PRODUCTS: Product[] = [
       "Self-employed business owner or professional running a current account",
       "A good credit record for the business and its owners; a CIBIL score of around 700 or above may help",
     ],
-    documents: [KYC, BUSINESS_DOCS],
+    documents: [KYC],
     charges: CHARGES_LIMIT,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "project-funding",
@@ -926,6 +1018,7 @@ export const PRODUCTS: Product[] = [
       "Approvals, plans and land title documents",
     ],
     charges: CHARGES_COMMERCIAL,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
 
   {
@@ -954,8 +1047,9 @@ export const PRODUCTS: Product[] = [
       "Proprietorship, partnership, LLP or company",
       "A good credit record for the business and its promoters; a CIBIL score of around 700 or above may help",
     ],
-    documents: [KYC, BUSINESS_DOCS, "Audited financials and stock / debtor statements"],
+    documents: [KYC, "Audited financials and stock / debtor statements"],
     charges: CHARGES_LIMIT,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "cash-credit",
@@ -983,8 +1077,9 @@ export const PRODUCTS: Product[] = [
       "Proprietorship, partnership, LLP or company",
       "A good credit record for the business and its promoters",
     ],
-    documents: [KYC, BUSINESS_DOCS, "Stock and debtor ageing statements"],
+    documents: [KYC, "Stock and debtor ageing statements"],
     charges: CHARGES_LIMIT,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "overdraft-limit",
@@ -1012,8 +1107,9 @@ export const PRODUCTS: Product[] = [
       "Self-employed business owner or professional with a steady income",
       "Proprietorship, partnership, LLP or company",
     ],
-    documents: [KYC, BUSINESS_DOCS],
+    documents: [KYC],
     charges: CHARGES_LIMIT,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "bank-guarantee",
@@ -1041,8 +1137,9 @@ export const PRODUCTS: Product[] = [
       "Proprietorship, partnership, LLP or company",
       "A good credit standing for the business and its promoters",
     ],
-    documents: [KYC, BUSINESS_DOCS, "Tender / contract copy and BG format"],
+    documents: [KYC, "Tender / contract copy and BG format"],
     charges: CHARGES_GUARANTEE,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "letter-of-credit",
@@ -1070,8 +1167,9 @@ export const PRODUCTS: Product[] = [
       "Proprietorship, partnership, LLP or company",
       "A good credit standing for the business and its promoters",
     ],
-    documents: [KYC, BUSINESS_DOCS, "Proforma invoice and supplier agreement"],
+    documents: [KYC, "Proforma invoice and supplier agreement"],
     charges: CHARGES_GUARANTEE,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "working-capital-term-loan",
@@ -1099,8 +1197,9 @@ export const PRODUCTS: Product[] = [
       "Proprietorship, partnership, LLP or company",
       "A good credit record for the business and its promoters",
     ],
-    documents: [KYC, BUSINESS_DOCS, "Audited financials and existing sanction letters"],
+    documents: [KYC, "Audited financials and existing sanction letters"],
     charges: CHARGES_LIMIT,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
 
   {
@@ -1132,8 +1231,9 @@ export const PRODUCTS: Product[] = [
       "A consumer CIBIL score of 700 or more",
       "Proprietorship, partnership, LLP or company",
     ],
-    documents: [KYC, BUSINESS_DOCS, "Machinery quotation or invoice from the supplier"],
+    documents: [KYC, "Machinery quotation or invoice from the supplier"],
     charges: CHARGES_COMMERCIAL,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "personal-loan",
@@ -1164,8 +1264,9 @@ export const PRODUCTS: Product[] = [
       "Salaried, or a self-employed professional or business owner",
       "If salaried, generally at least 1 year with your current employer",
     ],
-    documents: [KYC, INCOME],
+    documents: [KYC],
     charges: CHARGES_UNSECURED,
+    documentCategories: RESIDENT_DOC_CATEGORIES,
   },
   {
     slug: "loan-against-securities",
@@ -1283,7 +1384,6 @@ export const PRODUCTS: Product[] = [
     documents: [
       KYC,
       "Admission letter and fee structure",
-      "Co-applicant income proof",
       "Academic records",
     ],
     checklistIntake: [
@@ -1306,6 +1406,7 @@ export const PRODUCTS: Product[] = [
       { key: "country", label: "Country", type: "text" },
     ],
     charges: CHARGES_EDUCATION,
+    documentCategories: EDUCATION_DOC_CATEGORIES,
   },
 
   {
@@ -1333,7 +1434,7 @@ export const PRODUCTS: Product[] = [
       "A CIBIL score of 650+ is usually considered; 750+ may help you get better rates",
       "Resident Indian, salaried or self-employed",
     ],
-    documents: [KYC, INCOME, "Dealer's vehicle quotation"],
+    documents: [KYC, "Dealer's vehicle quotation"],
     checklistIntake: [
       {
         key: "purchaseFrom",
@@ -1350,6 +1451,7 @@ export const PRODUCTS: Product[] = [
       },
     ],
     charges: CHARGES_VEHICLE,
+    documentCategories: RESIDENT_DOC_CATEGORIES,
   },
   {
     slug: "used-car-loan",
@@ -1379,7 +1481,7 @@ export const PRODUCTS: Product[] = [
       "At least 1 year in your current job or business",
       "A CIBIL score of around 700 or above may help you get a better rate; lower scores are reviewed case by case",
     ],
-    documents: [KYC, INCOME, "RC copy, insurance and valuation report"],
+    documents: [KYC, "RC copy, insurance and valuation report"],
     checklistIntake: [
       {
         key: "purchaseFrom",
@@ -1396,6 +1498,7 @@ export const PRODUCTS: Product[] = [
       },
     ],
     charges: CHARGES_VEHICLE,
+    documentCategories: RESIDENT_DOC_CATEGORIES,
   },
   {
     slug: "car-refinance",
@@ -1424,7 +1527,7 @@ export const PRODUCTS: Product[] = [
       "Resident Indian, salaried or self-employed",
       "A CIBIL score of around 700 or above may help you get better terms; lower scores are reviewed case by case",
     ],
-    documents: [KYC, INCOME, "RC, insurance and any current loan statement"],
+    documents: [KYC, "RC, insurance and any current loan statement"],
     checklistIntake: [
       {
         key: "loanAmount",
@@ -1435,6 +1538,7 @@ export const PRODUCTS: Product[] = [
       },
     ],
     charges: CHARGES_VEHICLE,
+    documentCategories: RESIDENT_DOC_CATEGORIES,
   },
   {
     slug: "commercial-vehicle",
@@ -1471,6 +1575,7 @@ export const PRODUCTS: Product[] = [
       "Vehicle quotation, or registration papers for a used vehicle",
     ],
     charges: CHARGES_VEHICLE,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
   },
   {
     slug: "private-funding",

@@ -59,7 +59,7 @@ export function SiteHeader() {
           : "border-transparent bg-white/80 backdrop-blur-md dark:bg-card/80"
       }`}
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-5 py-5 sm:px-8 lg:px-6 xl:gap-4 2xl:max-w-[90rem] 2xl:px-10">
+      <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-5 py-5 sm:px-8 lg:px-6 xl:gap-4 min-[1360px]:max-w-[88rem] 2xl:max-w-[90rem] 2xl:px-10">
         {/* Logo — fixed width, never shrinks even if the nav grows */}
         <Link
           to="/"
@@ -73,7 +73,7 @@ export function SiteHeader() {
         {/* Right side */}
         <div className="flex items-center justify-end gap-3 2xl:gap-4">
           {/* Desktop nav */}
-          <nav className="hidden items-center xl:flex">
+          <nav className="hidden items-center min-[1360px]:flex">
             {NAV.map((link) => {
               if (link.dropdown) {
                 return (
@@ -91,7 +91,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-0.5 rounded-md px-1.5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors hover:text-foreground min-[1440px]:gap-1 min-[1440px]:px-2 min-[1440px]:text-sm 2xl:px-3 2xl:text-[15px]"
+                      className="group relative flex items-center gap-0.5 rounded-md px-1.5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors hover:text-foreground"
                     >
                       {link.label}
                       <ChevronDown
@@ -383,7 +383,7 @@ export function SiteHeader() {
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
-                  className="relative rounded-md px-1.5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-1.5 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-0.75rem)] min-[1440px]:px-2 min-[1440px]:text-sm min-[1440px]:after:left-2 min-[1440px]:hover:after:w-[calc(100%-1rem)] 2xl:px-3 2xl:text-[15px] 2xl:after:left-3 2xl:hover:after:w-[calc(100%-1.5rem)]"
+                  className="relative rounded-md px-1.5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-1.5 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-0.75rem)]"
                 >
                   {link.label}
                 </Link>
@@ -394,7 +394,7 @@ export function SiteHeader() {
           <LanguageSwitcher className="hidden sm:inline-flex" />
 
           {/* Apply CTA */}
-          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-4 xl:text-[13px] min-[1440px]:py-2.5 min-[1440px]:px-5 min-[1440px]:text-sm 2xl:px-7">
+          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-4 xl:text-[13px]">
             Apply Now
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
@@ -404,7 +404,7 @@ export function SiteHeader() {
             type="button"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             onClick={() => setMobileOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border xl:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border min-[1360px]:hidden"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -414,7 +414,7 @@ export function SiteHeader() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div
-          className="border-t bg-white xl:hidden dark:bg-card"
+          className="border-t bg-white min-[1360px]:hidden dark:bg-card"
           style={{ animation: "gcs-slide-up 300ms ease both" }}
         >
           <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">

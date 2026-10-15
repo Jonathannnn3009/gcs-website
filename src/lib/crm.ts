@@ -9,3 +9,11 @@ export const CRM_API: string =
 export function crmAsset(path: string): string {
   return path.startsWith("/public/") ? `${CRM_API}${path}` : path;
 }
+
+/**
+ * Where the CRM's pages (sign-in, tracking) are opened from the browser. On the live site the CRM is
+ * served from the same domain under /crm. For local development `.env.development` points this at
+ * the CRM's own dev server.
+ */
+export const CRM_APP: string =
+  ((import.meta.env["VITE_CRM_APP_URL"] as string | undefined) ?? "").replace(/\/$/, "") || "/crm";

@@ -367,6 +367,7 @@ export const NAV_HEADER = [
   { label: "Case Studies", to: "/case-studies" },
   { label: "CA & Legal", to: "/ca-legal-services" },
   { label: "Become Partner", to: "/partner" },
+  { label: "Track Application", to: "/track-application" },
   { label: "Contact Us", to: "/contact" },
 ];
 
@@ -413,6 +414,7 @@ export const FOOTER_EXPLORE = [
   { label: "Case Studies", to: "/case-studies" },
   { label: "CA & Legal Services", to: "/ca-legal-services" },
   { label: "Become Partner", to: "/partner" },
+  { label: "Track Application", to: "/track-application" },
   { label: "Contact Us", to: "/contact" },
 ];
 
