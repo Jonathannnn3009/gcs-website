@@ -17,6 +17,7 @@ import { PRODUCTS, getProduct } from "@/data/products";
 import { useProduct } from "@/lib/site-content";
 import { FactsStrip } from "@/components/facts-strip";
 import { CheckBadge, TopicHeader } from "@/components/topic-header";
+import { ChargesBlock, NriBlock } from "@/components/product-extras";
 import { useIntakeFields } from "@/lib/page-lists";
 import { CONTACT, waLink } from "@/data/site";
 import { PageCalculators } from "@/components/page-calculators";
@@ -389,6 +390,9 @@ function ProductDetailPage() {
                   />
                 </div>
               </div>
+
+              {product.charges ? <ChargesBlock charges={product.charges} /> : null}
+              {product.nri ? <NriBlock nri={product.nri} /> : null}
                 </>
               )}
             </div>

@@ -175,14 +175,20 @@ HOME_LOAN_NRI = dict(
                 "CDC certificate (Continuous Discharge Certificate)",
                 "Resident Indian (should be a blood relative of the NRI) as co-applicant — co-applicant's "
                 "PAN card copy & residence address proof",
-                "Copy of valid Visa stamped on Passport",
+                "Copy of valid Visa stamped on Passport (work permit or residence permit, as applicable)",
+                "OCI or PIO card || If you hold one",
+                "Overseas address proof and permanent address proof in India",
+                "Salary-account statements from abroad || Latest 6 months",
                 "Copy of employment contract",
                 "Copy of last filed Income Tax Return — Form W2 (US) / P60 (UK) / ITR / Indian ITRs || If filed",
                 "Customer should be a confirmed employee — contract copies",
                 "Embassy / Consulate / local specialised vendor in India",
                 "Details of HR person — name, contact no., designation and email ID",
                 "Copy of Leave & Licence agreement of shop || If applicable",
-                "Copy of POA (to be allowed) || If the customer is not in India to sign the agreement",
+                "Copy of POA (to be allowed), attested by the Indian embassy / consulate or notarised and "
+                "apostilled || If the customer is not in India to sign the agreement",
+                "Business registration or licence, with tax returns and financials for the last two years || "
+                "If self-employed abroad",
                 "Obligation details",
             ],
         },

@@ -41,6 +41,22 @@ export type ChecklistIntakeField =
   | { key: string; label: string; type: "select"; options: string[] }
   | { key: string; label: string; type: "date" };
 
+/** What a lender may charge besides interest: shown as a small two-column table on the loan page. */
+export type ChargesInfo = {
+  intro: string;
+  rows: { label: string; value: string }[];
+  note?: string;
+};
+
+/** Extra guidance for applicants who live abroad. */
+export type NriInfo = {
+  heading: string;
+  intro: string;
+  points: { title: string; body: string }[];
+  faqs: { q: string; a: string }[];
+  note: string;
+};
+
 export type Product = {
   slug: string;
   icon: LucideIcon;
@@ -52,6 +68,10 @@ export type Product = {
   features: string[];
   eligibility: string[];
   documents: string[];
+  /** Fees and other charges, in plain words, where the loan has them. */
+  charges?: ChargesInfo;
+  /** A fuller section for NRI applicants, on loans that lenders offer to them. */
+  nri?: NriInfo;
   /** Only for products where paperwork genuinely differs by applicant type. */
   documentCategories?: { label: string; description: string; items: string[] }[];
   /** For sensitive/informal products we don't want to spell out publicly — show only the top facts, then a direct "contact us" instead of features/eligibility/documents. */
@@ -83,11 +103,15 @@ const SELF_EMPLOYED_DOCS = [
   "Business proof — GST registration, shop licence, partnership deed or MOA/AOA as applicable",
 ];
 const NRI_DOCS = [
-  "Passport and valid visa copy",
-  "Last 6 months' salary slips and a copy of the employment contract",
-  "Last 12 months' NRE/NRO account statements",
-  "Power of Attorney (POA) in favour of a resident Indian representative, for signing if the applicant can't be present in India",
-  "A resident Indian co-applicant's PAN card and address proof",
+  "Valid passport, and your visa, work permit or residence permit (OCI or PIO card, if you hold one)",
+  "Employment contract or appointment letter, and your last 3 to 6 months' salary slips from abroad",
+  "Last 6 months' overseas salary-account statements, and last 12 months' NRE/NRO account statements",
+  "Self-employed NRIs: business registration or licence, last 2 years' tax returns and financial statements",
+  "Last filed income tax return of your country of residence (for example W-2, P60), and Indian ITRs if you file them",
+  "Overseas address proof and your permanent address proof in India",
+  "Details of existing loans, in India or abroad",
+  "A resident Indian co-applicant's KYC (PAN and address proof), if the lender asks for one",
+  "Power of Attorney (POA) in favour of a resident Indian, if you cannot be in India to sign",
 ];
 export const APPLICANT_CATEGORY_LABELS = ["Salaried", "Self-Employed", "NRI"];
 
@@ -107,10 +131,452 @@ const APPLICANT_DOC_CATEGORIES = [
   {
     label: "NRI",
     description:
-      "You live and work outside India. Expect visa, passport and NRE/NRO account checks, plus a resident co-applicant.",
+      "You live and work outside India. Lenders check your passport, visa, overseas job or business and NRE/NRO account, and some ask for a resident Indian co-applicant. See the NRI section below for how it works.",
     items: NRI_DOCS,
   },
 ];
+
+const NRI_HOME_LOAN: NriInfo = {
+  heading: "Home loans for NRIs",
+  intro:
+    "If you live and work abroad, you can still buy or build a home in India with a loan from an Indian Bank or NBFC. Much of the process can be done online, and a Power of Attorney lets a trusted person in India sign for you. We help you find lenders that lend to NRIs and guide you through each step.",
+  points: [
+    {
+      title: "Who counts as an NRI",
+      body: "Indian citizens who live and work outside India. Many lenders also accept Persons of Indian Origin (PIO) and Overseas Citizens of India (OCI) cardholders.",
+    },
+    {
+      title: "What you can buy",
+      body: "Residential and commercial property in India. NRIs cannot buy agricultural land, plantation property or a farmhouse without special permission from the RBI.",
+    },
+    {
+      title: "Your income abroad",
+      body: "Lenders look for a stable job or business overseas, with an employment contract, salary slips and overseas bank statements. Your foreign income is converted to rupees when they assess it. The minimum income and job period differ by lender.",
+    },
+    {
+      title: "How you repay",
+      body: "EMIs are usually paid from your NRE or NRO account in India, or from funds you send from abroad. The lender will tell you which routes it accepts.",
+    },
+    {
+      title: "Loan amount and tenure",
+      body: "Lenders may fund a smaller share of the property value for NRIs than for residents, and the tenure is often a little shorter. Your expert will confirm each lender's limits for your case.",
+    },
+    {
+      title: "Signing from abroad",
+      body: "A registered Power of Attorney in favour of a trusted resident Indian can sign for you in India. It is usually attested by the Indian embassy or consulate, or notarised and apostilled as the country requires. Some lenders may ask for a short visit or a video verification.",
+    },
+    {
+      title: "Tax benefits",
+      body: "NRIs who repay a home loan may be able to claim deductions on the principal and the interest, as residents can, under the tax rules in force. Please check your own position with a CA.",
+    },
+    {
+      title: "A resident co-applicant",
+      body: "Some lenders ask for a close family member living in India as co-applicant. It can help with local follow-up and with assessing the income.",
+    },
+  ],
+  faqs: [
+    {
+      q: "Can an NRI get a home loan in India?",
+      a: "Yes. Many Banks and NBFCs lend to NRIs to buy, build or renovate a home in India. Approval depends on your overseas income, how stable your job or business is, your credit history and the property.",
+    },
+    {
+      q: "Do I need to be in India to apply?",
+      a: "Not always. Most of the application can be done online or by courier, and a Power of Attorney can cover the signing in India. Some lenders may ask for a visit or a video verification.",
+    },
+    {
+      q: "Which documents do NRIs need?",
+      a: "Usually your passport and visa, your employment contract, recent salary slips, overseas and NRE/NRO bank statements, address proof abroad and in India, and the property papers. Use the NRI tab in the paperwork list above, and download the NRI checklist for the full list.",
+    },
+    {
+      q: "Is my foreign salary accepted as income?",
+      a: "Yes, usually. Lenders convert it to rupees and ask for proof such as your contract, salary slips and bank statements. Some also ask for a tax return from your country of residence.",
+    },
+    {
+      q: "Can I repay from my overseas account?",
+      a: "Most lenders collect EMIs from your NRE or NRO account in India, funded by money you send from abroad. Ask which routes your lender accepts.",
+    },
+    {
+      q: "Can I get a loan against a property I already own in India?",
+      a: "A few lenders offer it to NRIs, with extra checks on the property and your income. Tell us your case and we will tell you which lenders to approach.",
+    },
+  ],
+  note: "NRI lending is governed by RBI and FEMA rules and each lender's own policy, and the rules can change. We share general information here. Your expert will confirm what applies to you.",
+};
+
+const NRI_LAP: NriInfo = {
+  heading: "Loan against property for NRIs",
+  intro:
+    "NRIs who own a residential or commercial property in India can sometimes borrow against it. Fewer lenders offer this than home loans, and they check the property and your income more closely. We can tell you which lenders to approach.",
+  points: [
+    {
+      title: "Who can apply",
+      body: "NRIs, and often PIO and OCI cardholders, who own the property in their own name or jointly, with a clear title.",
+    },
+    {
+      title: "Which property",
+      body: "Residential and commercial property in India. Agricultural land, plantation property and farmhouses are not accepted for NRIs without RBI permission.",
+    },
+    {
+      title: "How the money can be used",
+      body: "Lenders restrict some uses, and rules on moving funds out of India apply. Money is generally used inside India, for example for business, medical or personal needs. Confirm your plan with us before applying.",
+    },
+    {
+      title: "Income checks",
+      body: "Lenders may look at your overseas income, your rental income from the property, and your NRE/NRO account statements.",
+    },
+    {
+      title: "Repayment",
+      body: "EMIs are usually paid from your NRE or NRO account in India.",
+    },
+    {
+      title: "Signing from abroad",
+      body: "A registered Power of Attorney in favour of a trusted resident Indian can complete the signing and the mortgage in India, attested as the lender requires.",
+    },
+  ],
+  faqs: [
+    {
+      q: "Can an NRI take a loan against property in India?",
+      a: "Yes, with select lenders. They usually want a property with a clear title, proof of your overseas income and your NRE/NRO account statements.",
+    },
+    {
+      q: "Can I send the money abroad?",
+      a: "There are limits on moving funds out of India under FEMA and RBI rules, and lenders restrict how the money is used. Ask us before you plan, so we can check what applies.",
+    },
+    {
+      q: "Do I need a Power of Attorney?",
+      a: "If you cannot be in India to sign, yes. A Power of Attorney in favour of a trusted resident Indian lets them complete the signing and the mortgage for you.",
+    },
+  ],
+  note: "NRI lending is governed by RBI and FEMA rules and each lender's own policy, and the rules can change. We share general information here. Your expert will confirm what applies to you.",
+};
+
+// What a lender may charge besides interest. Written as a general guide: every lender sets its own fees.
+const CHARGES_NOTE =
+  "These are general guides and every lender sets its own fees. Your expert will share the exact charges in writing before you sign.";
+const CHARGES_PROPERTY: ChargesInfo = {
+  intro:
+    "Besides interest, a lender may charge a few fees. It helps to know them before you apply, so there are no surprises.",
+  rows: [
+    {
+      label: "Processing fee",
+      value:
+        "A percentage of the loan amount plus GST, often somewhere between about 0.5% and 1.5%. Some lenders reduce or waive it during offers.",
+    },
+    {
+      label: "Legal and valuation charges",
+      value:
+        "A fee for the lender's legal check of the property papers and for a valuation visit. It is usually a fixed amount and depends on the lender and the property.",
+    },
+    {
+      label: "Stamp duty, registration and insurance",
+      value:
+        "Stamp duty and registration follow your state's rules. Property or loan insurance is charged only where you take it.",
+    },
+    {
+      label: "Late payment and penal interest",
+      value:
+        "If an EMI is late, the lender adds a penalty on the overdue amount, and a missed EMI can also lower your credit score. Each lender sets its own rate.",
+    },
+    {
+      label: "Foreclosure and part-prepayment",
+      value:
+        "Floating-rate loans to individuals generally carry no prepayment or foreclosure charge under RBI rules. A fixed-rate loan may charge a small percentage of the amount you prepay.",
+    },
+  ],
+  note: CHARGES_NOTE,
+};
+const CHARGES_UNSECURED: ChargesInfo = {
+  intro:
+    "Besides interest, a lender may charge a few fees. It helps to know them before you apply, so there are no surprises.",
+  rows: [
+    {
+      label: "Processing fee",
+      value:
+        "A percentage of the loan amount plus GST, often somewhere between about 1% and 3% for loans without security. It varies by lender and profile.",
+    },
+    {
+      label: "Documentation and other charges",
+      value: "Some lenders add a small fixed fee for documentation or a statement of account.",
+    },
+    {
+      label: "Late payment and penal interest",
+      value:
+        "If an EMI is late, the lender adds a penalty on the overdue amount, and a missed EMI can also lower your credit score. Each lender sets its own rate.",
+    },
+    {
+      label: "Foreclosure and part-prepayment",
+      value:
+        "Closing the loan early may carry a charge, usually a percentage of the outstanding amount, and some lenders allow it only after a minimum period. Ask before you prepay.",
+    },
+  ],
+  note: CHARGES_NOTE,
+};
+const CHARGES_VEHICLE: ChargesInfo = {
+  intro:
+    "Besides interest, a lender may charge a few fees. It helps to know them before you apply, so there are no surprises.",
+  rows: [
+    {
+      label: "Processing fee",
+      value:
+        "A percentage of the loan amount plus GST, often somewhere between about 0.5% and 2%. Some lenders reduce or waive it during offers.",
+    },
+    {
+      label: "Documentation and hypothecation charges",
+      value:
+        "A small fee for the paperwork, and for recording the lender's charge on the vehicle's registration (RC).",
+    },
+    {
+      label: "Late payment and penal interest",
+      value:
+        "If an EMI is late, the lender adds a penalty on the overdue amount, and a missed EMI can also lower your credit score. Each lender sets its own rate.",
+    },
+    {
+      label: "Foreclosure and part-prepayment",
+      value:
+        "Closing early may carry a charge, usually a percentage of the outstanding amount, depending on the lender and how long you have held the loan.",
+    },
+  ],
+  note: CHARGES_NOTE,
+};
+
+
+const CHARGES_INTRO =
+  "Besides interest, a lender may charge a few fees. It helps to know them before you apply, so there are no surprises.";
+const LATE_PAYMENT_ROW = {
+  label: "Late payment and penal interest",
+  value:
+    "If an EMI or interest payment is late, the lender adds a penalty on the overdue amount, and a missed payment can also lower your credit score. Each lender sets its own rate.",
+};
+const CHARGES_LIMIT: ChargesInfo = {
+  intro: CHARGES_INTRO,
+  rows: [
+    {
+      label: "Processing fee",
+      value:
+        "A percentage of the limit plus GST, often somewhere between about 0.5% and 1.5%. It is charged when the limit is sanctioned and again when it is renewed or enhanced.",
+    },
+    {
+      label: "Annual review or renewal fee",
+      value:
+        "Working-capital limits are reviewed every year. Many lenders charge a renewal or review fee at that point.",
+    },
+    {
+      label: "Inspection, valuation and legal charges",
+      value:
+        "Where the limit is backed by stock, receivables or property, the lender may charge for inspections, valuations or a legal check.",
+    },
+    {
+      label: "Penal charges",
+      value:
+        "Going over the sanctioned limit, or not routing enough business through the account, can attract extra interest or charges. Each lender sets its own terms.",
+    },
+  ],
+  note: CHARGES_NOTE,
+};
+const CHARGES_COMMERCIAL: ChargesInfo = {
+  intro: CHARGES_INTRO,
+  rows: [
+    {
+      label: "Processing fee",
+      value:
+        "A percentage of the loan amount plus GST, often somewhere between about 0.5% and 2%. For large or project-based loans it is usually agreed with the lender.",
+    },
+    {
+      label: "Legal, valuation and technical charges",
+      value:
+        "Fees for the lender's legal check, the property or project valuation, and any technical inspection. They depend on the lender and the size of the deal.",
+    },
+    {
+      label: "Stamp duty and registration",
+      value: "These follow your state's rules and apply when the loan documents and mortgage are registered.",
+    },
+    LATE_PAYMENT_ROW,
+    {
+      label: "Foreclosure and part-prepayment",
+      value:
+        "Loans taken for business purposes may carry a charge for early closure, often a small percentage of the amount prepaid. Check the terms before you prepay.",
+    },
+  ],
+  note: CHARGES_NOTE,
+};
+const CHARGES_GUARANTEE: ChargesInfo = {
+  intro: CHARGES_INTRO,
+  rows: [
+    {
+      label: "Commission",
+      value:
+        "A percentage of the guarantee or letter of credit amount, charged for the period it is valid and often billed every quarter or year. The rate depends on the lender and your profile.",
+    },
+    {
+      label: "Margin money",
+      value:
+        "Lenders usually ask you to keep a part of the amount as cash margin or a fixed deposit while the facility is in use.",
+    },
+    {
+      label: "Processing and amendment fees",
+      value:
+        "A fee when the facility is sanctioned, and a smaller one if you change the amount, the period or the beneficiary.",
+    },
+    {
+      label: "Invocation or devolvement",
+      value:
+        "If the guarantee is called on, or a letter of credit is paid by the lender, the amount is recovered from you with interest and charges.",
+    },
+  ],
+  note: CHARGES_NOTE,
+};
+const CHARGES_CGTMSE: ChargesInfo = {
+  intro: CHARGES_INTRO,
+  rows: [
+    {
+      label: "Guarantee fee",
+      value:
+        "A fee for the credit guarantee cover, charged every year on the guaranteed amount. It usually falls between about 0.37% and 2% a year, depending on the loan size, the borrower category and the risk rating. Use our CGTMSE fee calculator for an estimate.",
+    },
+    {
+      label: "Processing fee",
+      value: "The lender may charge its normal processing fee plus GST on the loan.",
+    },
+    LATE_PAYMENT_ROW,
+    {
+      label: "Foreclosure and part-prepayment",
+      value:
+        "Closing early may carry a charge depending on the lender. Ask before you prepay.",
+    },
+  ],
+  note: CHARGES_NOTE,
+};
+const CHARGES_SECURITIES: ChargesInfo = {
+  intro: CHARGES_INTRO,
+  rows: [
+    {
+      label: "Processing fee",
+      value:
+        "A percentage of the loan or limit plus GST, often somewhere between about 0.5% and 1.5%. Some lenders cap it at a fixed amount.",
+    },
+    {
+      label: "Pledge and lien charges",
+      value:
+        "A small fee for marking your shares, bonds or mutual funds as pledged, and for releasing them when you repay.",
+    },
+    {
+      label: "Top-up or shortfall",
+      value:
+        "If the value of what you pledged falls, the lender may ask you to add more or repay part of the loan. This is not a fee, but it is worth knowing about.",
+    },
+    LATE_PAYMENT_ROW,
+  ],
+  note: CHARGES_NOTE,
+};
+const CHARGES_EDUCATION: ChargesInfo = {
+  intro: CHARGES_INTRO,
+  rows: [
+    {
+      label: "Processing fee",
+      value:
+        "Many lenders charge little or no processing fee on education loans, especially for smaller amounts. For larger loans it is often a small percentage plus GST.",
+    },
+    {
+      label: "Interest during the study period",
+      value:
+        "Interest usually starts when the money is paid out. You may be able to pay it during the course, or let it add up and begin EMIs after the moratorium.",
+    },
+    {
+      label: "Legal, valuation and insurance",
+      value:
+        "Where the loan is backed by property, the lender may charge for a legal check and a valuation. Loan insurance is charged only where you take it.",
+    },
+    LATE_PAYMENT_ROW,
+    {
+      label: "Foreclosure and part-prepayment",
+      value:
+        "Many lenders allow early repayment of education loans with little or no charge. Check your lender's terms.",
+    },
+  ],
+  note: CHARGES_NOTE,
+};
+
+const NRI_BALANCE_TRANSFER: NriInfo = {
+  heading: "Balance transfer for NRIs",
+  intro:
+    "If you are an NRI with a home loan in India, you can move it to another Bank or NBFC for a lower rate or better terms, just like a resident. The new lender checks your overseas income and your account again, so a few of the NRI documents are needed.",
+  points: [
+    {
+      title: "Who can transfer",
+      body: "NRIs, and often PIO and OCI cardholders, whose existing loan has a good repayment record.",
+    },
+    {
+      title: "What the new lender checks",
+      body: "Your overseas income, your job or business abroad, your credit history, and the property that is already mortgaged.",
+    },
+    {
+      title: "Your existing loan",
+      body: "You will need the sanction letter, the loan statement and the list of documents held by your current lender, plus a foreclosure letter from them.",
+    },
+    {
+      title: "Costs to weigh",
+      body: "The new lender's processing fee and any charge from your current lender. Floating-rate loans to individuals generally carry no foreclosure charge, but check your own loan terms. Our balance transfer calculator shows what you could save.",
+    },
+    {
+      title: "Signing from abroad",
+      body: "A registered Power of Attorney in favour of a trusted resident Indian can sign the new loan papers in India for you, attested as the lender requires.",
+    },
+    {
+      title: "Repayment",
+      body: "EMIs are usually paid from your NRE or NRO account in India, as with your current loan.",
+    },
+  ],
+  faqs: [
+    {
+      q: "Can an NRI transfer a home loan to another lender?",
+      a: "Yes. Several Banks and NBFCs take over NRI home loans. They look at your overseas income, your repayment record and the property, much as they would for a new loan.",
+    },
+    {
+      q: "Do I need to be in India?",
+      a: "Not always. Much of the process can be done online or by courier, and a Power of Attorney can cover the signing. Some lenders may ask for a visit or a video verification.",
+    },
+    {
+      q: "Is it worth it?",
+      a: "That depends on how much lower the new rate is, how long your loan still has to run, and the costs of moving. Try the balance transfer calculator, or ask us to compare lenders for you.",
+    },
+  ],
+  note: "NRI lending is governed by RBI and FEMA rules and each lender's own policy, and the rules can change. We share general information here. Your expert will confirm what applies to you.",
+};
+
+const NRI_LRD: NriInfo = {
+  heading: "Lease rental discounting for NRIs",
+  intro:
+    "NRIs who own a let-out commercial property in India can sometimes raise money against its rent. A few lenders offer this, and they check the lease, the tenant and your income carefully. We can tell you which lenders to approach.",
+  points: [
+    {
+      title: "Who can apply",
+      body: "NRIs, and often PIO and OCI cardholders, who own the let-out property and have a registered lease with a reliable tenant.",
+    },
+    {
+      title: "What lenders check",
+      body: "The lease agreement, the rent history in your bank statements, the tenant's standing and the property's title. Your overseas income may also be looked at.",
+    },
+    {
+      title: "Rent and repayment",
+      body: "The rent is usually collected in an account with the lender, and the EMIs are paid from it. Rent is received in your NRO account in India.",
+    },
+    {
+      title: "Signing from abroad",
+      body: "A registered Power of Attorney in favour of a trusted resident Indian can sign for you in India, attested as the lender requires.",
+    },
+  ],
+  faqs: [
+    {
+      q: "Can an NRI take a lease rental discounting loan?",
+      a: "With select lenders, yes, for commercial property that is already let out. They will want the lease, the rent record and clear title.",
+    },
+    {
+      q: "Which account is the rent paid into?",
+      a: "Rent from Indian property is received in your NRO account in India. The lender will set up how the rent is routed for repayment.",
+    },
+  ],
+  note: "NRI lending is governed by RBI and FEMA rules and each lender's own policy, and the rules can change. We share general information here. Your expert will confirm what applies to you.",
+};
 
 export const PRODUCTS: Product[] = [
   {
@@ -136,9 +602,13 @@ export const PRODUCTS: Product[] = [
     ],
     eligibility: [
       "Resident Indian, generally 21–65 (up to around 70 for self-employed) at loan maturity",
+      "NRIs with a stable overseas income can apply too, with a few extra documents. See the NRI section below",
       "Salaried with take-home income from about ₹25,000/month, or self-employed with 2–3 years of ITR",
       "Cash salary accepted as income proof too, not just bank-credited salary",
       "A CIBIL score near 700 or above may help you get a better rate; lower scores are reviewed case by case",
+      "Salaried, self-employed professional or self-employed business owner",
+      "If salaried, generally at least 1 year with your current employer",
+      "Residential property: a ready or under-construction flat, a plot, or a house you plan to build",
     ],
     documents: [KYC, PROPERTY_DOCS, PHOTOS],
     documentCategories: APPLICANT_DOC_CATEGORIES,
@@ -164,6 +634,8 @@ export const PRODUCTS: Product[] = [
         format: "amount",
       },
     ],
+    charges: CHARGES_PROPERTY,
+    nri: NRI_HOME_LOAN,
   },
   {
     slug: "loan-against-property",
@@ -189,9 +661,16 @@ export const PRODUCTS: Product[] = [
       "Property owner, generally 21–70 years of age when the loan matures",
       "Clean and marketable title with the full ownership chain on record",
       "Demonstrable repayment capacity via income, business banking or rental receipts — cash salary accepted too, not just bank-credited salary",
+      "Indian citizen with a property in India to offer as security; NRIs can apply with select lenders (see the NRI section below)",
+      "Salaried, self-employed professional or self-employed business owner",
+      "If salaried, generally at least 1 year with your current employer",
+      "A CIBIL score of around 750 or above may help you get better terms; lower scores are reviewed case by case",
+      "Residential, commercial or industrial property that can be pledged as security",
     ],
     documents: [KYC, PROPERTY_DOCS, PHOTOS],
     documentCategories: APPLICANT_DOC_CATEGORIES,
+    charges: CHARGES_PROPERTY,
+    nri: NRI_LAP,
   },
   {
     slug: "lease-rental-discounting",
@@ -216,8 +695,13 @@ export const PRODUCTS: Product[] = [
       "A registered lease with sufficient residual tenure to run",
       "A dependable tenant with an uninterrupted rent-payment record",
       "Property title held in the borrower's own name",
+      "Resident Indian owners can apply; NRIs can apply with select lenders (see the NRI section below)",
+      "Commercial property, such as offices, shops or warehouses, that is already let out",
+      "A clean credit history; a CIBIL score of around 750 or above may help you get better terms",
     ],
     documents: [KYC, "Registered lease deed and rent receipts", PROPERTY_DOCS],
+    charges: CHARGES_COMMERCIAL,
+    nri: NRI_LRD,
   },
   {
     slug: "balance-transfer",
@@ -242,6 +726,11 @@ export const PRODUCTS: Product[] = [
       "A track record of on-time EMIs for at least the last 12 months",
       "No recent bounces or delayed payments on the existing loan",
       "Income documents and property papers ready for a fresh credit review",
+      "Resident Indian with an existing home loan; NRIs can transfer with select lenders (see the NRI section below)",
+      "Salaried, self-employed professional or self-employed business owner",
+      "If salaried, generally at least 1 year with your current employer",
+      "A CIBIL score of around 700 or above may help you get the better rate; lower scores are reviewed case by case",
+      "A residential property already mortgaged, with its papers in order",
     ],
     documents: [
       KYC,
@@ -249,6 +738,8 @@ export const PRODUCTS: Product[] = [
       "Current loan statement, sanction letter and foreclosure letter",
       PROPERTY_DOCS,
     ],
+    charges: CHARGES_PROPERTY,
+    nri: NRI_BALANCE_TRANSFER,
   },
   {
     slug: "dlod",
@@ -273,8 +764,12 @@ export const PRODUCTS: Product[] = [
       "Clear, marketable title in the applicant's name",
       "At least two years of business or professional income",
       "A steady banking track record over the preceding 12 months",
+      "Self-employed professional or business owner with a steady income",
+      "Residential, commercial or industrial property that can be pledged as security",
+      "A good credit history; a CIBIL score of around 700 or above may help",
     ],
     documents: [KYC, BUSINESS_DOCS, PROPERTY_DOCS],
+    charges: CHARGES_LIMIT,
   },
 
   {
@@ -302,8 +797,12 @@ export const PRODUCTS: Product[] = [
       "At least 2 years of business vintage",
       "Annual turnover of roughly ₹40 lakh or above",
       "The last two years of ITR and GST returns filed on time",
+      "Proprietorship, partnership, LLP, company or self-employed professional",
+      "A steady business income that shows in your bank statements",
+      "A CIBIL score of around 700 or above for the owner may help you get better terms; lower scores are reviewed case by case",
     ],
     documents: [KYC, BUSINESS_DOCS, "Proof of business ownership"],
+    charges: CHARGES_UNSECURED,
   },
   {
     slug: "cgtmse",
@@ -328,8 +827,11 @@ export const PRODUCTS: Product[] = [
       "Udyam-registered as a micro or small enterprise",
       "At least 1 year of operating history",
       "A workable business/project plan and a clean credit history",
+      "A business in India in manufacturing or services; some activities, such as retail trade, may not be covered",
+      "Proprietorship, partnership, LLP or company",
     ],
     documents: [KYC, BUSINESS_DOCS, "Udyam registration and project report"],
+    charges: CHARGES_CGTMSE,
   },
   {
     slug: "unsecured-term-loan",
@@ -355,8 +857,11 @@ export const PRODUCTS: Product[] = [
       "At least 3 years in business with audited or CA-certified financials",
       "Consistent bank credits through the preceding 12 months",
       "A CIBIL score of 680 or higher for the business and its promoters",
+      "Business owner or self-employed professional with a steady business income",
+      "Proprietorship, partnership, LLP or company",
     ],
     documents: [KYC, BUSINESS_DOCS],
+    charges: CHARGES_UNSECURED,
   },
   {
     slug: "unsecured-dod",
@@ -381,8 +886,11 @@ export const PRODUCTS: Product[] = [
       "At least 3 years of business operations",
       "A healthy average balance across current accounts",
       "No adverse remarks on existing credit facilities",
+      "Self-employed business owner or professional running a current account",
+      "A good credit record for the business and its owners; a CIBIL score of around 700 or above may help",
     ],
     documents: [KYC, BUSINESS_DOCS],
+    charges: CHARGES_LIMIT,
   },
   {
     slug: "project-funding",
@@ -408,12 +916,16 @@ export const PRODUCTS: Product[] = [
       "Sanctioned building plans and clear, marketable land title",
       "The developer's own contribution already committed to the project",
       "A track record of completed projects is preferred, though not always mandatory",
+      "A developer or company registered in India",
+      "A good credit record for the developer, its promoters and group companies",
+      "Residential, commercial or mixed-use projects",
     ],
     documents: [
       KYC,
       "Project report with cost and sales projections",
       "Approvals, plans and land title documents",
     ],
+    charges: CHARGES_COMMERCIAL,
   },
 
   {
@@ -439,8 +951,11 @@ export const PRODUCTS: Product[] = [
       "At least 3 years of business operations",
       "Annual turnover of ₹2 Cr or above, with audited financial statements",
       "A visible working-capital gap in the balance sheet",
+      "Proprietorship, partnership, LLP or company",
+      "A good credit record for the business and its promoters; a CIBIL score of around 700 or above may help",
     ],
     documents: [KYC, BUSINESS_DOCS, "Audited financials and stock / debtor statements"],
+    charges: CHARGES_LIMIT,
   },
   {
     slug: "cash-credit",
@@ -465,8 +980,11 @@ export const PRODUCTS: Product[] = [
       "A trading or manufacturing business with a regular stock cycle",
       "Audited financials and GST filings in good order",
       "Satisfactory conduct on existing current accounts",
+      "Proprietorship, partnership, LLP or company",
+      "A good credit record for the business and its promoters",
     ],
     documents: [KYC, BUSINESS_DOCS, "Stock and debtor ageing statements"],
+    charges: CHARGES_LIMIT,
   },
   {
     slug: "overdraft-limit",
@@ -491,8 +1009,11 @@ export const PRODUCTS: Product[] = [
       "An active current account with regular credits",
       "Documented proof of business or professional income",
       "A clean credit report with no ongoing defaults",
+      "Self-employed business owner or professional with a steady income",
+      "Proprietorship, partnership, LLP or company",
     ],
     documents: [KYC, BUSINESS_DOCS],
+    charges: CHARGES_LIMIT,
   },
   {
     slug: "bank-guarantee",
@@ -517,8 +1038,11 @@ export const PRODUCTS: Product[] = [
       "An existing or freshly opened banking relationship",
       "Margin money or suitable collateral to back the guarantee",
       "Tender or contract documents supporting the request",
+      "Proprietorship, partnership, LLP or company",
+      "A good credit standing for the business and its promoters",
     ],
     documents: [KYC, BUSINESS_DOCS, "Tender / contract copy and BG format"],
+    charges: CHARGES_GUARANTEE,
   },
   {
     slug: "letter-of-credit",
@@ -543,8 +1067,11 @@ export const PRODUCTS: Product[] = [
       "An established trading or manufacturing business",
       "A sanctioned LC limit, or full cash margin in its absence",
       "A supplier contract or proforma invoice on file",
+      "Proprietorship, partnership, LLP or company",
+      "A good credit standing for the business and its promoters",
     ],
     documents: [KYC, BUSINESS_DOCS, "Proforma invoice and supplier agreement"],
+    charges: CHARGES_GUARANTEE,
   },
   {
     slug: "working-capital-term-loan",
@@ -569,8 +1096,11 @@ export const PRODUCTS: Product[] = [
       "A viable business with an identifiable working-capital gap",
       "Two years of audited financial statements",
       "Promoter contribution where the lender asks for one",
+      "Proprietorship, partnership, LLP or company",
+      "A good credit record for the business and its promoters",
     ],
     documents: [KYC, BUSINESS_DOCS, "Audited financials and existing sanction letters"],
+    charges: CHARGES_LIMIT,
   },
 
   {
@@ -600,8 +1130,10 @@ export const PRODUCTS: Product[] = [
       "Machinery that is useful for the business and keeps its value",
       "Ownership of property or a factory may be considered",
       "A consumer CIBIL score of 700 or more",
+      "Proprietorship, partnership, LLP or company",
     ],
     documents: [KYC, BUSINESS_DOCS, "Machinery quotation or invoice from the supplier"],
+    charges: CHARGES_COMMERCIAL,
   },
   {
     slug: "personal-loan",
@@ -628,8 +1160,12 @@ export const PRODUCTS: Product[] = [
       "Between roughly 21 and 60 years of age",
       "Salaried take-home from about ₹25,000/month, or 2 years of ITR if self-employed",
       "A CIBIL score of 700+ may help you get a better rate; scores from the mid-600s may still be considered at a higher rate",
+      "Resident Indian",
+      "Salaried, or a self-employed professional or business owner",
+      "If salaried, generally at least 1 year with your current employer",
     ],
     documents: [KYC, INCOME],
+    charges: CHARGES_UNSECURED,
   },
   {
     slug: "loan-against-securities",
@@ -656,6 +1192,7 @@ export const PRODUCTS: Product[] = [
       "Resident Indian, 21 years or older",
     ],
     documents: [KYC, "Demat holding statement", "Portfolio / policy documents"],
+    charges: CHARGES_SECURITIES,
   },
   {
     slug: "loan-against-mutual-funds",
@@ -682,6 +1219,7 @@ export const PRODUCTS: Product[] = [
       "Resident Indian, 18 years or older",
     ],
     documents: [KYC, "Mutual fund statement / CAS", "Folio details"],
+    charges: CHARGES_SECURITIES,
   },
   {
     slug: "professional-loan",
@@ -707,8 +1245,11 @@ export const PRODUCTS: Product[] = [
       "A recognised professional qualification or registration (MBBS, CA, CS, architecture, engineering, etc.)",
       "A minimum number of years in active practice, as set by the lender",
       "A credit score in the low-to-mid 700s is typical for the better rate slabs",
+      "Resident Indian professional in independent practice",
+      "A steady practice income that shows in your bank statements",
     ],
     documents: [KYC, INCOME, "Professional registration / degree certificate"],
+    charges: CHARGES_UNSECURED,
   },
   {
     slug: "education-loan",
@@ -735,6 +1276,9 @@ export const PRODUCTS: Product[] = [
       "Confirmed admission to a recognised institution in India or abroad",
       "An earning co-applicant based in India",
       "Collateral typically expected once the loan crosses the unsecured threshold, especially for overseas study",
+      "Indian student, with a resident Indian co-applicant who is usually a parent or guardian",
+      "A co-applicant who is salaried or self-employed with a steady income",
+      "A good credit record for the co-applicant helps",
     ],
     documents: [
       KYC,
@@ -761,6 +1305,7 @@ export const PRODUCTS: Product[] = [
       { key: "universityName", label: "University Name", type: "text" },
       { key: "country", label: "Country", type: "text" },
     ],
+    charges: CHARGES_EDUCATION,
   },
 
   {
@@ -786,6 +1331,7 @@ export const PRODUCTS: Product[] = [
       "Typically 21–65 years old, with a regular, documented income",
       "At least 1 year in the current job or business",
       "A CIBIL score of 650+ is usually considered; 750+ may help you get better rates",
+      "Resident Indian, salaried or self-employed",
     ],
     documents: [KYC, INCOME, "Dealer's vehicle quotation"],
     checklistIntake: [
@@ -803,6 +1349,7 @@ export const PRODUCTS: Product[] = [
         format: "amount",
       },
     ],
+    charges: CHARGES_VEHICLE,
   },
   {
     slug: "used-car-loan",
@@ -828,6 +1375,9 @@ export const PRODUCTS: Product[] = [
       "Around 21–65 years old, with income that can be documented",
       "The car falls within the lender's maximum age limit",
       "A clean RC, with no lapses in the insurance history",
+      "Resident Indian, salaried or self-employed",
+      "At least 1 year in your current job or business",
+      "A CIBIL score of around 700 or above may help you get a better rate; lower scores are reviewed case by case",
     ],
     documents: [KYC, INCOME, "RC copy, insurance and valuation report"],
     checklistIntake: [
@@ -845,6 +1395,7 @@ export const PRODUCTS: Product[] = [
         format: "amount",
       },
     ],
+    charges: CHARGES_VEHICLE,
   },
   {
     slug: "car-refinance",
@@ -870,6 +1421,8 @@ export const PRODUCTS: Product[] = [
       "Car registered in the applicant's own name",
       "No existing loan on the car, or one that can be taken over cleanly",
       "Documented income and a credit report free of active defaults",
+      "Resident Indian, salaried or self-employed",
+      "A CIBIL score of around 700 or above may help you get better terms; lower scores are reviewed case by case",
     ],
     documents: [KYC, INCOME, "RC, insurance and any current loan statement"],
     checklistIntake: [
@@ -881,6 +1434,7 @@ export const PRODUCTS: Product[] = [
         format: "amount",
       },
     ],
+    charges: CHARGES_VEHICLE,
   },
   {
     slug: "commercial-vehicle",
@@ -907,12 +1461,16 @@ export const PRODUCTS: Product[] = [
       "A business or person who will use the vehicle for commercial work",
       "Income or business proof to show that you can repay the loan",
       "Final eligibility, amount and terms depend on the lender's policy and the vehicle",
+      "Resident Indian: an individual transporter, proprietorship, firm or company",
+      "At least 1 year of experience in transport or the business the vehicle is for",
+      "A CIBIL score of around 700 or above may help you get better terms; lower scores are reviewed case by case",
     ],
     documents: [
       KYC,
       "Income or business proof (ITR, bank statements)",
       "Vehicle quotation, or registration papers for a used vehicle",
     ],
+    charges: CHARGES_VEHICLE,
   },
   {
     slug: "private-funding",
