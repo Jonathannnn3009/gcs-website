@@ -6,6 +6,7 @@ import {
   CalendarRange,
   Car,
   CarFront,
+  Cog,
   CreditCard,
   Gauge,
   GraduationCap,
@@ -23,6 +24,7 @@ import {
   Store,
   TrendingDown,
   TrendingUp,
+  Truck,
   Wallet,
   type LucideIcon,
 } from "lucide-react";
@@ -220,7 +222,7 @@ export const PRODUCTS: Product[] = [
   {
     slug: "balance-transfer",
     icon: ArrowLeftRight,
-    title: "Balance Transfer",
+    title: "Balance Transfer & Top-Up",
     tagline: "Same loan, smaller bill.",
     group: "Property Finance",
     facts: [
@@ -308,7 +310,7 @@ export const PRODUCTS: Product[] = [
     icon: ShieldCheck,
     title: "CGTMSE Funding",
     tagline: "Government-backed funding, no collateral.",
-    group: "Business Growth",
+    group: "Cash Flow & Trade",
     facts: [
       { label: "Loan amount", value: "Up to ₹10 Cr" },
       { label: "Interest rate", value: "From 9%* p.a." },
@@ -387,7 +389,7 @@ export const PRODUCTS: Product[] = [
     icon: HardHat,
     title: "Project Funding",
     tagline: "Finance that builds as you build.",
-    group: "Business Growth",
+    group: "Property Finance",
     facts: [
       { label: "Funding", value: "Up to 75% of project cost" },
       { label: "Interest rate", value: "From 12%* p.a." },
@@ -572,6 +574,36 @@ export const PRODUCTS: Product[] = [
   },
 
   {
+    slug: "machine-loan",
+    icon: Cog,
+    title: "Machine Loan",
+    tagline: "Take your business to the next level.",
+    group: "Cash Flow & Trade",
+    facts: [
+      { label: "Funding", value: "Up to 100%*" },
+      { label: "Loan amount", value: "₹10 Lakh to ₹3 Cr" },
+      { label: "Tenure", value: "Up to 60 months" },
+    ],
+    about:
+      "A machine loan helps you buy new machinery or equipment, or raise money against machinery you already own. It can help a business set up, expand or upgrade its production. We compare options from Banks and NBFCs that may suit your business and guide you through the paperwork.",
+    features: [
+      "Loan for buying machinery, or against different types of machinery",
+      "Funding of up to 100%* of the machinery cost, including GST on machinery up to ₹35 Lakh, as per lender policy",
+      "Fewer documents for loans up to ₹35 Lakh, as per lender policy",
+      "Loan amount from ₹10 Lakh to ₹3 Crore, with repayment of up to 60 months",
+      "For some profiles, financial statements may not be needed for loans up to ₹3 Crore",
+    ],
+    eligibility: [
+      "An established business, usually 2 years or more",
+      "Profitable accounts for the last 2 years",
+      "A healthy average balance in the business bank account",
+      "Machinery that is useful for the business and keeps its value",
+      "Ownership of property or a factory may be considered",
+      "A consumer CIBIL score of 700 or more",
+    ],
+    documents: [KYC, BUSINESS_DOCS, "Machinery quotation or invoice from the supplier"],
+  },
+  {
     slug: "personal-loan",
     icon: Wallet,
     title: "Personal Loan",
@@ -656,7 +688,7 @@ export const PRODUCTS: Product[] = [
     icon: Stethoscope,
     title: "Professional Loan",
     tagline: "Built for doctors, CAs and other qualified professionals.",
-    group: "Personal & Education",
+    group: "Business Growth",
     facts: [
       { label: "Loan amount", value: "Up to ₹75 lakh" },
       { label: "Interest rate", value: "From 10.99%* p.a." },
@@ -851,11 +883,43 @@ export const PRODUCTS: Product[] = [
     ],
   },
   {
+    slug: "commercial-vehicle",
+    icon: Truck,
+    title: "Commercial Vehicle",
+    tagline: "Get the right vehicle for your business.",
+    group: "Vehicles & Special Cases",
+    facts: [
+      { label: "Funding", value: "Up to 100%* LTV" },
+      { label: "Repayment", value: "Up to 7 years" },
+      { label: "Used vehicles", value: "Up to 80% finance" },
+    ],
+    about:
+      "Financing for new and used commercial vehicles such as trucks, buses and light goods vehicles. It helps a business add or replace vehicles without putting a large amount of its own money upfront. We compare options from Banks and NBFCs that may suit your business.",
+    features: [
+      "Finance for new and used commercial vehicles",
+      "Funding of up to 100%* of the vehicle value for eligible profiles",
+      "Used commercial vehicles: up to 80% finance",
+      "Repayment of up to 7 years",
+      "No penalty for early repayment on eligible loans, as per lender terms",
+      "Simpler documents",
+    ],
+    eligibility: [
+      "A business or person who will use the vehicle for commercial work",
+      "Income or business proof to show that you can repay the loan",
+      "Final eligibility, amount and terms depend on the lender's policy and the vehicle",
+    ],
+    documents: [
+      KYC,
+      "Income or business proof (ITR, bank statements)",
+      "Vehicle quotation, or registration papers for a used vehicle",
+    ],
+  },
+  {
     slug: "private-funding",
     icon: KeyRound,
     title: "Private Funding",
     tagline: "Fast money when the clock is ticking.",
-    group: "Vehicles & Special Cases",
+    group: "Business Growth",
     facts: [
       { label: "Security", value: "No property required" },
       { label: "Interest rate", value: "From ~2.70% per month" },

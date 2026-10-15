@@ -354,7 +354,7 @@ export const FLOWS: Flow[] = [
   {
     id: "machinery",
     label: "Machinery finance",
-    productSlug: "business-loan",
+    productSlug: "machine-loan",
     steps: [
       { key: "asset_type", label: "Machinery", question: "What machinery or equipment do you need?", kind: "text", placeholder: "e.g. CNC machine" },
       { key: "asset_condition", label: "Condition", question: "Is it new or used?", kind: "choice", options: ["New", "Used"] },

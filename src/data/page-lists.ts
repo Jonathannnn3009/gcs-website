@@ -159,7 +159,7 @@ export const HOME_STEPS = [
 export const ABOUT_STATS = [
   { value: "2017", label: "Established" },
   { value: "75+", label: "Bank & NBFC Partners" },
-  { value: "25+", label: "Loan Products" },
+  { value: "27+", label: "Loan Products" },
   { value: "100%", label: "Transparent Process" },
 ];
 
@@ -455,7 +455,7 @@ export const HOME_GOALS = [
     slug: "balance-transfer",
     icon: TrendingDown,
     goal: "Lower your EMI",
-    product: "Balance Transfer",
+    product: "Balance Transfer & Top-Up",
     line: "Compare other lenders and move your loan if better terms are available. A top-up may be possible.",
     featured: "",
   },

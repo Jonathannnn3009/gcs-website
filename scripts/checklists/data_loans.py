@@ -538,6 +538,48 @@ PRIVATE_FUNDING = dict(
     ],
 )
 
+MACHINE_LOAN = dict(
+    title="Machine Loan",
+    subtitle="Take your business to the next level.",
+    sections=[
+        KYC_BUSINESS,
+        BUSINESS_PROOF,
+        {
+            "title": "Banking & Financials",
+            "note": "Lighter requirements may apply for smaller loans, as per lender policy",
+            "items": [
+                "Business current and savings account bank statements || Latest 12 months",
+                "ITRs and financial statements || Latest 2 years | Where required",
+                "GSTR 3B || Latest 12 months",
+            ],
+        },
+        {
+            "title": "Machinery Documents",
+            "items": [
+                "Machinery quotation / proforma invoice from the supplier",
+                "Details of the machinery and how it will be used in the business",
+            ],
+        },
+    ],
+)
+
+COMMERCIAL_VEHICLE = dict(
+    title="Commercial Vehicle",
+    subtitle="Get the right vehicle for your business.",
+    sections=[
+        KYC_INDIVIDUAL,
+        BUSINESS_PROOF,
+        self_employed_income(),
+        {
+            "title": "Vehicle Documents",
+            "items": [
+                "Vehicle quotation from the dealer || For a new vehicle",
+                "Registration certificate (RC), insurance and valuation report || For a used vehicle",
+            ],
+        },
+    ],
+)
+
 # filename (without -checklist.pdf) -> content
 LOAN_CHECKLISTS = {
     "home-loan-salaried": HOME_LOAN_SALARIED,
@@ -560,6 +602,8 @@ LOAN_CHECKLISTS = {
     "loan-against-mutual-funds": LOAN_AGAINST_MUTUAL_FUNDS,
     "professional-loan": PROFESSIONAL_LOAN,
     "private-funding": PRIVATE_FUNDING,
+    "machine-loan": MACHINE_LOAN,
+    "commercial-vehicle": COMMERCIAL_VEHICLE,
 }
 
 # Products that share another product's list (they were identical files before, too)

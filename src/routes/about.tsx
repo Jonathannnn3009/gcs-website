@@ -187,7 +187,7 @@ function AboutPage() {
               <div>
                 <p className="eyebrow">Our Services</p>
                 <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
-                  25 products, <span className="gold-text-static italic">one advisor who knows all of them.</span>
+                  {PRODUCTS.length} products, <span className="gold-text-static italic">one advisor who knows all of them.</span>
                 </h2>
               </div>
               <Link

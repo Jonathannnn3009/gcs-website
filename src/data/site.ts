@@ -153,7 +153,7 @@ export const SERVICES: Service[] = [
   },
   {
     id: "balance-transfer",
-    title: "Balance Transfer",
+    title: "Balance Transfer & Top-Up",
     tagline: "Same loan, smaller bill",
     description: "Move your existing loan to a lower rate with a structured top-up where eligible.",
     highlights: [
