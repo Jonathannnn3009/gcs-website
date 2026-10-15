@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowRight, Calculator } from "lucide-react";
 import { Reveal } from "@/components/reveal";
+import { ExpertNote } from "@/components/expert-note";
 import { PageCalculators } from "@/components/page-calculators";
 import { CONTACT } from "@/data/site";
 import { useBankRates } from "@/lib/site-content";
@@ -121,6 +122,12 @@ function RatesPage() {
           </div>
         </div>
         <p className="mt-3 text-xs text-muted-foreground italic">{rates.disclaimer}</p>
+
+        <ExpertNote className="mt-8">
+          A rate table alone rarely tells the whole story. Some lenders favour salaried applicants,
+          while others suit self-employed income or under-construction properties. Your expert
+          studies your income, credit history and property before recommending the right lender.
+        </ExpertNote>
 
         <div className="mt-10 flex flex-wrap gap-3">
           <Link to="/contact" className="gold-btn px-6 py-3 text-sm">

@@ -15,6 +15,7 @@ import { LeadForm } from "@/components/lead-form";
 import { ChecklistGate } from "@/components/checklist-gate";
 import { PRODUCTS, getProduct } from "@/data/products";
 import { LOAN_PROCESS } from "@/data/loan-process";
+import { ExpertNote } from "@/components/expert-note";
 import { useProduct } from "@/lib/site-content";
 import { FactsStrip } from "@/components/facts-strip";
 import { CheckBadge, TopicHeader } from "@/components/topic-header";
@@ -586,6 +587,11 @@ function ProductDetailPage() {
                 </Reveal>
               ))}
             </ol>
+            <ExpertNote className="mt-8">
+              With GCS, your expert looks at your profile, matches it with suitable lenders, and
+              coordinates with the banks for you. That means less confusion and more confidence when
+              you apply.
+            </ExpertNote>
           </Section>
         );
       })()}
