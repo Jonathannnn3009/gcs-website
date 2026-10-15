@@ -903,7 +903,8 @@ export function ChatAssistant() {
                     </p>
                     <ContactButtons />
                     <p className="mt-3 text-[10.5px] leading-snug text-muted-foreground">
-                      {ASSISTANT_NAME} only answers questions about loans, credit and GCS.{" "}
+                      {ASSISTANT_NAME} is an AI assistant and can make mistakes. Figures are
+                      indicative. {ASSISTANT_NAME} only answers questions about loans, credit and GCS.{" "}
                       <button
                         type="button"
                         onClick={signOut}
