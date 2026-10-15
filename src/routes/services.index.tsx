@@ -3,6 +3,7 @@ import { Check, ArrowRight, Calculator } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { LoanGoals } from "@/components/loan-goals";
+import { LenderComparison } from "@/components/lender-comparison";
 import { ServiceCarousel, imageForGroup } from "@/components/service-carousel";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { CONTACT } from "@/data/site";
@@ -194,6 +195,11 @@ function ServicesPage() {
           </div>
         </Section>
       ))}
+
+      {/* How the kinds of lender differ */}
+      <Section className="pt-0">
+        <LenderComparison />
+      </Section>
 
       {/* CTA */}
       <Section className="pt-0">

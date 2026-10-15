@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
+import { LenderComparison } from "@/components/lender-comparison";
 import { LoanGoals } from "@/components/loan-goals";
 import { ConcernCards } from "@/components/concern-cards";
 import { BankMarquee } from "@/components/bank-marquee";
@@ -568,6 +569,11 @@ function HomePage() {
         <Reveal delay={80} className="mt-12">
           <CompareColumns />
         </Reveal>
+      </Section>
+
+      {/* ─── WHICH KIND OF LENDER ─────────────────────── */}
+      <Section className="pt-0">
+        <LenderComparison />
       </Section>
 
       {/* ─── HOW IT WORKS (click-through stepper) ─────── */}
