@@ -28,6 +28,24 @@ export type ServiceDivision = "CA Services" | "Sheetal Associates";
 export const divisionLabel = (division: ServiceDivision): string =>
   division === "Sheetal Associates" ? "Legal Services" : division;
 
+/** The fuller write-up some services carry: when present, the service page shows it in place of the short lists. */
+export type ServiceDetail = {
+  /** A line under the title that says what the service gets you. */
+  heading: string;
+  /** What the service is, in a few short paragraphs. */
+  intro: string[];
+  whoHeading: string;
+  whoList: string[];
+  whoNote?: string;
+  steps: { title: string; body: string }[];
+  documentsIntro: string;
+  documentGroups: { title: string; intro?: string; items: string[]; after?: string }[];
+  why: { title: string; body: string }[];
+  /** A callout for people whose case does not fit one box. */
+  callout: { title: string; body: string; cta: string };
+  important: string;
+};
+
 export type ProfessionalService = {
   slug: string;
   icon: LucideIcon;
@@ -38,13 +56,19 @@ export type ProfessionalService = {
   whoNeedsIt: string;
   process: string[];
   documents: string[];
+  detail?: ServiceDetail;
 };
 
 /** Display order for each division's categories on the listing page. */
 export const SERVICE_DIVISIONS: { division: ServiceDivision; categories: string[] }[] = [
   {
     division: "CA Services",
-    categories: ["Tax & Income Tax", "GST & Compliance", "Accounting & Audit", "Business Registration"],
+    categories: [
+      "Tax & Income Tax",
+      "GST & Compliance",
+      "Accounting & Audit",
+      "Business Registration",
+    ],
   },
   {
     division: "Sheetal Associates",
@@ -73,18 +97,281 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     icon: FileText,
     division: "CA Services",
     category: "Tax & Income Tax",
-    title: "Income Tax Return Filing",
+    title: "Income Tax Return (ITR) Filing",
     summary:
-      "ITR filing support for salaried individuals, professionals, business owners and firms, matched to the correct ITR form for your income type. We handle everything from Form 16 reconciliation to e-filing and the acknowledgement receipt.",
+      "Income Tax Return (ITR) filing is the process of reporting your income, deductions and taxes to the Income Tax Department. We help salaried people, professionals, business owners and firms prepare and file the right return for their income.",
     whoNeedsIt:
-      "Anyone with taxable income who needs to file a return — salaried, self-employed or a firm. Also useful if you've missed a filing deadline in a prior year and need to catch up correctly.",
+      "Salaried employees, self-employed people, freelancers, business owners, firms, and anyone with rental, interest, investment or capital gains income. Filing requirements depend on your income, transactions and the Income Tax rules that apply.",
     process: [
-      "Share your income sources and documents for review",
-      "Correct ITR form identified and return prepared",
-      "Return shared with you for confirmation before filing",
-      "Filed and acknowledgement shared with you",
+      "Share your income details and documents",
+      "Review and preparation, including selecting the right ITR form",
+      "Your confirmation of the return before filing",
+      "ITR filing with the Income Tax Department",
+      "Filing acknowledgement shared for your records",
     ],
-    documents: [KYC, "Form 16 or income proof", "Bank statements", "Investment/deduction proofs, if applicable"],
+    documents: [
+      "Basic KYC and personal details",
+      "Salary documents",
+      "Bank and interest income",
+      "Tax statements and TDS",
+      "Investments and deductions",
+      "House property and rental income",
+      "Capital gains and property sale",
+      "Business, professional and firm records",
+    ],
+    detail: {
+      heading: "File Your Income Tax Return with Professional Guidance",
+      intro: [
+        "Income Tax Return (ITR) filing is the process of reporting your income, deductions and taxes to the Income Tax Department.",
+        "Whether you are salaried, self-employed, a professional, business owner or firm, we help you prepare and file the appropriate Income Tax Return based on your income and applicable tax requirements.",
+        "Our aim is simple: make your ITR filing clear, accurate and hassle-free.",
+      ],
+      whoHeading: "Who May Need to File an ITR?",
+      whoList: [
+        "Salaried employees",
+        "Self-employed individuals",
+        "Freelancers and professionals",
+        "Proprietors and business owners",
+        "Partnership firms and LLPs",
+        "Individuals earning rental income",
+        "Individuals earning interest or investment income",
+        "Individuals with capital gains from shares, mutual funds or property",
+        "Individuals with multiple sources of income",
+        "Eligible NRIs with income in India",
+        "Persons required to file under applicable Income Tax rules",
+        "Persons who need to file an eligible belated, revised or updated return",
+      ],
+      whoNote:
+        "Filing requirements depend on your income, transactions and applicable Income Tax provisions.",
+      steps: [
+        {
+          title: "Share Your Details",
+          body: "Tell us about your income sources and provide the required documents.",
+        },
+        {
+          title: "Review & Preparation",
+          body: "Your documents, income, eligible deductions and tax details are reviewed, and the applicable ITR form is selected.",
+        },
+        {
+          title: "Your Confirmation",
+          body: "The return details are shared with you for confirmation before filing.",
+        },
+        {
+          title: "ITR Filing",
+          body: "The return is filed with the Income Tax Department, subject to required verification and applicable procedures.",
+        },
+        {
+          title: "Acknowledgement",
+          body: "Your filing acknowledgement is shared with you for your records.",
+        },
+      ],
+      documentsIntro:
+        "The exact documents depend on your income sources. You only need to provide the documents that are applicable to you.",
+      documentGroups: [
+        {
+          title: "Basic KYC & Personal Details",
+          items: [
+            "PAN Card",
+            "Aadhaar Card",
+            "Current address",
+            "Mobile number",
+            "Email ID",
+            "Bank account details",
+            "Bank IFSC",
+            "Details of eligible bank account(s) for tax refund",
+            "Previous year's ITR and computation, if available",
+          ],
+        },
+        {
+          title: "For Salaried Employees",
+          items: [
+            "Form 16 from employer(s)",
+            "Salary slips, where required",
+            "Details of salary received from more than one employer, if applicable",
+            "Form 12BA or other salary-related documents, if applicable",
+            "Details of allowances, perquisites or other employment income, where applicable",
+          ],
+        },
+        {
+          title: "Bank & Interest Income",
+          items: [
+            "Bank statements/passbook",
+            "Savings account interest details",
+            "Fixed Deposit (FD) interest certificates",
+            "Recurring Deposit interest details",
+            "Interest certificates from banks/post offices, where applicable",
+          ],
+        },
+        {
+          title: "Tax Information & TDS",
+          items: [
+            "Form 26AS",
+            "Annual Information Statement (AIS)",
+            "Taxpayer Information Summary (TIS)",
+            "TDS certificates such as Form 16 / Form 16A, as applicable",
+            "Advance Tax payment details",
+            "Self-Assessment Tax challans, if any",
+            "Details of other taxes already paid",
+          ],
+        },
+        {
+          title: "Investments & Deductions",
+          intro: "Where applicable:",
+          items: [
+            "Life insurance premium receipts",
+            "PPF contribution details",
+            "Eligible ELSS/investment details",
+            "National Pension System (NPS) contribution details",
+            "Health insurance premium receipts",
+            "Eligible tuition fee receipts",
+            "Eligible donation receipts",
+            "Home loan interest certificate",
+            "Home loan principal repayment details",
+            "Education loan interest certificate",
+            "Other eligible deduction documents",
+          ],
+          after:
+            "The availability and amount of deductions depend on the applicable tax regime and Income Tax provisions.",
+        },
+        {
+          title: "House Property / Rental Income",
+          intro: "If you own or rent out property:",
+          items: [
+            "Property address and ownership details",
+            "Rent received during the year",
+            "Rent agreement, where available/applicable",
+            "Municipal/property tax payment details",
+            "Home loan interest certificate",
+            "Co-owner details and ownership percentage, where applicable",
+          ],
+        },
+        {
+          title: "Capital Gains: Shares & Mutual Funds",
+          intro: "If you sold investments:",
+          items: [
+            "Capital gains statement from broker/investment platform",
+            "Share transaction statement",
+            "Mutual fund capital gains statement",
+            "Demat statement, where required",
+            "Purchase and sale details where not available in the capital gains statement",
+            "Other supporting investment records, where applicable",
+          ],
+        },
+        {
+          title: "Sale of Property / Real Estate",
+          intro: "If you sold property:",
+          items: [
+            "Purchase agreement/deed",
+            "Sale agreement/deed",
+            "Purchase and sale value details",
+            "Details of eligible purchase/improvement expenses",
+            "Stamp duty/registration-related documents, where relevant",
+            "TDS details/certificates related to the property transaction",
+            "Details of any eligible reinvestment/exemption claimed",
+          ],
+        },
+        {
+          title: "For Self-Employed Professionals & Freelancers",
+          items: [
+            "Income/receipts details",
+            "Professional fee invoices or summary",
+            "Bank statements",
+            "Business/professional expense details",
+            "TDS certificates",
+            "Form 26AS, AIS and TIS",
+            "Books/accounts or income-expense statement, where maintained/required",
+            "GST details/returns, if applicable",
+            "Details of assets and liabilities, where applicable",
+          ],
+        },
+        {
+          title: "For Proprietors & Business Owners",
+          intro: "Depending on the nature of the business:",
+          items: [
+            "Profit & Loss Account",
+            "Balance Sheet",
+            "Trial Balance",
+            "Ledger/books of accounts, where applicable",
+            "Sales and purchase details",
+            "Business bank statements",
+            "Expense details",
+            "GST returns/reconciliation, where applicable",
+            "TDS details",
+            "Loan statements and interest certificates, where relevant",
+            "Fixed asset details",
+            "Depreciation schedule",
+            "Stock/inventory details, where applicable",
+            "Previous year's financial statements and ITR",
+            "Tax Audit Report, if applicable",
+          ],
+        },
+        {
+          title: "For Partnership Firms / LLPs",
+          items: [
+            "PAN of Firm/LLP",
+            "Partnership Deed / LLP Agreement",
+            "Profit & Loss Account",
+            "Balance Sheet",
+            "Trial Balance and books of accounts, where applicable",
+            "Bank statements",
+            "GST details, if applicable",
+            "TDS details",
+            "Partner details",
+            "Partner remuneration and interest details, where applicable",
+            "Capital account details",
+            "Previous year's ITR and financial statements",
+            "Tax Audit Report, where applicable",
+            "Other statutory or financial records relevant to the return",
+          ],
+        },
+        {
+          title: "Other Income, If Applicable",
+          intro: "Please also provide details of income from:",
+          items: [
+            "Commission or brokerage",
+            "Dividend",
+            "Pension",
+            "Family pension",
+            "Interest",
+            "Freelancing",
+            "Foreign income/assets, where applicable",
+            "Cryptocurrency/Virtual Digital Asset transactions, where applicable",
+            "Other investments or taxable receipts",
+            "Any other source of income",
+          ],
+          after: "Additional documents may be required depending on the nature of the income.",
+        },
+      ],
+      why: [
+        {
+          title: "Simple Process",
+          body: "We explain your requirements in easy-to-understand language.",
+        },
+        {
+          title: "Professional Review",
+          body: "Your income and available tax information are reviewed before preparing the return.",
+        },
+        {
+          title: "Correct ITR Selection",
+          body: "The applicable ITR form is selected based on your income profile and current rules.",
+        },
+        {
+          title: "Multiple Income Sources",
+          body: "Assistance is available for salary, business, professional, rental, investment and other applicable income.",
+        },
+        {
+          title: "End-to-End Support",
+          body: "From document collection and return preparation to filing and acknowledgement.",
+        },
+      ],
+      callout: {
+        title: "Have More Than One Source of Income?",
+        body: "No problem. Tell us whether you earn from salary, business, profession, rent, interest, investments or other sources, and we will guide you on the documents required for your case.",
+        cta: "Get Professional Assistance",
+      },
+      important:
+        "The documents and filing requirements vary depending on the taxpayer's income, transactions, tax regime and applicable Income Tax provisions. Additional documents or information may be required after reviewing the case. Professional services requiring certification, audit or other regulated work should be handled by an appropriately qualified/authorised professional.",
+    },
   },
   {
     slug: "tax-planning-advisory",
@@ -154,7 +441,12 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Application prepared and submitted on the GST portal",
       "Follow-up on queries until registration is granted",
     ],
-    documents: [KYC, "Business proof (registration certificate, partnership deed, etc.)", "Business address proof", "Bank account details"],
+    documents: [
+      KYC,
+      "Business proof (registration certificate, partnership deed, etc.)",
+      "Business address proof",
+      "Bank account details",
+    ],
   },
   {
     slug: "gst-return-filing",
@@ -171,7 +463,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Returns prepared and shared for review",
       "Filed within the due date each cycle",
     ],
-    documents: ["Sales and purchase registers", "GST login credentials", "Bank statements, if required for reconciliation"],
+    documents: [
+      "Sales and purchase registers",
+      "GST login credentials",
+      "Bank statements, if required for reconciliation",
+    ],
   },
   {
     slug: "gst-reconciliation-notice-support",
@@ -243,7 +539,12 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "DSC, DIN and incorporation forms prepared and filed with MCA",
       "Certificate of Incorporation, PAN and TAN obtained",
     ],
-    documents: [KYC, "Registered office proof", "Passport-size photographs", "Digital Signature Certificate (DSC)"],
+    documents: [
+      KYC,
+      "Registered office proof",
+      "Passport-size photographs",
+      "Digital Signature Certificate (DSC)",
+    ],
   },
   {
     slug: "msme-udyam-registration",
@@ -277,7 +578,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Application prepared with the required premises/business documents",
       "Registration/licence obtained and shared with you",
     ],
-    documents: [KYC, "Premises proof (rent agreement/ownership document)", "Business constitution proof"],
+    documents: [
+      KYC,
+      "Premises proof (rent agreement/ownership document)",
+      "Business constitution proof",
+    ],
   },
   {
     slug: "pan-tan-dsc-services",
@@ -313,7 +618,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Title chain, encumbrances and approvals reviewed",
       "Written observations shared with you",
     ],
-    documents: ["Title documents/chain", "7/12 extract or property card", "Encumbrance certificate, where available"],
+    documents: [
+      "Title documents/chain",
+      "7/12 extract or property card",
+      "Encumbrance certificate, where available",
+    ],
   },
   {
     slug: "sale-agreement-sale-deed",
@@ -383,7 +692,12 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Application and supporting documents prepared",
       "Coordination with the society until the transfer is recorded",
     ],
-    documents: [KYC, "Share certificate", "Sale/gift/release deed as applicable", "Society NOC application"],
+    documents: [
+      KYC,
+      "Share certificate",
+      "Sale/gift/release deed as applicable",
+      "Society NOC application",
+    ],
   },
   {
     slug: "society-noc-membership",
@@ -472,7 +786,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Required agreements/consents identified",
       "Documentation prepared and coordinated with the relevant parties",
     ],
-    documents: ["Society registration documents", "Existing member/share documents", "Developer agreement, where applicable"],
+    documents: [
+      "Society registration documents",
+      "Existing member/share documents",
+      "Developer agreement, where applicable",
+    ],
   },
 
   // ── Sheetal Associates · Legal Drafting ────────────────
@@ -508,7 +826,10 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Notice drafted and shared for your approval",
       "Published, with the tear sheet/proof of publication shared with you",
     ],
-    documents: [KYC, "Details/proof relevant to the notice (e.g. FIR copy for a lost document, property papers for a sale notice)"],
+    documents: [
+      KYC,
+      "Details/proof relevant to the notice (e.g. FIR copy for a lost document, property papers for a sale notice)",
+    ],
   },
 
   // ── Sheetal Associates · NRI & Family Property Services ─
@@ -527,7 +848,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Documents drafted and shared for remote execution",
       "Coordination with the POA holder/local representative as needed",
     ],
-    documents: ["Passport/OCI details", "Property title documents", "POA, if a representative will act locally"],
+    documents: [
+      "Passport/OCI details",
+      "Property title documents",
+      "POA, if a representative will act locally",
+    ],
   },
   {
     slug: "will-succession-documentation",
@@ -544,7 +869,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Document(s) drafted and shared for review",
       "Execution/registration guidance, or coordination for succession documentation",
     ],
-    documents: [KYC, "Asset/property details", "Death certificate and family details, for succession matters"],
+    documents: [
+      KYC,
+      "Asset/property details",
+      "Death certificate and family details, for succession matters",
+    ],
   },
 ];
 
