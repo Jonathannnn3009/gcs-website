@@ -84,6 +84,7 @@ uniform float uWisp;
 uniform float uHeat;
 uniform float uSize;
 uniform float uBright;
+uniform float uLight;
 varying vec2 vUv;
 ${NOISE}
 void main(){
@@ -104,7 +105,7 @@ void main(){
   float body = smoothstep(thick, 0.0, d);
   float gaps = smoothstep(-0.95, 0.25, n2 * 0.8 + n1 * 0.4);
   float specks = smoothstep(0.6, 0.95, n3) * smoothstep(0.12, 0.0, abs(r - radius - n2 * 0.05));
-  float glow = exp(-d * 7.0) * 0.24 * (0.45 + 0.55 * gaps);
+  float glow = exp(-d * 7.0) * 0.24 * (1.0 - 0.6 * uLight) * (0.45 + 0.55 * gaps);
   float v = clamp(body * (0.35 + 0.65 * gaps) + specks * 0.5 + glow, 0.0, 1.4);
 
   // colour: mostly blue (deep blue at the thin edges, bright blue in the middle, pale where it is
@@ -112,7 +113,7 @@ void main(){
   float heat = clamp(0.30 + v * 0.55 + n1 * 0.18 + (uHeat - 0.45) * 0.6, 0.0, 1.0);
   vec3 deep  = vec3(0.04, 0.12, 0.50);
   vec3 blue  = vec3(0.12, 0.46, 1.00);
-  vec3 pale  = vec3(0.72, 0.88, 1.00);
+  vec3 pale  = mix(vec3(0.72, 0.88, 1.00), vec3(0.22, 0.52, 1.00), uLight);   // stays visible on white
   vec3 gold  = vec3(1.00, 0.78, 0.26);
   vec3 col = mix(deep, blue, smoothstep(0.0, 0.5, heat));
   col = mix(col, pale, smoothstep(0.7, 1.0, heat) * body);
@@ -125,14 +126,24 @@ void main(){
 `;
 
 /**
- * Gia's 3D symbol: a dark round button with a bold "AI" and a ring of blue and gold light
- * swirling around it, drawn with three.js. Until the 3D code has loaded (it waits for the page to
- * settle), and for visitors who prefer reduced motion or whose browser cannot do WebGL, it shows
- * the dark button and "AI" without the moving ring.
+ * Gia's 3D symbol: the GCS logo with a ring of blue and gold light swirling around it, drawn with
+ * three.js straight onto whatever it sits on (no disc, no border). Until the 3D code has loaded
+ * (it waits for the page to settle), and for visitors who prefer reduced motion or whose browser
+ * cannot do WebGL, just the logo shows.
  */
-export function GiaOrb({ mood = "idle", className = "h-11 w-11" }: { mood?: GiaMood; className?: string }) {
+export function GiaOrb({
+  mood = "idle",
+  className = "h-12 w-12",
+  tone = "light",
+}: {
+  mood?: GiaMood;
+  className?: string;
+  /** "light" for a light background (the logo keeps its colours); "dark" for a dark one (the logo turns white). */
+  tone?: "light" | "dark";
+}) {
   const host = useRef<HTMLSpanElement>(null);
   const moodRef = useRef<GiaMood>(mood);
+  const toneRef = useRef(tone);
   const [drawn, setDrawn] = useState(false);
 
   useEffect(() => {
@@ -182,6 +193,7 @@ export function GiaOrb({ mood = "idle", className = "h-11 w-11" }: { mood?: GiaM
           uHeat: { value: LOOKS.idle.heat },
           uSize: { value: 1 },
           uBright: { value: LOOKS.idle.bright },
+          uLight: { value: toneRef.current === "light" ? 1 : 0 },
         };
         const geometry = new THREE.PlaneGeometry(2, 2);
         const material = new THREE.ShaderMaterial({
@@ -272,7 +284,7 @@ export function GiaOrb({ mood = "idle", className = "h-11 w-11" }: { mood?: GiaM
           canvas.remove();
         };
       } catch {
-        // no WebGL: the dark button with "AI" simply stays as it is
+        // no WebGL: the logo simply stays as it is
       }
     })();
 
@@ -287,14 +299,14 @@ export function GiaOrb({ mood = "idle", className = "h-11 w-11" }: { mood?: GiaM
       ref={host}
       aria-hidden="true"
       data-drawn={drawn}
-      className={`relative grid shrink-0 place-items-center overflow-hidden rounded-full bg-[radial-gradient(circle_at_50%_45%,#0d1a3d_0%,#060b1a_78%)] ring-2 ring-gold/50 shadow-[0_0_14px_rgba(60,130,255,0.45)] [container-type:size] ${className}`}
+      className={`relative grid shrink-0 place-items-center rounded-full ${className}`}
     >
-      <span
-        className="relative font-sans font-extrabold tracking-tight text-white"
-        style={{ fontSize: "28cqw", lineHeight: 1, textShadow: "0 0 8px rgba(110,170,255,0.6)" }}
-      >
-        AI
-      </span>
+      <img
+        src="/brand/gcs-mark.png"
+        alt=""
+        className="relative h-auto w-[40%]"
+        style={tone === "dark" ? { filter: "brightness(0) invert(1) drop-shadow(0 0 4px rgba(120,170,255,0.6))" } : undefined}
+      />
     </span>
   );
 }
