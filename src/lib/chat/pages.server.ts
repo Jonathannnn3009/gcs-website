@@ -13,6 +13,7 @@ export const SITE_PAGES: { path: string; about: string }[] = [
   { path: "/", about: "Home page: what GCS does, how it works, partner banks, client stories" },
   { path: "/about", about: "About GCS: story, team, values" },
   { path: "/why-us", about: "Why choose GCS" },
+  { path: "/track-application", about: "Track Application: clients enter their GCS ID, partners sign in, and enquiries can ask for an update" },
   { path: "/contact", about: "Contact details, enquiry form and common questions" },
   { path: "/services", about: "All loan products by group" },
   { path: "/rates", about: "Indicative interest rates by loan" },

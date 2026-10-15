@@ -236,7 +236,7 @@ export const TOOL_DEFINITIONS = [
     function: {
       name: "read_website_page",
       description:
-        "Read what a page of the GCS website actually says. Use it whenever the visitor asks about something the website covers (a partner programme, commission, steps, FAQs, a loan page, CA and legal services, the about page, a city page, the case studies) and answer from the text returned, keeping figures and claims as written. Paths come from the page index in your instructions.",
+        "Read what a page of the GCS website actually says. Call it before answering any factual question that your instructions do not already answer (a rule, a charge, a document, a tax or legal point, how something works, a partner programme, commission, steps, FAQs, a loan page, credit scores, CA and legal services, the about page, a city page, the case studies). Answer only from the text returned, keeping figures and claims as written. If the text does not say it, tell the visitor our website does not cover it and offer an expert. Paths come from the page index in your instructions.",
       parameters: {
         type: "object",
         properties: {
@@ -704,7 +704,11 @@ export async function runTool(
               ...page,
               note: "This is the page's own text. Answer from it, keep its figures as written, and link the page.",
             }
-          : { error: page.error, advice: "Answer from your instructions, or offer an expert." },
+          : {
+              error: page.error,
+              advice:
+                "Answer only from your instructions, or say the website does not cover it and offer an expert.",
+            },
       };
     }
     switch (name) {

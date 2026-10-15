@@ -64,6 +64,8 @@ export async function* streamChat(opts: {
   messages: OpenAiMessage[];
   /** When false the model must answer in text and may not call tools (used on the last round). */
   allowTools: boolean;
+  /** Makes the model call this tool now (used to make it read a page before it answers). */
+  forceTool?: string | undefined;
   signal?: AbortSignal;
 }): AsyncGenerator<StreamPiece> {
   const body: Record<string, unknown> = {
@@ -73,7 +75,11 @@ export async function* streamChat(opts: {
     stream_options: { include_usage: true },
     max_completion_tokens: 700,
     tools: TOOL_DEFINITIONS,
-    tool_choice: opts.allowTools ? "auto" : "none",
+    tool_choice: opts.forceTool
+      ? { type: "function", function: { name: opts.forceTool } }
+      : opts.allowTools
+        ? "auto"
+        : "none",
   };
   if (REASONING_MODEL.test(opts.model)) body["reasoning_effort"] = "low";
   else body["temperature"] = 0.3;

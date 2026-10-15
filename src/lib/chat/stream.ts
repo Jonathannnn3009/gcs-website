@@ -7,6 +7,8 @@ export class ChatHttpError extends Error {
   constructor(
     readonly status: number,
     readonly code: string,
+    /** When a paused chat opens again (an ISO time), if the server said. */
+    readonly until?: string,
   ) {
     super(code);
   }
@@ -27,13 +29,15 @@ export async function streamChatReply(
 
   if (!res.ok || !res.body) {
     let code = "failed";
+    let until: string | undefined;
     try {
-      const json = (await res.json()) as { error?: unknown };
+      const json = (await res.json()) as { error?: unknown; until?: unknown };
       if (typeof json.error === "string") code = json.error;
+      if (typeof json.until === "string") until = json.until;
     } catch {
       // the body was not JSON; keep the generic code
     }
-    throw new ChatHttpError(res.status, code);
+    throw new ChatHttpError(res.status, code, until);
   }
 
   const reader = res.body.getReader();

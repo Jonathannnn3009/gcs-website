@@ -31,7 +31,7 @@ type Part =
   | { kind: "form"; req: CallbackRequest; state: "open" | "sent"; name?: string }
   | {
       kind: "error";
-      code: "unavailable" | "rate_limited" | "failed";
+      code: "unavailable" | "rate_limited" | "failed" | "paused";
       text: string;
       /** The visitor's message, so "Try again" can ask it once more. */
       retry?: string;
@@ -40,6 +40,8 @@ type Part =
 type Msg = { id: string; role: ChatRole; parts: Part[] };
 
 const STORAGE_KEY = "gcs.chat.v1";
+/** Remembers, for the number that was turned away, when its chat opens again. */
+const PAUSE_KEY = "gcs.chat.paused.v1";
 const MAX_STORED = 40;
 
 const QUICK_ACTIONS = [
@@ -66,7 +68,16 @@ const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(
 
 type ErrorCode = Extract<Part, { kind: "error" }>["code"];
 
+const clockTime = (at: number) =>
+  new Date(at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+
+function pausedText(until: number): string {
+  return `This chat is paused for now because the questions weren't about loans or Growth Capital Services. It opens again around ${clockTime(until)}. For anything about your loan, our experts can help right away:`;
+}
+
 function errorText(code: ErrorCode): string {
+  if (code === "paused")
+    return "This chat is paused for now. For anything about your loan, our experts can help right away:";
   if (code === "rate_limited")
     return "You're sending messages quickly. Please wait a minute and try again.";
   if (code === "unavailable")
@@ -86,6 +97,8 @@ function applyEvent(parts: Part[], e: ChatEvent, retry?: string): Part[] {
       return [...parts, { kind: "card", card: e.v }];
     case "form":
       return [...parts, { kind: "form", req: e.v, state: "open" }];
+    case "paused":
+      return [...parts, { kind: "error", code: "paused", text: e.v }];
     case "error":
       return [
         ...parts,
@@ -351,8 +364,12 @@ export function ChatAssistant() {
   /** The visitor's sign-in (a code texted to their mobile). Nothing can be asked without it. */
   const [pass, setPass] = useState<ChatPass | null>(null);
   const [gateNote, setGateNote] = useState("");
+  /** When the chat opens again, if it was paused for asking things unrelated to loans or GCS. */
+  const [pausedUntil, setPausedUntil] = useState<number | null>(null);
   const passRef = useRef<ChatPass | null>(null);
   passRef.current = pass;
+  const pausedRef = useRef<number | null>(null);
+  pausedRef.current = pausedUntil;
   /** A question asked before signing in, sent as soon as the visitor has. */
   const pendingRef = useRef<string | null>(null);
 
@@ -372,6 +389,50 @@ export function ChatAssistant() {
     setRestored(true);
     const timer = window.setTimeout(() => setReady(true), 2500);
     return () => window.clearTimeout(timer);
+  }, []);
+
+  // The pause belongs to the mobile number, so it is still there after a reload or a new tab.
+  useEffect(() => {
+    let until: number | null = null;
+    try {
+      const raw = window.localStorage.getItem(PAUSE_KEY);
+      const saved = raw ? (JSON.parse(raw) as { phone?: unknown; until?: unknown }) : null;
+      if (
+        pass &&
+        saved &&
+        saved.phone === pass.phone &&
+        typeof saved.until === "number" &&
+        saved.until > Date.now()
+      )
+        until = saved.until;
+    } catch {
+      // storage blocked: the server still enforces the pause
+    }
+    setPausedUntil(until);
+  }, [pass]);
+
+  useEffect(() => {
+    if (pausedUntil === null) return;
+    const wait = pausedUntil - Date.now();
+    if (wait <= 0) {
+      setPausedUntil(null);
+      return;
+    }
+    const timer = window.setTimeout(() => setPausedUntil(null), Math.min(wait, 2_147_000_000));
+    return () => window.clearTimeout(timer);
+  }, [pausedUntil]);
+
+  const pause = useCallback((until: number) => {
+    if (!Number.isFinite(until) || until <= Date.now()) return;
+    setPausedUntil(until);
+    try {
+      window.localStorage.setItem(
+        PAUSE_KEY,
+        JSON.stringify({ phone: passRef.current?.phone ?? "", until }),
+      );
+    } catch {
+      // the pause lasts for this page view only
+    }
   }, []);
 
   useEffect(() => {
@@ -435,7 +496,10 @@ export function ChatAssistant() {
         await streamChatReply(
           { messages: toTurns(history).slice(-CHAT_LIMITS.maxTurns), page: pathname, lang },
           token,
-          (e) => patch((parts) => applyEvent(parts, e, lastUser ? textOf(lastUser) : undefined)),
+          (e) => {
+            if (e.t === "paused") pause(Date.parse(e.until));
+            patch((parts) => applyEvent(parts, e, lastUser ? textOf(lastUser) : undefined));
+          },
           ctrl.signal,
         );
       } catch (err) {
@@ -449,7 +513,17 @@ export function ChatAssistant() {
           setBusy(false);
           return;
         }
-        if (!ctrl.signal.aborted) {
+        if (
+          !ctrl.signal.aborted &&
+          err instanceof ChatHttpError &&
+          err.status === 429 &&
+          err.code === "paused"
+        ) {
+          // asked again while paused (another device, or the pause was not remembered here)
+          const until = err.until ? Date.parse(err.until) : Date.now() + 60 * 60_000;
+          pause(until);
+          patch((parts) => [...parts, { kind: "error", code: "paused", text: pausedText(until) }]);
+        } else if (!ctrl.signal.aborted) {
           const retry = lastUser ? textOf(lastUser) : undefined;
           const code =
             err instanceof ChatHttpError
@@ -471,13 +545,14 @@ export function ChatAssistant() {
         setMessages((list) => list.filter((m) => !(m.id === bot.id && m.parts.length === 0)));
       }
     },
-    [pathname, lang],
+    [pathname, lang, pause],
   );
 
   const send = useCallback(
     (raw: string) => {
       const text = raw.trim().slice(0, CHAT_LIMITS.maxUserChars);
       if (!text || abortRef.current) return;
+      if (pausedRef.current && pausedRef.current > Date.now()) return;
       if (!passRef.current) {
         pendingRef.current = text;
         return;
@@ -613,6 +688,7 @@ export function ChatAssistant() {
 
   if (!ready) return null;
 
+  const isPaused = pausedUntil !== null && pausedUntil > Date.now();
   const last = messages[messages.length - 1];
   const waitingForText =
     busy && !!last && last.role === "assistant" && !last.parts.some((p) => p.kind === "text");
@@ -723,7 +799,7 @@ export function ChatAssistant() {
                     </div>
                   </div>
 
-                  {messages.length === 0 && (
+                  {messages.length === 0 && !isPaused && (
                     <div className="flex flex-wrap gap-2 pl-10">
                       {QUICK_ACTIONS.map((a) => (
                         <button
@@ -801,7 +877,7 @@ export function ChatAssistant() {
                                   ) : null}
                                   {p.code !== "rate_limited" && (
                                     <ContactButtons
-                                      {...(p.code === "unavailable"
+                                      {...(p.code === "unavailable" || p.code === "paused"
                                         ? { onRequestCall: () => requestCall(m.id) }
                                         : {})}
                                     />
@@ -818,11 +894,32 @@ export function ChatAssistant() {
                   })}
                 </div>
 
+                {isPaused && (
+                  <div className="border-t border-border bg-white p-4">
+                    <p className="text-[13px] leading-relaxed text-ink">
+                      <strong className="font-bold text-navy">Chat paused.</strong> It opens again
+                      around {clockTime(pausedUntil!)}. For anything about your loan, our experts
+                      are a call away.
+                    </p>
+                    <ContactButtons />
+                    <p className="mt-3 text-[10.5px] leading-snug text-muted-foreground">
+                      {ASSISTANT_NAME} only answers questions about loans, credit and GCS.{" "}
+                      <button
+                        type="button"
+                        onClick={signOut}
+                        className="font-semibold text-navy underline hover:text-gold-dark"
+                      >
+                        Not you? Sign out
+                      </button>
+                    </p>
+                  </div>
+                )}
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
                     send(input);
                   }}
+                  hidden={isPaused}
                   className="border-t border-border bg-white p-3"
                 >
                   <div className="flex items-end gap-2 rounded-2xl border border-border bg-bg-light py-1.5 pr-1.5 pl-3.5 transition-all focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/20">
