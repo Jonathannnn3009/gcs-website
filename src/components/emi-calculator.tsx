@@ -70,9 +70,9 @@ export function EmiCalculator() {
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,22rem)] lg:items-stretch">
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
         {/* Sliders */}
-        <div className="flex flex-col justify-between gap-7">
+        <div className="flex flex-col gap-7">
           <SliderField
             label="Loan Amount"
             value={principal}
@@ -215,7 +215,7 @@ export function EmiCalculator() {
           </div>
 
           <Link to="/contact" className="gold-btn group w-full justify-center py-3.5">
-            Talk to an Advisor
+            Talk to an Expert
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
