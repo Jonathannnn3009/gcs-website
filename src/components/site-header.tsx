@@ -91,7 +91,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-1 rounded-md px-2 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors hover:text-foreground 2xl:px-3 2xl:text-[15px]"
+                      className="group relative flex items-center gap-0.5 rounded-md px-1.5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors hover:text-foreground min-[1440px]:gap-1 min-[1440px]:px-2 min-[1440px]:text-sm 2xl:px-3 2xl:text-[15px]"
                     >
                       {link.label}
                       <ChevronDown
@@ -383,7 +383,7 @@ export function SiteHeader() {
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
-                  className="relative rounded-md px-2 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-2 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-1rem)] 2xl:px-3 2xl:text-[15px] 2xl:after:left-3 2xl:hover:after:w-[calc(100%-1.5rem)]"
+                  className="relative rounded-md px-1.5 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-1.5 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-0.75rem)] min-[1440px]:px-2 min-[1440px]:text-sm min-[1440px]:after:left-2 min-[1440px]:hover:after:w-[calc(100%-1rem)] 2xl:px-3 2xl:text-[15px] 2xl:after:left-3 2xl:hover:after:w-[calc(100%-1.5rem)]"
                 >
                   {link.label}
                 </Link>
@@ -394,7 +394,7 @@ export function SiteHeader() {
           <LanguageSwitcher className="hidden sm:inline-flex" />
 
           {/* Apply CTA */}
-          <Link to="/contact" className="gold-btn hidden py-2.5 whitespace-nowrap sm:inline-flex xl:px-5 2xl:px-7">
+          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-4 xl:text-[13px] min-[1440px]:py-2.5 min-[1440px]:px-5 min-[1440px]:text-sm 2xl:px-7">
             Apply Now
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
