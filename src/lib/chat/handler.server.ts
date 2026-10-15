@@ -149,7 +149,7 @@ async function converse(opts: {
       })),
     });
     for (const call of toolCalls) {
-      const out = runTool(call.name, call.arguments, snapshot);
+      const out = await runTool(call.name, call.arguments, snapshot, opts.origin);
       if (out.card) opts.send({ t: "card", v: out.card });
       if (out.form) opts.send({ t: "form", v: out.form });
       messages.push({ role: "tool", tool_call_id: call.id, content: JSON.stringify(out.result) });
@@ -159,7 +159,7 @@ async function converse(opts: {
   if (!spoke) {
     opts.send({
       t: "d",
-      v: "I couldn't put an answer together for that. Could you rephrase it, or would you like to talk to one of our advisors?",
+      v: "I couldn't put an answer together for that. Could you rephrase it, or would you like to talk to one of our experts?",
     });
   }
 

@@ -17,7 +17,7 @@ export const LOCATIONS: LocationContent[] = [
     metaDescription:
       "Growth Capital Services is based in Ghatkopar West, Mumbai — home loans, business loans, loan against property and more, arranged across 75+ Banks and NBFCs.",
     intro:
-      "Our advisory office sits on the Andheri-Ghatkopar Road in Ghatkopar West, in the middle of Mumbai's western suburbs. If you're anywhere from Andheri to Mulund, Bandra to Chembur, a senior advisor is a short trip away — or a phone call, if that's easier.",
+      "Our advisory office sits on the Andheri-Ghatkopar Road in Ghatkopar West, in the middle of Mumbai's western suburbs. If you're anywhere from Andheri to Mulund, Bandra to Chembur, a senior expert is a short trip away — or a phone call, if that's easier.",
     hasOffice: true,
     serviceNote:
       "Walk in by appointment for a face-to-face file review, or handle the entire process over phone, WhatsApp and email — most Mumbai clients do a mix of both.",
@@ -27,8 +27,8 @@ export const LOCATIONS: LocationContent[] = [
         a: "CCTV Towers, Andheri-Ghatkopar Road, Ghatkopar West, Mumbai 400084 — a short walk from Ghatkopar station on both the suburban line and Metro Line 1.",
       },
       {
-        q: "Can I meet an advisor in person?",
-        a: "Yes, by appointment, Monday to Saturday, 10 AM to 6 PM. Call ahead so the right advisor for your loan type is free.",
+        q: "Can I meet an expert in person?",
+        a: "Yes, by appointment, Monday to Saturday, 10 AM to 6 PM. Call ahead so the right expert for your loan type is free.",
       },
       {
         q: "Do you cover all of Mumbai, or just the western suburbs?",
@@ -43,10 +43,10 @@ export const LOCATIONS: LocationContent[] = [
     metaDescription:
       "Home loans, business loans, loan against property and more for Thane residents and businesses — arranged across 75+ Banks and NBFCs, with digital documentation and doorstep support.",
     intro:
-      "We don't have a branch counter in Thane — most of our Thane clients never needed one. Your file moves through us digitally from wherever you are, with a senior advisor on call throughout.",
+      "We don't have a branch counter in Thane — most of our Thane clients never needed one. Your file moves through us digitally from wherever you are, with a senior expert on call throughout.",
     hasOffice: false,
     serviceNote:
-      "Documents collected digitally or by doorstep pickup, video or phone consultations with a senior advisor, and an in-person meeting at our Ghatkopar West office when a file genuinely needs it.",
+      "Documents collected digitally or by doorstep pickup, video or phone consultations with a senior expert, and an in-person meeting at our Ghatkopar West office when a file genuinely needs it.",
     faqs: [
       {
         q: "Do you have an office in Thane?",
@@ -54,7 +54,7 @@ export const LOCATIONS: LocationContent[] = [
       },
       {
         q: "Does that slow things down compared to a local DSA?",
-        a: "Usually the opposite — no branch queue, and your advisor is reachable directly on phone or WhatsApp through the whole process.",
+        a: "Usually the opposite — no branch queue, and your expert is reachable directly on phone or WhatsApp through the whole process.",
       },
       {
         q: "Which lenders do you work with for Thane customers?",
@@ -69,10 +69,10 @@ export const LOCATIONS: LocationContent[] = [
     metaDescription:
       "Home loans, business loans, loan against property and more for Navi Mumbai residents and businesses — arranged across 75+ Banks and NBFCs, with digital documentation and doorstep support.",
     intro:
-      "From Vashi to Kharghar to Panvel, we handle Navi Mumbai files the same way we handle everything else — digitally, with a named advisor who stays on the case start to finish.",
+      "From Vashi to Kharghar to Panvel, we handle Navi Mumbai files the same way we handle everything else — digitally, with a named expert who stays on the case start to finish.",
     hasOffice: false,
     serviceNote:
-      "Documents collected digitally or by doorstep pickup, video or phone consultations with a senior advisor, and an in-person meeting at our Ghatkopar West office when a file genuinely needs it.",
+      "Documents collected digitally or by doorstep pickup, video or phone consultations with a senior expert, and an in-person meeting at our Ghatkopar West office when a file genuinely needs it.",
     faqs: [
       {
         q: "Do you have an office in Navi Mumbai?",
@@ -98,7 +98,7 @@ export const LOCATIONS: LocationContent[] = [
       "Pune is the farthest city we actively serve, and it works because almost nothing in the process needs you to be in the same room as us — documents, discussion and disbursal all move digitally.",
     hasOffice: false,
     serviceNote:
-      "Documents collected digitally or by courier, video or phone consultations with a senior advisor, and an in-person meeting at our Ghatkopar West, Mumbai office for the rare file that needs it.",
+      "Documents collected digitally or by courier, video or phone consultations with a senior expert, and an in-person meeting at our Ghatkopar West, Mumbai office for the rare file that needs it.",
     faqs: [
       {
         q: "Do you have an office in Pune?",

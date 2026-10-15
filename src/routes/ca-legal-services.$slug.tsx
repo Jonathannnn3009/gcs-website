@@ -121,38 +121,45 @@ function DetailDossier({
           {detail.documentsIntro}
         </p>
         <div className="mt-5 divide-y divide-border overflow-hidden rounded-xl border border-border">
-          {detail.documentGroups.map((g, i) => (
-            // every group stays in the page and is only folded away, so all of it can be read and searched
-            <details key={g.title} className="group" {...(i === 0 ? { open: true } : {})}>
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 [&::-webkit-details-marker]:hidden">
-                <span className="text-sm font-bold text-navy dark:text-white">
-                  <span className="mr-2 text-gold-dark">{i + 1}.</span>
-                  {g.title}
-                </span>
-                <ChevronDown className="h-4 w-4 shrink-0 text-gold transition-transform duration-300 group-open:rotate-180" />
-              </summary>
-              <div className="px-5 pb-5">
-                {g.intro && <p className="text-sm text-muted-foreground">{g.intro}</p>}
-                <ul className="mt-2 space-y-2">
-                  {g.items.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-2.5 text-sm text-muted-foreground"
-                    >
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                {g.after && (
-                  <p className="mt-3 text-xs leading-relaxed text-muted-foreground italic">
-                    {g.after}
-                  </p>
-                )}
-              </div>
-            </details>
-          ))}
+          {detail.documentGroups
+            .slice(0, detail.shownGroups ?? detail.documentGroups.length)
+            .map((g, i) => (
+              // every group stays in the page and is only folded away, so all of it can be read and searched
+              <details key={g.title} className="group" {...(i === 0 ? { open: true } : {})}>
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 [&::-webkit-details-marker]:hidden">
+                  <span className="text-sm font-bold text-navy dark:text-white">
+                    <span className="mr-2 text-gold-dark">{i + 1}.</span>
+                    {g.title}
+                  </span>
+                  <ChevronDown className="h-4 w-4 shrink-0 text-gold transition-transform duration-300 group-open:rotate-180" />
+                </summary>
+                <div className="px-5 pb-5">
+                  {g.intro && <p className="text-sm text-muted-foreground">{g.intro}</p>}
+                  <ul className="mt-2 space-y-2">
+                    {g.items.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2.5 text-sm text-muted-foreground"
+                      >
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  {g.after && (
+                    <p className="mt-3 text-xs leading-relaxed text-muted-foreground italic">
+                      {g.after}
+                    </p>
+                  )}
+                </div>
+              </details>
+            ))}
         </div>
+        {detail.documentsMore && (
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            {detail.documentsMore}
+          </p>
+        )}
         <ChecklistGate
           pdfHref={`/checklists/${slug}-checklist.pdf`}
           productTitle={title}
@@ -252,7 +259,7 @@ function ProfessionalServiceDetailPage() {
                   },
                   service.detail
                     ? {
-                        label: "Documents",
+                        label: "Full checklist",
                         value: `${service.detail.documentGroups.length} groups`,
                       }
                     : { label: "Documents", value: `${service.documents.length} items` },

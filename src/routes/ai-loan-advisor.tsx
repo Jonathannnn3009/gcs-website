@@ -6,13 +6,13 @@ import { LoanAdvisor } from "@/components/loan-advisor";
 export const Route = createFileRoute("/ai-loan-advisor")({
   head: () => ({
     meta: [
-      { title: "Loan Advisor | Growth Capital Services" },
+      { title: "Loan Expert | Growth Capital Services" },
       {
         name: "description",
         content:
           "Tell us what you need and answer a few short questions. A Growth Capital Services loan expert will look at the options that may suit your profile and contact you.",
       },
-      { property: "og:title", content: "GCS Loan Advisor" },
+      { property: "og:title", content: "GCS Loan Expert" },
       {
         property: "og:description",
         content: "A few simple questions, then a GCS loan expert takes it from there.",
@@ -34,9 +34,9 @@ function AdvisorPage() {
                 Home
               </Link>
               <span className="text-gold">/</span>
-              <span className="text-navy dark:text-white">Loan Advisor</span>
+              <span className="text-navy dark:text-white">Loan Expert</span>
             </p>
-            <p className="eyebrow mt-5">GCS Loan Advisor</p>
+            <p className="eyebrow mt-5">GCS Loan Expert</p>
             <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
               Tell us what you need.{" "}
               <span className="gold-text-static">We'll help you find the right direction.</span>

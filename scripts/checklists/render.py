@@ -16,6 +16,7 @@ form names in bold).
 Item prefixes:  "!" bold item, "*" italic note (no checkbox), "-" bullet, "## " sub-heading.
 """
 
+import os
 import re
 
 from reportlab.lib import colors
@@ -58,7 +59,7 @@ MARGIN_R = 14 * mm
 CONTENT_X = SPINE_W + MARGIN_L
 CONTENT_W = PAGE_W - CONTENT_X - MARGIN_R
 
-MARK_PATH = r"D:\CRM WEBSITE - GCS\secure-sums-site\public\brand\gcs-mark.png"
+MARK_PATH = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "public", "brand", "gcs-mark.png"))
 
 PHONE = "+91 88280 01700"
 PHONE2 = "+91 88280 03900"

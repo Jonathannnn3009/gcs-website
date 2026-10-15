@@ -13,6 +13,7 @@ import {
 import { PROFESSIONAL_SERVICES, divisionLabel } from "@/data/professional-services";
 import type { CallbackRequest, ResultCard } from "./config";
 import type { SiteSnapshot } from "./site-data.server";
+import { readSitePage } from "./pages.server";
 
 export type ToolOutput = { result: unknown; card?: ResultCard; form?: CallbackRequest };
 
@@ -233,6 +234,30 @@ export const TOOL_DEFINITIONS = [
   {
     type: "function",
     function: {
+      name: "read_website_page",
+      description:
+        "Read what a page of the GCS website actually says. Use it whenever the visitor asks about something the website covers (a partner programme, commission, steps, FAQs, a loan page, CA and legal services, the about page, a city page, the case studies) and answer from the text returned, keeping figures and claims as written. Paths come from the page index in your instructions.",
+      parameters: {
+        type: "object",
+        properties: {
+          path: {
+            type: "string",
+            description: "A path from the page index, e.g. /partner/builder.",
+          },
+          part: {
+            type: "integer",
+            description:
+              "For a long page, which part to read (starts at 1). The result says how many parts there are.",
+          },
+        },
+        required: ["path"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
       name: "search_ca_legal_services",
       description:
         "Find GCS's CA and legal services (delivered by associated professionals), e.g. ITR filing, GST registration, property title search, society redevelopment. Call with no query to list the categories.",
@@ -250,14 +275,14 @@ export const TOOL_DEFINITIONS = [
     function: {
       name: "show_callback_form",
       description:
-        "Show the visitor a short form to request a call from a GCS advisor. Use when they want to talk to someone, apply, or need something you cannot do yourself (checking a project's bank approval, an application's status, a custom quote). Do not ask for their name or number in chat.",
+        "Show the visitor a short form to request a call from a GCS expert. Use when they want to talk to someone, apply, or need something you cannot do yourself (checking a project's bank approval, an application's status, a custom quote). Do not ask for their name or number in chat.",
       parameters: {
         type: "object",
         properties: {
           reason: {
             type: "string",
             description:
-              "One line for the advisor: what the visitor wants, with any key numbers they shared.",
+              "One line for the expert: what the visitor wants, with any key numbers they shared.",
           },
           interested_in: {
             type: "string",
@@ -378,7 +403,7 @@ function toolStampDuty(a: Args, snap: SiteSnapshot): ToolOutput {
       result: {
         error: `No stamp duty rate on file for "${wanted}".`,
         states_available: states,
-        advice: "Say so, and suggest confirming with the local sub-registrar or a GCS advisor.",
+        advice: "Say so, and suggest confirming with the local sub-registrar or a GCS expert.",
       },
     };
   }
@@ -535,7 +560,7 @@ function toolProduct(a: Args, snap: SiteSnapshot): ToolOutput {
         found: false,
         loans_offered: list.map((x) => ({ slug: x.slug, title: x.title })),
         advice:
-          "Say you don't see that exact loan, suggest the closest ones, or offer an advisor call.",
+          "Say you don't see that exact loan, suggest the closest ones, or offer an expert call.",
       },
     };
   }
@@ -553,7 +578,7 @@ function toolProduct(a: Args, snap: SiteSnapshot): ToolOutput {
       result: {
         ...base,
         ...(p.pullQuote ? { headline: p.pullQuote } : {}),
-        note: "An advisor shares the full terms of this product directly. Do not add details beyond these facts.",
+        note: "An expert shares the full terms of this product directly. Do not add details beyond these facts.",
       },
     };
   }
@@ -651,7 +676,7 @@ function toolCaLegal(a: Args): ToolOutput {
 }
 
 function toolCallback(a: Args): ToolOutput {
-  const reason = str(a["reason"]).slice(0, 300) || "Wants to talk to an advisor";
+  const reason = str(a["reason"]).slice(0, 300) || "Wants to talk to an expert";
   const interest = str(a["interested_in"]).slice(0, 80);
   return {
     result: {
@@ -663,9 +688,25 @@ function toolCallback(a: Args): ToolOutput {
   };
 }
 
-export function runTool(name: string, rawArgs: string, snap: SiteSnapshot): ToolOutput {
+export async function runTool(
+  name: string,
+  rawArgs: string,
+  snap: SiteSnapshot,
+  origin: string,
+): Promise<ToolOutput> {
   const a = parseArgs(rawArgs);
   try {
+    if (name === "read_website_page") {
+      const page = await readSitePage(str(a["path"]), Number(a["part"]) || 1, origin);
+      return {
+        result: page.ok
+          ? {
+              ...page,
+              note: "This is the page's own text. Answer from it, keep its figures as written, and link the page.",
+            }
+          : { error: page.error, advice: "Answer from your instructions, or offer an expert." },
+      };
+    }
     switch (name) {
       case "calculate_emi":
         return toolEmi(a);

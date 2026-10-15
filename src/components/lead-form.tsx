@@ -186,7 +186,7 @@ export function LeadForm({
             Request a Free Consultation
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Share a few details and an advisor will call you back with matched lender options.
+            Share a few details and an expert will call you back with matched lender options.
           </p>
 
           <div className="my-5 border-t border-dashed border-border" />

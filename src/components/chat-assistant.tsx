@@ -23,7 +23,7 @@ import { clearPass, endPass, loadPass, type ChatPass } from "@/lib/chat/auth";
 
 // The website's AI assistant: a launcher in the corner that opens a chat panel. Answers come from
 // /api/chat (the server holds the OpenAI key). Calculations show up as small result cards, and
-// "talk to an advisor" turns into a short callback form that lands in the CRM as a lead.
+// "talk to an expert" turns into a short callback form that lands in the CRM as a lead.
 
 type Part =
   | { kind: "text"; text: string }
@@ -59,7 +59,7 @@ const QUICK_ACTIONS = [
     prompt: "How do I check whether a housing project is bank-approved?",
   },
   { label: "Track my application", prompt: "I want to know the status of my loan application." },
-  { label: "Talk to an advisor", prompt: "I'd like to talk to an advisor." },
+  { label: "Talk to an expert", prompt: "I'd like to talk to an expert." },
 ];
 
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
@@ -70,7 +70,7 @@ function errorText(code: ErrorCode): string {
   if (code === "rate_limited")
     return "You're sending messages quickly. Please wait a minute and try again.";
   if (code === "unavailable")
-    return `${ASSISTANT_NAME} isn't available right now, but our team is. You can reach an advisor here:`;
+    return `${ASSISTANT_NAME} isn't available right now, but our team is. You can reach an expert here:`;
   return "I couldn't get an answer just now. Please try again, or reach us directly.";
 }
 
@@ -242,7 +242,7 @@ function CallbackCard({
             Thanks{part.name ? `, ${part.name}` : ""}. Your request is in.
           </p>
           <p className="mt-0.5 text-muted-foreground">
-            An advisor will call you, typically within one business day ({CONTACT.hours}).
+            An expert will call you, typically within one business day ({CONTACT.hours}).
           </p>
         </div>
       </div>
@@ -274,7 +274,7 @@ function CallbackCard({
       noValidate
       className="rounded-2xl border border-gold/30 bg-white p-4 shadow-sm"
     >
-      <p className="text-[13px] font-bold text-navy">Request a call from an advisor</p>
+      <p className="text-[13px] font-bold text-navy">Request a call from an expert</p>
       <p className="mt-0.5 text-[11.5px] leading-snug text-muted-foreground">
         About: {reason}. A short summary of this chat is shared so you don't have to repeat
         yourself.
@@ -577,7 +577,7 @@ export function ChatAssistant() {
                 {
                   kind: "form",
                   state: "open",
-                  req: { reason: "Wants a call from an advisor" },
+                  req: { reason: "Wants a call from an expert" },
                 } as Part,
               ],
             }
@@ -717,7 +717,7 @@ export function ChatAssistant() {
                         Hi{pass ? ` ${pass.name.trim().split(/\s+/)[0]}` : ""}, I'm{" "}
                         <strong className="font-bold text-navy">{ASSISTANT_NAME}</strong>, GCS's AI
                         assistant. I can check your loan eligibility, work out EMIs, explain
-                        documents and rates, or connect you with an advisor.
+                        documents and rates, or connect you with an expert.
                       </p>
                       <p className="mt-2">What would you like to do?</p>
                     </div>

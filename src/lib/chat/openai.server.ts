@@ -53,7 +53,9 @@ type Chunk = {
   usage?: { prompt_tokens?: number; completion_tokens?: number } | null;
 };
 
-const REQUEST_TIMEOUT_MS = 45_000;
+const REQUEST_TIMEOUT_MS = 60_000;
+/** An attempt that has not started answering by now is dropped and tried again. */
+const FIRST_BYTE_MS = 12_000;
 const REASONING_MODEL = /^(o\d|gpt-5)/;
 
 export async function* streamChat(opts: {
@@ -82,16 +84,34 @@ export async function* streamChat(opts: {
   opts.signal?.addEventListener("abort", onClientAbort);
 
   try {
-    let res: Response;
-    try {
-      res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: { "content-type": "application/json", authorization: `Bearer ${opts.apiKey}` },
-        body: JSON.stringify(body),
-        signal: abort.signal,
-      });
-    } catch {
-      throw new UpstreamError(0, "Could not reach the AI service");
+    let res: Response | undefined;
+    // A connection that went stale, or a request that stalls before answering, is dropped and
+    // tried again on a fresh one. Once the answer has started, nothing is retried.
+    let stream: AbortController = abort;
+    for (let attempt = 1; !res; attempt++) {
+      stream = new AbortController();
+      const stop = () => stream.abort();
+      abort.signal.addEventListener("abort", stop);
+      const stall = setTimeout(stop, FIRST_BYTE_MS);
+      try {
+        res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: { "content-type": "application/json", authorization: `Bearer ${opts.apiKey}` },
+          body: JSON.stringify(body),
+          signal: stream.signal,
+        });
+      } catch (err) {
+        if (abort.signal.aborted || attempt >= 3) {
+          const cause = (err as { cause?: { code?: unknown } } | null)?.cause?.code;
+          throw new UpstreamError(
+            0,
+            `Could not reach the AI service${typeof cause === "string" ? ` (${cause})` : ""}`,
+          );
+        }
+        await new Promise((r) => setTimeout(r, 300 * attempt));
+      } finally {
+        clearTimeout(stall);
+      }
     }
     if (!res.ok || !res.body) {
       const detail = (await res.text().catch(() => "")).slice(0, 300);

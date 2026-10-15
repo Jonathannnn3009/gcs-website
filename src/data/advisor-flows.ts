@@ -1,4 +1,4 @@
-// The questions the GCS AI Loan Advisor asks, one short list per kind of loan. They follow the
+// The questions the GCS AI Loan Expert asks, one short list per kind of loan. They follow the
 // GCS intake question tree (one question at a time, only what a first look needs). It is a fixed,
 // guided flow, not a free-text bot: nothing here decides anything about a loan, it only organises
 // the enquiry so a GCS expert can pick it up without asking the same things again.

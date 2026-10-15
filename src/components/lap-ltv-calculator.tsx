@@ -1,3 +1,4 @@
+import { CalcExpertButton } from "@/components/calc-expert-button";
 import { useState, useMemo } from "react";
 import { emi, formatCurrency, formatINR } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
@@ -27,8 +28,8 @@ export function LapLtvCalculator() {
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-        <div className="space-y-7">
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
+        <div className="flex flex-col gap-7 lg:justify-evenly">
           <SliderField
             label="Property Market Value"
             value={propertyValue}
@@ -79,8 +80,8 @@ export function LapLtvCalculator() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <div className="relative w-full overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
+        <div className="flex flex-col gap-4">
+          <div className="relative flex w-full flex-1 flex-col justify-center overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-[50px]"></div>
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
               Eligible Loan Amount
@@ -90,14 +91,19 @@ export function LapLtvCalculator() {
             </p>
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>
             <div className="relative mt-5">
-              <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">Estimated EMI</p>
-              <p className="mt-1 text-lg font-extrabold text-gold">{formatINR(result.monthlyEmi)}</p>
+              <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                Estimated EMI
+              </p>
+              <p className="mt-1 text-lg font-extrabold text-gold">
+                {formatINR(result.monthlyEmi)}
+              </p>
             </div>
             <p className="relative mt-5 text-[11px] text-muted-foreground">
               Actual LTV depends on property type, location, age and lender policy. Commercial
               property typically gets a lower LTV than residential.
             </p>
           </div>
+          <CalcExpertButton />
         </div>
       </div>
     </div>

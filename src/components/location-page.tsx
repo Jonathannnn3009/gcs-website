@@ -25,9 +25,13 @@ function FaqAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
               className={`h-4 w-4 shrink-0 text-gold transition-transform duration-300 ${open === i ? "rotate-180" : ""}`}
             />
           </button>
-          {open === i && (
-            <p className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
-          )}
+          {/* always in the page, only hidden while closed, so the answer is there for search and the chat assistant */}
+          <p
+            hidden={open !== i}
+            className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground"
+          >
+            {f.a}
+          </p>
         </div>
       ))}
     </div>
@@ -49,13 +53,15 @@ export function LocationPage({ location: builtInLocation }: { location: Location
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-              <Link to="/" className="hover:text-navy dark:text-white">Home</Link>
+              <Link to="/" className="hover:text-navy dark:text-white">
+                Home
+              </Link>
               <span className="text-gold">/</span>
               <span className="text-navy dark:text-white">{location.city}</span>
             </p>
             <p className="eyebrow mt-5">Loan Advisory in {location.city}</p>
             <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              Trusted Loan Advisors in <span className="gold-text">{location.city}.</span>
+              Trusted Loan Experts in <span className="gold-text">{location.city}.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
               {location.intro}
@@ -81,15 +87,15 @@ export function LocationPage({ location: builtInLocation }: { location: Location
       <Section>
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <Reveal>
-            <p className="eyebrow">
-              {location.hasOffice ? "Our Office" : "How We Serve You Here"}
-            </p>
+            <p className="eyebrow">{location.hasOffice ? "Our Office" : "How We Serve You Here"}</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
               {location.hasOffice
                 ? "Visit us, or handle everything remotely."
                 : `${location.city}, without a branch counter.`}
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{location.serviceNote}</p>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              {location.serviceNote}
+            </p>
 
             <div className="mt-6 space-y-4">
               <div className="flex items-start gap-3">
@@ -116,8 +122,12 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                   <Clock className="h-4 w-4" />
                 </span>
                 <div>
-                  <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">Hours</p>
-                  <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">{CONTACT.hours}</p>
+                  <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
+                    Hours
+                  </p>
+                  <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">
+                    {CONTACT.hours}
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -125,8 +135,13 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                   <Phone className="h-4 w-4" />
                 </span>
                 <div>
-                  <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">Call or WhatsApp</p>
-                  <a href={CONTACT.phoneHref} className="mt-0.5 block text-sm font-semibold text-navy hover:text-gold-dark dark:text-white">
+                  <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
+                    Call or WhatsApp
+                  </p>
+                  <a
+                    href={CONTACT.phoneHref}
+                    className="mt-0.5 block text-sm font-semibold text-navy hover:text-gold-dark dark:text-white"
+                  >
                     {CONTACT.phone}
                   </a>
                 </div>
@@ -174,7 +189,9 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                   <span className="grid h-10 w-10 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
                     <Building2 className="h-5 w-5" />
                   </span>
-                  <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">{group.name}</h3>
+                  <h3 className="mt-4 text-base font-extrabold text-navy dark:text-white">
+                    {group.name}
+                  </h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">{group.description}</p>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-gold-dark">
                     Explore products

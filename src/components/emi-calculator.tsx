@@ -72,7 +72,7 @@ export function EmiCalculator() {
 
       <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
         {/* Sliders */}
-        <div className="flex flex-col gap-7">
+        <div className="flex flex-col gap-7 lg:justify-evenly">
           <SliderField
             label="Loan Amount"
             value={principal}
@@ -137,9 +137,9 @@ export function EmiCalculator() {
             </div>
           </dl>
 
-          <div className="flex flex-1 flex-col items-center justify-center py-6">
+          <div className="flex flex-1 flex-col items-center justify-center py-3">
             <div className="relative">
-              <svg width="200" height="200" viewBox="0 0 200 200" className="drop-shadow-lg">
+              <svg width="150" height="150" viewBox="0 0 200 200" className="drop-shadow-lg">
                 {/* Background circle */}
                 <circle
                   cx="100"
@@ -214,6 +214,7 @@ export function EmiCalculator() {
             </div>
           </div>
 
+          {/* the button closes the results, below the chart */}
           <Link to="/contact" className="gold-btn group w-full justify-center py-3.5">
             Talk to an Expert
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

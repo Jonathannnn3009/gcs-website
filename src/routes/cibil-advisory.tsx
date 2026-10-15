@@ -27,7 +27,7 @@ export const Route = createFileRoute("/cibil-advisory")({
       {
         name: "description",
         content:
-          "Understand your credit report and score with our advisors. For individuals and business owners (MSMEs): read your report, spot errors, plan your next steps and get ready to apply for a loan.",
+          "Understand your credit report and score with our experts. For individuals and business owners (MSMEs): read your report, spot errors, plan your next steps and get ready to apply for a loan.",
       },
       { property: "og:title", content: "CIBIL Advisory Services" },
       {
@@ -124,7 +124,7 @@ function CibilAdvisoryPage() {
                   Understand your credit. <span className="gold-text">Improve it, step by step.</span>
                 </h1>
                 <p className="mt-4 max-w-2xl text-base text-white/70">
-                  Your credit report decides how lenders see you. Our advisors help individuals and business owners
+                  Your credit report decides how lenders see you. Our experts help individuals and business owners
                   read their report, spot problems and make a clear plan before they apply for a loan.
                 </p>
                 <div className="mt-6 flex flex-wrap items-center gap-4">

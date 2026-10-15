@@ -30,6 +30,7 @@ import {
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import {
+  ReferralVolumeField,
   ZoneAssistant,
   ZoneFeatureGrid,
   ZoneGetStarted,
@@ -85,7 +86,7 @@ const WHAT_WE_DO: { icon: LucideIcon; title: string; body: string }[] = [
   {
     icon: UserCheck,
     title: "One contact who handles the file",
-    body: "A named advisor looks after login, documents and bank follow-ups, and keeps you informed.",
+    body: "A named expert looks after login, documents and bank follow-ups, and keeps you informed.",
   },
   {
     icon: GraduationCap,
@@ -108,7 +109,7 @@ const WHY_CHOOSE: { icon: LucideIcon; title: string; body: string }[] = [
   {
     icon: MapPin,
     title: "Rooted in Mumbai, Thane & Pune",
-    body: "Advisors who know the local banks, builders and projects, so your clients are not treated as a number.",
+    body: "Experts who know the local banks, builders and projects, so your clients are not treated as a number.",
   },
 ];
 
@@ -130,7 +131,7 @@ const ASSISTANT_POINTS: { icon: LucideIcon; title: string; body: string }[] = [
   },
   {
     icon: MessageCircle,
-    title: "Hand-off to an advisor",
+    title: "Hand-off to an expert",
     body: "If a client wants a call, the request lands straight in our CRM with a short summary.",
   },
 ];
@@ -142,7 +143,7 @@ const GET_STARTED = [
   },
   {
     title: "Refer a case",
-    body: "Send your client's name, number and requirement. Our advisor checks eligibility and matches the case with suitable lenders from 75+.",
+    body: "Send your client's name, number and requirement. Our expert checks eligibility and matches the case with suitable lenders from 75+.",
   },
   {
     title: "Sit back and get paid",
@@ -153,8 +154,15 @@ const GET_STARTED = [
 const fieldClass =
   "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20 dark:bg-card dark:text-white";
 
-type Fields = { name: string; phone: string; email: string; profession: string; message: string };
-const empty: Fields = { name: "", phone: "", email: "", profession: "", message: "" };
+type Fields = {
+  name: string;
+  phone: string;
+  email: string;
+  profession: string;
+  volume: string;
+  message: string;
+};
+const empty: Fields = { name: "", phone: "", email: "", profession: "", volume: "", message: "" };
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -183,6 +191,7 @@ function PartnerForm() {
     const detailParts = [
       values.profession.trim(),
       values.email.trim() ? `Email: ${values.email.trim()}` : "",
+      values.volume ? `Could refer per month: ${values.volume}` : "",
       values.message.trim(),
     ].filter(Boolean);
 
@@ -217,7 +226,7 @@ function PartnerForm() {
     <form
       onSubmit={onSubmit}
       noValidate
-      className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-lift)] sm:p-7 dark:bg-card"
+      className="h-full rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-lift)] sm:p-7 dark:bg-card"
     >
       <h3 className="text-xl font-extrabold text-navy dark:text-white">
         Become a Referral Partner
@@ -307,6 +316,12 @@ function PartnerForm() {
             <span className="mt-1 block text-xs text-destructive">{errors.profession}</span>
           )}
         </div>
+        <ReferralVolumeField
+          id={`${uid}-volume`}
+          label="How many clients could you refer in a month?"
+          value={values.volume}
+          onChange={(volume) => setValues((v) => ({ ...v, volume }))}
+        />
         <div>
           <label
             htmlFor={`${uid}-message`}
@@ -425,9 +440,13 @@ function Accordion({ items }: { items: { q: string; a: string }[] }) {
               className={`h-4 w-4 shrink-0 text-gold transition-transform duration-300 ${open === i ? "rotate-180" : ""}`}
             />
           </button>
-          {open === i && (
-            <p className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
-          )}
+          {/* always in the page, only hidden while closed, so the answer is there for search and the chat assistant */}
+          <p
+            hidden={open !== i}
+            className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground"
+          >
+            {item.a}
+          </p>
         </div>
       ))}
     </div>
@@ -448,9 +467,9 @@ function PartnerPage() {
       {/* Hero: navy panel with stats + the registration form */}
       <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-5 lg:grid-cols-2 lg:items-start">
-            <Reveal>
-              <div className="navy-panel relative flex flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
+          <div className="grid gap-5 lg:grid-cols-2 lg:items-stretch">
+            <Reveal className="h-full">
+              <div className="navy-panel relative flex h-full flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
                 <div className="float-animation absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
                 <p className="relative text-xs font-bold tracking-[0.2em] text-gold uppercase">
                   Agent Partner
@@ -482,7 +501,7 @@ function PartnerPage() {
                   ))}
                 </div>
 
-                <div className="relative mt-8 space-y-3 border-t border-white/10 pt-6">
+                <div className="relative mt-8 mb-8 space-y-3 border-t border-white/10 pt-6">
                   {HERO_HIGHLIGHTS.map((h) => (
                     <div key={h.text} className="flex items-start gap-2.5 text-sm text-white/75">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" />
@@ -491,17 +510,17 @@ function PartnerPage() {
                   ))}
                 </div>
 
-                <div className="relative mt-8 border-t border-white/10 pt-6">
+                <div className="relative mt-auto border-t border-white/10 pt-6">
                   <p className="font-heading text-base italic leading-relaxed text-white/80">
-                    "You bring the introduction. We bring 75+ lenders, a senior advisor, and the
+                    "You bring the introduction. We bring 75+ lenders, a senior expert, and the
                     paperwork."
                   </p>
                 </div>
               </div>
             </Reveal>
 
-            <Reveal delay={100}>
-              <div id="register" className="scroll-mt-24">
+            <Reveal delay={100} className="h-full">
+              <div id="register" className="h-full scroll-mt-24">
                 <PartnerForm />
               </div>
             </Reveal>
@@ -554,16 +573,16 @@ function PartnerPage() {
             />
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
               Most referral programs leave you chasing updates or managing paperwork you never
-              signed up for. Ours doesn't. Once you share a lead, a dedicated advisor takes
-              ownership of the file end to end — checking eligibility, matching it against our
-              network of 75+ banks and NBFCs, and pushing it through to disbursal — while you get
-              scheduled updates at every stage instead of radio silence until the payout.
+              signed up for. Ours doesn't. Once you share a lead, a dedicated expert takes ownership
+              of the file end to end — checking eligibility, matching it against our network of 75+
+              banks and NBFCs, and pushing it through to disbursal — while you get scheduled updates
+              at every stage instead of radio silence until the payout.
             </p>
           </Reveal>
           <Reveal delay={80}>
             <img
               src="/brand/partner-presenting-growth.png"
-              alt="An advisor walking a client through their loan options"
+              alt="An expert walking a client through their loan options"
               className="w-full rounded-3xl object-cover"
             />
           </Reveal>
@@ -649,7 +668,7 @@ function PartnerPage() {
       <ZoneAssistant
         eyebrow={`Meet ${ASSISTANT_NAME}`}
         title="An AI assistant that answers your clients' first questions."
-        intro="Send clients to our site and let the assistant handle the basics: eligibility, EMI, documents and rates, any time of day. When they are ready to talk, it passes them to an advisor."
+        intro="Send clients to our site and let the assistant handle the basics: eligibility, EMI, documents and rates, any time of day. When they are ready to talk, it passes them to an expert."
         points={ASSISTANT_POINTS}
         prompts={[
           {

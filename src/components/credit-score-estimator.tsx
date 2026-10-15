@@ -1,3 +1,4 @@
+import { CalcExpertButton } from "@/components/calc-expert-button";
 import { useState, useMemo } from "react";
 
 type PaymentHistory = "always" | "occasional" | "frequent" | "default";
@@ -118,7 +119,16 @@ export function CreditScoreEstimator() {
     const low = Math.max(300, Math.round(midpoint / 10) * 10 - 25);
     const high = Math.min(900, Math.round(midpoint / 10) * 10 + 25);
 
-    return { low, high, midpoint, paymentScore, utilizationScore, historyScore, inquiryScore, mixScore };
+    return {
+      low,
+      high,
+      midpoint,
+      paymentScore,
+      utilizationScore,
+      historyScore,
+      inquiryScore,
+      mixScore,
+    };
   }, [payment, utilization, historyLength, inquiries, mix]);
 
   const band = scoreBand(result.midpoint);
@@ -139,13 +149,13 @@ export function CreditScoreEstimator() {
           Where does your <span className="gold-text-static">credit score</span> likely stand?
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          An indicative range based on the same factors bureaus like CIBIL use — not a real bureau pull.
-          For your actual score, check directly with CIBIL, Experian or Equifax.
+          An indicative range based on the same factors bureaus like CIBIL use — not a real bureau
+          pull. For your actual score, check directly with CIBIL, Experian or Equifax.
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-        <div className="space-y-6">
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
+        <div className="flex flex-col gap-6 lg:justify-evenly">
           <ChoiceGroup
             label="Payment History"
             options={PAYMENT_OPTIONS}
@@ -184,8 +194,8 @@ export function CreditScoreEstimator() {
           <ChoiceGroup label="Credit Mix" options={MIX_OPTIONS} value={mix} onChange={setMix} />
         </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <div className="relative w-full overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
+        <div className="flex flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
+          <div className="relative flex w-full flex-col justify-center overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-[50px]"></div>
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
               Indicative Score Range
@@ -202,10 +212,11 @@ export function CreditScoreEstimator() {
               <p className="mt-1 text-sm font-bold text-gold">{weakest.label}</p>
             </div>
             <p className="relative mt-5 text-[11px] text-muted-foreground">
-              Estimate only, on a 300–900 scale. Your real score depends on your full credit report and
-              varies by bureau — this tool doesn't access any bureau data.
+              Estimate only, on a 300–900 scale. Your real score depends on your full credit report
+              and varies by bureau — this tool doesn't access any bureau data.
             </p>
           </div>
+          <CalcExpertButton />
         </div>
       </div>
     </div>

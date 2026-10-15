@@ -223,7 +223,7 @@ function CaseStudyDetailPage() {
                 Explore <span className="italic text-gold-dark">{study.productLabel}.</span>
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                A senior advisor will review your situation and tell you which lenders in our
+                A senior expert will review your situation and tell you which lenders in our
                 network are the best fit — free of cost.
               </p>
               <div className="mt-6 flex flex-col gap-3">

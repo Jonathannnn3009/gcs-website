@@ -81,7 +81,7 @@ const STEPS: { title: string; body: string }[] = [
   },
   {
     title: "Buyers get their loans",
-    body: "Your buyers are guided from eligibility to sanction by one named advisor.",
+    body: "Your buyers are guided from eligibility to sanction by one named expert.",
   },
   {
     title: "Disbursals follow your milestones",
@@ -143,7 +143,7 @@ const ASSISTANT_POINTS: { icon: LucideIcon; title: string; body: string }[] = [
   },
   {
     icon: MessageCircle,
-    title: "A straight line to an advisor",
+    title: "A straight line to an expert",
     body: "When a buyer wants a call, the request reaches our team with a short summary of the chat.",
   },
   {
@@ -204,6 +204,7 @@ function BuilderPage() {
         form={
           <ZoneForm
             source="partner-builder"
+            volumeLabel="How many buyers could you refer in a month?"
             heading="Talk to our project finance desk"
             intro="Tell us about your project and we will call you to plan how buyer financing can work for it."
             orgLabel="Company / Project"
@@ -264,7 +265,7 @@ function BuilderPage() {
           <Reveal delay={80}>
             <img
               src="/brand/partner-presenting-growth.png"
-              alt="An advisor presenting growth to a builder"
+              alt="An expert presenting growth to a builder"
               className="w-full rounded-3xl object-cover"
             />
           </Reveal>
@@ -345,7 +346,7 @@ function BuilderPage() {
       <ZoneAssistant
         eyebrow={`${ASSISTANT_NAME}: the GCS advantage`}
         title="Buyer questions answered without loading your sales team."
-        intro="Our AI assistant takes the first round of a buyer's loan questions, then hands over to an advisor when they are ready to move."
+        intro="Our AI assistant takes the first round of a buyer's loan questions, then hands over to an expert when they are ready to move."
         points={ASSISTANT_POINTS}
         prompts={[
           {

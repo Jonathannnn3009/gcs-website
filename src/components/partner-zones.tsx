@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import {
   ArrowRight,
   Building2,
@@ -26,7 +26,7 @@ export const PARTNER_ZONES = [
 /** Small switcher at the top of each partner page so a visitor can hop between the three. */
 export function ZoneTabs({ current }: { current: (typeof PARTNER_ZONES)[number]["to"] }) {
   return (
-    <div className="border-b border-gold/15 bg-white dark:bg-card">
+    <nav aria-label="Partner pages" className="border-b border-gold/15 bg-white dark:bg-card">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-2 px-4 py-3 sm:px-6 lg:px-8">
         <span className="mr-1 hidden text-[10px] font-bold tracking-[0.2em] text-muted-foreground uppercase sm:inline">
           Partner as a
@@ -50,7 +50,7 @@ export function ZoneTabs({ current }: { current: (typeof PARTNER_ZONES)[number][
           );
         })}
       </div>
-    </div>
+    </nav>
   );
 }
 
@@ -75,9 +75,9 @@ export function ZoneHero({
   return (
     <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-5 lg:grid-cols-2 lg:items-start">
-          <Reveal>
-            <div className="navy-panel relative flex flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
+        <div className="grid gap-5 lg:grid-cols-2 lg:items-stretch">
+          <Reveal className="h-full">
+            <div className="navy-panel relative flex h-full flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
               <div className="float-animation absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
               <p className="relative text-xs font-bold tracking-[0.2em] text-gold uppercase">
                 {eyebrow}
@@ -104,7 +104,7 @@ export function ZoneHero({
                 ))}
               </div>
 
-              <div className="relative mt-8 space-y-3 border-t border-white/10 pt-6">
+              <div className="relative mt-8 mb-8 space-y-3 border-t border-white/10 pt-6">
                 {points.map((p) => (
                   <div key={p} className="flex items-start gap-2.5 text-sm text-white/75">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" />
@@ -113,15 +113,15 @@ export function ZoneHero({
                 ))}
               </div>
 
-              <div className="relative mt-8 border-t border-white/10 pt-6">
+              <div className="relative mt-auto border-t border-white/10 pt-6">
                 <p className="font-heading text-base leading-relaxed text-white/80 italic">
                   "{quote}"
                 </p>
               </div>
             </div>
           </Reveal>
-          <Reveal delay={100}>
-            <div id="register" className="scroll-mt-24">
+          <Reveal delay={100} className="h-full">
+            <div id="register" className="h-full scroll-mt-24">
               {form}
             </div>
           </Reveal>
@@ -138,15 +138,135 @@ const labelClass =
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/** How many people a partner expects to refer in a month: an estimate, not a target. */
+export const REFERRAL_VOLUMES = ["1–2", "3–5", "6–10", "More than 10", "Not sure yet"] as const;
+
+/**
+ * The "how many could you refer" dropdown shared by the partner forms. It is built by hand instead of
+ * using the browser's own select, so the closed field and the open list match the form's other fields.
+ */
+export function ReferralVolumeField({
+  id,
+  label,
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(0);
+  const root = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const away = (e: MouseEvent) => {
+      if (root.current && !root.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", away);
+    return () => document.removeEventListener("mousedown", away);
+  }, [open]);
+
+  const pick = (v: string) => {
+    onChange(v);
+    setOpen(false);
+  };
+
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") return setOpen(false);
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!open) {
+        setActive(
+          Math.max(0, REFERRAL_VOLUMES.indexOf(value as (typeof REFERRAL_VOLUMES)[number])),
+        );
+        return setOpen(true);
+      }
+      const step = e.key === "ArrowDown" ? 1 : -1;
+      setActive((i) => (i + step + REFERRAL_VOLUMES.length) % REFERRAL_VOLUMES.length);
+    }
+    if ((e.key === "Enter" || e.key === " ") && open) {
+      e.preventDefault();
+      const chosen = REFERRAL_VOLUMES[active];
+      if (chosen) pick(chosen);
+    }
+  };
+
+  return (
+    <div ref={root} className="relative">
+      <span id={`${id}-label`} className={labelClass}>
+        {label}
+      </span>
+      <button
+        type="button"
+        id={id}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-labelledby={`${id}-label ${id}`}
+        onClick={() => {
+          setActive(
+            Math.max(0, REFERRAL_VOLUMES.indexOf(value as (typeof REFERRAL_VOLUMES)[number])),
+          );
+          setOpen((o) => !o);
+        }}
+        onKeyDown={onKey}
+        className={`${fieldClass} flex items-center justify-between text-left ${open ? "border-gold ring-2 ring-gold/20" : ""}`}
+      >
+        <span className={value ? "" : "text-muted-foreground/70"}>
+          {value || "Select, an estimate is fine"}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-gold transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open && (
+        <ul
+          role="listbox"
+          aria-labelledby={`${id}-label`}
+          className="absolute right-0 left-0 z-30 mt-2 overflow-hidden rounded-xl border border-gold/15 bg-white p-1.5 shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.25)] dark:bg-card"
+          style={{ animation: "gcs-scale-in 160ms ease both" }}
+        >
+          {REFERRAL_VOLUMES.map((v, i) => (
+            <li
+              key={v}
+              role="option"
+              aria-selected={v === value}
+              onMouseEnter={() => setActive(i)}
+              onClick={() => pick(v)}
+              className={`flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${
+                i === active ? "bg-gold/10 text-navy dark:text-white" : "text-foreground"
+              } ${v === value ? "font-bold" : "font-medium"}`}
+            >
+              {v}
+              {v === value && <Check className="h-4 w-4 text-gold-dark" />}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 type Values = {
   name: string;
   phone: string;
   email: string;
   org: string;
   city: string;
+  volume: string;
   message: string;
 };
-const empty: Values = { name: "", phone: "", email: "", org: "", city: "", message: "" };
+const empty: Values = {
+  name: "",
+  phone: "",
+  email: "",
+  org: "",
+  city: "",
+  volume: "",
+  message: "",
+};
 
 /** Registration / enquiry form for a partner zone. The lead reaches the CRM under `source`. */
 export function ZoneForm({
@@ -158,6 +278,7 @@ export function ZoneForm({
   messagePlaceholder,
   cta,
   thanks,
+  volumeLabel = "How many clients could you refer in a month?",
 }: {
   source: string;
   heading: string;
@@ -167,6 +288,8 @@ export function ZoneForm({
   messagePlaceholder: string;
   cta: string;
   thanks: string;
+  /** The wording of the "how many in a month" question, e.g. buyers for a builder. */
+  volumeLabel?: string;
 }) {
   const uid = useId();
   const [values, setValues] = useState<Values>(empty);
@@ -193,6 +316,7 @@ export function ZoneForm({
       `${orgLabel}: ${values.org.trim()}`,
       values.city.trim() ? `City: ${values.city.trim()}` : "",
       values.email.trim() ? `Email: ${values.email.trim()}` : "",
+      values.volume ? `Could refer per month: ${values.volume}` : "",
       values.message.trim(),
     ]
       .filter(Boolean)
@@ -231,7 +355,7 @@ export function ZoneForm({
     <form
       onSubmit={onSubmit}
       noValidate
-      className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-lift)] sm:p-7 dark:bg-card"
+      className="h-full rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-lift)] sm:p-7 dark:bg-card"
     >
       <h3 className="text-xl font-extrabold text-navy dark:text-white">{heading}</h3>
       <p className="mt-2 text-sm text-muted-foreground">{intro}</p>
@@ -311,6 +435,12 @@ export function ZoneForm({
             />
           </div>
         </div>
+        <ReferralVolumeField
+          id={`${uid}-volume`}
+          label={volumeLabel}
+          value={values.volume}
+          onChange={(volume) => setValues((v) => ({ ...v, volume }))}
+        />
         <div>
           <label htmlFor={`${uid}-message`} className={labelClass}>
             Anything Else (Optional)
@@ -355,9 +485,13 @@ export function ZoneFaq({ items }: { items: { q: string; a: string }[] }) {
               className={`h-4 w-4 shrink-0 text-gold transition-transform duration-300 ${open === i ? "rotate-180" : ""}`}
             />
           </button>
-          {open === i && (
-            <p className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
-          )}
+          {/* always in the page, only hidden while closed, so the answer is there for search and the chat assistant */}
+          <p
+            hidden={open !== i}
+            className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground"
+          >
+            {item.a}
+          </p>
         </div>
       ))}
     </div>

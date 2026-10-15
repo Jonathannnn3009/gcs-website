@@ -29,7 +29,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 const BENEFITS = [
-  "Callback from a senior advisor within one business day",
+  "Callback from a senior expert within one business day",
   "Indicative offer & lender shortlist within 48 hours",
   "Zero upfront fees — we're paid only on disbursal",
   "Full confidentiality on profile, file and amount",
@@ -45,7 +45,6 @@ const reachMethods = () => [
   },
   { icon: Mail, label: "Email", value: "Send a query", href: `mailto:${CONTACT.email}` },
 ];
-
 
 function FaqAccordion() {
   const faqs = useFaqs("contact", CONTACT_FAQS);
@@ -63,9 +62,13 @@ function FaqAccordion() {
               className={`h-4 w-4 shrink-0 text-gold transition-transform duration-300 ${open === i ? "rotate-180" : ""}`}
             />
           </button>
-          {open === i && (
-            <p className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
-          )}
+          {/* always in the page, only hidden while closed, so the answer is there for search and the chat assistant */}
+          <p
+            hidden={open !== i}
+            className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground"
+          >
+            {f.a}
+          </p>
         </div>
       ))}
     </div>
@@ -132,7 +135,7 @@ function ContactPage() {
 
                 <div className="relative mt-auto pt-8">
                   <p className="font-heading text-base italic leading-relaxed text-white/80">
-                    "We don't hand your file to a call centre. A senior advisor reads it, structures
+                    "We don't hand your file to a call centre. A senior expert reads it, structures
                     it, and stays with it until disbursal."
                   </p>
                   <p className="mt-2 text-[11px] font-bold tracking-[0.18em] text-gold-light uppercase">
@@ -190,7 +193,9 @@ function ContactPage() {
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
                     Hours
                   </p>
-                  <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">{CONTACT.hours}</p>
+                  <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">
+                    {CONTACT.hours}
+                  </p>
                 </div>
               </div>
             </div>

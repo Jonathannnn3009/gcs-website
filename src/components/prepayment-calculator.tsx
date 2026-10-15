@@ -1,3 +1,4 @@
+import { CalcExpertButton } from "@/components/calc-expert-button";
 import { useState, useMemo } from "react";
 import { formatCurrency, formatINR, monthsToYearsMonths, tenureFromEmi } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
@@ -15,7 +16,12 @@ export function PrepaymentCalculator() {
     const monthsSaved = isFinite(originalMonths) ? originalMonths - newMonths : 0;
     const oldTotalInterest = isFinite(originalMonths) ? emiAmount * originalMonths - principal : 0;
     const newTotalInterest = newPrincipal === 0 ? 0 : emiAmount * newMonths - newPrincipal;
-    return { originalMonths, newMonths, monthsSaved, interestSaved: oldTotalInterest - newTotalInterest };
+    return {
+      originalMonths,
+      newMonths,
+      monthsSaved,
+      interestSaved: oldTotalInterest - newTotalInterest,
+    };
   }, [principal, rate, emiAmount, prepayment]);
 
   return (
@@ -26,12 +32,13 @@ export function PrepaymentCalculator() {
           See how much a <span className="gold-text-static">lump sum saves</span>
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Estimate the tenure and interest you'll save by making a part-prepayment, keeping your EMI unchanged.
+          Estimate the tenure and interest you'll save by making a part-prepayment, keeping your EMI
+          unchanged.
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-        <div className="space-y-7">
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
+        <div className="flex flex-col gap-7 lg:justify-evenly">
           <SliderField
             label="Outstanding Principal"
             value={principal}
@@ -77,8 +84,8 @@ export function PrepaymentCalculator() {
           />
         </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <div className="relative w-full overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
+        <div className="flex flex-col gap-4">
+          <div className="relative flex w-full flex-1 flex-col justify-center overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-[50px]"></div>
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
               Interest Saved
@@ -89,22 +96,28 @@ export function PrepaymentCalculator() {
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>
             <div className="relative mt-5 grid grid-cols-1 gap-4">
               <div>
-                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">Tenure Reduced By</p>
+                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                  Tenure Reduced By
+                </p>
                 <p className="mt-1 text-lg font-extrabold text-gold">
                   {monthsToYearsMonths(Math.max(result.monthsSaved, 0))}
                 </p>
               </div>
               <div>
-                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">New Payoff Time</p>
+                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                  New Payoff Time
+                </p>
                 <p className="mt-1 text-lg font-extrabold text-gold">
                   {monthsToYearsMonths(result.newMonths)}
                 </p>
               </div>
             </div>
             <p className="relative mt-5 text-[11px] text-muted-foreground">
-              Assumes EMI stays the same after prepayment. Check with your lender for any prepayment charges.
+              Assumes EMI stays the same after prepayment. Check with your lender for any prepayment
+              charges.
             </p>
           </div>
+          <CalcExpertButton />
         </div>
       </div>
     </div>

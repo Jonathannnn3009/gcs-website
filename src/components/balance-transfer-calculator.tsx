@@ -1,3 +1,4 @@
+import { CalcExpertButton } from "@/components/calc-expert-button";
 import { useState, useMemo } from "react";
 import { emi, formatCurrency, formatINR } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
@@ -30,12 +31,13 @@ export function BalanceTransferCalculator() {
           Is a <span className="gold-text-static">transfer worth it?</span>
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Compare your current loan against a lower-rate offer and see the real net savings after fees.
+          Compare your current loan against a lower-rate offer and see the real net savings after
+          fees.
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-        <div className="space-y-7">
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
+        <div className="flex flex-col gap-7 lg:justify-evenly">
           <SliderField
             label="Outstanding Principal"
             value={principal}
@@ -94,18 +96,26 @@ export function BalanceTransferCalculator() {
 
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
-              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">Current EMI</p>
-              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">{formatINR(result.oldEmi)}</p>
+              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+                Current EMI
+              </p>
+              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
+                {formatINR(result.oldEmi)}
+              </p>
             </div>
             <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
-              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">New EMI</p>
-              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">{formatINR(result.newEmi)}</p>
+              <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+                New EMI
+              </p>
+              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
+                {formatINR(result.newEmi)}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <div className="relative w-full overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
+        <div className="flex flex-col gap-4">
+          <div className="relative flex w-full flex-1 flex-col justify-center overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-[50px]"></div>
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
               Net Savings
@@ -116,20 +126,30 @@ export function BalanceTransferCalculator() {
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>
             <div className="relative mt-5 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">Monthly Savings</p>
-                <p className="mt-1 text-lg font-extrabold text-gold">{formatINR(Math.max(result.monthlySavings, 0))}</p>
+                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                  Monthly Savings
+                </p>
+                <p className="mt-1 text-lg font-extrabold text-gold">
+                  {formatINR(Math.max(result.monthlySavings, 0))}
+                </p>
               </div>
               <div>
-                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">Fee Breakeven</p>
+                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                  Fee Breakeven
+                </p>
                 <p className="mt-1 text-lg font-extrabold text-gold">
-                  {isFinite(result.breakevenMonths) ? `${Math.ceil(result.breakevenMonths)} mo` : "—"}
+                  {isFinite(result.breakevenMonths)
+                    ? `${Math.ceil(result.breakevenMonths)} mo`
+                    : "—"}
                 </p>
               </div>
             </div>
             <p className="relative mt-5 text-[11px] text-muted-foreground">
-              Excludes any foreclosure charges from your current lender — ask us to check before you switch.
+              Excludes any foreclosure charges from your current lender — ask us to check before you
+              switch.
             </p>
           </div>
+          <CalcExpertButton />
         </div>
       </div>
     </div>

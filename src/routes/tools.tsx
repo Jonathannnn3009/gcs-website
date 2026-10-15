@@ -186,7 +186,7 @@ function ToolsPage() {
             },
             {
               title: "Need Expert Advice?",
-              body: "These calculators give estimates. Actual rates and eligibility depend on your profile, lender policies and property valuation. Talk to our advisors for a precise assessment.",
+              body: "These calculators give estimates. Actual rates and eligibility depend on your profile, lender policies and property valuation. Talk to our experts for a precise assessment.",
             },
           ].map((card, i) => (
             <Reveal key={card.title} delay={i * 60}>

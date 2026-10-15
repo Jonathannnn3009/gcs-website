@@ -73,7 +73,9 @@ export function ChatMarkdown({
           </strong>,
         );
       } else if (m[2] !== undefined && m[3] !== undefined) {
-        const href = m[3];
+        // a link the model wrote with the site's own domain still stays inside the site
+        const href =
+          m[3].replace(/^https?:\/\/(?:www\.)?growthcapitalservices\.in(?=\/|$)/i, "") || "/";
         const label = m[2];
         if (INTERNAL.test(href)) {
           parts.push(

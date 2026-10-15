@@ -130,7 +130,7 @@ export function ChecklistGate({
   return (
     <form onSubmit={onSubmit} noValidate className={t.form}>
       <p className={t.intro}>
-        Share your name and number and we'll unlock the download — an advisor may follow up.
+        Share your name and number and we'll unlock the download — an expert may follow up.
       </p>
       <div className="mt-3 space-y-3">
         {presetCategory ? (

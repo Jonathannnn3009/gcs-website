@@ -39,7 +39,12 @@ export type ServiceDetail = {
   whoNote?: string;
   steps: { title: string; body: string }[];
   documentsIntro: string;
+  /** Every document group. The downloadable checklist lists all of them. */
   documentGroups: { title: string; intro?: string; items: string[]; after?: string }[];
+  /** How many of those groups the page itself shows (the common ones, first); the rest come with the download. */
+  shownGroups?: number;
+  /** Said under the shown groups when some are held back for the download. */
+  documentsMore?: string;
   why: { title: string; body: string }[];
   /** A callout for people whose case does not fit one box. */
   callout: { title: string; body: string; cta: string };
@@ -167,6 +172,9 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       ],
       documentsIntro:
         "The exact documents depend on your income sources. You only need to provide the documents that are applicable to you.",
+      shownGroups: 3,
+      documentsMore:
+        "These are the documents most people need. Depending on your case you may also need papers for tax statements and TDS, investments and deductions, rent, capital gains, a property sale, business or professional income, firms and LLPs, and other income. Unlock the free checklist below to get the complete list.",
       documentGroups: [
         {
           title: "Basic KYC & Personal Details",

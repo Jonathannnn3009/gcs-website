@@ -1,3 +1,4 @@
+import { CalcExpertButton } from "@/components/calc-expert-button";
 import { useState, useMemo } from "react";
 import { emi, formatCurrency, formatINR } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
@@ -38,7 +39,8 @@ export function LoanComparisonCalculator() {
           Compare offers, <span className="gold-text-static">side by side</span>
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Enter the rate and processing fee from up to three lenders to see the true cheapest option.
+          Enter the rate and processing fee from up to three lenders to see the true cheapest
+          option.
         </p>
       </div>
 
@@ -84,7 +86,9 @@ export function LoanComparisonCalculator() {
           </thead>
           <tbody>
             <tr>
-              <td className="py-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">Rate (p.a.)</td>
+              <td className="py-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                Rate (p.a.)
+              </td>
               {rows.map((r, i) => (
                 <td key={i} className="px-2 py-2">
                   <input
@@ -99,7 +103,9 @@ export function LoanComparisonCalculator() {
               ))}
             </tr>
             <tr>
-              <td className="py-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">Processing Fee</td>
+              <td className="py-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                Processing Fee
+              </td>
               {rows.map((r, i) => (
                 <td key={i} className="px-2 py-2">
                   <input
@@ -114,24 +120,36 @@ export function LoanComparisonCalculator() {
               ))}
             </tr>
             <tr>
-              <td className="py-3 text-xs font-bold tracking-wide text-muted-foreground uppercase">Monthly EMI</td>
+              <td className="py-3 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                Monthly EMI
+              </td>
               {rows.map((r, i) => (
-                <td key={i} className="px-2 py-3 text-sm font-bold text-navy dark:text-white">{formatINR(r.monthlyEmi)}</td>
+                <td key={i} className="px-2 py-3 text-sm font-bold text-navy dark:text-white">
+                  {formatINR(r.monthlyEmi)}
+                </td>
               ))}
             </tr>
             <tr>
-              <td className="py-3 text-xs font-bold tracking-wide text-muted-foreground uppercase">Total Interest</td>
+              <td className="py-3 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                Total Interest
+              </td>
               {rows.map((r, i) => (
-                <td key={i} className="px-2 py-3 text-sm font-bold text-navy dark:text-white">{formatCurrency(r.totalInterest)}</td>
+                <td key={i} className="px-2 py-3 text-sm font-bold text-navy dark:text-white">
+                  {formatCurrency(r.totalInterest)}
+                </td>
               ))}
             </tr>
             <tr>
-              <td className="py-3 text-xs font-bold tracking-wide text-muted-foreground uppercase">Total Cost</td>
+              <td className="py-3 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                Total Cost
+              </td>
               {rows.map((r, i) => (
                 <td key={i} className="px-2 py-3">
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-extrabold ${
-                      r.isCheapest ? "bg-gold-pale/70 text-gold-dark ring-1 ring-gold/30" : "text-navy dark:text-white"
+                      r.isCheapest
+                        ? "bg-gold-pale/70 text-gold-dark ring-1 ring-gold/30"
+                        : "text-navy dark:text-white"
                     }`}
                   >
                     {formatCurrency(r.totalCost)}
@@ -144,8 +162,10 @@ export function LoanComparisonCalculator() {
         </table>
       </div>
       <p className="mt-4 text-[11px] text-muted-foreground">
-        Total cost = total interest + processing fee, over the full tenure. Excludes any prepayment or foreclosure charges.
+        Total cost = total interest + processing fee, over the full tenure. Excludes any prepayment
+        or foreclosure charges.
       </p>
+      <CalcExpertButton className="mt-6" />
     </div>
   );
 }

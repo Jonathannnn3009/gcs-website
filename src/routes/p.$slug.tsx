@@ -86,9 +86,9 @@ function CustomPage() {
         <RichText text={page.body} />
       </div>
       <div className="mt-12 rounded-2xl bg-bg-light p-6 dark:bg-card">
-        <p className="text-sm font-bold text-navy dark:text-white">Talk to an advisor</p>
+        <p className="text-sm font-bold text-navy dark:text-white">Talk to an expert</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          Tell us what you need and a senior advisor will call you within one business day.
+          Tell us what you need and a senior expert will call you within one business day.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <Link to="/contact" className="gold-btn px-5 py-2.5 text-sm">

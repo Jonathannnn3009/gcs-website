@@ -25,3 +25,13 @@ A section whose items have no details just shows the Document column.
 
 Lists use one full-width column when they fit a page that way, otherwise two columns (and a
 slightly smaller type size if needed).
+
+## Services with a fuller list than their page
+
+Some service pages (for example Income Tax Return Filing) show only the common document groups and keep
+the complete list for the download. The complete groups live in `src/data/professional-services.ts`
+(`detail.documentGroups`; `detail.shownGroups` is how many the page shows). To rebuild that PDF after
+editing them:
+
+    npx tsx scripts/checklists/export-full-groups.mts     # refreshes full-document-groups.json
+    python scripts/checklists/build.py income-tax-return

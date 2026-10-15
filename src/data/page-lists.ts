@@ -122,7 +122,7 @@ export const HOME_PERSONAS = [
     body: "Move an existing loan to a better rate — top-up included.",
     whyIcon: Target,
     whyTitle: "End-to-End Guidance",
-    whyBody: "One advisor from picking the product to after the money lands.",
+    whyBody: "One expert from picking the product to after the money lands.",
   },
   {
     icon: Landmark,
@@ -170,8 +170,8 @@ export const ABOUT_WHY = [
     body: "75+ banks and NBFCs in our network, so your file gets more than one shot at approval.",
   },
   {
-    title: "Senior Advisors, Not a Call Centre",
-    body: "The same experienced advisor stays with your file from the first call to disbursal.",
+    title: "Senior Experts, Not a Call Centre",
+    body: "The same experienced expert stays with your file from the first call to disbursal.",
   },
   {
     title: "Built For Speed",
@@ -283,7 +283,7 @@ export const PARTNER_STEPS: { icon: LucideIcon; title: string; body: string }[] 
   {
     icon: PhoneCall,
     title: "We Take It From There",
-    body: "A senior advisor reaches out, assesses eligibility and manages the file.",
+    body: "A senior expert reaches out, assesses eligibility and manages the file.",
   },
   {
     icon: Calendar,
@@ -333,7 +333,7 @@ export const PARTNER_BENEFITS = [
 export const PARTNER_REASONS = [
   {
     q: "No License or Certification Needed",
-    a: "Unlike a registered loan agent, you don't need any certification to refer clients to us — just an introduction and a phone number. Our licensed advisors handle the lending process end to end.",
+    a: "Unlike a registered loan agent, you don't need any certification to refer clients to us — just an introduction and a phone number. Our licensed experts handle the lending process end to end.",
   },
   {
     q: "No Exclusivity Required",
@@ -345,7 +345,7 @@ export const PARTNER_REASONS = [
   },
   {
     q: "Grow Your Professional Network",
-    a: "Every successful referral builds a track record with senior advisors across our network of 75+ banks and NBFCs.",
+    a: "Every successful referral builds a track record with senior experts across our network of 75+ banks and NBFCs.",
   },
 ];
 

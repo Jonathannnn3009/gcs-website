@@ -47,7 +47,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Tailored home, property, business and personal loan solutions from leading Banks and NBFCs. Trusted loan advisors since 2017 across Mumbai, Thane, Navi Mumbai and Pune.",
+          "Tailored home, property, business and personal loan solutions from leading Banks and NBFCs. Trusted loan experts since 2017 across Mumbai, Thane, Navi Mumbai and Pune.",
       },
       {
         property: "og:title",
@@ -401,7 +401,7 @@ function HomePage() {
             <Reveal delay={60}>
               <p className="mt-8 flex items-center gap-2 text-xs font-bold tracking-[0.3em] text-gold-dark uppercase">
                 <span className="h-px w-8 bg-gold" />
-                Trusted Loan Advisors — Since 2017
+                Trusted Loan Experts — Since 2017
               </p>
             </Reveal>
 
@@ -452,7 +452,7 @@ function HomePage() {
                   <span className="grid h-11 w-11 place-items-center rounded-full border-2 border-navy/15 text-navy transition-all duration-300 group-hover:border-gold group-hover:bg-gold group-hover:text-navy dark:text-white dark:group-hover:text-navy">
                     <WhatsAppIcon />
                   </span>
-                  Talk to an Advisor
+                  Talk to an Expert
                 </a>
               </div>
             </Reveal>
@@ -506,7 +506,7 @@ function HomePage() {
           <div className="navy-panel relative flex flex-col items-start justify-between gap-5 overflow-hidden rounded-3xl p-7 sm:flex-row sm:items-center sm:p-9">
             <div className="pointer-events-none absolute top-0 right-0 h-56 w-56 rounded-full bg-gold/10 blur-[90px]" />
             <div className="relative max-w-2xl">
-              <p className="eyebrow">GCS Loan Advisor</p>
+              <p className="eyebrow">GCS Loan Expert</p>
               <h2 className="mt-2 text-xl font-bold text-white sm:text-2xl" style={{ fontFamily: "var(--font-sans)", letterSpacing: "0" }}>
                 Not sure which loan fits? Answer a few short questions.
               </h2>

@@ -93,7 +93,7 @@ function CreditScoreEstimatorPage() {
             <span>
               <span className="block text-base font-extrabold text-navy dark:text-white">Need help with the next step?</span>
               <span className="mt-1 block text-sm text-muted-foreground">
-                Our advisors can go through your report with you and plan what to do.
+                Our experts can go through your report with you and plan what to do.
               </span>
               <span className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-gold-dark">
                 CIBIL Advisory Services <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />

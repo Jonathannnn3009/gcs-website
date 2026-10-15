@@ -121,7 +121,7 @@ const PERKS: { icon: LucideIcon; title: string; body: string }[] = [
   {
     icon: Check,
     title: "No licence needed",
-    body: "Our advisors handle the lending side, so you only make the introduction.",
+    body: "Our experts handle the lending side, so you only make the introduction.",
   },
   {
     icon: UserRound,
@@ -159,14 +159,14 @@ const ASSISTANT_POINTS: { icon: LucideIcon; title: string; body: string }[] = [
   {
     icon: MessageCircle,
     title: "Hand over to our team",
-    body: "When the person is ready, the assistant passes their details to an advisor and we take it from there.",
+    body: "When the person is ready, the assistant passes their details to an expert and we take it from there.",
   },
 ];
 
 const FAQS = [
   {
     q: "Do I need a licence, experience or any qualification?",
-    a: "No. You only introduce people who need a loan. Our advisors do the eligibility checks, bank matching, paperwork and follow-up.",
+    a: "No. You only introduce people who need a loan. Our experts do the eligibility checks, bank matching, paperwork and follow-up.",
   },
   {
     q: "Is there any fee to join?",

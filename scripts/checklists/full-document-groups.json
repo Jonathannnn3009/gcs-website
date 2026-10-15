@@ -1,0 +1,176 @@
+{
+  "income-tax-return-filing": [
+    {
+      "title": "Basic KYC & Personal Details",
+      "items": [
+        "PAN Card",
+        "Aadhaar Card",
+        "Current address",
+        "Mobile number",
+        "Email ID",
+        "Bank account details",
+        "Bank IFSC",
+        "Details of eligible bank account(s) for tax refund",
+        "Previous year's ITR and computation, if available"
+      ]
+    },
+    {
+      "title": "For Salaried Employees",
+      "items": [
+        "Form 16 from employer(s)",
+        "Salary slips, where required",
+        "Details of salary received from more than one employer, if applicable",
+        "Form 12BA or other salary-related documents, if applicable",
+        "Details of allowances, perquisites or other employment income, where applicable"
+      ]
+    },
+    {
+      "title": "Bank & Interest Income",
+      "items": [
+        "Bank statements/passbook",
+        "Savings account interest details",
+        "Fixed Deposit (FD) interest certificates",
+        "Recurring Deposit interest details",
+        "Interest certificates from banks/post offices, where applicable"
+      ]
+    },
+    {
+      "title": "Tax Information & TDS",
+      "items": [
+        "Form 26AS",
+        "Annual Information Statement (AIS)",
+        "Taxpayer Information Summary (TIS)",
+        "TDS certificates such as Form 16 / Form 16A, as applicable",
+        "Advance Tax payment details",
+        "Self-Assessment Tax challans, if any",
+        "Details of other taxes already paid"
+      ]
+    },
+    {
+      "title": "Investments & Deductions",
+      "intro": "Where applicable:",
+      "items": [
+        "Life insurance premium receipts",
+        "PPF contribution details",
+        "Eligible ELSS/investment details",
+        "National Pension System (NPS) contribution details",
+        "Health insurance premium receipts",
+        "Eligible tuition fee receipts",
+        "Eligible donation receipts",
+        "Home loan interest certificate",
+        "Home loan principal repayment details",
+        "Education loan interest certificate",
+        "Other eligible deduction documents"
+      ],
+      "after": "The availability and amount of deductions depend on the applicable tax regime and Income Tax provisions."
+    },
+    {
+      "title": "House Property / Rental Income",
+      "intro": "If you own or rent out property:",
+      "items": [
+        "Property address and ownership details",
+        "Rent received during the year",
+        "Rent agreement, where available/applicable",
+        "Municipal/property tax payment details",
+        "Home loan interest certificate",
+        "Co-owner details and ownership percentage, where applicable"
+      ]
+    },
+    {
+      "title": "Capital Gains: Shares & Mutual Funds",
+      "intro": "If you sold investments:",
+      "items": [
+        "Capital gains statement from broker/investment platform",
+        "Share transaction statement",
+        "Mutual fund capital gains statement",
+        "Demat statement, where required",
+        "Purchase and sale details where not available in the capital gains statement",
+        "Other supporting investment records, where applicable"
+      ]
+    },
+    {
+      "title": "Sale of Property / Real Estate",
+      "intro": "If you sold property:",
+      "items": [
+        "Purchase agreement/deed",
+        "Sale agreement/deed",
+        "Purchase and sale value details",
+        "Details of eligible purchase/improvement expenses",
+        "Stamp duty/registration-related documents, where relevant",
+        "TDS details/certificates related to the property transaction",
+        "Details of any eligible reinvestment/exemption claimed"
+      ]
+    },
+    {
+      "title": "For Self-Employed Professionals & Freelancers",
+      "items": [
+        "Income/receipts details",
+        "Professional fee invoices or summary",
+        "Bank statements",
+        "Business/professional expense details",
+        "TDS certificates",
+        "Form 26AS, AIS and TIS",
+        "Books/accounts or income-expense statement, where maintained/required",
+        "GST details/returns, if applicable",
+        "Details of assets and liabilities, where applicable"
+      ]
+    },
+    {
+      "title": "For Proprietors & Business Owners",
+      "intro": "Depending on the nature of the business:",
+      "items": [
+        "Profit & Loss Account",
+        "Balance Sheet",
+        "Trial Balance",
+        "Ledger/books of accounts, where applicable",
+        "Sales and purchase details",
+        "Business bank statements",
+        "Expense details",
+        "GST returns/reconciliation, where applicable",
+        "TDS details",
+        "Loan statements and interest certificates, where relevant",
+        "Fixed asset details",
+        "Depreciation schedule",
+        "Stock/inventory details, where applicable",
+        "Previous year's financial statements and ITR",
+        "Tax Audit Report, if applicable"
+      ]
+    },
+    {
+      "title": "For Partnership Firms / LLPs",
+      "items": [
+        "PAN of Firm/LLP",
+        "Partnership Deed / LLP Agreement",
+        "Profit & Loss Account",
+        "Balance Sheet",
+        "Trial Balance and books of accounts, where applicable",
+        "Bank statements",
+        "GST details, if applicable",
+        "TDS details",
+        "Partner details",
+        "Partner remuneration and interest details, where applicable",
+        "Capital account details",
+        "Previous year's ITR and financial statements",
+        "Tax Audit Report, where applicable",
+        "Other statutory or financial records relevant to the return"
+      ]
+    },
+    {
+      "title": "Other Income, If Applicable",
+      "intro": "Please also provide details of income from:",
+      "items": [
+        "Commission or brokerage",
+        "Dividend",
+        "Pension",
+        "Family pension",
+        "Interest",
+        "Freelancing",
+        "Foreign income/assets, where applicable",
+        "Cryptocurrency/Virtual Digital Asset transactions, where applicable",
+        "Other investments or taxable receipts",
+        "Any other source of income"
+      ],
+      "after": "Additional documents may be required depending on the nature of the income."
+    }
+  ]
+}

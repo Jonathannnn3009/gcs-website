@@ -58,7 +58,7 @@ function ServicesPage() {
               <span className="gold-text-static italic">matched to your file, not a script.</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-              One advisor works across our full catalogue of {PRODUCTS.length} products and our 75+
+              One expert works across our full catalogue of {PRODUCTS.length} products and our 75+
               lender network to find what actually fits your profile.
             </p>
           </Reveal>

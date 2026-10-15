@@ -22,7 +22,7 @@ function show(step: Step, value: string): string {
 }
 
 /**
- * The GCS Loan Advisor: a guided, one-question-at-a-time intake. The visitor picks what they need,
+ * The GCS Loan Expert: a guided, one-question-at-a-time intake. The visitor picks what they need,
  * answers a handful of short questions, checks them, agrees to be contacted and sends. The
  * enquiry reaches the CRM as an ordinary lead with every answer written into its notes, so a GCS
  * expert can pick it up without asking the same things again. Nothing here approves or prices a
@@ -124,7 +124,7 @@ export function LoanAdvisor() {
       .filter((s) => s.key in answers)
       .map((s) => `${s.label}: ${show(s, answers[s.key] ?? "")}`);
     const detail = [
-      `GCS Loan Advisor — ${flow.label}`,
+      `GCS Loan Expert — ${flow.label}`,
       ...lines,
       `Agreed to be contacted: yes (wording ${CONSENT_VERSION}, ${new Date().toISOString()})`,
     ].join("\n");

@@ -11,7 +11,7 @@ import { useProductGroups } from "@/lib/page-lists";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Growth Capital Services | Trusted Loan Advisors Since 2017" },
+      { title: "About Growth Capital Services | Trusted Loan Experts Since 2017" },
       {
         name: "description",
         content:
@@ -96,13 +96,13 @@ function AboutPage() {
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
                 <strong className="text-foreground">Growth Capital Services</strong> opened in
                 2017 as a Direct Selling Agent, built around a simple idea: a borrower's paperwork
-                shouldn't decide their financial future — the right advisor, matching them to the
+                shouldn't decide their financial future — the right expert, matching them to the
                 right lender, should. That's still the job today.
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                 A first home, a business that's outgrown its funding, or equity sitting locked
                 inside a property already owned — we've structured all three, often for clients
-                another advisor had already turned away.
+                another expert had already turned away.
               </p>
               <Link
                 to="/services"
@@ -137,7 +137,7 @@ function AboutPage() {
                 <div className="lg:pl-10">
                   <p className="eyebrow">Our Vision</p>
                   <h3 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-                    The advisor people call before they call a bank.
+                    The expert people call before they call a bank.
                   </h3>
                   <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
                     To be the first call a borrower makes across our markets — because they
@@ -187,7 +187,7 @@ function AboutPage() {
               <div>
                 <p className="eyebrow">Our Services</p>
                 <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
-                  {PRODUCTS.length} products, <span className="gold-text-static italic">one advisor who knows all of them.</span>
+                  {PRODUCTS.length} products, <span className="gold-text-static italic">one expert who knows all of them.</span>
                 </h2>
               </div>
               <Link

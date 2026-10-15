@@ -17,7 +17,7 @@ import { useList } from "@/lib/page-lists";
 export const Route = createFileRoute("/why-us")({
   head: () => ({
     meta: [
-      { title: "Why Choose Growth Capital Services | Loan Advisors Since 2017" },
+      { title: "Why Choose Growth Capital Services | Loan Experts Since 2017" },
       {
         name: "description",
         content:
@@ -156,7 +156,7 @@ function WhyUsPage() {
               Call {CONTACT.phone} · {CONTACT.hours}
             </p>
             <Link to="/contact" className="gold-btn relative mt-6 py-3.5 text-base">
-              Talk to an Advisor <ArrowRight className="h-4 w-4" />
+              Talk to an Expert <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </Reveal>

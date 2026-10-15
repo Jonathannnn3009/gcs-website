@@ -17,6 +17,7 @@ from pypdf import PdfReader
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from data_ca_legal import SERVICES  # noqa: E402
+import json  # noqa: E402
 from data_loans import COPIES, LOAN_CHECKLISTS  # noqa: E402
 from render import build_pdf  # noqa: E402
 
@@ -39,8 +40,8 @@ def pages_of(slug):
 ATTEMPTS = [(1, 8.6), (2, 8.0), (2, 7.8), (2, 7.6), (2, 7.4), (2, 7.2), (2, 6.9)]
 
 
-def build_fitting(slug, title, sections, subtitle=None):
-    allowed = 2 if any("form" in s for s in sections) else 1  # a fill-in sheet gets its own page
+def build_fitting(slug, title, sections, subtitle=None, pages=1):
+    allowed = max(pages, 2 if any("form" in s for s in sections) else 1)  # a fill-in sheet gets its own page
     for columns, size in ATTEMPTS:
         build_pdf(path_for(slug), title, sections, subtitle=subtitle, columns=columns, size=size)
         if pages_of(slug) <= allowed:
@@ -70,6 +71,25 @@ for slug, spec in LOAN_CHECKLISTS.items():
         shutil.copyfile(path_for(slug), path_for(copy))
         built.append(copy)
 
+# Services whose page shows only the common documents keep the complete list for this download.
+# The groups come from src/data/professional-services.ts (run export-full-groups.mts to refresh).
+FULL_GROUPS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "full-document-groups.json")
+FULL_GROUPS = json.load(open(FULL_GROUPS_FILE)) if os.path.exists(FULL_GROUPS_FILE) else {}
+
+
+def full_sections(groups):
+    out = []
+    for g in groups:
+        items = [split_condition(i) for i in g["items"]]
+        if g.get("after"):
+            items.append("*" + g["after"])  # a note line closing the section
+        sec = {"title": g["title"], "items": items}
+        if g.get("intro"):
+            sec["note"] = g["intro"]
+        out.append(sec)
+    return out
+
+
 # ── CA & legal services ───────────────────────────────────────────────────
 for slug, title, division, documents in SERVICES:
     if only and only not in slug:
@@ -83,7 +103,14 @@ for slug, title, division, documents in SERVICES:
         },
         {"title": "Documents Typically Required", "items": [split_condition(d) for d in documents]},
     ]
-    build_pdf(path_for(slug), title, sections, subtitle="Document checklist for this service.")
+    if slug in FULL_GROUPS:
+        sections = sections[:1] + [
+            {"callout": "The exact documents depend on your income sources. <b>You only need to provide the "
+             "documents that apply to you.</b> Additional documents may be asked for after your case is reviewed."}
+        ] + full_sections(FULL_GROUPS[slug])
+        layouts[slug] = build_fitting(slug, title, sections, "Complete document checklist.", pages=3)
+    else:
+        build_pdf(path_for(slug), title, sections, subtitle="Document checklist for this service.")
     built.append(slug)
 
 print(f"\nBuilt {len(built)} PDFs into {OUT_DIR}\n")

@@ -252,7 +252,7 @@ function ProductDetailPage() {
                       For More Information
                     </p>
                     <p className="mt-3 text-sm leading-relaxed text-white/70">
-                      Terms vary case to case — call or WhatsApp us and a senior advisor will talk
+                      Terms vary case to case — call or WhatsApp us and a senior expert will talk
                       you through the details directly.
                     </p>
                     <div className="mt-5 flex flex-wrap justify-center gap-3">

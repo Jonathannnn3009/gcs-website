@@ -175,7 +175,7 @@ function CaseStudiesPage() {
                 See what's <span className="gold-text">possible for your profile.</span>
               </h3>
               <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-                Tell an advisor your situation, and we'll tell you which lenders in our network fit
+                Tell an expert your situation, and we'll tell you which lenders in our network fit
                 it best.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
