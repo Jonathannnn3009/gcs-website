@@ -642,7 +642,6 @@ export function ChatAssistant() {
         >
           <span className="relative">
             <GiaOrb mood={mood} tone="dark" className="h-16 w-16" />
-            <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-navy bg-emerald-400" />
           </span>
           <span className="hidden text-left sm:block">
             <span className="block text-sm leading-tight font-bold">Ask {ASSISTANT_NAME}</span>
