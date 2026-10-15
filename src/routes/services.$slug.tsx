@@ -14,6 +14,7 @@ import { Reveal } from "@/components/reveal";
 import { LeadForm } from "@/components/lead-form";
 import { ChecklistGate } from "@/components/checklist-gate";
 import { PRODUCTS, getProduct } from "@/data/products";
+import { LOAN_PROCESS } from "@/data/loan-process";
 import { useProduct } from "@/lib/site-content";
 import { FactsStrip } from "@/components/facts-strip";
 import { CheckBadge, TopicHeader } from "@/components/topic-header";
@@ -524,36 +525,70 @@ function ProductDetailPage() {
       )}
 
       {/* Process */}
-      <Section className="pt-0">
-        <Reveal animate={false}>
-          <SectionHeading
-            eyebrow="Our Process"
-            title="From first conversation to disbursal."
-            align="center"
-          />
-        </Reveal>
-        <div className="relative mt-14">
-          <span
-            aria-hidden
-            className="absolute top-5 right-[10%] left-[10%] hidden h-0.5 bg-gold/20 lg:block"
-          />
-          <ol className="relative grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {PROCESS.map((step, i) => (
-              <Reveal animate={false} key={step.num} delay={i * 80}>
-                <li className="text-center">
-                  <span className="relative z-10 mx-auto grid h-10 w-10 place-items-center rounded-full border-2 border-gold bg-white text-gold-dark dark:bg-card">
-                    <step.icon className="h-4 w-4" />
-                  </span>
-                  <h4 className="mt-4 text-base font-extrabold text-navy dark:text-white">{step.title}</h4>
-                  <p className="mx-auto mt-1.5 max-w-[15rem] text-sm leading-relaxed text-muted-foreground">
-                    {step.body}
-                  </p>
-                </li>
+      {(() => {
+        const guide = LOAN_PROCESS[product.slug];
+        if (!guide) {
+          return (
+            <Section className="pt-0">
+              <Reveal animate={false}>
+                <SectionHeading
+                  eyebrow="Our Process"
+                  title="From first conversation to disbursal."
+                  align="center"
+                />
               </Reveal>
-            ))}
-          </ol>
-        </div>
-      </Section>
+              <div className="relative mt-14">
+                <span
+                  aria-hidden
+                  className="absolute top-5 right-[10%] left-[10%] hidden h-0.5 bg-gold/20 lg:block"
+                />
+                <ol className="relative grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+                  {PROCESS.map((step, i) => (
+                    <Reveal animate={false} key={step.num} delay={i * 80}>
+                      <li className="text-center">
+                        <span className="relative z-10 mx-auto grid h-10 w-10 place-items-center rounded-full border-2 border-gold bg-white text-gold-dark dark:bg-card">
+                          <step.icon className="h-4 w-4" />
+                        </span>
+                        <h4 className="mt-4 text-base font-extrabold text-navy dark:text-white">{step.title}</h4>
+                        <p className="mx-auto mt-1.5 max-w-[15rem] text-sm leading-relaxed text-muted-foreground">
+                          {step.body}
+                        </p>
+                      </li>
+                    </Reveal>
+                  ))}
+                </ol>
+              </div>
+            </Section>
+          );
+        }
+        const cols = guide.steps.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-5";
+        return (
+          <Section className="pt-0">
+            <Reveal animate={false}>
+              <SectionHeading
+                eyebrow="Step-by-step guide"
+                title={`${product.title} process, step by step.`}
+                description={guide.intro}
+                align="center"
+              />
+            </Reveal>
+            <ol className={`mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 ${cols}`}>
+              {guide.steps.map((step, i) => (
+                <Reveal animate={false} key={step.title} delay={i * 70}>
+                  <li className="flex h-full flex-col rounded-2xl border border-border bg-white p-6 text-center shadow-sm dark:bg-card">
+                    <span className="font-heading text-5xl leading-none font-extrabold text-gold-dark">
+                      {i + 1}
+                    </span>
+                    <span aria-hidden className="mx-auto mt-3 h-0.5 w-8 rounded bg-gold" />
+                    <h4 className="mt-4 text-base font-extrabold text-navy dark:text-white">{step.title}</h4>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+                  </li>
+                </Reveal>
+              ))}
+            </ol>
+          </Section>
+        );
+      })()}
 
       {/* Related products */}
       <Section className="pt-0">
