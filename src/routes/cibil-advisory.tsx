@@ -212,6 +212,53 @@ function CibilAdvisoryPage() {
         </ol>
       </Section>
 
+      <Section className="pt-0">
+        <div className="grid items-center gap-10 rounded-3xl border border-gold/20 bg-white p-6 sm:p-10 lg:grid-cols-[minmax(0,360px)_1fr] dark:bg-card">
+          <Reveal>
+            <a href="/posters/cibil-advisory-poster.png" target="_blank" rel="noopener noreferrer" aria-label="Open the poster in full size">
+              <img
+                src="/posters/cibil-advisory-poster.webp"
+                alt="CIBIL Advisory Services at a glance: how we can help, who it is for, and how it works"
+                width={720}
+                height={1307}
+                loading="lazy"
+                className="mx-auto w-full max-w-[360px] rounded-2xl border border-border shadow-[var(--shadow-lift)]"
+              />
+            </a>
+          </Reveal>
+          <Reveal delay={80}>
+            <p className="eyebrow">At A Glance</p>
+            <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
+              Everything on one page, <span className="gold-text">easy to share.</span>
+            </h2>
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              Our CIBIL Advisory Services in a single picture. Save it, print it, or send it to a friend or a
+              business owner who may find it useful.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a href="/posters/cibil-advisory-poster.png" download className="gold-btn py-3 text-sm">
+                Download the poster <ArrowRight className="h-4 w-4" />
+              </a>
+              <a href="/posters/cibil-advisory-poster.pdf" download className="outline-btn dark:bg-card dark:text-white">
+                Download as PDF
+              </a>
+              <a
+                href="https://wa.me/"
+                onClick={(e) => {
+                  // share this page's own address, whatever the site's domain is
+                  e.preventDefault();
+                  const msg = `CIBIL Advisory Services from Growth Capital Services: ${window.location.origin}/cibil-advisory`;
+                  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
+                }}
+                className="outline-btn dark:bg-card dark:text-white"
+              >
+                Share on WhatsApp
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </Section>
+
       <Section className="pt-0" id="talk">
         <div className="grid gap-8 rounded-2xl border border-gold/25 panel-light p-8 sm:p-12 lg:grid-cols-[1fr_480px] lg:items-stretch">
           <Reveal>
