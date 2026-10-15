@@ -9,7 +9,6 @@ import {
   GitCompare,
   Building2,
   Landmark,
-  Gauge,
   ChevronDown,
   type LucideIcon,
 } from "lucide-react";
@@ -24,7 +23,6 @@ import { LoanComparisonCalculator } from "@/components/loan-comparison-calculato
 import { WorkingCapitalCalculator } from "@/components/working-capital-calculator";
 import { CgtmseCalculator } from "@/components/cgtmse-calculator";
 import { LapLtvCalculator } from "@/components/lap-ltv-calculator";
-import { CreditScoreEstimator } from "@/components/credit-score-estimator";
 import { TOOLS_CARDS } from "@/data/page-lists";
 import { useFixedList } from "@/lib/page-lists";
 
@@ -35,7 +33,7 @@ export const Route = createFileRoute("/tools")({
       {
         name: "description",
         content:
-          "Ten free calculators — EMI, eligibility, stamp duty, prepayment, balance transfer, loan comparison, working capital, CGTMSE fee, LAP eligibility and a credit score estimator.",
+          "Nine free calculators — EMI, eligibility, stamp duty, prepayment, balance transfer, loan comparison, working capital, CGTMSE fee and LAP eligibility.",
       },
       { property: "og:title", content: "Loan Calculators & Tools" },
       {
@@ -65,7 +63,6 @@ const TOOLS: Tool[] = [
   { id: "working-capital", icon: Building2, label: "Working Capital Estimator", sub: "MSME limit — exclusive to GCS", render: () => <WorkingCapitalCalculator /> },
   { id: "cgtmse", icon: Landmark, label: "CGTMSE Guarantee Fee", sub: "Fee on a collateral-free business loan", render: () => <CgtmseCalculator /> },
   { id: "lap-ltv", icon: FileText, label: "Loan Against Property LTV", sub: "What your property can unlock", render: () => <LapLtvCalculator /> },
-  { id: "credit-score", icon: Gauge, label: "Credit Score Estimator", sub: "Indicative range, not a bureau pull", render: () => <CreditScoreEstimator /> },
 ];
 
 const TOOL_IDS = TOOLS.map((t) => t.id);
@@ -122,8 +119,8 @@ function ToolsPage() {
               Know Your Numbers. <span className="gold-text">Then Apply with Confidence.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Ten free calculators covering every loan on our desk — from EMI and eligibility to
-              CGTMSE fees and a credit score estimator. Tap one to open it. No signup required.
+              Nine free calculators covering every loan on our desk — from EMI and eligibility to
+              CGTMSE fees. Tap one to open it. No signup required.
             </p>
           </Reveal>
         </div>

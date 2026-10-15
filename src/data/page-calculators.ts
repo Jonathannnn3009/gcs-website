@@ -13,7 +13,7 @@ export type CalcId =
 
 /** Loan product slug -> calculators that help someone weigh that loan, most relevant first. */
 export const PRODUCT_CALCULATORS: Record<string, CalcId[]> = {
-  "home-loan": ["emi", "eligibility", "stamp-duty", "prepayment", "credit-score"],
+  "home-loan": ["emi", "eligibility", "stamp-duty", "prepayment"],
   "loan-against-property": ["lap-ltv", "emi", "eligibility"],
   "lease-rental-discounting": ["lap-ltv", "emi"],
   "balance-transfer": ["balance-transfer", "prepayment", "emi"],
@@ -29,7 +29,7 @@ export const PRODUCT_CALCULATORS: Record<string, CalcId[]> = {
   "bank-guarantee": ["working-capital"],
   "letter-of-credit": ["working-capital"],
   "working-capital-term-loan": ["working-capital", "emi"],
-  "personal-loan": ["emi", "eligibility", "prepayment", "credit-score"],
+  "personal-loan": ["emi", "eligibility", "prepayment"],
   "loan-against-securities": ["emi"],
   "loan-against-mutual-funds": ["emi"],
   "professional-loan": ["emi", "eligibility"],

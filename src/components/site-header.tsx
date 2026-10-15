@@ -5,7 +5,7 @@ import { Menu, Phone, X, ChevronDown, ArrowRight, type LucideIcon } from "lucide
 import { CONTACT } from "@/data/site";
 import { BrandLogo } from "@/components/brand-logo";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
-import { NAV_HEADER, NAV_PARTNER, NAV_TOOLS } from "@/data/page-lists";
+import { NAV_CIBIL, NAV_HEADER, NAV_PARTNER, NAV_TOOLS } from "@/data/page-lists";
 import { useList, useProductGroups } from "@/lib/page-lists";
 
 
@@ -19,11 +19,14 @@ export function SiteHeader() {
         ? ("services" as const)
         : l["to"] === "/tools"
           ? ("tools" as const)
+          : l["to"] === "/cibil"
+            ? ("cibil" as const)
           : l["to"] === "/partner"
             ? ("partner" as const)
             : undefined,
   }));
   const PARTNER_ITEMS = useList("nav.partner", NAV_PARTNER);
+  const CIBIL_ITEMS = useList("nav.cibil", NAV_CIBIL);
   const TOOL_ITEMS = useList("nav.tools", NAV_TOOLS);
   const PRODUCT_GROUPS_LIVE = useProductGroups();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -211,6 +214,43 @@ export function SiteHeader() {
                       </div>
                     )}
 
+                    {/* CIBIL Dropdown */}
+                    {link.dropdown === "cibil" && activeDropdown === "cibil" && (
+                      <div
+                        className="absolute left-1/2 top-full -translate-x-1/2 pt-2"
+                        style={{ animation: "gcs-scale-in 200ms ease both" }}
+                      >
+                        <div className="w-[320px] overflow-hidden rounded-xl border border-gold/10 bg-white p-3 shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.2)] dark:bg-card">
+                          <p className="mb-2 px-2 text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+                            Credit &amp; CIBIL
+                          </p>
+                          {CIBIL_ITEMS.map((item) => {
+                            const Icon = item["icon"] as LucideIcon;
+                            return (
+                              <Link
+                                key={String(item["to"])}
+                                to={String(item["to"]) as "/"}
+                                onClick={() => setActiveDropdown(null)}
+                                className="group/cibil flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gold/5"
+                              >
+                                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-secondary text-gold transition-colors duration-300 group-hover/cibil:animate-[gcs-wiggle_600ms_ease-in-out] group-hover/cibil:bg-gold group-hover/cibil:text-navy">
+                                  <Icon className="h-4 w-4" />
+                                </span>
+                                <span className="min-w-0">
+                                  <span className="block text-sm font-semibold text-foreground">
+                                    {String(item["label"])}
+                                  </span>
+                                  <span className="block text-[11px] text-muted-foreground">
+                                    {String(item["desc"])}
+                                  </span>
+                                </span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Tools Dropdown */}
                     {link.dropdown === "tools" && activeDropdown === "tools" && (
                       <div
@@ -339,6 +379,17 @@ export function SiteHeader() {
                 </Link>
                 {link.dropdown === "partner" &&
                   PARTNER_ITEMS.map((item) => (
+                    <Link
+                      key={String(item["to"])}
+                      to={String(item["to"]) as "/"}
+                      onClick={() => setMobileOpen(false)}
+                      className="ml-4 rounded-md border-l-2 border-gold/30 px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-gold"
+                    >
+                      {String(item["label"])}
+                    </Link>
+                  ))}
+                {link.dropdown === "cibil" &&
+                  CIBIL_ITEMS.map((item) => (
                     <Link
                       key={String(item["to"])}
                       to={String(item["to"]) as "/"}

@@ -16,6 +16,7 @@ import {
   Clock,
   Compass,
   FileText,
+  Gauge,
   Gem,
   Globe,
   GraduationCap,
@@ -375,6 +376,12 @@ export const NAV_PARTNER = [
   { icon: Users, label: "Freelancer", desc: "Earn on your own time, no investment", to: "/partner/freelancer" },
 ];
 
+export const NAV_CIBIL = [
+  { icon: FileText, label: "Credit Report", desc: "Request your CIBIL or other bureau report", to: "/cibil" },
+  { icon: Gauge, label: "Credit Score Estimator", desc: "An indicative range, not a bureau pull", to: "/credit-score-estimator" },
+  { icon: Compass, label: "CIBIL Advisory Services", desc: "Understand your report and plan the next steps", to: "/cibil-advisory" },
+];
+
 export const NAV_TOOLS = [
   { label: "EMI Calculator", desc: "Estimate your monthly EMI", hash: "emi" },
   { label: "Eligibility Calculator", desc: "Find your max loan amount", hash: "eligibility" },
@@ -393,11 +400,6 @@ export const NAV_TOOLS = [
   },
   { label: "CGTMSE Guarantee Fee", desc: "Fee on a collateral-free loan", hash: "cgtmse" },
   { label: "Loan Against Property LTV", desc: "What your property can unlock", hash: "lap-ltv" },
-  {
-    label: "Credit Score Estimator",
-    desc: "Indicative range, not a bureau pull",
-    hash: "credit-score",
-  },
 ];
 
 export const FOOTER_EXPLORE = [
@@ -524,11 +526,6 @@ export const TOOLS_CARDS = [
   },
   { id: "cgtmse", label: "CGTMSE Guarantee Fee", sub: "Fee on a collateral-free business loan" },
   { id: "lap-ltv", label: "Loan Against Property LTV", sub: "What your property can unlock" },
-  {
-    id: "credit-score",
-    label: "Credit Score Estimator",
-    sub: "Indicative range, not a bureau pull",
-  },
 ];
 
 export const SERVICES_GROUPS = PRODUCT_GROUPS.map((g) => ({
@@ -783,7 +780,7 @@ export const LIST_SPECS: ListSpec[] = [
     key: "nav.header",
     page: "Menu & footer",
     label: "Top menu",
-    hint: "The links in the top menu. Our Services and Tools keep their drop-down panels.",
+    hint: "The links in the top menu. Our Services, Calculators, CIBIL and Become Partner keep their drop-down panels.",
     fields: [T("label", "Name"), T("to", "Page address, e.g. /about")],
     items: NAV_HEADER,
   },
@@ -794,6 +791,14 @@ export const LIST_SPECS: ListSpec[] = [
     hint: "The partner types listed under Become Partner. Page address is e.g. /partner/builder.",
     fields: [I("icon", "Icon"), T("label", "Name"), T("desc", "Short line"), T("to", "Page address")],
     items: NAV_PARTNER,
+  },
+  {
+    key: "nav.cibil",
+    page: "Menu & footer",
+    label: "CIBIL drop-down",
+    hint: "The pages listed under CIBIL in the top menu.",
+    fields: [I("icon", "Icon"), T("label", "Name"), T("desc", "Short line"), T("to", "Page address")],
+    items: NAV_CIBIL,
   },
   {
     key: "nav.tools",

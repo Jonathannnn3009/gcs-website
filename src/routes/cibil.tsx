@@ -649,8 +649,7 @@ function CibilPage() {
                   you.
                 </p>
                 <Link
-                  to="/tools"
-                  hash="credit-score"
+                  to="/credit-score-estimator"
                   className="mt-5 inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2.5 text-sm font-bold text-white/85 transition-colors hover:border-gold/40 hover:text-white"
                 >
                   <Gauge className="h-4 w-4 text-gold" />
@@ -715,8 +714,7 @@ function CibilPage() {
                 request your report.
               </p>
               <Link
-                to="/tools"
-                hash="credit-score"
+                to="/credit-score-estimator"
                 className="mt-4 gold-btn px-4 py-2.5"
               >
                 Try the estimator <ArrowRight className="h-3.5 w-3.5" />

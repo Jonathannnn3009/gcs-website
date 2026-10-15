@@ -14,7 +14,9 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AiLoanAdvisorRouteImport } from './routes/ai-loan-advisor'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
 import { Route as CibilRouteImport } from './routes/cibil'
+import { Route as CibilAdvisoryRouteImport } from './routes/cibil-advisory'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CreditScoreEstimatorRouteImport } from './routes/credit-score-estimator'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as MumbaiRouteImport } from './routes/mumbai'
 import { Route as NaviMumbaiRouteImport } from './routes/navi-mumbai'
@@ -61,9 +63,19 @@ const CibilRoute = CibilRouteImport.update({
   path: '/cibil',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CibilAdvisoryRoute = CibilAdvisoryRouteImport.update({
+  id: '/cibil-advisory',
+  path: '/cibil-advisory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreditScoreEstimatorRoute = CreditScoreEstimatorRouteImport.update({
+  id: '/credit-score-estimator',
+  path: '/credit-score-estimator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsightsRoute = InsightsRouteImport.update({
@@ -173,7 +185,9 @@ export interface FileRoutesByFullPath {
   '/ai-loan-advisor': typeof AiLoanAdvisorRoute
   '/case-studies': typeof CaseStudiesRouteWithChildren
   '/cibil': typeof CibilRoute
+  '/cibil-advisory': typeof CibilAdvisoryRoute
   '/contact': typeof ContactRoute
+  '/credit-score-estimator': typeof CreditScoreEstimatorRoute
   '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
@@ -200,7 +214,9 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/ai-loan-advisor': typeof AiLoanAdvisorRoute
   '/cibil': typeof CibilRoute
+  '/cibil-advisory': typeof CibilAdvisoryRoute
   '/contact': typeof ContactRoute
+  '/credit-score-estimator': typeof CreditScoreEstimatorRoute
   '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
@@ -228,7 +244,9 @@ export interface FileRoutesById {
   '/ai-loan-advisor': typeof AiLoanAdvisorRoute
   '/case-studies': typeof CaseStudiesRouteWithChildren
   '/cibil': typeof CibilRoute
+  '/cibil-advisory': typeof CibilAdvisoryRoute
   '/contact': typeof ContactRoute
+  '/credit-score-estimator': typeof CreditScoreEstimatorRoute
   '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
@@ -258,7 +276,9 @@ export interface FileRouteTypes {
     | '/ai-loan-advisor'
     | '/case-studies'
     | '/cibil'
+    | '/cibil-advisory'
     | '/contact'
+    | '/credit-score-estimator'
     | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
@@ -285,7 +305,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/ai-loan-advisor'
     | '/cibil'
+    | '/cibil-advisory'
     | '/contact'
+    | '/credit-score-estimator'
     | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
@@ -312,7 +334,9 @@ export interface FileRouteTypes {
     | '/ai-loan-advisor'
     | '/case-studies'
     | '/cibil'
+    | '/cibil-advisory'
     | '/contact'
+    | '/credit-score-estimator'
     | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
@@ -341,7 +365,9 @@ export interface RootRouteChildren {
   AiLoanAdvisorRoute: typeof AiLoanAdvisorRoute
   CaseStudiesRoute: typeof CaseStudiesRouteWithChildren
   CibilRoute: typeof CibilRoute
+  CibilAdvisoryRoute: typeof CibilAdvisoryRoute
   ContactRoute: typeof ContactRoute
+  CreditScoreEstimatorRoute: typeof CreditScoreEstimatorRoute
   InsightsRoute: typeof InsightsRoute
   MumbaiRoute: typeof MumbaiRoute
   NaviMumbaiRoute: typeof NaviMumbaiRoute
@@ -397,11 +423,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CibilRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cibil-advisory': {
+      id: '/cibil-advisory'
+      path: '/cibil-advisory'
+      fullPath: '/cibil-advisory'
+      preLoaderRoute: typeof CibilAdvisoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/credit-score-estimator': {
+      id: '/credit-score-estimator'
+      path: '/credit-score-estimator'
+      fullPath: '/credit-score-estimator'
+      preLoaderRoute: typeof CreditScoreEstimatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insights': {
@@ -581,7 +621,9 @@ const rootRouteChildren: RootRouteChildren = {
   AiLoanAdvisorRoute: AiLoanAdvisorRoute,
   CaseStudiesRoute: CaseStudiesRouteWithChildren,
   CibilRoute: CibilRoute,
+  CibilAdvisoryRoute: CibilAdvisoryRoute,
   ContactRoute: ContactRoute,
+  CreditScoreEstimatorRoute: CreditScoreEstimatorRoute,
   InsightsRoute: InsightsRoute,
   MumbaiRoute: MumbaiRoute,
   NaviMumbaiRoute: NaviMumbaiRoute,
