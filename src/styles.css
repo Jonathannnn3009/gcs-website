@@ -401,6 +401,11 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gcs-shimmer 4s linear infinite;
+  /* Italic letters lean past the text box; without this the last letter of each line is clipped. */
+  padding-inline: 0.08em;
+  margin-inline: -0.08em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 @utility gold-text-static {
@@ -408,6 +413,11 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  /* Italic letters lean past the text box; without this the last letter of each line is clipped. */
+  padding-inline: 0.08em;
+  margin-inline: -0.08em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 /* ─── Button Utilities ─────────────────────────────── */
