@@ -342,7 +342,8 @@ function toolEligibility(a: Args, snap: SiteSnapshot): ToolOutput {
   );
   const tenure = optNum(a, "tenure_years", "years", 1, 40, 20);
   const foir = snap.foirPct;
-  const maxEmi = (income - existing) * (foir / 100);
+  const totalEmiLimit = income * (foir / 100);
+  const maxEmi = totalEmiLimit - existing;
 
   if (maxEmi <= 0) {
     return {
@@ -371,7 +372,8 @@ function toolEligibility(a: Args, snap: SiteSnapshot): ToolOutput {
       max_loan_exact: formatINR(maxLoan),
       max_emi_affordable: formatINR(maxEmi),
       assumptions: {
-        foir: `${foir}% of (income minus existing EMIs)`,
+        foir: `${foir}% of income is the most that can go to EMIs in total; existing EMIs are then subtracted`,
+        max_total_emi: formatINR(totalEmiLimit),
         rate: pct(rate),
         tenure: years(tenure),
       },
@@ -384,7 +386,8 @@ function toolEligibility(a: Args, snap: SiteSnapshot): ToolOutput {
       rows: [
         { label: "Monthly income", value: formatINR(income) },
         { label: "Existing EMIs", value: formatINR(existing) },
-        { label: "EMI you can afford", value: formatINR(maxEmi) },
+        { label: `Total EMI limit (${foir}% of income)`, value: formatINR(totalEmiLimit) },
+        { label: "EMI available for the new loan", value: formatINR(maxEmi) },
         { label: "Assumed rate & tenure", value: `${pct(rate)} · ${years(tenure)}` },
       ],
       note: `Based on ${foir}% of income going to EMIs. Actual eligibility depends on the lender.`,

@@ -12,9 +12,11 @@ export function EligibilityCalculator() {
   const [tenure, setTenure] = useState(20);
 
   const result = useMemo(() => {
-    const maxEmi = (monthlyIncome - existingEmi) * (foirPct / 100);
-    if (maxEmi <= 0) return { maxLoan: 0, maxEmi: 0 };
-    return { maxLoan: principalFromEmi(maxEmi, rate, tenure), maxEmi };
+    // Income x FOIR gives the most the applicant can pay in EMIs in total; existing EMIs come off that.
+    const totalEmi = monthlyIncome * (foirPct / 100);
+    const maxEmi = totalEmi - existingEmi;
+    if (maxEmi <= 0) return { maxLoan: 0, maxEmi: 0, totalEmi };
+    return { maxLoan: principalFromEmi(maxEmi, rate, tenure), maxEmi, totalEmi };
   }, [monthlyIncome, existingEmi, rate, tenure, foirPct]);
 
   return (
@@ -113,24 +115,35 @@ export function EligibilityCalculator() {
               {formatCurrency(result.maxLoan)}
             </p>
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>
-            <div className="relative mt-5 grid grid-cols-2 gap-4">
+            <div className="relative mt-5 grid grid-cols-3 gap-3">
               <div>
                 <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  Max EMI
+                  Total EMI limit
                 </p>
-                <p className="mt-1 text-lg font-extrabold text-gold">
+                <p className="mt-1 text-base font-extrabold text-gold">
+                  {formatCurrency(result.totalEmi)}
+                </p>
+                <p className="text-[10px] text-muted-foreground">{foirPct}% of income</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                  Less existing EMIs
+                </p>
+                <p className="mt-1 text-base font-extrabold text-gold">
+                  {formatCurrency(existingEmi)}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                  EMI for new loan
+                </p>
+                <p className="mt-1 text-base font-extrabold text-gold">
                   {formatCurrency(result.maxEmi)}
                 </p>
               </div>
-              <div>
-                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  FOIR Used
-                </p>
-                <p className="mt-1 text-lg font-extrabold text-gold">{foirPct}%</p>
-              </div>
             </div>
             <p className="relative mt-5 text-[11px] text-muted-foreground">
-              Based on a FOIR (Fixed Obligation to Income Ratio) of {foirPct}%. Each lender sets its own limit, so actual eligibility may vary.
+              FOIR (Fixed Obligation to Income Ratio) of {foirPct}% sets the most you can pay in EMIs in total. Your existing EMIs are subtracted from that to find what is left for the new loan. Each lender sets its own limit, so actual eligibility may vary.
             </p>
           </div>
           <CalcExpertButton />
