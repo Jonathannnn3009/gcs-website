@@ -12,6 +12,8 @@ import {
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { LeadForm } from "@/components/lead-form";
+import { ProductQuestionnaire } from "@/components/product-questionnaire";
+import { questionnaireFor } from "@/data/product-questionnaires";
 import { ChecklistGate } from "@/components/checklist-gate";
 import { PRODUCTS, getProduct } from "@/data/products";
 import { LOAN_PROCESS } from "@/data/loan-process";
@@ -129,6 +131,7 @@ function ProductDetailPage() {
   const fallbackRelated =
     related.length > 0 ? related : PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
   const code = CODE_OVERRIDES[product.slug] ?? productCode(product.title);
+  const questionnaire = questionnaireFor(product.slug);
   // the applicant type whose documents the panel shows: the one picked, otherwise the first
   const activeCategory =
     product.documentCategories?.find((c) => c.label === presetCategory) ??
@@ -181,9 +184,22 @@ function ProductDetailPage() {
                 <FactsStrip facts={product.facts} />
 
                 <div className="relative mt-8 flex flex-wrap items-center gap-5">
-                  <Link to="/contact" className="gold-btn py-3.5 text-base">
-                    Apply for {code} <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  {questionnaire ? (
+                    <a
+                      href="#apply"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById("apply")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="gold-btn py-3.5 text-base"
+                    >
+                      Apply for {code} <ArrowRight className="h-4 w-4" />
+                    </a>
+                  ) : (
+                    <Link to="/contact" className="gold-btn py-3.5 text-base">
+                      Apply for {code} <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  )}
                   <a
                     href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
                     target="_blank"
@@ -498,7 +514,11 @@ function ProductDetailPage() {
 
           {/* RIGHT: sticky apply card */}
           <Reveal animate={false} delay={100} className="lg:sticky lg:top-28">
-            <LeadForm defaultLoanType={product.title} source={`service-enquiry-${product.slug}`} />
+            {questionnaire ? (
+              <ProductQuestionnaire config={questionnaire} productSlug={product.slug} productTitle={product.title} />
+            ) : (
+              <LeadForm defaultLoanType={product.title} source={`service-enquiry-${product.slug}`} />
+            )}
           </Reveal>
         </div>
       </Section>

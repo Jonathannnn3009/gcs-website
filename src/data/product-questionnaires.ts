@@ -1,0 +1,601 @@
+// The detailed "Tell us about ..." questions asked on a few loan pages instead of the short
+// consultation form. They follow the wording the team supplied. Each step is one screen; a question
+// can be shown only when an earlier answer says so (showWhen), the same idea as the checklist form.
+
+export type ShowWhen = { key: string; values: string[] };
+
+type Base = { key: string; label: string; help?: string; required?: boolean; showWhen?: ShowWhen };
+
+export type QuestionField =
+  | (Base & { kind: "choice"; options: string[] })
+  | (Base & { kind: "multi"; options: string[] })
+  | (Base & { kind: "text"; placeholder?: string; long?: boolean })
+  | (Base & { kind: "amount"; placeholder?: string })
+  | (Base & { kind: "percent" });
+
+export type QuestionStep = { title: string; help?: string; fields: QuestionField[] };
+
+export type Questionnaire = {
+  /** The loan pages this applies to. */
+  slugs: string[];
+  /** Heading of the card and the line under it. */
+  title: string;
+  intro: string;
+  steps: QuestionStep[];
+  /** The last screen: heading, the paragraph above the contact fields, and the button. */
+  finalTitle: string;
+  finalText: string;
+  button: string;
+  /** What the "Apply" button on the page says it is for, e.g. the name used in the lead notes. */
+  topic: string;
+  /** Which answer is the amount asked for (goes to the lead's amount). */
+  amountKey: string;
+  disclaimer: string;
+};
+
+const YES_NO = ["Yes", "No"];
+const rupee = "e.g. 50,00,000";
+
+// ───────────── Project Finance / Project Funding ─────────────
+const PROJECT: Questionnaire = {
+  slugs: ["project-funding"],
+  title: "Tell Us About Your Project",
+  intro: "Please share a few basic details so we can understand your project and funding requirement.",
+  topic: "Project funding",
+  amountKey: "fundingRequired",
+  steps: [
+    {
+      title: "What is the project type or industry?",
+      fields: [
+        {
+          key: "projectType",
+          label: "Select your project",
+          kind: "choice",
+          required: true,
+          options: [
+            "Manufacturing",
+            "Real Estate / Construction",
+            "Infrastructure",
+            "Hotel / Hospitality",
+            "Hospital / Healthcare",
+            "Education",
+            "Renewable Energy",
+            "Commercial Project",
+            "Expansion of Existing Business",
+            "New Business / Greenfield Project",
+            "Other",
+          ],
+        },
+        {
+          key: "projectTypeOther",
+          label: "Please mention your project",
+          kind: "text",
+          showWhen: { key: "projectType", values: ["Other"] },
+        },
+      ],
+    },
+    {
+      title: "What is the current stage of the project?",
+      fields: [
+        {
+          key: "stage",
+          label: "Current stage",
+          kind: "choice",
+          options: [
+            "Planning Stage",
+            "Land Identified",
+            "Land Purchased / Owned",
+            "Approvals in Process",
+            "Construction / Setup Started",
+            "Partially Completed",
+            "Existing Project – Expansion",
+          ],
+        },
+      ],
+    },
+    {
+      title: "What is the total project cost?",
+      help: "Include the approximate total cost of land, building, plant & machinery, setup and other project expenses, as applicable.",
+      fields: [{ key: "projectCost", label: "Total project cost", kind: "amount", placeholder: rupee }],
+    },
+    {
+      title: "How much funding do you require?",
+      fields: [
+        { key: "fundingRequired", label: "Funding required", kind: "amount", required: true, placeholder: rupee },
+        {
+          key: "purpose",
+          label: "Main purpose",
+          kind: "choice",
+          options: [
+            "Land / Property",
+            "Construction",
+            "Plant & Machinery",
+            "Equipment",
+            "Expansion",
+            "Working Capital",
+            "Multiple Purposes",
+          ],
+        },
+      ],
+    },
+    {
+      title: "What is your own contribution to the project?",
+      help: "Mention how much has already been invested and how much additional promoter contribution is available.",
+      fields: [
+        { key: "ownContribution", label: "Your contribution (₹ or %)", kind: "text", placeholder: "e.g. ₹1 Cr or 25%" },
+      ],
+    },
+    {
+      title: "What security or collateral is available?",
+      fields: [
+        {
+          key: "security",
+          label: "Select all that apply",
+          kind: "multi",
+          options: [
+            "Project Property",
+            "Residential Property",
+            "Commercial Property",
+            "Industrial Property",
+            "Land",
+            "Plant & Machinery",
+            "Other Security",
+            "No Additional Collateral",
+          ],
+        },
+        { key: "securityValue", label: "Approximate value", kind: "amount", placeholder: rupee },
+      ],
+    },
+    {
+      title: "Tell us about the promoter or existing business",
+      help: "For a new project, please mention the promoters' relevant business or industry experience.",
+      fields: [
+        { key: "businessName", label: "Business / company name", kind: "text" },
+        {
+          key: "constitution",
+          label: "Constitution",
+          kind: "choice",
+          options: ["Proprietorship", "Partnership", "LLP", "Pvt. Ltd.", "Ltd."],
+        },
+        { key: "yearsInBusiness", label: "Years in business", kind: "text", placeholder: "e.g. 8 years" },
+        { key: "turnover", label: "Latest annual turnover", kind: "amount", placeholder: rupee },
+        { key: "profit", label: "Profit / cash accruals", kind: "text", placeholder: "e.g. ₹40 Lakh" },
+        { key: "existingLoans", label: "Existing loans / banking facilities, if any", kind: "text", long: true },
+        { key: "experience", label: "Promoters' experience (for a new project)", kind: "text", long: true },
+      ],
+    },
+    {
+      title: "Are the project report (DPR) and required approvals ready?",
+      fields: [
+        { key: "dpr", label: "Project report / DPR", kind: "choice", options: ["Yes", "In Process", "No"] },
+        {
+          key: "approvals",
+          label: "Status of major approvals, licences, permissions and registrations",
+          kind: "text",
+          long: true,
+        },
+      ],
+    },
+  ],
+  finalTitle: "Submit for Initial Project Finance Assessment",
+  finalText:
+    "Based on these details, Growth Capital Services can understand your requirement and help explore suitable project-finance options from its network of Banks & NBFCs.",
+  button: "Discuss Your Project Funding Requirement",
+  disclaimer:
+    "Project funding is subject to project viability, promoter profile and contribution, financial assessment, security or collateral, statutory approvals, credit assessment and the respective Bank or NBFC's lending policy.",
+};
+
+// ───────────── Drop-Line Overdraft, and the same for Overdraft ─────────────
+function overdraft(name: string, slugs: string[], topic: string, bt: string): Questionnaire {
+  return {
+    slugs,
+    title: "Tell Us About Your Funding Requirement",
+    intro: `Please answer a few basic questions so we can understand your requirement and assess suitable ${name} options.`,
+    topic,
+    amountKey: "limit",
+    steps: [
+      {
+        title: "What is your employment or business profile?",
+        fields: [
+          {
+            key: "profile",
+            label: "Profile",
+            kind: "choice",
+            required: true,
+            options: [
+              "Salaried",
+              "Self-Employed Professional",
+              "Proprietorship",
+              "Partnership Firm",
+              "LLP",
+              "Private Limited Company",
+              "Limited Company",
+            ],
+          },
+        ],
+      },
+      {
+        title: `How much ${name} limit do you require?`,
+        fields: [
+          { key: "limit", label: "Required amount", kind: "amount", required: true, placeholder: rupee },
+          {
+            key: "purpose",
+            label: "Main purpose",
+            kind: "choice",
+            options: [
+              "Business Expansion",
+              "Working Capital",
+              "Debt Consolidation / Balance Transfer",
+              "Business Expenses",
+              "Personal Financial Requirement",
+              "Other",
+            ],
+          },
+        ],
+      },
+      {
+        title: "What is your income or business turnover?",
+        fields: [
+          {
+            key: "salary",
+            label: "Monthly net salary",
+            kind: "amount",
+            placeholder: "e.g. 1,00,000",
+            showWhen: { key: "profile", values: ["Salaried"] },
+          },
+          {
+            key: "turnover",
+            label: "Annual turnover",
+            kind: "amount",
+            placeholder: rupee,
+            showWhen: {
+              key: "profile",
+              values: [
+                "Self-Employed Professional",
+                "Proprietorship",
+                "Partnership Firm",
+                "LLP",
+                "Private Limited Company",
+                "Limited Company",
+              ],
+            },
+          },
+          {
+            key: "profit",
+            label: "Annual net profit",
+            kind: "amount",
+            placeholder: rupee,
+            showWhen: {
+              key: "profile",
+              values: [
+                "Self-Employed Professional",
+                "Proprietorship",
+                "Partnership Firm",
+                "LLP",
+                "Private Limited Company",
+                "Limited Company",
+              ],
+            },
+          },
+        ],
+      },
+      {
+        title: "How long have you been in your current job or business?",
+        fields: [
+          {
+            key: "vintage",
+            label: "Time in current job / business",
+            kind: "choice",
+            options: ["Less than 2 Years", "2–5 Years", "5–10 Years", "More than 10 Years"],
+          },
+        ],
+      },
+      {
+        title: "Do you have any existing loans or credit facilities?",
+        fields: [
+          { key: "hasLoans", label: "Existing loans or facilities", kind: "choice", options: YES_NO },
+          { key: "loanType", label: "Loan / facility type", kind: "text", showWhen: { key: "hasLoans", values: ["Yes"] } },
+          {
+            key: "loanOutstanding",
+            label: "Outstanding amount",
+            kind: "amount",
+            placeholder: rupee,
+            showWhen: { key: "hasLoans", values: ["Yes"] },
+          },
+          {
+            key: "loanEmi",
+            label: "EMI / monthly obligation",
+            kind: "amount",
+            placeholder: "e.g. 25,000",
+            showWhen: { key: "hasLoans", values: ["Yes"] },
+          },
+          {
+            key: "existingOdCc",
+            label: "Existing OD / CC limit, if any",
+            kind: "amount",
+            placeholder: rupee,
+            showWhen: { key: "hasLoans", values: ["Yes"] },
+          },
+          { key: "loanBank", label: "Current Bank / NBFC", kind: "text", showWhen: { key: "hasLoans", values: ["Yes"] } },
+        ],
+      },
+      {
+        title: "What type of property or security is available?",
+        fields: [
+          {
+            key: "propertyType",
+            label: "Property type",
+            kind: "choice",
+            options: ["Residential Property", "Commercial Property", "Industrial Property", "Other Eligible Property"],
+          },
+          { key: "ownership", label: "Property ownership", kind: "choice", options: ["Self", "Joint", "Family-Owned"] },
+          { key: "propertyValue", label: "Approximate market value", kind: "amount", placeholder: rupee },
+          { key: "propertyLocation", label: "Property location", kind: "text" },
+        ],
+      },
+      {
+        title: "What is your current banking and credit profile?",
+        fields: [
+          { key: "primaryBank", label: "Primary bank name", kind: "text" },
+          { key: "monthlyCredits", label: "Average monthly banking / credits", kind: "amount", placeholder: "e.g. 5,00,000" },
+          { key: "emiReturn", label: "Any EMI or cheque return in recent months?", kind: "choice", options: YES_NO },
+          { key: "overdue", label: "Any current overdue?", kind: "choice", options: YES_NO },
+          { key: "cibil", label: "Approximate CIBIL score, if known", kind: "text", placeholder: "e.g. 740" },
+        ],
+      },
+      {
+        title: `Is this a fresh requirement or a balance transfer?`,
+        fields: [
+          {
+            key: "freshOrBt",
+            label: "Requirement",
+            kind: "choice",
+            options: [`Fresh ${bt}`, "Balance Transfer of Existing OD / Loan", "Balance Transfer + Additional Funding"],
+          },
+          {
+            key: "btLender",
+            label: "Existing lender",
+            kind: "text",
+            showWhen: { key: "freshOrBt", values: ["Balance Transfer of Existing OD / Loan", "Balance Transfer + Additional Funding"] },
+          },
+          {
+            key: "btOutstanding",
+            label: "Current outstanding / limit",
+            kind: "amount",
+            placeholder: rupee,
+            showWhen: { key: "freshOrBt", values: ["Balance Transfer of Existing OD / Loan", "Balance Transfer + Additional Funding"] },
+          },
+          {
+            key: "btRate",
+            label: "Current rate of interest",
+            kind: "percent",
+            showWhen: { key: "freshOrBt", values: ["Balance Transfer of Existing OD / Loan", "Balance Transfer + Additional Funding"] },
+          },
+          {
+            key: "btExtra",
+            label: "Additional funding required",
+            kind: "amount",
+            placeholder: rupee,
+            showWhen: { key: "freshOrBt", values: ["Balance Transfer + Additional Funding"] },
+          },
+        ],
+      },
+    ],
+    finalTitle: `Check Your ${bt} Eligibility`,
+    finalText: `Based on these basic details, Growth Capital Services can understand your financial requirement and help explore suitable ${name} options from its network of Banks & NBFCs.`,
+    button: "Check Your Eligibility",
+    disclaimer:
+      "Eligibility, OD limit, interest rate, tenure, property acceptability, repayment structure, charges and approval are subject to the applicant's financial and credit profile, property assessment and the respective Bank or NBFC's lending policy.",
+  };
+}
+
+// ───────────── Balance Transfer & Top-Up ─────────────
+const BALANCE_TRANSFER: Questionnaire = {
+  slugs: ["balance-transfer"],
+  title: "Tell Us About Your Existing Loan & Additional Funding Requirement",
+  intro: "Home Loan, Loan Against Property or Drop-Line Overdraft: share a few details and we will review your options.",
+  topic: "Balance transfer and top-up",
+  amountKey: "topUp",
+  steps: [
+    {
+      title: "What type of existing facility do you have?",
+      fields: [
+        {
+          key: "facility",
+          label: "Existing facility",
+          kind: "choice",
+          required: true,
+          options: ["Home Loan", "Loan Against Property (LAP)", "Dropline Overdraft (DLOD)"],
+        },
+        {
+          key: "requirement",
+          label: "Requirement",
+          kind: "choice",
+          required: true,
+          options: ["Balance Transfer Only", "Balance Transfer + Top-Up"],
+        },
+      ],
+    },
+    {
+      title: "What are your existing loan details?",
+      fields: [
+        { key: "bank", label: "Existing Bank / NBFC", kind: "text" },
+        { key: "original", label: "Original loan / sanctioned amount", kind: "amount", placeholder: rupee },
+        { key: "outstanding", label: "Current outstanding", kind: "amount", placeholder: rupee },
+        { key: "rate", label: "Current interest rate", kind: "percent" },
+        { key: "emi", label: "Current EMI / monthly obligation", kind: "amount", placeholder: "e.g. 45,000" },
+        { key: "tenure", label: "Remaining tenure", kind: "text", placeholder: "e.g. 12 years" },
+      ],
+    },
+    {
+      title: "How much additional top-up funding do you need?",
+      fields: [
+        {
+          key: "topUp",
+          label: "Top-up amount required",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "requirement", values: ["Balance Transfer + Top-Up"] },
+        },
+        {
+          key: "topUpPurpose",
+          label: "Purpose of additional funding",
+          kind: "choice",
+          options: [
+            "Business Expansion",
+            "Working Capital",
+            "Property Purchase / Construction",
+            "Home Renovation",
+            "Debt Consolidation",
+            "Education",
+            "Medical / Personal Requirement",
+            "Other",
+          ],
+          showWhen: { key: "requirement", values: ["Balance Transfer + Top-Up"] },
+        },
+      ],
+    },
+    {
+      title: "How long have you been paying the existing loan?",
+      fields: [
+        { key: "vintage", label: "Loan vintage", kind: "text", placeholder: "e.g. 3 years 6 months" },
+        {
+          key: "track",
+          label: "Repayment track",
+          kind: "choice",
+          options: ["Regular EMI Payments", "Some Delays / Bounces", "Current Overdue"],
+        },
+        {
+          key: "trackReason",
+          label: "Please tell us briefly the reason for the delay or overdue",
+          kind: "text",
+          long: true,
+          showWhen: { key: "track", values: ["Some Delays / Bounces", "Current Overdue"] },
+        },
+      ],
+    },
+    {
+      title: "What is your employment or business profile?",
+      fields: [
+        {
+          key: "profile",
+          label: "Applicant type",
+          kind: "choice",
+          options: [
+            "Salaried",
+            "Self-Employed Professional",
+            "Proprietor",
+            "Partnership",
+            "LLP",
+            "Private Limited Company",
+            "Other",
+          ],
+        },
+        {
+          key: "salary",
+          label: "Monthly net salary",
+          kind: "amount",
+          placeholder: "e.g. 1,00,000",
+          showWhen: { key: "profile", values: ["Salaried"] },
+        },
+        {
+          key: "turnover",
+          label: "Annual turnover",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: {
+            key: "profile",
+            values: ["Self-Employed Professional", "Proprietor", "Partnership", "LLP", "Private Limited Company", "Other"],
+          },
+        },
+        {
+          key: "income",
+          label: "Annual net profit / income",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: {
+            key: "profile",
+            values: ["Self-Employed Professional", "Proprietor", "Partnership", "LLP", "Private Limited Company", "Other"],
+          },
+        },
+      ],
+    },
+    {
+      title: "What are the property details?",
+      fields: [
+        {
+          key: "propertyType",
+          label: "Property type",
+          kind: "choice",
+          options: ["Residential", "Commercial", "Industrial", "Other Eligible Property"],
+        },
+        { key: "propertyLocation", label: "Property location", kind: "text" },
+        { key: "propertyValue", label: "Approximate current market value", kind: "amount", placeholder: rupee },
+        { key: "ownership", label: "Ownership", kind: "choice", options: ["Self", "Joint", "Other"] },
+      ],
+    },
+    {
+      title: "Do you have any other existing loans or credit facilities?",
+      help: "This helps us understand your overall existing repayment obligations.",
+      fields: [
+        { key: "hasLoans", label: "Other loans or facilities", kind: "choice", options: YES_NO },
+        { key: "otherType", label: "Loan / facility type", kind: "text", showWhen: { key: "hasLoans", values: ["Yes"] } },
+        {
+          key: "otherOutstanding",
+          label: "Outstanding amount",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "hasLoans", values: ["Yes"] },
+        },
+        {
+          key: "otherEmi",
+          label: "EMI / monthly obligation",
+          kind: "amount",
+          placeholder: "e.g. 20,000",
+          showWhen: { key: "hasLoans", values: ["Yes"] },
+        },
+        { key: "otherBank", label: "Bank / NBFC", kind: "text", showWhen: { key: "hasLoans", values: ["Yes"] } },
+      ],
+    },
+    {
+      title: "What is your credit profile?",
+      fields: [
+        {
+          key: "cibil",
+          label: "Approximate CIBIL score",
+          kind: "choice",
+          options: ["750+", "700–749", "650–699", "Below 650", "Don't Know"],
+        },
+        {
+          key: "issue",
+          label: "Any current overdue, settlement, write-off or major repayment issue?",
+          kind: "choice",
+          options: YES_NO,
+        },
+        {
+          key: "issueDetails",
+          label: "Please give brief details",
+          kind: "text",
+          long: true,
+          showWhen: { key: "issue", values: ["Yes"] },
+        },
+      ],
+    },
+  ],
+  finalTitle: "Check Your Balance Transfer & Top-Up Options",
+  finalText:
+    "Share these basic details and Growth Capital Services can review your existing facility and help explore suitable Balance Transfer + Top-Up options from its network of Banks & NBFCs.",
+  button: "Check My Eligibility",
+  disclaimer:
+    "Loan eligibility, balance transfer, top-up amount, interest rate, tenure, charges and approval are subject to the applicant's financial and credit profile, existing repayment history, property assessment and the respective Bank or NBFC's lending policy.",
+};
+
+export const QUESTIONNAIRES: Questionnaire[] = [
+  PROJECT,
+  overdraft("Dropline Overdraft", ["dlod"], "Dropline overdraft", "Dropline OD"),
+  overdraft("Overdraft", ["overdraft-limit"], "Overdraft", "Overdraft"),
+  BALANCE_TRANSFER,
+];
+
+export const questionnaireFor = (slug: string): Questionnaire | undefined =>
+  QUESTIONNAIRES.find((q) => q.slugs.includes(slug));
