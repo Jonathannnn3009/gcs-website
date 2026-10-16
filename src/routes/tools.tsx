@@ -9,7 +9,6 @@ import {
   GitCompare,
   Building2,
   Landmark,
-  ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 import { Section } from "@/components/section";
@@ -65,37 +64,32 @@ const TOOLS: Tool[] = [
   { id: "lap-ltv", icon: FileText, label: "Loan Against Property LTV", sub: "What your property can unlock", render: () => <LapLtvCalculator /> },
 ];
 
+// The order the calculators are listed in, whatever order the CRM list is saved in.
+const ORDER = ["emi", "eligibility", "balance-transfer", "loan-comparison", "prepayment", "lap-ltv", "working-capital", "cgtmse", "stamp-duty"];
+
 const TOOL_IDS = TOOLS.map((t) => t.id);
 
-function useHashAccordion(defaultId: string) {
-  // Always starts at defaultId so the client's first render matches the
-  // server's (window.location.hash doesn't exist during SSR) — the mount
-  // effect below corrects it to the real hash right after, without a
-  // hydration mismatch.
-  const [openId, setOpenId] = useState<string | null>(defaultId);
+function useHashTool(defaultId: string) {
+  // Starts at defaultId so the first client render matches the server's; the mount effect then
+  // picks up a #hash (links such as /tools#eligibility) without a hydration mismatch.
+  const [activeId, setActiveId] = useState<string>(defaultId);
 
   useEffect(() => {
-    const openAndScroll = (id: string) => {
-      setOpenId(id);
-      requestAnimationFrame(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    };
     const onHashChange = () => {
       const h = window.location.hash.replace("#", "");
-      if (TOOL_IDS.includes(h)) openAndScroll(h);
+      if (TOOL_IDS.includes(h)) setActiveId(h);
     };
     window.addEventListener("hashchange", onHashChange);
     if (window.location.hash) onHashChange();
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
-  const toggle = (id: string) => {
-    setOpenId((prev) => (prev === id ? null : id));
+  const select = (id: string) => {
+    setActiveId(id);
     if (typeof window !== "undefined") window.history.replaceState(null, "", `#${id}`);
   };
 
-  return [openId, toggle] as const;
+  return [activeId, select] as const;
 }
 
 function ToolsPage() {
@@ -104,8 +98,10 @@ function ToolsPage() {
       const base = TOOLS.find((t) => t.id === c.id);
       return base ? { ...base, label: c.label, sub: c.sub } : null;
     })
-    .filter((t): t is Tool => t !== null);
-  const [openId, toggle] = useHashAccordion("emi");
+    .filter((t): t is Tool => t !== null)
+    .sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
+  const [activeId, select] = useHashTool("emi");
+  const active = tools.find((t) => t.id === activeId) ?? tools[0];
 
   return (
     <>
@@ -120,55 +116,88 @@ function ToolsPage() {
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
               Nine free calculators covering every loan on our desk — from EMI and eligibility to
-              CGTMSE fees. Tap one to open it. No signup required.
+              CGTMSE fees. Pick a calculator from the menu. No signup required.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* Accordion */}
+      {/* Menu on the left, selected calculator on the right */}
       <Section>
-        <div className="space-y-3">
-          {tools.map((t, i) => {
-            const isOpen = openId === t.id;
-            return (
-              <Reveal key={t.id} delay={Math.min(i * 40, 240)}>
-                <div
-                  id={t.id}
-                  className={`scroll-mt-24 overflow-hidden rounded-2xl border transition-colors duration-300 ${
-                    isOpen ? "border-gold/30" : "border-border"
-                  }`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => toggle(t.id)}
-                    aria-expanded={isOpen}
-                    className="flex w-full items-center gap-4 bg-white px-5 py-4 text-left transition-colors hover:bg-gold/5 sm:px-6 sm:py-5 dark:bg-card"
-                  >
-                    <span
-                      className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-colors ${
-                        isOpen ? "bg-navy text-gold-light" : "bg-gold-pale/60 text-gold-dark dark:bg-gold/15"
+        <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start">
+          {/* Phone and tablet: horizontal scrolling menu */}
+          <nav
+            aria-label="Calculators"
+            className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 lg:hidden"
+          >
+            {tools.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => select(t.id)}
+                aria-current={t.id === active?.id ? "true" : undefined}
+                className={`flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors ${
+                  t.id === active?.id
+                    ? "border-navy bg-navy text-white"
+                    : "border-border bg-white text-navy hover:border-gold/50 dark:bg-card dark:text-white"
+                }`}
+              >
+                <t.icon className="h-4 w-4" />
+                {t.label}
+              </button>
+            ))}
+          </nav>
+
+          {/* Laptop and desktop: fixed, scrollable side menu */}
+          <nav
+            aria-label="Calculators"
+            className="sticky top-24 hidden max-h-[calc(100vh-7rem)] overflow-y-auto rounded-3xl border border-border bg-white p-4 shadow-[var(--shadow-card)] lg:block dark:bg-card"
+          >
+            <p className="px-3 pt-1 pb-3 text-xs font-extrabold tracking-[0.2em] text-gold-dark uppercase">
+              Calculators
+            </p>
+            <ul className="space-y-1">
+              {tools.map((t) => {
+                const on = t.id === active?.id;
+                return (
+                  <li key={t.id}>
+                    <button
+                      type="button"
+                      onClick={() => select(t.id)}
+                      aria-current={on ? "true" : undefined}
+                      className={`flex w-full items-center gap-3 rounded-xl border-l-4 px-3 py-2.5 text-left transition-colors ${
+                        on
+                          ? "border-navy bg-bg-light dark:bg-background"
+                          : "border-transparent hover:bg-gold/5"
                       }`}
                     >
-                      <t.icon className="h-5 w-5" />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-base font-bold text-navy dark:text-white">{t.label}</span>
-                      <span className="block text-xs text-muted-foreground">{t.sub}</span>
-                    </span>
-                    <ChevronDown
-                      className={`h-5 w-5 shrink-0 text-gold transition-transform duration-300 ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  {isOpen && (
-                    <div className="border-t border-border bg-bg-light p-3 sm:p-5 dark:bg-background">{t.render()}</div>
-                  )}
-                </div>
-              </Reveal>
-            );
-          })}
+                      <span
+                        className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${
+                          on ? "bg-navy text-gold-light" : "bg-gold-pale/60 text-gold-dark dark:bg-gold/15"
+                        }`}
+                      >
+                        <t.icon className="h-5 w-5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-sm leading-snug font-bold text-navy dark:text-white">
+                          {t.label}
+                        </span>
+                        <span className="block text-xs text-muted-foreground">{t.sub}</span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          <div className="min-w-0" id={active?.id}>
+            <div key={active?.id}>{active?.render()}</div>
+            <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+              Results are indicative and may vary according to lender policy. Final rates, charges
+              and eligibility are decided by the lender.
+            </p>
+          </div>
         </div>
       </Section>
 
