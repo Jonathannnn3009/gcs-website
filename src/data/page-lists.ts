@@ -384,23 +384,15 @@ export const NAV_CIBIL = [
 ];
 
 export const NAV_TOOLS = [
-  { label: "EMI Calculator", desc: "Estimate your monthly EMI", hash: "emi" },
-  { label: "Eligibility Calculator", desc: "Find your max loan amount", hash: "eligibility" },
-  { label: "Stamp Duty Calculator", desc: "State-wise registration costs", hash: "stamp-duty" },
-  { label: "Prepayment Calculator", desc: "Tenure & interest you'll save", hash: "prepayment" },
-  {
-    label: "Balance Transfer Calculator",
-    desc: "Is switching lenders worth it",
-    hash: "balance-transfer",
-  },
+  { label: "EMI Calculator", desc: "Monthly payment", hash: "emi" },
+  { label: "Loan Eligibility", desc: "Maximum loan amount", hash: "eligibility" },
+  { label: "Loan Balance Transfer", desc: "Is switching lenders worth it", hash: "balance-transfer" },
   { label: "Loan Comparison", desc: "Compare offers side by side", hash: "loan-comparison" },
-  {
-    label: "Working Capital Estimator",
-    desc: "MSME limit, GCS exclusive",
-    hash: "working-capital",
-  },
+  { label: "Loan Prepayment", desc: "Interest savings", hash: "prepayment" },
+  { label: "Loan Against Property – LTV", desc: "What your property can unlock", hash: "lap-ltv" },
+  { label: "Working Capital Estimator", desc: "MSME limit, GCS exclusive", hash: "working-capital" },
   { label: "CGTMSE Guarantee Fee", desc: "Fee on a collateral-free loan", hash: "cgtmse" },
-  { label: "Loan Against Property LTV", desc: "What your property can unlock", hash: "lap-ltv" },
+  { label: "Stamp Duty", desc: "Property registration", hash: "stamp-duty" },
 ];
 
 export const FOOTER_EXPLORE = [
@@ -511,15 +503,15 @@ export const HOME_GOALS = [
 ];
 
 export const TOOLS_CARDS = [
-  { id: "emi", label: "Loan EMI Calculator", sub: "Monthly payment" },
-  { id: "eligibility", label: "Loan Eligibility Calculator", sub: "Maximum loan amount" },
-  { id: "balance-transfer", label: "Loan Balance Transfer Calculator", sub: "Is switching lenders worth it" },
-  { id: "loan-comparison", label: "Loan Comparison Calculator", sub: "Compare offers side by side" },
-  { id: "prepayment", label: "Loan Prepayment Calculator", sub: "Interest savings" },
-  { id: "lap-ltv", label: "Loan Against Property (LAP) – LTV Calculator", sub: "What your property can unlock" },
+  { id: "emi", label: "EMI Calculator", sub: "Monthly payment" },
+  { id: "eligibility", label: "Loan Eligibility", sub: "Maximum loan amount" },
+  { id: "balance-transfer", label: "Loan Balance Transfer", sub: "Is switching lenders worth it" },
+  { id: "loan-comparison", label: "Loan Comparison", sub: "Compare offers side by side" },
+  { id: "prepayment", label: "Loan Prepayment", sub: "Interest savings" },
+  { id: "lap-ltv", label: "Loan Against Property – LTV", sub: "What your property can unlock" },
   { id: "working-capital", label: "Working Capital Estimator", sub: "Business limit estimate" },
-  { id: "cgtmse", label: "CGTMSE Guarantee Fee Calculator", sub: "Fee on a collateral-free business loan" },
-  { id: "stamp-duty", label: "Stamp Duty Calculator", sub: "Property registration" },
+  { id: "cgtmse", label: "CGTMSE Guarantee Fee", sub: "Fee on a collateral-free business loan" },
+  { id: "stamp-duty", label: "Stamp Duty", sub: "Property registration" },
 ];
 
 export const SERVICES_GROUPS = PRODUCT_GROUPS.map((g) => ({
