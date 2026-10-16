@@ -249,7 +249,7 @@ function EnquiryForm() {
 
 const SIDE: Record<
   Who,
-  { eyebrow: string; title: string; text: string; points: string[]; note: string }
+  { eyebrow: string; title: string; text: string; points: string[]; note?: string }
 > = {
   client: {
     eyebrow: "For clients",
@@ -260,7 +260,6 @@ const SIDE: Record<
       "Your file followed from login to sanction and disbursal",
       "Your GCS ID is the code your expert shared when your application was opened",
     ],
-    note: "Your details go straight to our secure sign-in page. They are not shown in the web address.",
   },
   partner: {
     eyebrow: "For partners",
@@ -271,7 +270,6 @@ const SIDE: Record<
       "Where each file stands, from referral to disbursal",
       "Your commission structure",
     ],
-    note: "Your details go straight to our secure sign-in page. They are not shown in the web address.",
   },
   enquiry: {
     eyebrow: "For enquiries",
@@ -309,10 +307,12 @@ function SidePanel({ who }: { who: Who }) {
           </li>
         ))}
       </ul>
-      <p className="relative mt-auto flex min-h-[6.5rem] items-start gap-2 border-t border-white/10 pt-5 text-[13px] leading-relaxed text-white/60">
-        <LockKeyhole className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-light" />
-        {side.note}
-      </p>
+      {side.note ? (
+        <p className="relative mt-auto flex min-h-[6.5rem] items-start gap-2 border-t border-white/10 pt-5 text-[13px] leading-relaxed text-white/60">
+          <LockKeyhole className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-light" />
+          {side.note}
+        </p>
+      ) : null}
     </div>
   );
 }
