@@ -414,6 +414,33 @@ const CHARGES_UNSECURED: ChargesInfo = {
   ],
   note: CHARGES_NOTE,
 };
+
+const CHARGES_WC_TERM: ChargesInfo = {
+  intro:
+    "Besides interest, a lender may charge a few fees. It helps to know them before you apply, so there are no surprises.",
+  rows: [
+    {
+      label: "Processing fee",
+      value:
+        "A percentage of the loan amount plus GST. Loans without security often cost more, roughly 1% to 3%, and secured loans are usually lower. It varies by lender and profile.",
+    },
+    {
+      label: "Documentation and other charges",
+      value: "Some lenders add a small fixed fee for documentation or a statement of account.",
+    },
+    {
+      label: "Foreclosure and part-prepayment",
+      value:
+        "Closing the loan early may carry a charge, usually a percentage of the outstanding amount, and some lenders allow it only after a minimum period. Ask before you prepay.",
+    },
+    {
+      label: "Inspection, valuation and legal charges",
+      value:
+        "Where the loan is backed by stock, receivables or property, the lender may charge for inspections, valuations or a legal check.",
+    },
+  ],
+  note: CHARGES_NOTE,
+};
 const CHARGES_VEHICLE: ChargesInfo = {
   intro:
     "Besides interest, a lender may charge a few fees. It helps to know them before you apply, so there are no surprises.",
@@ -740,6 +767,44 @@ export const PRODUCTS: Product[] = [
     nri: NRI_HOME_LOAN,
   },
   {
+    slug: "balance-transfer",
+    icon: ArrowLeftRight,
+    title: "Balance Transfer & Top-Up",
+    tagline: "Same loan, smaller bill.",
+    group: "Property Finance",
+    facts: [
+      { label: "Use case", value: "Home / LAP / Business" },
+      { label: "Benefit", value: "Lower rate + top-up" },
+      { label: "Savings", value: "Shown in writing first" },
+    ],
+    about:
+      "A balance transfer means moving your current loan to another lender that may offer better terms. We put your existing loan next to offers from other lenders, in writing, so you can compare before you decide. If you choose to switch, we guide you through the whole process. A top-up may also be possible if your profile qualifies.",
+    features: [
+      "Better pricing available on home, LAP and business loans",
+      "Top-up sanctioned at mortgage-linked pricing, not personal-loan pricing",
+      "Trim the EMI or shorten the tenure — you choose which",
+      "We liaise with your existing lender on foreclosure and transfer",
+    ],
+    eligibility: [
+      "A track record of on-time EMIs for at least the last 12 months",
+      "No recent bounces or delayed payments on the existing loan",
+      "Income documents and property papers ready for a fresh credit review",
+      "Resident Indian with an existing home loan; NRIs can transfer with select lenders (see the NRI section below)",
+      "Salaried, self-employed professional or self-employed business owner",
+      "If salaried, generally at least 1 year with your current employer",
+      "A CIBIL score of around 700 or above may help you get the better rate; lower scores are reviewed case by case",
+      "A residential property already mortgaged, with its papers in order",
+    ],
+    documents: [
+      KYC,
+      "Current loan statement, sanction letter and foreclosure letter",
+      PROPERTY_DOCS,
+    ],
+    charges: CHARGES_PROPERTY,
+    nri: NRI_BALANCE_TRANSFER,
+    documentCategories: APPLICANT_DOC_CATEGORIES,
+  },
+  {
     slug: "loan-against-property",
     icon: Building2,
     title: "Loan Against Property",
@@ -836,44 +901,6 @@ export const PRODUCTS: Product[] = [
     documentCategories: LRD_DOC_CATEGORIES,
   },
   {
-    slug: "balance-transfer",
-    icon: ArrowLeftRight,
-    title: "Balance Transfer & Top-Up",
-    tagline: "Same loan, smaller bill.",
-    group: "Property Finance",
-    facts: [
-      { label: "Use case", value: "Home / LAP / Business" },
-      { label: "Benefit", value: "Lower rate + top-up" },
-      { label: "Savings", value: "Shown in writing first" },
-    ],
-    about:
-      "A balance transfer means moving your current loan to another lender that may offer better terms. We put your existing loan next to offers from other lenders, in writing, so you can compare before you decide. If you choose to switch, we guide you through the whole process. A top-up may also be possible if your profile qualifies.",
-    features: [
-      "Better pricing available on home, LAP and business loans",
-      "Top-up sanctioned at mortgage-linked pricing, not personal-loan pricing",
-      "Trim the EMI or shorten the tenure — you choose which",
-      "We liaise with your existing lender on foreclosure and transfer",
-    ],
-    eligibility: [
-      "A track record of on-time EMIs for at least the last 12 months",
-      "No recent bounces or delayed payments on the existing loan",
-      "Income documents and property papers ready for a fresh credit review",
-      "Resident Indian with an existing home loan; NRIs can transfer with select lenders (see the NRI section below)",
-      "Salaried, self-employed professional or self-employed business owner",
-      "If salaried, generally at least 1 year with your current employer",
-      "A CIBIL score of around 700 or above may help you get the better rate; lower scores are reviewed case by case",
-      "A residential property already mortgaged, with its papers in order",
-    ],
-    documents: [
-      KYC,
-      "Current loan statement, sanction letter and foreclosure letter",
-      PROPERTY_DOCS,
-    ],
-    charges: CHARGES_PROPERTY,
-    nri: NRI_BALANCE_TRANSFER,
-    documentCategories: APPLICANT_DOC_CATEGORIES,
-  },
-  {
     slug: "dlod",
     icon: TrendingDown,
     title: "Drop-Line Overdraft (Secured)",
@@ -902,6 +929,43 @@ export const PRODUCTS: Product[] = [
     ],
     documents: [KYC, PROPERTY_DOCS],
     charges: CHARGES_LIMIT,
+    documentCategories: BUSINESS_DOC_CATEGORIES,
+  },
+
+  {
+    slug: "project-funding",
+    icon: HardHat,
+    title: "Project Funding",
+    tagline: "Finance that builds as you build.",
+    group: "Property Finance",
+    facts: [
+      { label: "Funding", value: "Up to 75% of project cost" },
+      { label: "Interest rate", value: "From 12%* p.a." },
+      { label: "Use", value: "Construction & development" },
+      { label: "Release", value: "Stage by stage" },
+    ],
+    about:
+      "Funding for construction and development projects. The amount depends on your approvals, project cost and expected sales. The money is released in stages as the work moves ahead, not all at once.",
+    features: [
+      "Residential, commercial and industrial developments",
+      "Combined land-and-construction funding where needed",
+      "Repayment structured through escrow and sales receivables",
+      "Legal, technical and valuation checks coordinated on your behalf",
+    ],
+    eligibility: [
+      "Sanctioned building plans and clear, marketable land title",
+      "The developer's own contribution already committed to the project",
+      "A track record of completed projects is preferred, though not always mandatory",
+      "A developer or company registered in India",
+      "A good credit record for the developer, its promoters and group companies",
+      "Residential, commercial or mixed-use projects",
+    ],
+    documents: [
+      KYC,
+      "Project report with cost and sales projections",
+      "Approvals, plans and land title documents",
+    ],
+    charges: CHARGES_COMMERCIAL,
     documentCategories: BUSINESS_DOC_CATEGORIES,
   },
 
@@ -1005,30 +1069,37 @@ export const PRODUCTS: Product[] = [
     slug: "working-capital-term-loan",
     icon: CalendarRange,
     title: "Working Capital Term Loan",
-    tagline: "Reset a stretched cash cycle.",
+    tagline: "Fixed EMIs to reset a stretched cash cycle.",
     group: "Cash Flow & Trade",
     facts: [
-      { label: "Structure", value: "Term loan on WC gap" },
+      { label: "Structure", value: "Term loan with fixed EMIs" },
+      { label: "Loan amount", value: "Up to ₹5 Cr" },
+      { label: "Interest rate", value: "From 11.50%* p.a." },
       { label: "Tenure", value: "12 — 60 months" },
-      { label: "Use", value: "Cycle reset & consolidation" },
     ],
     about:
-      "This turns an overdrawn or irregular working-capital account into a term loan with a fixed repayment plan. The plan is set so that it matches what your cash flow can handle.",
+      "A working capital term loan gives your business a term loan with a fixed repayment plan and a fixed EMI. It can turn an overdrawn or irregular working-capital account into a loan your cash flow can handle, or fund your day-to-day needs. It can be offered without collateral to businesses with clean, audited financials. The lender decides the amount based on your bank turnover and filings, not only a quick GST check.",
     features: [
+      "Fixed EMI on a defined repayment schedule",
       "Regularises stretched cash-credit or overdraft accounts",
       "Consolidates several short-term dues into one facility",
+      "Can be offered without collateral to businesses with clean financials",
+      "Offers compared across several lenders before you commit",
+      "Part-prepayment allowed once the initial lock-in ends",
+      "Top-up available after a clean repayment run",
       "Moratorium period available with select lenders",
       "Can run alongside a freshly sanctioned working-capital limit",
     ],
     eligibility: [
       "A viable business with an identifiable working-capital gap",
-      "Two years of audited financial statements",
+      "Audited or CA-certified financial statements, usually for 2 to 3 years, as per the lender",
+      "Consistent bank credits through the preceding 12 months",
+      "A good credit record; a CIBIL score of 680 or higher may be asked for the business and its promoters",
       "Promoter contribution where the lender asks for one",
-      "Proprietorship, partnership, LLP or company",
-      "A good credit record for the business and its promoters",
+      "Business owner or self-employed professional with a steady income, as a proprietorship, partnership, LLP or company",
     ],
     documents: [KYC, "Audited financials and existing sanction letters"],
-    charges: CHARGES_LIMIT,
+    charges: CHARGES_WC_TERM,
     documentCategories: BUSINESS_DOC_CATEGORIES,
   },
 
@@ -1210,43 +1281,6 @@ export const PRODUCTS: Product[] = [
     charges: CHARGES_LIMIT,
     documentCategories: BUSINESS_DOC_CATEGORIES,
   },
-  {
-    slug: "project-funding",
-    icon: HardHat,
-    title: "Project Funding",
-    tagline: "Finance that builds as you build.",
-    group: "Property Finance",
-    facts: [
-      { label: "Funding", value: "Up to 75% of project cost" },
-      { label: "Interest rate", value: "From 12%* p.a." },
-      { label: "Use", value: "Construction & development" },
-      { label: "Release", value: "Stage by stage" },
-    ],
-    about:
-      "Funding for construction and development projects. The amount depends on your approvals, project cost and expected sales. The money is released in stages as the work moves ahead, not all at once.",
-    features: [
-      "Residential, commercial and industrial developments",
-      "Combined land-and-construction funding where needed",
-      "Repayment structured through escrow and sales receivables",
-      "Legal, technical and valuation checks coordinated on your behalf",
-    ],
-    eligibility: [
-      "Sanctioned building plans and clear, marketable land title",
-      "The developer's own contribution already committed to the project",
-      "A track record of completed projects is preferred, though not always mandatory",
-      "A developer or company registered in India",
-      "A good credit record for the developer, its promoters and group companies",
-      "Residential, commercial or mixed-use projects",
-    ],
-    documents: [
-      KYC,
-      "Project report with cost and sales projections",
-      "Approvals, plans and land title documents",
-    ],
-    charges: CHARGES_COMMERCIAL,
-    documentCategories: BUSINESS_DOC_CATEGORIES,
-  },
-
   {
     slug: "personal-loan",
     icon: Wallet,

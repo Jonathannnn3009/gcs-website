@@ -321,17 +321,23 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
   },
   "working-capital-term-loan": {
     intro:
-      "A working capital term loan resets a stretched cash cycle into fixed repayments. Here is how.",
+      "A working capital term loan gives you fixed repayments for your business cash needs. Here is how we arrange it.",
     steps: [
       s(
-        "Tell us what is stretched",
-        "Share your existing dues, the cash gap and the amount you need.",
+        "Tell us what you need",
+        "Share the amount, why you need it, any dues that are stretched, and whether you can offer security.",
       ),
-      s("Review your finances", "We look at your cash flow, existing loans and statements."),
-      s("Structure the loan", "We plan a loan and repayment period that your cash flow can carry."),
+      s(
+        "Review your finances",
+        "We look at your cash flow, existing loans, bank statements and credit record.",
+      ),
+      s(
+        "Compare and structure",
+        "We compare lenders on rate, fees and EMI, and plan a repayment period your cash flow can carry.",
+      ),
       s(
         "Documents and approval",
-        "You submit KYC, financials and bank statements, and the lender approves.",
+        "You submit KYC, financials and bank statements, and the lender reviews and approves.",
       ),
       s("Disbursal and fixed EMIs", "The funds arrive and you repay in fixed monthly instalments."),
     ],

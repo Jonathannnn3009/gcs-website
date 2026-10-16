@@ -27,7 +27,7 @@ export const PRODUCT_CALCULATORS: Record<string, CalcId[]> = {
   "bank-guarantee": ["working-capital"],
   "letter-of-credit": ["working-capital"],
   "bill-discounting": ["working-capital"],
-  "working-capital-term-loan": ["working-capital", "emi"],
+  "working-capital-term-loan": ["working-capital", "emi", "loan-comparison"],
   "personal-loan": ["emi", "eligibility", "prepayment"],
   "loan-against-securities": ["emi"],
   "professional-loan": ["emi", "eligibility"],
