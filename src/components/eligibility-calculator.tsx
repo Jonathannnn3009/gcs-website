@@ -47,19 +47,6 @@ export function EligibilityCalculator() {
           />
 
           <SliderField
-            label="Existing EMIs"
-            value={existingEmi}
-            onChange={setExistingEmi}
-            min={0}
-            max={Math.max(monthlyIncome * 0.6, 10000)}
-            step={1000}
-            format={formatCurrency}
-            minLabel="₹0"
-            maxLabel={formatCurrency(Math.max(monthlyIncome * 0.6, 10000))}
-            ariaLabel="Existing EMIs"
-          />
-
-          <SliderField
             label="FOIR (share of income that can go to EMIs)"
             value={foirPct}
             onChange={setFoirPct}
@@ -71,6 +58,19 @@ export function EligibilityCalculator() {
             minLabel="10%"
             maxLabel="90%"
             ariaLabel="FOIR percentage"
+          />
+
+          <SliderField
+            label="Existing EMIs"
+            value={existingEmi}
+            onChange={setExistingEmi}
+            min={0}
+            max={Math.max(monthlyIncome * 0.6, 10000)}
+            step={1000}
+            format={formatCurrency}
+            minLabel="₹0"
+            maxLabel={formatCurrency(Math.max(monthlyIncome * 0.6, 10000))}
+            ariaLabel="Existing EMIs"
           />
 
           <SliderField
