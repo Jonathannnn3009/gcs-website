@@ -164,8 +164,8 @@ export const SERVICES: Service[] = [
     ],
   },
   {
-    id: "working-capital",
-    title: "Working Capital Loans",
+    id: "working-capital-term-loan",
+    title: "Working Capital Term Loan",
     tagline: "Keep operations liquid",
     description:
       "Cash credit, overdraft and bill discounting facilities sized to your operating cycle.",

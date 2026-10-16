@@ -190,26 +190,6 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
       ),
     ],
   },
-  "unsecured-term-loan": {
-    intro:
-      "An unsecured term loan needs no security, so the lender looks closely at your business and credit. Here is the path.",
-    steps: [
-      s(
-        "Tell us your requirement",
-        "Share the amount, the purpose and how long you would like to repay.",
-      ),
-      s(
-        "Credit and cash-flow check",
-        "We review your credit record and bank statements to see which lenders will fit.",
-      ),
-      s("Compare offers", "You see the rate, fees and EMI from each lender side by side."),
-      s(
-        "Documents and approval",
-        "You submit KYC and business proof. The lender reviews and approves.",
-      ),
-      s("Disbursal and fixed EMIs", "The funds are credited and you repay in fixed monthly EMIs."),
-    ],
-  },
   "unsecured-dod": {
     intro:
       "An unsecured drop-down overdraft is standby cash with no EMI until you use it. Here is how it is set up.",
@@ -252,28 +232,6 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
       s(
         "Sanction and staged release",
         "After the sanction, money is released in stages as the work progresses.",
-      ),
-    ],
-  },
-  "working-capital": {
-    intro: "Working capital keeps day-to-day business moving. Here is how we line it up.",
-    steps: [
-      s(
-        "Understand your cash cycle",
-        "Tell us how long it takes you to pay suppliers and to get paid.",
-      ),
-      s(
-        "Assess the need",
-        "We work out how much funding smooths that gap and which facility fits.",
-      ),
-      s("Shortlist lenders", "We approach lenders for the facility type and limit that suit you."),
-      s(
-        "Submit documents",
-        "You provide financials, GST returns, bank statements and details of stock or receivables.",
-      ),
-      s(
-        "Sanction and use",
-        "The lender sanctions the limit and you use it as business needs, reviewed each year.",
       ),
     ],
   },
@@ -435,6 +393,25 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
         "You submit KYC and pledge the securities through your depository.",
       ),
       s("Limit set and funds used", "The lender sets your limit, and you draw what you need."),
+    ],
+  },
+  "bill-discounting": {
+    intro: "Bill discounting turns your unpaid invoices into cash. Here is how we arrange it.",
+    steps: [
+      s("Share your invoices", "Tell us about your customers and the invoices that are still unpaid."),
+      s(
+        "Check your customers",
+        "We review which customers and invoices a lender is likely to accept.",
+      ),
+      s(
+        "Choose a lender",
+        "We compare lenders on the limit, the share of the invoice they advance and the charges.",
+      ),
+      s("Submit your papers", "You give us your KYC, business papers and the invoices."),
+      s(
+        "Limit set and funds released",
+        "The lender sets your limit and releases funds against approved invoices. You repay when your customers pay.",
+      ),
     ],
   },
   "professional-loan": {

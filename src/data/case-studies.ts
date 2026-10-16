@@ -140,8 +140,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     category: "Working Capital · Seasonal Cash-Flow Bridge",
     headline: "₹68 lakh working capital — released before the order was lost",
     amountLabel: "₹68 Lakh",
-    productSlug: "working-capital",
-    productLabel: "Working Capital",
+    productSlug: "working-capital-term-loan",
+    productLabel: "Working Capital Term Loan",
     clientProfile:
       "A garment exporter in Navi Mumbai with a strong seasonal order book, but cash tied up in receivables right when a large new order needed raw-material payment upfront.",
     challenge:

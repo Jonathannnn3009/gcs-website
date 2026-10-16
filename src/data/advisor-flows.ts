@@ -223,7 +223,7 @@ export const FLOWS: Flow[] = [
   {
     id: "working-capital",
     label: "Working capital / CC / OD",
-    productSlug: "working-capital",
+    productSlug: "working-capital-term-loan",
     steps: [
       {
         key: "wc_use_case",

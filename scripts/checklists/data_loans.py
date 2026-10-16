@@ -587,7 +587,6 @@ LOAN_CHECKLISTS = {
     "business-loan": BUSINESS_LOAN,
     "cgtmse": CGTMSE,
     "lease-rental-discounting": LEASE_RENTAL,
-    "unsecured-term-loan": UNSECURED_TERM_LOAN,
     "unsecured-dod": UNSECURED_DOD,
     "project-funding": PROJECT_FUNDING,
     "loan-against-securities": LOAN_AGAINST_SECURITIES,
@@ -603,6 +602,6 @@ COPIES = {
     "lap-dlod": ["loan-against-property", "dlod"],
     "wcl-cc-od-lc-bg": [
         "bank-guarantee", "cash-credit", "letter-of-credit",
-        "overdraft-limit", "working-capital", "working-capital-term-loan",
+        "overdraft-limit", "bill-discounting", "working-capital-term-loan",
     ],
 }

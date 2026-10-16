@@ -91,11 +91,19 @@ const CODE_OVERRIDES: Record<string, string> = {
   "balance-transfer": "BT & Top Up",
   dlod: "DL-OD",
   "unsecured-dod": "UOD",
+  cgtmse: "CGTMSE",
+  "cash-credit": "CC",
+  "overdraft-limit": "OD",
+  "bank-guarantee": "BG",
+  "letter-of-credit": "LC",
+  "bill-discounting": "BD",
 };
 
 // Products that were merged into another one: their old address goes to the new page.
 const MERGED_INTO: Record<string, string> = {
   "loan-against-mutual-funds": "loan-against-securities",
+  "working-capital": "working-capital-term-loan",
+  "unsecured-term-loan": "working-capital-term-loan",
 };
 
 function productCode(title: string): string {

@@ -160,7 +160,7 @@ export const HOME_STEPS = [
 export const ABOUT_STATS = [
   { value: "2017", label: "Established" },
   { value: "75+", label: "Bank & NBFC Partners" },
-  { value: "26+", label: "Loan Products" },
+  { value: "25+", label: "Loan Products" },
   { value: "100%", label: "Transparent Process" },
 ];
 
@@ -474,11 +474,11 @@ export const HOME_GOALS = [
   },
   {
     category: "Business & Cash Flow",
-    slug: "working-capital",
+    slug: "working-capital-term-loan",
     icon: RefreshCw,
     goal: "Keep your cash flowing",
-    product: "Working Capital",
-    line: "Cash credit, overdraft and bill discounting to match your business cycle.",
+    product: "Working Capital Term Loan",
+    line: "Working capital term loans, cash credit, overdraft and bill discounting to match your business cycle.",
     featured: "",
   },
   {
