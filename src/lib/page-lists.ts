@@ -95,20 +95,27 @@ export function useIntakeFields(
         .trim()
         .replace(/ (\w)/g, (_, c: string) => c.toUpperCase()) ||
       `field${i}`;
+    const whenKey = (r["showWhenKey"] ?? "").trim();
+    const whenValues = (r["showWhenValues"] ?? "")
+      .split(",")
+      .map((v) => v.trim())
+      .filter(Boolean);
+    const showWhen = whenKey && whenValues.length > 0 ? { showWhen: { key: whenKey, values: whenValues } } : {};
     if (r["type"] === "select") {
       const options = (r["options"] ?? "")
         .split(",")
         .map((o) => o.trim())
         .filter(Boolean);
-      return { key, label, type: "select", options: options.length > 0 ? options : ["Other"] };
+      return { key, label, type: "select", options: options.length > 0 ? options : ["Other"], ...showWhen };
     }
-    if (r["type"] === "date") return { key, label, type: "date" };
+    if (r["type"] === "date") return { key, label, type: "date", ...showWhen };
     return {
       key,
       label,
       type: "text",
       ...(r["placeholder"] ? { placeholder: r["placeholder"] } : {}),
       ...(r["amount"] === "yes" ? { format: "amount" as const } : {}),
+      ...showWhen,
     };
   });
 }

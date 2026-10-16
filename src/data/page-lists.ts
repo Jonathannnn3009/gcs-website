@@ -587,6 +587,8 @@ export const INTAKE_FIELDS = PRODUCTS.flatMap((p) =>
     options: f.type === "select" ? f.options.join(", ") : "",
     placeholder: f.type === "text" ? (f.placeholder ?? "") : "",
     amount: f.type === "text" && f.format === "amount" ? "yes" : "",
+    showWhenKey: f.showWhen?.key ?? "",
+    showWhenValues: f.showWhen?.values.join(", ") ?? "",
   })),
 );
 
@@ -960,7 +962,7 @@ export const LIST_SPECS: ListSpec[] = [
     key: "intake.fields",
     page: "Forms",
     label: "Checklist download: extra questions",
-    hint: "Extra questions asked before a checklist downloads. Put the loan's website slug in each row (e.g. education-loan). Type is text, select or date; for select, list the options separated by commas. Keep the id (key) of an existing question unchanged; leave it empty on new ones.",
+    hint: "Extra questions asked before a checklist downloads. Put the loan's website slug in each row (e.g. education-loan). Type is text, select or date; for select, list the options separated by commas. Keep the id (key) of an existing question unchanged; leave it empty on new ones. To show a question only after another one is answered, give that question's id and the answers that should reveal it.",
     fields: [
       T("slug", "Loan page slug"),
       T("label", "Question"),
@@ -969,6 +971,8 @@ export const LIST_SPECS: ListSpec[] = [
       T("placeholder", "Example answer (text only)"),
       Y("amount", "Format as a rupee amount"),
       T("key", "Id (leave empty on new)"),
+      T("showWhenKey", "Show only when this question (its id) ..."),
+      T("showWhenValues", "... has one of these answers, separated by commas"),
     ],
     items: INTAKE_FIELDS,
   },

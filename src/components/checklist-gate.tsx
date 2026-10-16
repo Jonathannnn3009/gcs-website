@@ -85,20 +85,31 @@ export function ChecklistGate({
   const setIntakeValue = (key: string, value: string) =>
     setIntakeValues((v) => ({ ...v, [key]: value }));
 
+  // A question with a show-when rule appears only when the question it depends on is showing and
+  // has one of the listed answers. Questions that are hidden are not asked, not required and not sent.
+  const showing = (f: ChecklistIntakeField, depth = 0): boolean => {
+    if (!f.showWhen) return true;
+    if (depth > 5) return false;
+    const parent = (intakeFields ?? []).find((x) => x.key === f.showWhen!.key);
+    if (!parent || !showing(parent, depth + 1)) return false;
+    return f.showWhen.values.includes(intakeValues[parent.key] ?? "");
+  };
+  const visibleFields = (intakeFields ?? []).filter((f) => showing(f));
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const next: Record<string, string> = {};
     if (name.trim().length < 2) next["name"] = "Enter your name";
     if (!PHONE_RE.test(phone.replace(/[\s-]/g, ""))) next["phone"] = "Enter a valid 10-digit mobile number";
     if (categories && !category) next["category"] = "Select one";
-    for (const f of intakeFields ?? []) {
+    for (const f of visibleFields) {
       if (!intakeValues[f.key]?.trim()) next[f.key] = "Required";
     }
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
     setSubmitting(true);
-    const intakeDetail = (intakeFields ?? [])
+    const intakeDetail = visibleFields
       .map((f) => `${f.label}: ${intakeValues[f.key]?.trim()}`)
       .join(", ");
     const detailParts = [
@@ -190,7 +201,7 @@ export function ChecklistGate({
           />
           {errors['phone'] && <span className={t.error}>{errors['phone']}</span>}
         </div>
-        {(intakeFields ?? []).map((f) => (
+        {visibleFields.map((f) => (
           <div key={f.key}>
             <label htmlFor={`${uid}-${f.key}`} className={t.label}>
               {f.label}

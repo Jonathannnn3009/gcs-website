@@ -19,6 +19,7 @@ export function SliderField({
   maxLabel,
   ariaLabel,
   presets,
+  hardMax,
 }: {
   label: string;
   value: number;
@@ -35,6 +36,8 @@ export function SliderField({
   ariaLabel: string;
   /** Quick-pick chips under the slider, e.g. ₹50 L, ₹1 Cr. */
   presets?: { label: string; value: number }[];
+  /** The most that may be typed (the box normally has no upper limit). */
+  hardMax?: number;
 }) {
   // The slider itself stays bounded to [min, max] — sliders need a fixed
   // range to be usable. Typing a number, though, can go past max (someone
@@ -48,7 +51,8 @@ export function SliderField({
   const [draft, setDraft] = useState<string | null>(null);
   const typed = draft === null ? null : draft.trim();
   const typedNumber = typed === null || typed === "" ? NaN : Number(typed);
-  const invalid = typed !== null && (typed === "" || !Number.isFinite(typedNumber) || typedNumber < min);
+  const tooHigh = typed !== null && hardMax !== undefined && Number.isFinite(typedNumber) && typedNumber > hardMax;
+  const invalid = typed !== null && (typed === "" || !Number.isFinite(typedNumber) || typedNumber < min || tooHigh);
   const minText = format ? format(min) : String(min);
 
   const change = (v: number) => {
@@ -72,7 +76,7 @@ export function SliderField({
                 const text = e.target.value;
                 setDraft(text);
                 const n = Number(text);
-                if (text.trim() !== "" && Number.isFinite(n) && n >= min) onChange(n);
+                if (text.trim() !== "" && Number.isFinite(n) && n >= min && (hardMax === undefined || n <= hardMax)) onChange(n);
               }}
               onBlur={() => setDraft(null)}
               className="w-28 bg-transparent text-right text-sm font-bold text-gold-dark outline-none"
@@ -87,7 +91,9 @@ export function SliderField({
         <p role="alert" className="mb-2 text-xs font-semibold text-red-600">
           {typed === "" || !Number.isFinite(typedNumber)
             ? "Please enter a number."
-            : `Please enter at least ${minText}.`}{" "}
+            : tooHigh
+              ? `Please enter at most ${hardMax}.`
+              : `Please enter at least ${minText}.`}{" "}
           Until then, the results use the last valid figure.
         </p>
       ) : null}

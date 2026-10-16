@@ -55,7 +55,7 @@ function ServicesPage() {
             <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
               {PRODUCTS.length} loan products,
               <br />
-              <span className="gold-text-static italic">matched to your file, not a script.</span>
+              <span className="gold-text-static italic">matched to your needs.</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
               One expert works across our full catalogue of {PRODUCTS.length} products and our 75+

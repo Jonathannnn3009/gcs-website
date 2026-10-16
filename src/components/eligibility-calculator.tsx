@@ -2,13 +2,13 @@ import { CalcExpertButton } from "@/components/calc-expert-button";
 import { useState, useMemo } from "react";
 import { formatCurrency, principalFromEmi } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
-import { useCalc, useCalcState } from "@/lib/page-lists";
+import { useCalcState } from "@/lib/page-lists";
 
 export function EligibilityCalculator() {
   const [monthlyIncome, setMonthlyIncome] = useState(100000);
   const [existingEmi, setExistingEmi] = useState(0);
   const [rate, setRate] = useCalcState("eligRate", 9);
-  const foirPct = useCalc("foir", 50);
+  const [foirPct, setFoirPct] = useCalcState("foir", 50);
   const [tenure, setTenure] = useState(20);
 
   const result = useMemo(() => {
@@ -55,6 +55,20 @@ export function EligibilityCalculator() {
             minLabel="₹0"
             maxLabel={formatCurrency(Math.max(monthlyIncome * 0.6, 10000))}
             ariaLabel="Existing EMIs"
+          />
+
+          <SliderField
+            label="FOIR (share of income that can go to EMIs)"
+            value={foirPct}
+            onChange={setFoirPct}
+            min={10}
+            max={90}
+            step={5}
+            hardMax={100}
+            suffix="%"
+            minLabel="10%"
+            maxLabel="90%"
+            ariaLabel="FOIR percentage"
           />
 
           <SliderField
@@ -116,7 +130,7 @@ export function EligibilityCalculator() {
               </div>
             </div>
             <p className="relative mt-5 text-[11px] text-muted-foreground">
-              Based on {foirPct}% Fixed Obligation to Income Ratio. Actual eligibility may vary.
+              Based on a FOIR (Fixed Obligation to Income Ratio) of {foirPct}%. Each lender sets its own limit, so actual eligibility may vary.
             </p>
           </div>
           <CalcExpertButton />

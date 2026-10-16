@@ -36,10 +36,13 @@ export type ProductGroup =
   | "Personal & Education"
   | "Vehicles & Special Cases";
 
+/** Show a question only when another question has one of these answers (and is itself showing). */
+export type ShowWhen = { key: string; values: string[] };
+
 export type ChecklistIntakeField =
-  | { key: string; label: string; type: "text"; placeholder?: string; format?: "amount" }
-  | { key: string; label: string; type: "select"; options: string[] }
-  | { key: string; label: string; type: "date" };
+  | { key: string; label: string; type: "text"; placeholder?: string; format?: "amount"; showWhen?: ShowWhen }
+  | { key: string; label: string; type: "select"; options: string[]; showWhen?: ShowWhen }
+  | { key: string; label: string; type: "date"; showWhen?: ShowWhen };
 
 /** What a lender may charge besides interest: shown as a small two-column table on the loan page. */
 export type ChargesInfo = {
@@ -709,9 +712,22 @@ export const PRODUCTS: Product[] = [
         key: "propertyType",
         label: "Property Type",
         type: "select",
-        options: ["Builder Purchase", "Resale"],
+        options: ["Builder Purchase", "Resale", "Self-Owned"],
       },
-      { key: "possessionDate", label: "Possession Date", type: "date" },
+      // Only a builder purchase has a status; only one still being built has a possession date.
+      {
+        key: "propertyStatus",
+        label: "Property Status",
+        type: "select",
+        options: ["Ready to Move", "Under Construction"],
+        showWhen: { key: "propertyType", values: ["Builder Purchase"] },
+      },
+      {
+        key: "possessionDate",
+        label: "Expected Possession Date",
+        type: "date",
+        showWhen: { key: "propertyStatus", values: ["Under Construction"] },
+      },
       {
         key: "loanAmount",
         label: "Loan Amount Required",
