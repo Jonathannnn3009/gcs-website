@@ -481,6 +481,7 @@ function ProductDetailPage() {
                     productSlug={product.slug}
                     categories={product.documentCategories?.map((c) => c.label)}
                     presetCategory={activeCategory?.label ?? presetCategory}
+                    onCategoryChange={setPresetCategory}
                     intakeFields={intakeFields}
                   />
                     </div>

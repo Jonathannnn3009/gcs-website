@@ -48,6 +48,7 @@ export function ChecklistGate({
   productSlug,
   categories,
   presetCategory,
+  onCategoryChange,
   theme = "dark",
   intakeFields,
 }: {
@@ -60,6 +61,8 @@ export function ChecklistGate({
   categories?: string[];
   /** Set when the user already picked their category elsewhere on the page (e.g. a profile card) — locks that category in. */
   presetCategory?: string | null;
+  /** Called when the visitor picks a different category in the dropdown, so the buttons on the page follow. */
+  onCategoryChange?: (category: string) => void;
   /** "dark" for a navy panel background (loan pages), "light" for a white card background (CA & Legal pages). */
   theme?: "dark" | "light";
   /** Extra product-specific questions asked alongside name/phone, e.g. course name for Education Loan. */
@@ -144,12 +147,7 @@ export function ChecklistGate({
         Share your name and number and we'll unlock the download — an expert may follow up.
       </p>
       <div className="mt-3 space-y-3">
-        {presetCategory ? (
-          <div>
-            <span className={t.label}>You Are</span>
-            <p className={t.presetValue}>{presetCategory}</p>
-          </div>
-        ) : categories ? (
+        {categories ? (
           <div>
             <label htmlFor={`${uid}-category`} className={t.label}>
               You Are
@@ -157,7 +155,10 @@ export function ChecklistGate({
             <select
               id={`${uid}-category`}
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => {
+                setCategory(e.target.value);
+                if (e.target.value) onCategoryChange?.(e.target.value);
+              }}
               className={`${t.field} appearance-none`}
             >
               <option value="" className="text-ink dark:text-white">
