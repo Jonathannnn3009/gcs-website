@@ -424,22 +424,8 @@ LOAN_AGAINST_SECURITIES = dict(
                 "Demat holding statement",
                 "Portfolio / policy documents for the securities to be pledged",
                 "Latest Consolidated Account Statement (CAS)",
+                "Mutual fund statement and folio details || If pledging mutual funds",
                 "Confirmation that the securities are on the lender's approved list",
-            ],
-        },
-    ],
-)
-
-LOAN_AGAINST_MUTUAL_FUNDS = dict(
-    title="Loan Against Mutual Funds",
-    sections=[
-        KYC_INDIVIDUAL,
-        {
-            "title": "Mutual Fund Documents",
-            "items": [
-                "Latest mutual fund statement / Consolidated Account Statement (CAS)",
-                "Folio details for the units to be pledged",
-                "Confirmation that the scheme is on the lender's approved AMC / fund list",
             ],
         },
     ],
@@ -605,7 +591,6 @@ LOAN_CHECKLISTS = {
     "unsecured-dod": UNSECURED_DOD,
     "project-funding": PROJECT_FUNDING,
     "loan-against-securities": LOAN_AGAINST_SECURITIES,
-    "loan-against-mutual-funds": LOAN_AGAINST_MUTUAL_FUNDS,
     "professional-loan": PROFESSIONAL_LOAN,
     "private-funding": PRIVATE_FUNDING,
     "machine-loan": MACHINE_LOAN,

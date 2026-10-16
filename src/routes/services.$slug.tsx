@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import {
   ArrowRight,
   Check,
@@ -84,6 +84,20 @@ const PROCESS = [
   },
 ];
 
+// Short names the team wants on the Apply button, where the automatic initials read wrongly.
+const CODE_OVERRIDES: Record<string, string> = {
+  "loan-against-property": "LAP",
+  "loan-against-securities": "LAS",
+  "balance-transfer": "BT & Top Up",
+  dlod: "DL-OD",
+  "unsecured-dod": "UOD",
+};
+
+// Products that were merged into another one: their old address goes to the new page.
+const MERGED_INTO: Record<string, string> = {
+  "loan-against-mutual-funds": "loan-against-securities",
+};
+
 function productCode(title: string): string {
   const skip = new Set(["against", "and", "for", "of", "the", "on"]);
   return title
@@ -101,11 +115,12 @@ function ProductDetailPage() {
   const intakeFields = useIntakeFields(slug, product?.checklistIntake);
   const [presetCategory, setPresetCategory] = useState<string | null>(null);
   useEffect(() => setPresetCategory(null), [slug]);
+  if (MERGED_INTO[slug]) return <Navigate to="/services/$slug" params={{ slug: MERGED_INTO[slug]! }} replace />;
   if (!product) return <NotFoundBlock />;
   const related = PRODUCTS.filter((p) => p.group === product.group && p.slug !== product.slug);
   const fallbackRelated =
     related.length > 0 ? related : PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
-  const code = productCode(product.title);
+  const code = CODE_OVERRIDES[product.slug] ?? productCode(product.title);
   // the applicant type whose documents the panel shows: the one picked, otherwise the first
   const activeCategory =
     product.documentCategories?.find((c) => c.label === presetCategory) ??

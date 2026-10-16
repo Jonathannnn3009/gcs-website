@@ -143,7 +143,10 @@ export function SiteHeader() {
                           </div>
 
                           {/* Right: every product, by category */}
-                          <div className="grid min-w-0 flex-1 grid-cols-5 gap-3 p-5">
+                          <div
+                            className="grid min-w-0 flex-1 gap-3 p-5"
+                            style={{ gridTemplateColumns: `repeat(${PRODUCT_GROUPS_LIVE.length}, minmax(0, 1fr))` }}
+                          >
                             {PRODUCT_GROUPS_LIVE.map((group) => (
                               <div key={group.name} className="min-w-0">
                                 <p className="border-b border-gold/20 pb-2 text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">

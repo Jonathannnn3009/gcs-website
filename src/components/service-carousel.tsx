@@ -14,8 +14,7 @@ const IMAGES: Record<string, string> = {
   "Property Finance": "/illustrations/cards/property.webp",
   "Business Growth": "/illustrations/cards/business.webp",
   "Cash Flow & Trade": "/illustrations/cards/cashflow.webp",
-  "Personal & Education": "/illustrations/cards/personal.webp",
-  "Vehicles & Special Cases": "/illustrations/cards/vehicles.webp",
+  "Personal, Education, Vehicle & Other Loans": "/illustrations/cards/personal.webp",
 };
 
 export const imageForGroup = (name: string) => IMAGES[name] ?? "/illustrations/cards/property.webp";

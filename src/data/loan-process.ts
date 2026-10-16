@@ -423,7 +423,7 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
     steps: [
       s(
         "Share your holdings",
-        "Tell us which shares or securities you hold and how much you need.",
+        "Tell us which shares, mutual funds or bonds you hold and how much you need.",
       ),
       s(
         "Value the portfolio",
@@ -433,22 +433,6 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
       s(
         "Pledge the securities",
         "You submit KYC and pledge the securities through your depository.",
-      ),
-      s("Limit set and funds used", "The lender sets your limit, and you draw what you need."),
-    ],
-  },
-  "loan-against-mutual-funds": {
-    intro: "You borrow against your mutual fund units without selling them. Here is how it works.",
-    steps: [
-      s("Share your funds", "Tell us which mutual funds you hold and how much money you need."),
-      s(
-        "Check the eligible units",
-        "We see which of your units a lender accepts and what limit they give.",
-      ),
-      s("Choose a lender", "We compare lenders on rate, limit and charges."),
-      s(
-        "Lien on your units",
-        "You submit KYC and mark a lien on the units, which stay in your name.",
       ),
       s("Limit set and funds used", "The lender sets your limit, and you draw what you need."),
     ],

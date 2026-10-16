@@ -33,8 +33,7 @@ export type ProductGroup =
   | "Property Finance"
   | "Business Growth"
   | "Cash Flow & Trade"
-  | "Personal & Education"
-  | "Vehicles & Special Cases";
+  | "Personal, Education, Vehicle & Other Loans";
 
 /** Show a question only when another question has one of these answers (and is itself showing). */
 export type ShowWhen = { key: string; values: string[] };
@@ -773,6 +772,35 @@ export const PRODUCTS: Product[] = [
     documentCategories: APPLICANT_DOC_CATEGORIES,
     charges: CHARGES_PROPERTY,
     nri: NRI_LAP,
+    checklistIntake: [
+      {
+        key: "propertyType",
+        label: "Property Type",
+        type: "select",
+        options: ["Builder Purchase", "Resale", "Self-Owned"],
+      },
+      // Only a builder purchase has a status; only one still being built has a possession date.
+      {
+        key: "propertyStatus",
+        label: "Property Status",
+        type: "select",
+        options: ["Ready to Move", "Under Construction"],
+        showWhen: { key: "propertyType", values: ["Builder Purchase"] },
+      },
+      {
+        key: "possessionDate",
+        label: "Expected Possession Date",
+        type: "date",
+        showWhen: { key: "propertyStatus", values: ["Under Construction"] },
+      },
+      {
+        key: "loanAmount",
+        label: "Loan Amount Required",
+        type: "text",
+        placeholder: "e.g. 50,00,000",
+        format: "amount",
+      },
+    ],
   },
   {
     slug: "lease-rental-discounting",
@@ -1256,7 +1284,7 @@ export const PRODUCTS: Product[] = [
     icon: Wallet,
     title: "Personal Loan",
     tagline: "Money for life's plans, minus the paperwork.",
-    group: "Personal & Education",
+    group: "Personal, Education, Vehicle & Other Loans",
     facts: [
       { label: "Interest rate", value: "From 10.49%* p.a." },
       { label: "Loan amount", value: "Up to ₹1 Cr" },
@@ -1285,95 +1313,11 @@ export const PRODUCTS: Product[] = [
     documentCategories: RESIDENT_DOC_CATEGORIES,
   },
   {
-    slug: "loan-against-securities",
-    icon: TrendingUp,
-    title: "Loan Against Securities",
-    tagline: "Borrow on your portfolio, stay invested.",
-    group: "Personal & Education",
-    facts: [
-      { label: "LTV", value: "Up to 80% on debt instruments, 50% on listed shares" },
-      { label: "Structure", value: "Overdraft limit" },
-      { label: "Interest rate", value: "From 9.75%* p.a." },
-    ],
-    about:
-      "You can pledge shares, bonds or insurance policies to get an overdraft limit, instead of selling them. Your investments stay in place, and the limit is there when you need it. Lenders accept only certain securities and set their own limits.",
-    features: [
-      "Shares, bonds, insurance policies and debt instruments accepted",
-      "The limit moves with the value of the pledged portfolio",
-      "No EMI — interest applies only to what's drawn",
-      "Quick setup on lender-approved securities",
-    ],
-    eligibility: [
-      "Approved securities held in the applicant's own name",
-      "A demat account with a recognised depository",
-      "Resident Indian, 21 years or older",
-    ],
-    documents: [KYC, "Demat holding statement", "Portfolio / policy documents"],
-    charges: CHARGES_SECURITIES,
-  },
-  {
-    slug: "loan-against-mutual-funds",
-    icon: PieChart,
-    title: "Loan Against Mutual Funds",
-    tagline: "Borrow against your units, without redeeming them.",
-    group: "Personal & Education",
-    facts: [
-      { label: "LTV", value: "Up to 85% on debt funds, 75% on equity funds" },
-      { label: "Structure", value: "Overdraft limit" },
-      { label: "Interest rate", value: "From 9.99%* p.a." },
-    ],
-    about:
-      "The lender marks a lien on your mutual fund units through the registrar (CAMS or KFintech). Your SIPs and investments continue as before, and you can draw money against the units as an overdraft.",
-    features: [
-      "Equity, debt and hybrid schemes accepted as collateral",
-      "Units remain invested and keep earning returns",
-      "No EMI — interest applies only to the amount drawn",
-      "Digital lien marking, usually completed the same day",
-    ],
-    eligibility: [
-      "Mutual fund units held in the applicant's own name",
-      "Scheme falls on the lender's approved AMC/fund list",
-      "Resident Indian, 18 years or older",
-    ],
-    documents: [KYC, "Mutual fund statement / CAS", "Folio details"],
-    charges: CHARGES_SECURITIES,
-  },
-  {
-    slug: "professional-loan",
-    icon: Stethoscope,
-    title: "Professional Loan",
-    tagline: "Built for doctors, CAs and other qualified professionals.",
-    group: "Business Growth",
-    facts: [
-      { label: "Loan amount", value: "Up to ₹75 lakh" },
-      { label: "Interest rate", value: "From 10.99%* p.a." },
-      { label: "Tenure", value: "12 — 84 months" },
-      { label: "Collateral", value: "Usually unsecured" },
-    ],
-    about:
-      "A loan without collateral for doctors, CAs, architects and other registered professionals. You can use it to start or grow a practice, buy equipment or meet working capital needs. Depending on the lender's policy, the terms may be better than a regular personal loan because of your professional qualification.",
-    features: [
-      "Preferential pricing tied to your professional registration",
-      "No collateral for most ticket sizes",
-      "Usable for practice setup, equipment purchase or working capital",
-      "Faster turnaround with lighter documentation than a business loan",
-    ],
-    eligibility: [
-      "A recognised professional qualification or registration (MBBS, CA, CS, architecture, engineering, etc.)",
-      "A minimum number of years in active practice, as set by the lender",
-      "A credit score in the low-to-mid 700s is typical for the better rate slabs",
-      "Resident Indian professional in independent practice",
-      "A steady practice income that shows in your bank statements",
-    ],
-    documents: [KYC, INCOME, "Professional registration / degree certificate"],
-    charges: CHARGES_UNSECURED,
-  },
-  {
     slug: "education-loan",
     icon: GraduationCap,
     title: "Education Loan",
     tagline: "Invest in the degree, not the worry.",
-    group: "Personal & Education",
+    group: "Personal, Education, Vehicle & Other Loans",
     facts: [
       { label: "Loan amount", value: "Up to ₹1.5 Cr" },
       { label: "Interest rate", value: "From 8.15%* p.a." },
@@ -1430,7 +1374,7 @@ export const PRODUCTS: Product[] = [
     icon: Car,
     title: "New Car Loan",
     tagline: "From showroom to driveway, fully funded.",
-    group: "Vehicles & Special Cases",
+    group: "Personal, Education, Vehicle & Other Loans",
     facts: [
       { label: "Funding", value: "Up to 100% on-road" },
       { label: "Tenure", value: "12 — 84 months" },
@@ -1474,7 +1418,7 @@ export const PRODUCTS: Product[] = [
     icon: CarFront,
     title: "Used Car Loan",
     tagline: "A great pre-owned car, sensibly financed.",
-    group: "Vehicles & Special Cases",
+    group: "Personal, Education, Vehicle & Other Loans",
     facts: [
       { label: "Funding", value: "Up to 90% of valuation" },
       { label: "Vehicle age", value: "Up to 8 years at loan end" },
@@ -1521,7 +1465,7 @@ export const PRODUCTS: Product[] = [
     icon: Repeat,
     title: "Car Refinance",
     tagline: "Your car can fund your next plan.",
-    group: "Vehicles & Special Cases",
+    group: "Personal, Education, Vehicle & Other Loans",
     facts: [
       { label: "Funding", value: "Up to 150% of valuation for strong profiles" },
       { label: "Interest rate", value: "From 12.50%* p.a." },
@@ -1561,7 +1505,7 @@ export const PRODUCTS: Product[] = [
     icon: Truck,
     title: "Commercial Vehicle",
     tagline: "Get the right vehicle for your business.",
-    group: "Vehicles & Special Cases",
+    group: "Personal, Education, Vehicle & Other Loans",
     facts: [
       { label: "Funding", value: "Up to 100%* LTV" },
       { label: "Repayment", value: "Up to 7 years" },
@@ -1592,6 +1536,65 @@ export const PRODUCTS: Product[] = [
     ],
     charges: CHARGES_VEHICLE,
     documentCategories: BUSINESS_DOC_CATEGORIES,
+  },
+  {
+    slug: "loan-against-securities",
+    icon: TrendingUp,
+    title: "Loan Against Securities",
+    tagline: "Borrow on your portfolio, stay invested.",
+    group: "Personal, Education, Vehicle & Other Loans",
+    facts: [
+      { label: "Pledge", value: "Shares, mutual funds and bonds" },
+      { label: "LTV", value: "Up to 50%–80% of the pledge value" },
+      { label: "Facility", value: "Overdraft, interest only on what you use" },
+    ],
+    about:
+      "You can pledge shares, mutual funds, bonds or insurance policies to get an overdraft limit, instead of selling them. For mutual funds, the lender marks a lien on your units through the registrar (CAMS or KFintech). Your investments stay in place, and the limit is there when you need it. Lenders accept only certain securities and set their own limits.",
+    features: [
+      "Shares, mutual funds, bonds, insurance policies and debt instruments accepted",
+      "Mutual fund units stay in your name and keep earning returns",
+      "The limit moves with the value of the pledged portfolio",
+      "No EMI — interest applies only to what's drawn",
+      "Quick setup on lender-approved securities",
+    ],
+    eligibility: [
+      "Approved securities or mutual fund units held in the applicant's own name",
+      "A demat account for shares and bonds, or a mutual fund folio for units",
+      "Securities or schemes that are on the lender's approved list",
+      "Resident Indian, 21 years or older",
+    ],
+    documents: [KYC, "Demat holding statement, or mutual fund statement (CAS)", "Portfolio, folio or policy documents"],
+    charges: CHARGES_SECURITIES,
+  },
+  {
+    slug: "professional-loan",
+    icon: Stethoscope,
+    title: "Professional Loan",
+    tagline: "Built for doctors, CAs and other qualified professionals.",
+    group: "Business Growth",
+    facts: [
+      { label: "Loan amount", value: "Up to ₹75 lakh" },
+      { label: "Interest rate", value: "From 10.99%* p.a." },
+      { label: "Tenure", value: "12 — 84 months" },
+      { label: "Collateral", value: "Usually unsecured" },
+    ],
+    about:
+      "A loan without collateral for doctors, CAs, architects and other registered professionals. You can use it to start or grow a practice, buy equipment or meet working capital needs. Depending on the lender's policy, the terms may be better than a regular personal loan because of your professional qualification.",
+    features: [
+      "Preferential pricing tied to your professional registration",
+      "No collateral for most ticket sizes",
+      "Usable for practice setup, equipment purchase or working capital",
+      "Faster turnaround with lighter documentation than a business loan",
+    ],
+    eligibility: [
+      "A recognised professional qualification or registration (MBBS, CA, CS, architecture, engineering, etc.)",
+      "A minimum number of years in active practice, as set by the lender",
+      "A credit score in the low-to-mid 700s is typical for the better rate slabs",
+      "Resident Indian professional in independent practice",
+      "A steady practice income that shows in your bank statements",
+    ],
+    documents: [KYC, INCOME, "Professional registration / degree certificate"],
+    charges: CHARGES_UNSECURED,
   },
   {
     slug: "private-funding",
@@ -1662,16 +1665,10 @@ export const PRODUCT_GROUPS: {
       "The day-to-day financial plumbing — credit lines, guarantees and limits that keep operations from stalling.",
   },
   {
-    name: "Personal & Education",
-    heading: "For life's big moments.",
+    name: "Personal, Education, Vehicle & Other Loans",
+    heading: "Personal, education, vehicle and other loans.",
     description:
-      "For the moments that don't wait — a medical bill, a degree abroad, or funds against what you've already invested.",
-  },
-  {
-    name: "Vehicles & Special Cases",
-    heading: "Wheels, bridges and urgent deadlines.",
-    description:
-      "A new car, a better rate on the one you're driving, or funding when a deadline won't wait.",
+      "For personal needs, studies, cars and commercial vehicles, or funds against the shares and mutual funds you already hold.",
   },
 ];
 
