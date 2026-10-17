@@ -4,6 +4,7 @@ import { Reveal } from "@/components/reveal";
 import { ServiceEnquiryForm } from "@/components/service-enquiry-form";
 import { PROFESSIONAL_SERVICES, SERVICE_DIVISIONS, divisionLabel, type ServiceDivision } from "@/data/professional-services";
 import { useProfessionalServices } from "@/lib/site-content";
+import { categoryAnchor } from "@/data/ca-legal-menu";
 
 const divisionId = (division: ServiceDivision) => division.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
@@ -135,7 +136,10 @@ function CaLegalServicesPage() {
                         <Link
                           to="/ca-legal-services/$slug"
                           params={{ slug: s.slug }}
-                          className="group flex items-center gap-4 border-b border-border/70 py-4"
+                          {...(i === 0 || services[i - 1]?.category !== s.category
+                            ? { id: categoryAnchor(s.category) }
+                            : {})}
+                          className="group flex scroll-mt-24 items-center gap-4 border-b border-border/70 py-4"
                         >
                           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-gold-dark ring-1 ring-gold/20 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy dark:bg-card">
                             <s.icon className="h-5 w-5" />

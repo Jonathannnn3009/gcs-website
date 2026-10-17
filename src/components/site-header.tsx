@@ -7,6 +7,7 @@ import { BrandLogo } from "@/components/brand-logo";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { NAV_CIBIL, NAV_HEADER, NAV_PARTNER, NAV_TOOLS } from "@/data/page-lists";
 import { useList, useProductGroups } from "@/lib/page-lists";
+import { CA_LEGAL_MENU, categoryAnchor } from "@/data/ca-legal-menu";
 
 
 
@@ -22,6 +23,8 @@ export function SiteHeader() {
         ? ("services" as const)
         : l["to"] === "/tools"
           ? ("tools" as const)
+          : l["to"] === "/ca-legal-services"
+            ? ("ca" as const)
           : l["to"] === "/cibil"
             ? ("cibil" as const)
           : l["to"] === "/partner"
@@ -309,6 +312,79 @@ export function SiteHeader() {
                       </div>
                     )}
 
+                    {/* CA & Legal dropdown: the same two-part panel as CIBIL, with the two teams side by side */}
+                    {link.dropdown === "ca" && activeDropdown === "ca" && (
+                      <div
+                        className="pointer-events-none fixed inset-x-0 z-50 flex justify-center"
+                        style={{ top: menuTop }}
+                      >
+                        <div className="pointer-events-auto pt-2" style={{ animation: "gcs-scale-in 200ms ease both" }}>
+                          <div className="flex w-[820px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card">
+                            {/* Left: the navy gradient panel */}
+                            <div className="navy-panel relative flex w-[240px] shrink-0 flex-col p-7">
+                              <div className="pointer-events-none absolute -top-10 -left-10 h-44 w-44 rounded-full bg-gold/15 blur-[60px]" />
+                              <p className="relative text-[10px] font-bold tracking-[0.22em] text-gold uppercase">
+                                CA & Legal
+                              </p>
+                              <p
+                                className="relative mt-3 text-[22px] leading-snug font-bold text-white"
+                                style={{ fontFamily: "var(--font-heading)", letterSpacing: "0" }}
+                              >
+                                Tax, GST and property paperwork, handled.
+                              </p>
+                              <p className="relative mt-3 text-[13px] leading-relaxed text-white/70">
+                                Associated CA and legal professionals, with GCS as your single point of contact.
+                              </p>
+                              <Link
+                                to="/ca-legal-services"
+                                onClick={() => setActiveDropdown(null)}
+                                className="gold-btn relative mt-5 self-start px-5 py-2.5 text-[13px]"
+                              >
+                                All CA & Legal services <ArrowRight className="h-3.5 w-3.5" />
+                              </Link>
+                            </div>
+
+                            {/* Right: the two teams and what each covers */}
+                            <div className="grid min-w-0 flex-1 grid-cols-2 content-start gap-x-3 p-5">
+                              {CA_LEGAL_MENU.map((group) => (
+                                <div key={group.anchor} className="min-w-0">
+                                  <Link
+                                    to="/ca-legal-services"
+                                    hash={group.anchor}
+                                    onClick={() => setActiveDropdown(null)}
+                                    className="block border-b border-gold/20 pb-2 text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase transition-colors hover:text-gold"
+                                  >
+                                    {group.heading}
+                                  </Link>
+                                  <div className="mt-2 space-y-0.5">
+                                    {group.items.map((item) => (
+                                      <Link
+                                        key={item.category}
+                                        to="/ca-legal-services"
+                                        hash={categoryAnchor(item.category)}
+                                        onClick={() => setActiveDropdown(null)}
+                                        className="group/ca flex items-center gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-gold/5"
+                                      >
+                                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gold-pale/50 text-gold-dark transition-colors duration-300 group-hover/ca:bg-gold group-hover/ca:text-navy dark:bg-gold/15">
+                                          <item.icon className="h-4 w-4" />
+                                        </span>
+                                        <span className="min-w-0">
+                                          <span className="block text-[13px] leading-snug font-semibold text-foreground">
+                                            {item.category}
+                                          </span>
+                                          <span className="block text-[11px] text-muted-foreground">{item.desc}</span>
+                                        </span>
+                                      </Link>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     {/* Tools Dropdown */}
                     {link.dropdown === "tools" && activeDropdown === "tools" && (
                       <div
@@ -444,6 +520,18 @@ export function SiteHeader() {
                       className="ml-4 rounded-md border-l-2 border-gold/30 px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-gold"
                     >
                       {String(item["label"])}
+                    </Link>
+                  ))}
+                {link.dropdown === "ca" &&
+                  CA_LEGAL_MENU.map((group) => (
+                    <Link
+                      key={group.anchor}
+                      to="/ca-legal-services"
+                      hash={group.anchor}
+                      onClick={() => setMobileOpen(false)}
+                      className="ml-4 rounded-md border-l-2 border-gold/30 px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-gold"
+                    >
+                      {group.heading}
                     </Link>
                   ))}
                 {link.dropdown === "cibil" &&
