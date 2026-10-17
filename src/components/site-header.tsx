@@ -401,7 +401,7 @@ export function SiteHeader() {
 
           {/* Apply CTA */}
           <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-4 xl:text-[13px]">
-            Apply Now
+            Contact Us
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
 
@@ -465,7 +465,7 @@ export function SiteHeader() {
               onClick={() => setMobileOpen(false)}
               className="gold-btn mt-3 justify-center py-3"
             >
-              Apply Now
+              Contact Us
               <ArrowRight className="h-4 w-4" />
             </Link>
             <a
