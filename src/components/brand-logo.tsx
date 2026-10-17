@@ -9,7 +9,7 @@ const SIZES = {
 // icon height + text sizing for the single-line header lockup
 const HORIZONTAL_SIZES = {
   sm: { mark: "h-9", name: "text-sm", sub: "text-[9px]", rule: "w-3" },
-  md: { mark: "h-11", name: "text-base", sub: "text-[10px]", rule: "w-4" },
+  md: { mark: "h-11", name: "text-lg", sub: "text-[11px]", rule: "w-4" },
   lg: { mark: "h-14", name: "text-lg", sub: "text-[11px]", rule: "w-5" },
 } as const;
 
@@ -26,7 +26,7 @@ export function BrandLogo({
   if (layout === "horizontal") {
     const s = HORIZONTAL_SIZES[size];
     return (
-      <span className={cn("inline-flex items-center gap-2.5", className)}>
+      <span className={cn("inline-flex items-center gap-2", className)}>
         <img
           src="/brand/gcs-mark.png"
           alt=""
@@ -38,7 +38,7 @@ export function BrandLogo({
           <span className={cn("font-brand font-bold tracking-[0.02em] whitespace-nowrap text-navy uppercase dark:text-white", s.name)}>
             Growth Capital
           </span>
-          <span className={cn("mt-1 flex items-center gap-1.5 font-brand font-semibold whitespace-nowrap text-gold-dark uppercase", s.sub)}>
+          <span className={cn("mt-0.5 flex items-center gap-1.5 font-brand font-semibold whitespace-nowrap text-gold-dark uppercase", s.sub)}>
             <span className={cn("h-px bg-gold/70", s.rule)} />
             <span className="-mr-[0.42em] tracking-[0.42em]">Services</span>
             <span className={cn("h-px bg-gold/70", s.rule)} />
