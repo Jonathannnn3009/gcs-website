@@ -90,14 +90,14 @@ function CaLegalServicesPage() {
                 >
                   <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
                     <img
-                      src={isLegal ? "/illustrations/legal-services.webp" : "/illustrations/ca-services.webp"}
+                      src={isLegal ? "/illustrations/legal-counsel.webp" : "/illustrations/ca-services.webp"}
                       alt={
                         isLegal
-                          ? "An adviser talking through documents with a family in front of their housing society"
+                          ? "A lawyer explaining documents to a family, with a court building and the scales of justice behind them"
                           : "A chartered accountant reviewing accounts and charts at her desk"
                       }
-                      width={1024}
-                      height={1024}
+                      width={isLegal ? 1438 : 1024}
+                      height={isLegal ? 1094 : 1024}
                       loading="lazy"
                       className={`mx-auto aspect-[4/3] w-full max-w-xl rounded-2xl object-cover shadow-[var(--shadow-card)] ${
                         isLegal ? "lg:order-2" : ""
