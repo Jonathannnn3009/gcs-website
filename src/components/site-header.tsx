@@ -76,7 +76,7 @@ export function SiteHeader() {
         {/* Right side */}
         <div className="flex min-w-0 items-center justify-end gap-2 2xl:gap-4">
           {/* Desktop nav */}
-          <nav className="hidden flex-1 items-center justify-evenly min-[1360px]:flex">
+          <nav className="hidden flex-1 items-center justify-end gap-3 min-[1360px]:flex min-[1536px]:gap-1 min-[1800px]:gap-0">
             {NAV.map((link) => {
               if (link.dropdown) {
                 return (
