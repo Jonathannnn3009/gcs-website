@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useId, useState } from "react";
-import { ArrowRight, Check, Handshake, LockKeyhole, MessageCircle, UserRound } from "lucide-react";
+import { useEffect, useId, useState } from "react";
+import { ArrowRight, Check, Handshake, UserRound } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { CONTACT } from "@/data/site";
 import { CRM_APP } from "@/lib/crm";
 import { normalizePhone } from "@/lib/lead-dedupe";
-import { submitLead } from "@/lib/leads";
+import { confirmIdCode, IdRecoveryError, requestIdCode, type IdKind } from "@/lib/gcs-id-recovery";
 import { leaveHandoff } from "@/lib/track-handoff";
 
 export const Route = createFileRoute("/track-application")({
@@ -27,17 +27,11 @@ export const Route = createFileRoute("/track-application")({
   component: TrackApplicationPage,
 });
 
-type Who = "client" | "partner" | "enquiry";
+type Who = IdKind;
 
 const WHO: { id: Who; label: string; icon: typeof UserRound; blurb: string }[] = [
   { id: "client", label: "Client", icon: UserRound, blurb: "I have a GCS ID for my loan file" },
   { id: "partner", label: "Partner", icon: Handshake, blurb: "I refer clients to GCS" },
-  {
-    id: "enquiry",
-    label: "Enquiry",
-    icon: MessageCircle,
-    blurb: "I enquired but have no GCS ID yet",
-  },
 ];
 
 const fieldClass =
@@ -124,37 +118,65 @@ function ClientForm() {
   );
 }
 
+/** A partner's GCS ID is their partner code, e.g. GCS-BSA-001: letters and numbers, hyphens allowed. */
+const PARTNER_ID = /^[A-Z0-9-]{4,24}$/;
+
 function PartnerForm() {
   const uid = useId();
   const [phone, setPhone] = useState("");
-  const [error, setError] = useState("");
+  const [code, setCode] = useState("");
+  const [errors, setErrors] = useState<{ phone?: string; code?: string }>({});
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const digits = normalizePhone(phone);
-    if (!digits) return setError("Enter the 10-digit mobile number registered with us");
-    setError("");
-    leaveHandoff({ kind: "partner", phone: digits });
+    const id = code.trim().toUpperCase().replace(/\s+/g, "-");
+    const next: typeof errors = {};
+    if (!digits) next.phone = "Enter the 10-digit mobile number registered with us";
+    if (!PARTNER_ID.test(id)) next.code = "Enter your GCS ID, for example GCS-BSA-001";
+    setErrors(next);
+    if (next.phone || next.code || !digits) return;
+    leaveHandoff({ kind: "partner", phone: digits, code: id });
     window.location.assign(`${CRM_APP}/partner-login`);
   };
 
   return (
     <form onSubmit={onSubmit} noValidate>
-      <div>
-        <label htmlFor={`${uid}-phone`} className={labelClass}>
-          Registered Mobile Number <span className="text-gold">*</span>
-        </label>
-        <input
-          id={`${uid}-phone`}
-          className={fieldClass}
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="10-digit mobile number"
-          inputMode="tel"
-          autoComplete="tel-national"
-          maxLength={15}
-        />
-        <Err text={error} />
+      <div className="space-y-4">
+        <div>
+          <label htmlFor={`${uid}-phone`} className={labelClass}>
+            Registered Mobile Number <span className="text-gold">*</span>
+          </label>
+          <input
+            id={`${uid}-phone`}
+            className={fieldClass}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="10-digit mobile number"
+            inputMode="tel"
+            autoComplete="tel-national"
+            maxLength={15}
+          />
+          <Err text={errors.phone} />
+        </div>
+        <div>
+          <label htmlFor={`${uid}-code`} className={labelClass}>
+            GCS ID <span className="text-gold">*</span>
+          </label>
+          <input
+            id={`${uid}-code`}
+            className={`${fieldClass} tracking-widest uppercase`}
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            placeholder="e.g. GCS-BSA-001"
+            autoComplete="off"
+            maxLength={24}
+          />
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            The partner ID GCS gave you when you joined.
+          </p>
+          <Err text={errors.code} />
+        </div>
       </div>
       <button type="submit" className={submitClass}>
         Go to partner sign in
@@ -164,65 +186,106 @@ function PartnerForm() {
   );
 }
 
-function EnquiryForm() {
-  const uid = useId();
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
-  const [sent, setSent] = useState(false);
+const RESEND_SECONDS = 30;
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const digits = normalizePhone(phone);
-    const next: typeof errors = {};
-    if (name.trim().length < 2) next.name = "Please enter your name";
-    if (!digits) next.phone = "Enter your 10-digit mobile number";
-    setErrors(next);
-    if (next.name || next.phone || !digits) return;
-    await submitLead({
-      name: name.trim(),
-      phone: digits,
-      source: "track-status-request",
-      detail: "Asked for a status update on their enquiry from the Track Application page.",
-    });
-    setSent(true);
+/**
+ * "Do not have a GCS ID?": confirm the mobile number with a code, and the ID is texted to that number.
+ * The ID is never shown here, and the page says the same whether or not one is on file for the number.
+ */
+function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
+  const uid = useId();
+  const [step, setStep] = useState<"phone" | "code" | "done" | "none">("phone");
+  const [phone, setPhone] = useState("");
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [wait, setWait] = useState(0);
+
+  useEffect(() => {
+    if (wait <= 0) return;
+    const t = window.setTimeout(() => setWait((w) => w - 1), 1000);
+    return () => window.clearTimeout(t);
+  }, [wait]);
+
+  const digits = normalizePhone(phone);
+  const shown = digits ? `+91 ${digits.slice(0, 5)} ${digits.slice(5)}` : phone;
+
+  const sendCode = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!digits) return setError("Enter your 10-digit mobile number");
+    setBusy(true);
+    setError("");
+    try {
+      const res = await requestIdCode(kind, digits);
+      setWait(res.resendAfterSeconds || RESEND_SECONDS);
+      setCode("");
+      setStep("code");
+    } catch (err) {
+      setError(
+        err instanceof IdRecoveryError ? err.message : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setBusy(false);
+    }
   };
 
-  if (sent) {
+  const verify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!/^\d{6}$/.test(code.trim())) return setError("Enter the 6-digit code");
+    setBusy(true);
+    setError("");
+    try {
+      const res = await confirmIdCode(kind, digits ?? phone, code);
+      setStep(res.sent ? "done" : "none");
+    } catch (err) {
+      setError(
+        err instanceof IdRecoveryError ? err.message : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const back = (
+    <button
+      type="button"
+      onClick={onBack}
+      className="mt-5 text-[13px] font-semibold text-gold-dark hover:underline"
+    >
+      {kind === "client" ? "Back to track my application" : "Back to partner sign in"}
+    </button>
+  );
+
+  if (step === "done" || step === "none") {
     return (
-      <div className="flex min-h-[280px] flex-col items-center justify-center text-center">
+      <div>
         <span className="grid h-12 w-12 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
           <Check className="h-6 w-6" />
         </span>
         <h2 className="mt-4 text-lg font-extrabold text-navy dark:text-white">
-          Thanks, we will call you.
+          {step === "done" ? "Your GCS ID is on its way" : "We have no GCS ID for this number"}
         </h2>
-        <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-          An expert will update you on your enquiry, typically within one business day (
-          {CONTACT.hours}).
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          {step === "done"
+            ? `We have sent it by SMS to ${shown}. When it arrives, come back and enter it with your mobile number.`
+            : `Your number ${shown} is confirmed, but no GCS ID is held against it yet. Call ${CONTACT.phone} and an expert will help.`}
         </p>
+        {back}
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate>
-      <div className="space-y-4">
-        <div>
-          <label htmlFor={`${uid}-name`} className={labelClass}>
-            Full Name <span className="text-gold">*</span>
-          </label>
-          <input
-            id={`${uid}-name`}
-            className={fieldClass}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
-            maxLength={100}
-          />
-          <Err text={errors.name} />
-        </div>
-        <div>
+    <div>
+      <h2 className="text-lg font-extrabold text-navy dark:text-white">Get your GCS ID</h2>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+        {kind === "client"
+          ? "Enter the mobile number on your loan file. We will text a code to confirm it is you, then text you your GCS ID."
+          : "Enter the mobile number you joined GCS with. We will text a code to confirm it is you, then text you your partner GCS ID."}
+      </p>
+
+      {step === "phone" ? (
+        <form onSubmit={sendCode} noValidate className="mt-5">
           <label htmlFor={`${uid}-phone`} className={labelClass}>
             Mobile Number <span className="text-gold">*</span>
           </label>
@@ -231,26 +294,73 @@ function EnquiryForm() {
             className={fieldClass}
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="The number you enquired with"
+            placeholder="10-digit mobile number"
             inputMode="tel"
             autoComplete="tel-national"
             maxLength={15}
           />
-          <Err text={errors.phone} />
-        </div>
-      </div>
-      <button type="submit" className={submitClass}>
-        Ask for an update
-        <Arrow />
-      </button>
-    </form>
+          <Err text={error} />
+          <button type="submit" disabled={busy} className={submitClass}>
+            {busy ? "Sending…" : "Send code"}
+            <Arrow />
+          </button>
+        </form>
+      ) : (
+        <form onSubmit={verify} noValidate className="mt-5">
+          <p className="text-[13px] leading-relaxed text-muted-foreground">
+            If a GCS ID is held for {shown}, we have texted it a 6-digit code.{" "}
+            <button
+              type="button"
+              onClick={() => {
+                setStep("phone");
+                setError("");
+              }}
+              className="font-bold text-gold-dark hover:underline"
+            >
+              Wrong number?
+            </button>
+          </p>
+          <label htmlFor={`${uid}-code`} className={`${labelClass} mt-4`}>
+            6-digit code <span className="text-gold">*</span>
+          </label>
+          <input
+            id={`${uid}-code`}
+            className={`${fieldClass} tracking-[0.4em]`}
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+            placeholder="······"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            maxLength={6}
+          />
+          <Err text={error} />
+          <button type="submit" disabled={busy} className={submitClass}>
+            {busy ? "Checking…" : "Send me my GCS ID"}
+            <Arrow />
+          </button>
+          <p className="mt-3 text-[13px] text-muted-foreground">
+            No code yet?{" "}
+            {wait > 0 ? (
+              <span>You can ask again in {wait}s.</span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => void sendCode()}
+                disabled={busy}
+                className="font-bold text-gold-dark hover:underline"
+              >
+                Send it again
+              </button>
+            )}
+          </p>
+        </form>
+      )}
+      {back}
+    </div>
   );
 }
 
-const SIDE: Record<
-  Who,
-  { eyebrow: string; title: string; text: string; points: string[]; note?: string }
-> = {
+const SIDE: Record<Who, { eyebrow: string; title: string; text: string; points: string[] }> = {
   client: {
     eyebrow: "For clients",
     title: "Track your loan file",
@@ -259,28 +369,19 @@ const SIDE: Record<
       "The current status of your application",
       "Your file followed from login to sanction and disbursal",
       "Your GCS ID is the code your expert shared when your application was opened",
+      "No GCS ID yet? Confirm your mobile number and we text it to you",
     ],
   },
   partner: {
     eyebrow: "For partners",
     title: "Partner sign in",
-    text: "Enter your registered mobile number and we will take you to your partner portal. There you sign in with your password.",
+    text: "Enter your registered mobile number and your partner GCS ID, and we will take you to your partner portal. There you sign in with your password.",
     points: [
       "Every client you have referred, in one place",
       "Where each file stands, from referral to disbursal",
       "Your commission structure",
+      "Lost your GCS ID? Confirm your mobile number and we text it to you",
     ],
-  },
-  enquiry: {
-    eyebrow: "For enquiries",
-    title: "Sent an enquiry?",
-    text: "Your GCS ID is created when your application is opened with a lender, and your expert shares it with you then. Until that happens, ask us for an update.",
-    points: [
-      "An expert calls you with an update on your enquiry",
-      "Typically within one business day",
-      "Once your application is opened, you get your GCS ID to track it here",
-    ],
-    note: "We use your number only to call you back about your enquiry.",
   },
 };
 
@@ -307,18 +408,13 @@ function SidePanel({ who }: { who: Who }) {
           </li>
         ))}
       </ul>
-      {side.note ? (
-        <p className="relative mt-auto flex min-h-[6.5rem] items-start gap-2 border-t border-white/10 pt-5 text-[13px] leading-relaxed text-white/60">
-          <LockKeyhole className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-light" />
-          {side.note}
-        </p>
-      ) : null}
     </div>
   );
 }
 
 function TrackApplicationPage() {
   const [who, setWho] = useState<Who>("client");
+  const [recover, setRecover] = useState(false);
 
   return (
     <>
@@ -339,7 +435,7 @@ function TrackApplicationPage() {
 
           <Reveal delay={80}>
             <div
-              className="mt-8 grid gap-3 sm:grid-cols-3"
+              className="mt-8 grid gap-3 sm:grid-cols-2"
               role="tablist"
               aria-label="Who is tracking"
             >
@@ -351,7 +447,10 @@ function TrackApplicationPage() {
                     type="button"
                     role="tab"
                     aria-selected={on}
-                    onClick={() => setWho(w.id)}
+                    onClick={() => {
+                      setWho(w.id);
+                      setRecover(false);
+                    }}
                     className={`flex items-center gap-4 rounded-2xl border p-5 text-left transition-all duration-300 hover:-translate-y-0.5 ${
                       on
                         ? "border-navy bg-navy text-white shadow-[var(--shadow-card)]"
@@ -384,16 +483,25 @@ function TrackApplicationPage() {
               <SidePanel who={who} />
               <div className="flex flex-col justify-between gap-10 p-8 sm:p-11">
                 <div className="my-auto">
-                  {who === "client" && <ClientForm />}
-                  {who === "partner" && <PartnerForm />}
-                  {who === "enquiry" && <EnquiryForm />}
+                  {recover ? (
+                    <GcsIdRecovery key={who} kind={who} onBack={() => setRecover(false)} />
+                  ) : (
+                    <>
+                      {who === "client" ? <ClientForm /> : <PartnerForm />}
+                      <button
+                        type="button"
+                        onClick={() => setRecover(true)}
+                        className="mt-4 text-[13px] font-semibold text-gold-dark hover:underline"
+                      >
+                        Do not have a GCS ID?
+                      </button>
+                    </>
+                  )}
                 </div>
                 <p className="min-h-[6.5rem] border-t border-border pt-5 text-[13px] leading-relaxed text-muted-foreground">
                   {who === "client"
                     ? "Need help finding your GCS ID? "
-                    : who === "partner"
-                      ? "Forgot your password, or not a partner yet? "
-                      : "Prefer to talk it through? "}
+                    : "Forgot your password, or not a partner yet? "}
                   Call {CONTACT.phone} ({CONTACT.hours}) or message us on{" "}
                   <a
                     href={CONTACT.whatsappLink}

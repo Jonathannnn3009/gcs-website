@@ -219,7 +219,7 @@ export function SiteHeader() {
                           </div>
 
                           {/* Right: the pages */}
-                          <div className="grid min-w-0 flex-1 grid-cols-1 content-start gap-1 p-4">
+                          <div className="grid min-w-0 flex-1 grid-cols-1 auto-rows-fr gap-1 p-4">
                             {PARTNER_ITEMS.map((item) => {
                               const Icon = item["icon"] as LucideIcon;
                               return (
@@ -282,7 +282,7 @@ export function SiteHeader() {
                           </div>
 
                           {/* Right: the pages */}
-                          <div className="grid min-w-0 flex-1 grid-cols-1 content-start gap-1 p-4">
+                          <div className="grid min-w-0 flex-1 grid-cols-1 auto-rows-fr gap-1 p-4">
                             {CIBIL_ITEMS.map((item) => {
                               const Icon = item["icon"] as LucideIcon;
                               return (

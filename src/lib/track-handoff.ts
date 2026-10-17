@@ -4,7 +4,8 @@
 // different ports, the note simply does not arrive and the visitor types the details again.)
 
 export type TrackHandoff =
-  { kind: "client"; phone: string; code: string } | { kind: "partner"; phone: string };
+  | { kind: "client"; phone: string; code: string }
+  | { kind: "partner"; phone: string; code: string };
 
 export const TRACK_HANDOFF_KEY = "gcs.track.handoff";
 
