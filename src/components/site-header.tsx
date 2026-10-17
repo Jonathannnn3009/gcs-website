@@ -11,7 +11,10 @@ import { useList, useProductGroups } from "@/lib/page-lists";
 
 
 export function SiteHeader() {
-  const NAV = useList("nav.header", NAV_HEADER).map((l) => ({
+  // "Apply Now" already goes to the contact page, so the menu does not list it a second time.
+  const NAV = useList("nav.header", NAV_HEADER)
+    .filter((l) => l["to"] !== "/contact")
+    .map((l) => ({
     to: String(l["to"]),
     label: String(l["label"]),
     dropdown:
