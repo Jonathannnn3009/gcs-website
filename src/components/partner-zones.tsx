@@ -13,6 +13,7 @@ import {
 import { Reveal } from "@/components/reveal";
 import { Section, SectionHeading } from "@/components/section";
 import { ASSISTANT_NAME } from "@/lib/chat/config";
+import { isValidEmail } from "@/lib/validation";
 import { submitLead } from "@/lib/leads";
 
 // Pieces shared by the three partner pages (Agent, Builder, Freelancer).
@@ -136,7 +137,6 @@ const fieldClass =
 const labelClass =
   "block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white";
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** How many people a partner expects to refer in a month: an estimate, not a target. */
 export const REFERRAL_VOLUMES = ["1–2", "3–5", "6–10", "More than 10", "Not sure yet"] as const;
@@ -306,7 +306,7 @@ export function ZoneForm({
     if (values.name.trim().length < 2) next.name = "Please enter your name";
     if (!PHONE_RE.test(values.phone.replace(/[\s-]/g, "")))
       next.phone = "Enter a valid 10-digit mobile number";
-    if (values.email.trim() && !EMAIL_RE.test(values.email.trim()))
+    if (values.email.trim() && !isValidEmail(values.email.trim()))
       next.email = "Enter a valid email address";
     if (values.org.trim().length < 2) next.org = `Tell us your ${orgLabel.toLowerCase()}`;
     setErrors(next);

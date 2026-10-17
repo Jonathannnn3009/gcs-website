@@ -10,7 +10,7 @@ export type QuestionField =
   | (Base & { kind: "choice"; options: string[] })
   | (Base & { kind: "multi"; options: string[] })
   | (Base & { kind: "text"; placeholder?: string; long?: boolean })
-  | (Base & { kind: "amount"; placeholder?: string })
+  | (Base & { kind: "amount"; placeholder?: string; /** 0 is a valid answer, e.g. "no EMIs". */ allowZero?: boolean })
   | (Base & { kind: "percent" });
 
 export type QuestionStep = { title: string; help?: string; fields: QuestionField[] };
@@ -299,6 +299,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
             key: "loanOutstanding",
             label: "Outstanding amount",
             kind: "amount",
+            allowZero: true,
             placeholder: rupee,
             showWhen: { key: "hasLoans", values: ["Yes"] },
           },
@@ -306,6 +307,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
             key: "loanEmi",
             label: "EMI / monthly obligation",
             kind: "amount",
+            allowZero: true,
             placeholder: "e.g. 25,000",
             showWhen: { key: "hasLoans", values: ["Yes"] },
           },
@@ -313,6 +315,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
             key: "existingOdCc",
             label: "Existing OD / CC limit, if any",
             kind: "amount",
+            allowZero: true,
             placeholder: rupee,
             showWhen: { key: "hasLoans", values: ["Yes"] },
           },
@@ -544,6 +547,7 @@ const BALANCE_TRANSFER: Questionnaire = {
           key: "otherOutstanding",
           label: "Outstanding amount",
           kind: "amount",
+            allowZero: true,
           placeholder: rupee,
           showWhen: { key: "hasLoans", values: ["Yes"] },
         },
@@ -551,6 +555,7 @@ const BALANCE_TRANSFER: Questionnaire = {
           key: "otherEmi",
           label: "EMI / monthly obligation",
           kind: "amount",
+            allowZero: true,
           placeholder: "e.g. 20,000",
           showWhen: { key: "hasLoans", values: ["Yes"] },
         },

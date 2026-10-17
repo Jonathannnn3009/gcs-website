@@ -39,6 +39,7 @@ import {
 import { CONTACT } from "@/data/site";
 import { PARTNER_FAQS } from "@/data/faqs";
 import { ASSISTANT_NAME } from "@/lib/chat/config";
+import { isValidEmail } from "@/lib/validation";
 import { useFaqs } from "@/lib/site-content";
 import { submitLead } from "@/lib/leads";
 import { useCommissionStructure } from "@/lib/commission";
@@ -164,7 +165,6 @@ type Fields = {
 };
 const empty: Fields = { name: "", phone: "", email: "", profession: "", volume: "", message: "" };
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function PartnerForm() {
   const uid = useId();
@@ -182,7 +182,7 @@ function PartnerForm() {
     if (values.name.trim().length < 2) next.name = "Please enter your name";
     if (!PHONE_RE.test(values.phone.replace(/[\s-]/g, "")))
       next.phone = "Enter a valid 10-digit mobile number";
-    if (values.email.trim() && !EMAIL_RE.test(values.email.trim()))
+    if (values.email.trim() && !isValidEmail(values.email.trim()))
       next.email = "Enter a valid email address";
     if (values.profession.trim().length < 2) next.profession = "Tell us your profession or firm";
     setErrors(next);

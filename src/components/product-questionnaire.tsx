@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { CONSENT_TEXT, CONSENT_VERSION } from "@/data/advisor-flows";
 import type { QuestionField, Questionnaire } from "@/data/product-questionnaires";
 import { normalizePhone } from "@/lib/lead-dedupe";
+import { amountTooLow, isValidEmail, MIN_AMOUNT, MIN_LOAN_AMOUNT } from "@/lib/validation";
 import { submitLead } from "@/lib/leads";
 
 type Answers = Record<string, string>;
@@ -12,6 +13,7 @@ const field =
 const labelCls = "block text-[11px] font-bold tracking-[0.14em] text-navy uppercase dark:text-white";
 
 // 5000000 -> 50,00,000 as they type
+const inr = (n: number) => new Intl.NumberFormat("en-IN").format(n);
 const indian = (raw: string) => {
   const digits = raw.replace(/\D/g, "");
   return digits ? Number(digits).toLocaleString("en-IN") : "";
@@ -63,7 +65,17 @@ export function ProductQuestionnaire({
 
   const next = () => {
     const missing: Record<string, string> = {};
-    for (const f of stepFields(step)) if (f.required && !(answers[f.key] ?? "").trim()) missing[f.key] = "Please answer this";
+    for (const f of stepFields(step)) {
+      const typed = (answers[f.key] ?? "").trim();
+      if (f.required && !typed) missing[f.key] = "Please answer this";
+      else if (f.kind === "amount" && typed) {
+        const floor = f.key === config.amountKey ? MIN_LOAN_AMOUNT : MIN_AMOUNT;
+        if (amountTooLow(Number(typed.replace(/\D/g, "")), { min: floor, allowZero: f.allowZero }))
+          missing[f.key] = f.allowZero
+            ? `Enter 0 if none, or at least ₹${inr(floor)}`
+            : `Please enter at least ₹${inr(floor)}`;
+      }
+    }
     setErrors(missing);
     if (Object.keys(missing).length === 0) setStep(screens[position + 1] ?? lastStep);
   };
@@ -73,6 +85,7 @@ export function ProductQuestionnaire({
     const cleanPhone = normalizePhone(phone);
     if (name.trim().length < 2) problems["name"] = "Please enter your name";
     if (!cleanPhone) problems["phone"] = "Please enter a valid 10-digit mobile number";
+    if (email.trim() && !isValidEmail(email)) problems["email"] = "Please enter a valid email address, like name@example.com";
     if (!agreed) problems["agreed"] = "Please tick the box so we can contact you";
     setErrors(problems);
     if (Object.keys(problems).length > 0) return;
@@ -272,6 +285,7 @@ export function ProductQuestionnaire({
               Email (optional)
             </label>
             <input id="q-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" maxLength={160} className={field} />
+            {errors["email"] ? <p className="mt-1 text-xs text-destructive">{errors["email"]}</p> : null}
           </div>
           <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-muted-foreground">
             <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-[#e4b028]" />

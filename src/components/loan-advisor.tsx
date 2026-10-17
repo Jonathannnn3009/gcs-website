@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Check, ChevronDown, MessageCircle, Pencil, Shiel
 import { CONTACT } from "@/data/site";
 import { CITY_OPTIONS, CONSENT_TEXT, CONSENT_VERSION, FLOWS, titleCase, visibleSteps, type Flow, type Step } from "@/data/advisor-flows";
 import { normalizePhone } from "@/lib/lead-dedupe";
+import { amountTooLow, isValidEmail, MIN_AMOUNT } from "@/lib/validation";
 import { submitLead } from "@/lib/leads";
 
 type Answers = Record<string, string>;
@@ -123,6 +124,15 @@ export function LoanAdvisor() {
       setError("Please enter a number.");
       return;
     }
+    if (step.kind === "amount" && v && amountTooLow(Number(v), { min: step.min, allowZero: step.allowZero })) {
+      const floor = rupees(String(step.min ?? MIN_AMOUNT));
+      setError(
+        step.allowZero
+          ? `Please enter 0 if none, or at least ${floor}.`
+          : `Please enter at least ${floor}. An approximate figure is fine.`,
+      );
+      return;
+    }
     record(v);
   };
 
@@ -146,6 +156,7 @@ export function LoanAdvisor() {
     const cleanPhone = normalizePhone(phone);
     if (name.trim().length < 2) return setError("Please enter your name.");
     if (!cleanPhone) return setError("Please enter a valid 10-digit mobile number.");
+    if (email.trim() && !isValidEmail(email)) return setError("Please enter a valid email address, like name@example.com, or leave it blank.");
     if (!agreed) return setError("Please tick the box to let us contact you about this enquiry.");
     setError("");
     setSending(true);

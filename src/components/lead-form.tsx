@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
 import { APPLICANT_CATEGORY_LABELS, PRODUCTS } from "@/data/products";
 import { submitLead } from "@/lib/leads";
+import { isValidEmail } from "@/lib/validation";
 import { Toast } from "@/components/toast";
 import { FORM_LOAN_TYPES } from "@/data/page-lists";
 import { useApplicantOptions, useCities, useList } from "@/lib/page-lists";
@@ -45,7 +46,6 @@ const selectClass = `${fieldClass} appearance-none cursor-pointer`;
 
 // A real 10-digit Indian mobile number, with an optional country code or leading 0.
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
 
 function AccentBar() {
   return <div className="h-1 bg-gradient-to-r from-navy via-navy-soft to-gold" />;
@@ -123,7 +123,7 @@ export function LeadForm({
     if (values.name.trim().length < 2) next.name = "Please enter your full name";
     if (!PHONE_RE.test(values.phone.replace(/[\s-]/g, "")))
       next.phone = "Please match the requested format — a 10-digit mobile number";
-    if (!EMAIL_RE.test(values.email.trim()))
+    if (!isValidEmail(values.email.trim()))
       next.email = "Please match the requested format — name@example.com";
     if (!values.loanType) next.loanType = "Select a loan type";
     else if (values.loanType === "Other" && !values.loanTypeOther.trim())

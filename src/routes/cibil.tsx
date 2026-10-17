@@ -15,6 +15,7 @@ import { Section } from "@/components/section";
 import { PageCalculators } from "@/components/page-calculators";
 import { Reveal } from "@/components/reveal";
 import { submitLead } from "@/lib/leads";
+import { isValidEmail } from "@/lib/validation";
 import { CONTACT } from "@/data/site";
 import {
   BUREAUS,
@@ -55,7 +56,6 @@ const labelClass =
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
 const PAN_RE = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 const PIN_RE = /^[1-9]\d{5}$/;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const UTR_RE = /^\d{12}$/;
 
 const STEP_LABELS = ["Your details", "Bureau", "Last report", "Payment"];
@@ -219,7 +219,7 @@ function CibilFlow() {
     if (!details.gender) next["gender"] = "Select your gender";
     if (!PHONE_RE.test(details.phone.replace(/[\s-]/g, "")))
       next["phone"] = "Enter a valid 10-digit mobile number";
-    if (!EMAIL_RE.test(details.email.trim())) next["email"] = "Enter a valid email address";
+    if (!isValidEmail(details.email.trim())) next["email"] = "Enter a valid email address";
     if (details.address.trim().length < 8) next["address"] = "Enter your full residential address";
     if (!PIN_RE.test(details.pincode.trim())) next["pincode"] = "Enter a valid 6-digit pincode";
     if (details.consent !== "yes") next["consent"] = "Please confirm to continue";

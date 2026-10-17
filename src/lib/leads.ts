@@ -9,6 +9,7 @@
 import { CRM_API } from "@/lib/crm";
 import { getCaptchaToken } from "@/lib/captcha";
 import { normalizePhone } from "@/lib/lead-dedupe";
+import { isValidEmail } from "@/lib/validation";
 
 export type Lead = {
   name: string;
@@ -54,7 +55,7 @@ function toPayload(lead: Lead): CrmPayload | null {
     source: clip(lead.source.trim() || "website", 60),
   };
   const email = lead.email?.trim();
-  if (email && email.length >= 3 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (email && email.length >= 3 && isValidEmail(email)) {
     payload.email = clip(email, 160);
   }
   const city = lead.city?.trim();
