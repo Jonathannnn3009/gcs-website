@@ -76,7 +76,7 @@ export function SiteHeader() {
         {/* Right side */}
         <div className="flex min-w-0 items-center justify-end gap-2 2xl:gap-4">
           {/* Desktop nav */}
-          <nav className="hidden flex-1 items-center justify-end gap-[0.45em] text-[clamp(15.5px,calc(1.6vw_-_5.9px),25px)] min-[1360px]:flex">
+          <nav className="hidden flex-1 items-center justify-end gap-0 text-[clamp(15px,calc(1.35vw_-_3.2px),22px)] [--s:clamp(20px,calc(4.28vw_-_36.9px),45.3px)] min-[1360px]:flex">
             {NAV.map((link) => {
               if (link.dropdown) {
                 return (
@@ -94,7 +94,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-0.5 rounded-md px-[0.35em] py-2 font-semibold whitespace-nowrap transition-colors hover:text-foreground"
+                      className="group relative flex items-center gap-0.5 rounded-md px-[calc(var(--s)/2)] py-2 font-semibold whitespace-nowrap transition-colors hover:text-foreground"
                     >
                       {link.label}
                       <ChevronDown
@@ -389,7 +389,7 @@ export function SiteHeader() {
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
-                  className="relative rounded-md px-[0.35em] py-2 font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-[0.35em] after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-0.7em)]"
+                  className="relative rounded-md px-[calc(var(--s)/2)] py-2 font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-[calc(var(--s)/2)] after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-var(--s))]"
                 >
                   {link.label}
                 </Link>
@@ -400,7 +400,7 @@ export function SiteHeader() {
           <LanguageSwitcher className="hidden sm:inline-flex" />
 
           {/* Apply CTA */}
-          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-[1.1em] xl:text-[clamp(15.5px,calc(1.6vw_-_5.9px),25px)] min-[1536px]:py-2.5">
+          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-[1.1em] xl:text-[clamp(15px,calc(1.35vw_-_3.2px),22px)] min-[1536px]:py-2.5">
             Contact Us
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
