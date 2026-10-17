@@ -3,7 +3,14 @@
 // guided flow, not a free-text bot: nothing here decides anything about a loan, it only organises
 // the enquiry so a GCS expert can pick it up without asking the same things again.
 
-export type StepKind = "choice" | "text" | "amount" | "number";
+export type StepKind = "choice" | "text" | "amount" | "number" | "city";
+
+/** The cities offered in the dropdown; anything else is typed in under "Others". */
+export const CITY_OPTIONS = ["Mumbai", "Navi Mumbai", "Thane", "Pune"];
+
+/** "navi MUMBAI" becomes "Navi Mumbai". The length never changes, so it is safe while typing. */
+export const titleCase = (value: string): string =>
+  value.toLowerCase().replace(/(^|[\s\-'.])(\p{L})/gu, (_m, lead: string, letter: string) => lead + letter.toUpperCase());
 
 export type Step = {
   /** Field key, e.g. "employment_type". */
@@ -55,8 +62,9 @@ const city: Step = {
   key: "city",
   label: "City",
   question: "Which city are you in?",
-  kind: "text",
-  placeholder: "e.g. Mumbai",
+  kind: "city",
+  placeholder: "Type your city",
+  minLength: 2,
 };
 const amount = (question = "How much loan do you need?"): Step => ({
   key: "requested_amount",

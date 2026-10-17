@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, MessageCircle, Pencil, ShieldCheck } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ArrowRight, Check, ChevronDown, MessageCircle, Pencil, ShieldCheck } from "lucide-react";
 import { CONTACT } from "@/data/site";
-import { CONSENT_TEXT, CONSENT_VERSION, FLOWS, visibleSteps, type Flow, type Step } from "@/data/advisor-flows";
+import { CITY_OPTIONS, CONSENT_TEXT, CONSENT_VERSION, FLOWS, titleCase, visibleSteps, type Flow, type Step } from "@/data/advisor-flows";
 import { normalizePhone } from "@/lib/lead-dedupe";
 import { submitLead } from "@/lib/leads";
 
@@ -35,6 +35,7 @@ export function LoanAdvisor() {
   const [answers, setAnswers] = useState<Answers>({});
   const [draft, setDraft] = useState("");
   const [fixing, setFixing] = useState(false); // editing one answer from the review screen
+  const [otherCity, setOtherCity] = useState(false); // "Others" chosen on a city question
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -50,6 +51,14 @@ export function LoanAdvisor() {
     () => steps.slice(0, phase === "ask" ? idx : steps.length).filter((s) => s.key in answers),
     [steps, idx, phase, answers],
   );
+
+  // a city question starts on "Others" only if the saved answer is not one of the listed cities
+  useEffect(() => {
+    if (phase !== "ask" || step?.kind !== "city") return;
+    const saved = answers[step.key] ?? "";
+    setOtherCity(!!saved && !CITY_OPTIONS.includes(saved));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, idx, flow]);
 
   const choose = (f: Flow) => {
     setFlow(f);
@@ -97,13 +106,17 @@ export function LoanAdvisor() {
 
   const submitTyped = () => {
     if (!step) return;
-    const v = draft.trim();
+    const v = step.kind === "city" ? titleCase(draft.trim()) : draft.trim();
+    if (step.kind === "city" && !otherCity && !CITY_OPTIONS.includes(v)) {
+      setError("Please choose your city, or pick Others to type it.");
+      return;
+    }
     if (!v && !step.optional) {
       setError("Please answer this, or choose Talk to a person below.");
       return;
     }
     if (v && step.minLength && v.length < step.minLength) {
-      setError("Please add a few more words so our expert understands.");
+      setError(step.kind === "city" ? "Please type your city name." : "Please add a few more words so our expert understands.");
       return;
     }
     if (step.kind === "number" && v && !Number.isFinite(Number(v))) {
@@ -261,6 +274,62 @@ export function LoanAdvisor() {
                   </button>
                 )}
               </div>
+            ) : step.kind === "city" ? (
+              <form
+                className="mt-5 max-w-md"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  submitTyped();
+                }}
+              >
+                <div className="relative">
+                  <select
+                    autoFocus
+                    aria-label={step.question}
+                    value={otherCity ? "__other" : CITY_OPTIONS.includes(draft) ? draft : ""}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setError("");
+                      if (v === "__other") {
+                        setOtherCity(true);
+                        setDraft(CITY_OPTIONS.includes(draft) ? "" : draft);
+                      } else {
+                        setOtherCity(false);
+                        setDraft(v);
+                      }
+                    }}
+                    className={`${inputCls} cursor-pointer appearance-none pr-11`}
+                  >
+                    <option value="" disabled>
+                      Select your city
+                    </option>
+                    {CITY_OPTIONS.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                    <option value="__other">Others</option>
+                  </select>
+                  <ChevronDown className="pointer-events-none absolute top-1/2 right-3.5 h-5 w-5 -translate-y-1/2 text-navy" />
+                </div>
+                {otherCity && (
+                  <input
+                    autoFocus
+                    value={draft}
+                    onChange={(e) => setDraft(titleCase(e.target.value))}
+                    placeholder={step.placeholder ?? "Type your city"}
+                    maxLength={80}
+                    aria-label="Your city"
+                    autoCapitalize="words"
+                    className={`${inputCls} mt-3 capitalize`}
+                  />
+                )}
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  <button type="submit" className="gold-btn px-6 py-3">
+                    Next <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </form>
             ) : (
               <form
                 className="mt-5 max-w-md"
