@@ -203,7 +203,7 @@ function AboutPage() {
             {PRODUCT_GROUPS.map((group, gi) => (
               <Reveal key={group.name} delay={gi * 60}>
                 <div className="flex items-center gap-3">
-                  <p className="shrink-0 text-xs font-bold tracking-[0.14em] text-gold-dark uppercase">
+                  <p className="min-w-0 text-xs font-bold tracking-[0.14em] text-gold-dark uppercase sm:shrink-0">
                     {group.name}
                   </p>
                   <div className="h-px flex-1 bg-border" />

@@ -89,7 +89,7 @@ function PersonaPanel() {
   return (
     <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
       {/* Left: persona picker list */}
-      <div className="space-y-2.5">
+      <div className="min-w-0 space-y-2.5">
         {PERSONAS.map((p, i) => {
           const isActive = i === active;
           return (
