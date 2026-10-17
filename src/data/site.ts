@@ -265,7 +265,7 @@ export const BANK_PARTNERS: BankPartner[] = [
   { name: "Utkarsh Small Finance Bank", logo: "/banks/network/utkarsh-small-finance-bank.png" },
   { name: "PNB Housing Finance", logo: "/banks/network/pnb-housing-finance.png" },
   { name: "Bank of India", logo: "/banks/network/bank-of-india.png" },
-  { name: "L&T Finance", logo: "/banks/network/l-t-finance.svg" },
+  { name: "L&T Finance", logo: "/banks/network/l-t-finance.png" },
   { name: "Aadhar Housing Finance", logo: "/banks/network/aadhar-housing-finance.png" },
   { name: "IDFC First Bank", logo: "/banks/network/idfc-first-bank.png" },
   { name: "AU Small Finance Bank", logo: "/banks/network/au-small-finance-bank.png" },
