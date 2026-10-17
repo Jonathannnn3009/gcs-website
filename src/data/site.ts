@@ -233,7 +233,7 @@ export const BANK_PARTNERS: BankPartner[] = [
   { name: "Bajaj Housing Finance", logo: "/banks/network/bajaj-housing-finance.png" },
   { name: "IDBI Bank", logo: "/banks/network/idbi-bank.png" },
   { name: "Cholamandalam", logo: "/banks/network/cholamandalam.png" },
-  { name: "Kotak Mahindra Bank", logo: "/banks/network/kotak-mahindra-bank.png" },
+  { name: "Kotak Mahindra Bank", logo: "/banks/network/kotak-mahindra-bank.svg" },
   { name: "City Union Bank", logo: "/banks/network/city-union-bank.png" },
   { name: "Poonawalla Fincorp", logo: "/banks/network/poonawalla-fincorp.png" },
   { name: "Union Bank of India", logo: "/banks/network/union-bank-of-india.png" },
