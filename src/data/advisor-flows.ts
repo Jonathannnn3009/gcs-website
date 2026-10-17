@@ -465,6 +465,7 @@ export const FLOWS: Flow[] = [
         kind: "choice",
         options: ["Buy or build a home", "Business funding", "Personal need", "Education", "Vehicle", "Something else"],
       },
+      amount("Roughly how much do you need?"),
       {
         key: "funding_purpose_other",
         label: "Where you need it",
@@ -475,7 +476,6 @@ export const FLOWS: Flow[] = [
         showIf: { key: "funding_purpose", equals: "Something else" },
         minLength: 3,
       },
-      amount("Roughly how much do you need?"),
       { key: "employment_type", label: "Employment", question: "Are you salaried or self-employed?", kind: "choice", options: EMPLOYMENT },
       city,
     ],
