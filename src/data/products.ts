@@ -218,11 +218,6 @@ const LRD_DOC_CATEGORIES = [
       "Property title documents and the latest property tax receipt",
     ],
   },
-  {
-    label: "NRI",
-    description: "You live and work outside India and own the let-out property in India. The lender checks the lease, the rent paid into your NRO account, and your overseas income and documents. A Power of Attorney can complete the signing in India for you.",
-    items: NRI_DOCS,
-  },
 ];
 const EDUCATION_DOC_CATEGORIES = [
   {
@@ -659,41 +654,6 @@ const NRI_BALANCE_TRANSFER: NriInfo = {
   note: "NRI lending is governed by RBI and FEMA rules and each lender's own policy, and the rules can change. We share general information here. Your expert will confirm what applies to you.",
 };
 
-const NRI_LRD: NriInfo = {
-  heading: "Lease rental discounting for NRIs",
-  intro:
-    "NRIs who own a let-out commercial property in India can sometimes raise money against its rent. A few lenders offer this, and they check the lease, the tenant and your income carefully. We can tell you which lenders to approach.",
-  points: [
-    {
-      title: "Who can apply",
-      body: "NRIs, and often PIO and OCI cardholders, who own the let-out property and have a registered lease with a reliable tenant.",
-    },
-    {
-      title: "What lenders check",
-      body: "The lease agreement, the rent history in your bank statements, the tenant's standing and the property's title. Your overseas income may also be looked at.",
-    },
-    {
-      title: "Rent and repayment",
-      body: "The rent is usually collected in an account with the lender, and the EMIs are paid from it. Rent is received in your NRO account in India.",
-    },
-    {
-      title: "Signing from abroad",
-      body: "A registered Power of Attorney in favour of a trusted resident Indian can sign for you in India, attested as the lender requires.",
-    },
-  ],
-  faqs: [
-    {
-      q: "Can an NRI take a lease rental discounting loan?",
-      a: "With select lenders, yes, for commercial property that is already let out. They will want the lease, the rent record and clear title.",
-    },
-    {
-      q: "Which account is the rent paid into?",
-      a: "Rent from Indian property is received in your NRO account in India. The lender will set up how the rent is routed for repayment.",
-    },
-  ],
-  note: "NRI lending is governed by RBI and FEMA rules and each lender's own policy, and the rules can change. We share general information here. Your expert will confirm what applies to you.",
-};
-
 export const PRODUCTS: Product[] = [
   {
     slug: "home-loan",
@@ -891,13 +851,12 @@ export const PRODUCTS: Product[] = [
       "A registered lease with sufficient residual tenure to run",
       "A dependable tenant with an uninterrupted rent-payment record",
       "Property title held in the borrower's own name",
-      "Resident Indian owners can apply; NRIs can apply with select lenders (see the NRI section below)",
+      "Resident Indian owners of a let-out commercial property can apply",
       "Commercial property, such as offices, shops or warehouses, that is already let out",
       "A clean credit history; a CIBIL score of around 750 or above may help you get better terms",
     ],
     documents: [KYC, "Registered lease deed and rent receipts", PROPERTY_DOCS],
     charges: CHARGES_COMMERCIAL,
-    nri: NRI_LRD,
     documentCategories: LRD_DOC_CATEGORIES,
   },
   {
