@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { AboutTabs } from "@/components/about-tabs";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { BankMarquee } from "@/components/bank-marquee";
@@ -37,6 +38,7 @@ function AboutPage() {
   const STATS = useList("about.stats", ABOUT_STATS);
   return (
     <>
+      <AboutTabs current="/about" />
       {/* Banner */}
       <section className="hero-light border-b border-gold/15 py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

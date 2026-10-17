@@ -11,9 +11,9 @@ import { useList, useProductGroups } from "@/lib/page-lists";
 
 
 export function SiteHeader() {
-  // "Apply Now" already goes to the contact page, so the menu does not list it a second time.
+  // The contact page has its own button, and Case Studies sits under About Us as a tab, so neither is listed again here.
   const NAV = useList("nav.header", NAV_HEADER)
-    .filter((l) => l["to"] !== "/contact")
+    .filter((l) => l["to"] !== "/contact" && l["to"] !== "/case-studies")
     .map((l) => ({
     to: String(l["to"]),
     label: String(l["label"]),

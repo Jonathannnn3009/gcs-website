@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowRight, Calculator, LayoutGrid } from "lucide-react";
+import { AboutTabs } from "@/components/about-tabs";
 import { Reveal } from "@/components/reveal";
 import { CASE_STUDIES, CASE_STUDY_GROUPS, type CaseStudyGroup } from "@/data/case-studies";
 import { useCaseStudies } from "@/lib/site-content";
@@ -39,6 +40,7 @@ function CaseStudiesPage() {
 
   return (
     <>
+      <AboutTabs current="/case-studies" />
       {/* Hero */}
       <section className="relative overflow-hidden bg-bg-light py-14 sm:py-20 dark:bg-background">
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]" />

@@ -364,7 +364,6 @@ export const NAV_HEADER = [
   { label: "Our Services", to: "/services" },
   { label: "Calculators", to: "/tools" },
   { label: "CIBIL", to: "/cibil" },
-  { label: "Case Studies", to: "/case-studies" },
   { label: "CA & Legal", to: "/ca-legal-services" },
   { label: "Become Partner", to: "/partner" },
   { label: "Track Application", to: "/track-application" },

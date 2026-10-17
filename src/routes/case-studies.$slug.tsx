@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { AlertTriangle, ArrowRight, Calculator, Compass, MapPin, Trophy } from "lucide-react";
 import { Section } from "@/components/section";
+import { AboutTabs } from "@/components/about-tabs";
 import { Reveal } from "@/components/reveal";
 import { CASE_STUDIES, getCaseStudy, type CaseStudy } from "@/data/case-studies";
 import { useCaseStudies } from "@/lib/site-content";
@@ -141,6 +142,7 @@ function CaseStudyDetailPage() {
 
   return (
     <>
+      <AboutTabs current="/case-studies" />
       {/* Hero */}
       <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
