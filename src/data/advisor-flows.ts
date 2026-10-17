@@ -19,7 +19,15 @@ export type Step = {
   optional?: boolean;
   /** Placeholder for text / number boxes. */
   placeholder?: string;
+  /** Only asked when an earlier answer matches, e.g. a follow-up to "Something else". */
+  showIf?: { key: string; equals: string };
+  /** A typed answer must be at least this long (after trimming). */
+  minLength?: number;
 };
+
+/** The steps that apply, given the answers so far. */
+export const visibleSteps = (steps: Step[], answers: Record<string, string>): Step[] =>
+  steps.filter((s) => !s.showIf || answers[s.showIf.key] === s.showIf.equals);
 
 export type Flow = {
   id: string;
@@ -456,6 +464,16 @@ export const FLOWS: Flow[] = [
         question: "Tell us briefly what you need the money for.",
         kind: "choice",
         options: ["Buy or build a home", "Business funding", "Personal need", "Education", "Vehicle", "Something else"],
+      },
+      {
+        key: "funding_purpose_other",
+        label: "Where you need it",
+        question: "Let us know what you need the money for.",
+        kind: "text",
+        hint: "A few words are enough, so the right expert can call you.",
+        placeholder: "e.g. wedding, medical expense, renovation",
+        showIf: { key: "funding_purpose", equals: "Something else" },
+        minLength: 3,
       },
       amount("Roughly how much do you need?"),
       { key: "employment_type", label: "Employment", question: "Are you salaried or self-employed?", kind: "choice", options: EMPLOYMENT },

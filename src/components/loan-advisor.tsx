@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, MessageCircle, Pencil, ShieldCheck } from "lucide-react";
 import { CONTACT } from "@/data/site";
-import { CONSENT_TEXT, CONSENT_VERSION, FLOWS, type Flow, type Step } from "@/data/advisor-flows";
+import { CONSENT_TEXT, CONSENT_VERSION, FLOWS, visibleSteps, type Flow, type Step } from "@/data/advisor-flows";
 import { normalizePhone } from "@/lib/lead-dedupe";
 import { submitLead } from "@/lib/leads";
 
@@ -43,7 +43,7 @@ export function LoanAdvisor() {
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
 
-  const steps = flow?.steps ?? [];
+  const steps = useMemo(() => visibleSteps(flow?.steps ?? [], answers), [flow, answers]);
   const step = steps[idx];
 
   const answered = useMemo(
@@ -71,15 +71,28 @@ export function LoanAdvisor() {
   const record = (value: string) => {
     if (!step) return;
     const next = { ...answers, [step.key]: value };
+    // the answer may add or remove a follow-up question, so look at the steps it leads to
+    const after = visibleSteps(flow?.steps ?? [], next);
     setAnswers(next);
     setError("");
-    if (fixing || idx + 1 >= steps.length) {
+    if (fixing) {
+      // editing from the review screen: a new follow-up has to be answered first
+      const pending = after.findIndex((s) => !(s.key in next));
+      if (pending >= 0) {
+        setIdx(pending);
+        setDraft("");
+        return;
+      }
       setFixing(false);
       setPhase("review");
       return;
     }
+    if (idx + 1 >= after.length) {
+      setPhase("review");
+      return;
+    }
     setIdx(idx + 1);
-    setDraft(next[steps[idx + 1]!.key] ?? "");
+    setDraft(next[after[idx + 1]!.key] ?? "");
   };
 
   const submitTyped = () => {
@@ -87,6 +100,10 @@ export function LoanAdvisor() {
     const v = draft.trim();
     if (!v && !step.optional) {
       setError("Please answer this, or choose Talk to a person below.");
+      return;
+    }
+    if (v && step.minLength && v.length < step.minLength) {
+      setError("Please add a few more words so our expert understands.");
       return;
     }
     if (step.kind === "number" && v && !Number.isFinite(Number(v))) {
