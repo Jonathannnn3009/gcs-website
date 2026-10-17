@@ -94,7 +94,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-0.5 rounded-md px-1 py-2 text-[13px] min-[1536px]:px-3 min-[1536px]:text-[15px] min-[1800px]:px-4 min-[1800px]:text-base font-semibold whitespace-nowrap transition-colors hover:text-foreground"
+                      className="group relative flex items-center gap-0.5 rounded-md px-1 py-2 text-[14px] min-[1536px]:px-3 min-[1536px]:text-base min-[1800px]:px-4 min-[1800px]:text-[17px] font-semibold whitespace-nowrap transition-colors hover:text-foreground"
                     >
                       {link.label}
                       <ChevronDown
@@ -389,7 +389,7 @@ export function SiteHeader() {
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
-                  className="relative rounded-md px-1 py-2 text-[13px] min-[1536px]:px-3 min-[1536px]:text-[15px] min-[1800px]:px-4 min-[1800px]:text-base font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-1 min-[1536px]:after:left-3 min-[1800px]:after:left-4 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-0.5rem)] min-[1536px]:hover:after:w-[calc(100%-1.5rem)] min-[1800px]:hover:after:w-[calc(100%-2rem)]"
+                  className="relative rounded-md px-1 py-2 text-[14px] min-[1536px]:px-3 min-[1536px]:text-base min-[1800px]:px-4 min-[1800px]:text-[17px] font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-1 min-[1536px]:after:left-3 min-[1800px]:after:left-4 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-0.5rem)] min-[1536px]:hover:after:w-[calc(100%-1.5rem)] min-[1800px]:hover:after:w-[calc(100%-2rem)]"
                 >
                   {link.label}
                 </Link>
@@ -400,7 +400,7 @@ export function SiteHeader() {
           <LanguageSwitcher className="hidden sm:inline-flex" />
 
           {/* Apply CTA */}
-          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-4 xl:text-[13px] min-[1536px]:px-6 min-[1536px]:py-2.5 min-[1536px]:text-[15px] min-[1800px]:px-7 min-[1800px]:text-base">
+          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-4 xl:text-[14px] min-[1536px]:px-6 min-[1536px]:py-2.5 min-[1536px]:text-base min-[1800px]:px-7 min-[1800px]:text-[17px]">
             Contact Us
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
