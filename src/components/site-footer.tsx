@@ -20,7 +20,7 @@ export function SiteFooter() {
       {/* Gold accent line */}
       <div className="h-1 w-full bg-gradient-to-r from-transparent via-gold to-transparent"></div>
 
-      <div className="bg-white dark:bg-card">
+      <div className="navy-panel">
         {/* Main footer grid */}
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr] lg:px-8">
           {/* Brand column */}
@@ -30,9 +30,9 @@ export function SiteFooter() {
               alt="Growth Capital Services — Your growth, our financial expertise"
               width={870}
               height={595}
-              className="h-28 w-auto object-contain mix-blend-multiply"
+              className="h-28 w-auto rounded-xl bg-white object-contain p-3"
             />
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-4 text-sm leading-relaxed text-white/70">
               Established in 2017. Tailored loan solutions from leading Banks and NBFCs across
               Mumbai, Thane, Navi Mumbai and Pune. Your dreams, our funding expertise.
             </p>
@@ -89,15 +89,13 @@ export function SiteFooter() {
 
           {/* Explore */}
           <div>
-            <h3 className="text-xs font-bold tracking-[0.18em] text-gold-dark uppercase">
-              Explore
-            </h3>
+            <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">Explore</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               {exploreLinks.map((l) => (
                 <li key={String(l["to"])}>
                   <SiteLink
                     to={String(l["to"])}
-                    className="text-muted-foreground transition-colors hover:text-gold"
+                    className="text-white/70 transition-colors hover:text-gold"
                   >
                     {String(l["label"])}
                   </SiteLink>
@@ -108,7 +106,7 @@ export function SiteFooter() {
 
           {/* Loan Products */}
           <div>
-            <h3 className="text-xs font-bold tracking-[0.18em] text-gold-dark uppercase">
+            <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">
               Loan Products
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
@@ -121,7 +119,7 @@ export function SiteFooter() {
                   <li key={String(s["to"])}>
                     <SiteLink
                       to={String(s["to"])}
-                      className="text-muted-foreground transition-colors hover:text-gold"
+                      className="text-white/70 transition-colors hover:text-gold"
                     >
                       {String(s["label"])}
                     </SiteLink>
@@ -132,15 +130,13 @@ export function SiteFooter() {
 
           {/* Reach Us */}
           <div>
-            <h3 className="text-xs font-bold tracking-[0.18em] text-gold-dark uppercase">
-              Reach Us
-            </h3>
+            <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">Reach Us</h3>
             <ul className="mt-4 space-y-4 text-sm">
               <li className="flex gap-3">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                 <a
                   href={CONTACT.phoneHref}
-                  className="text-ink/80 transition-colors hover:text-gold dark:text-white"
+                  className="text-white transition-colors hover:text-gold"
                 >
                   {CONTACT.phone}
                 </a>
@@ -148,10 +144,7 @@ export function SiteFooter() {
               {morePhones.map((ph) => (
                 <li key={ph.href} className="flex gap-3">
                   <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                  <a
-                    href={ph.href}
-                    className="text-ink/80 transition-colors hover:text-gold dark:text-white"
-                  >
+                  <a href={ph.href} className="text-white transition-colors hover:text-gold">
                     {ph.display}
                   </a>
                 </li>
@@ -160,7 +153,7 @@ export function SiteFooter() {
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                 <a
                   href={`mailto:${CONTACT.email}`}
-                  className="text-ink/80 transition-colors hover:text-gold dark:text-white"
+                  className="text-white transition-colors hover:text-gold"
                 >
                   {CONTACT.email}
                 </a>
@@ -172,14 +165,14 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Open our address in Google Maps"
-                  className="text-ink/80 transition-colors hover:text-gold dark:text-white"
+                  className="text-white transition-colors hover:text-gold"
                 >
                   {CONTACT.address}
                 </a>
               </li>
               <li className="flex gap-3">
                 <Clock className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                <span className="text-muted-foreground">{CONTACT.hours}</span>
+                <span className="text-white/70">{CONTACT.hours}</span>
               </li>
             </ul>
 
@@ -193,7 +186,7 @@ export function SiteFooter() {
 
         {/* Bottom bar */}
         <div className="border-t border-gold/15">
-          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-white/70 sm:flex-row sm:px-6 lg:px-8">
             <span className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
               <span>
                 © {new Date().getFullYear()} Growth Capital Services. All rights reserved.
@@ -203,7 +196,7 @@ export function SiteFooter() {
                   key={p.slug}
                   to="/p/$slug"
                   params={{ slug: p.slug }}
-                  className="text-muted-foreground underline-offset-2 hover:text-gold hover:underline"
+                  className="text-white/70 underline-offset-2 hover:text-gold hover:underline"
                 >
                   {p.title}
                 </Link>
