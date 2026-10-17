@@ -193,33 +193,33 @@ export function SiteHeader() {
                         style={{ top: menuTop }}
                       >
                        <div className="pointer-events-auto pt-2" style={{ animation: "gcs-scale-in 200ms ease both" }}>
-                        <div className="flex max-w-[calc(100vw-2rem)] w-[620px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card">
+                        <div className="flex max-w-[calc(100vw-2rem)] w-[640px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card">
                           {/* Left: the navy gradient panel */}
-                          <div className="navy-panel relative flex w-[240px] shrink-0 flex-col p-7">
+                          <div className="navy-panel relative flex w-[270px] shrink-0 flex-col p-5">
                             <div className="pointer-events-none absolute -top-10 -left-10 h-44 w-44 rounded-full bg-gold/15 blur-[60px]" />
                             <p className="relative text-[10px] font-bold tracking-[0.22em] text-gold uppercase">
                               Partner With Us
                             </p>
                             <p
-                              className="relative mt-3 text-[22px] leading-snug font-bold text-white"
+                              className="relative mt-2 text-[19px] leading-snug font-bold text-white"
                               style={{ fontFamily: "var(--font-heading)", letterSpacing: "0" }}
                             >
                               Grow with a team behind you.
                             </p>
-                            <p className="relative mt-3 text-[13px] leading-relaxed text-white/70">
+                            <p className="relative mt-2 text-[12.5px] leading-relaxed text-white/70">
                               Join as an agent, builder or freelancer. We handle the lender follow-ups, so you can focus on your clients.
                             </p>
                             <Link
                               to="/partner"
                               onClick={() => setActiveDropdown(null)}
-                              className="gold-btn relative mt-5 self-start px-5 py-2.5 text-[13px]"
+                              className="gold-btn relative mt-4 self-start px-4 py-2 text-[13px]"
                             >
                               Become a partner <ArrowRight className="h-3.5 w-3.5" />
                             </Link>
                           </div>
 
                           {/* Right: the pages */}
-                          <div className="grid min-w-0 flex-1 grid-cols-1 auto-rows-fr gap-1 p-4">
+                          <div className="grid min-w-0 flex-1 grid-cols-1 content-center gap-0.5 p-3">
                             {PARTNER_ITEMS.map((item) => {
                               const Icon = item["icon"] as LucideIcon;
                               return (
@@ -256,33 +256,33 @@ export function SiteHeader() {
                         style={{ top: menuTop }}
                       >
                        <div className="pointer-events-auto pt-2" style={{ animation: "gcs-scale-in 200ms ease both" }}>
-                        <div className="flex max-w-[calc(100vw-2rem)] w-[620px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card">
+                        <div className="flex max-w-[calc(100vw-2rem)] w-[640px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card">
                           {/* Left: the navy gradient panel */}
-                          <div className="navy-panel relative flex w-[240px] shrink-0 flex-col p-7">
+                          <div className="navy-panel relative flex w-[270px] shrink-0 flex-col p-5">
                             <div className="pointer-events-none absolute -top-10 -left-10 h-44 w-44 rounded-full bg-gold/15 blur-[60px]" />
                             <p className="relative text-[10px] font-bold tracking-[0.22em] text-gold uppercase">
                               CIBIL & Credit
                             </p>
                             <p
-                              className="relative mt-3 text-[22px] leading-snug font-bold text-white"
+                              className="relative mt-2 text-[19px] leading-snug font-bold text-white"
                               style={{ fontFamily: "var(--font-heading)", letterSpacing: "0" }}
                             >
                               Know your credit. Plan your next step.
                             </p>
-                            <p className="relative mt-3 text-[13px] leading-relaxed text-white/70">
+                            <p className="relative mt-2 text-[12.5px] leading-relaxed text-white/70">
                               Request your report, try the score estimator, or talk to our experts.
                             </p>
                             <Link
                               to="/cibil-advisory"
                               onClick={() => setActiveDropdown(null)}
-                              className="gold-btn relative mt-5 self-start px-5 py-2.5 text-[13px]"
+                              className="gold-btn relative mt-4 self-start px-4 py-2 text-[13px]"
                             >
                               CIBIL advisory <ArrowRight className="h-3.5 w-3.5" />
                             </Link>
                           </div>
 
                           {/* Right: the pages */}
-                          <div className="grid min-w-0 flex-1 grid-cols-1 auto-rows-fr gap-1 p-4">
+                          <div className="grid min-w-0 flex-1 grid-cols-1 content-center gap-0.5 p-3">
                             {CIBIL_ITEMS.map((item) => {
                               const Icon = item["icon"] as LucideIcon;
                               return (
