@@ -7,6 +7,7 @@ import {
   GitCompare,
   IndianRupee,
   Landmark,
+  PiggyBank,
   ShieldCheck,
   TrendingDown,
   type LucideIcon,
@@ -17,6 +18,7 @@ import { EmiCalculator } from "@/components/emi-calculator";
 import { EligibilityCalculator } from "@/components/eligibility-calculator";
 import { StampDutyCalculator } from "@/components/stamp-duty-calculator";
 import { PrepaymentCalculator } from "@/components/prepayment-calculator";
+import { MoneySaverCalculator } from "@/components/money-saver-calculator";
 import { BalanceTransferCalculator } from "@/components/balance-transfer-calculator";
 import { LoanComparisonCalculator } from "@/components/loan-comparison-calculator";
 import { WorkingCapitalCalculator } from "@/components/working-capital-calculator";
@@ -30,6 +32,7 @@ export const CALCULATORS: Record<CalcId, { label: string; icon: LucideIcon; rend
   eligibility: { label: "Eligibility", icon: ShieldCheck, render: () => <EligibilityCalculator /> },
   "stamp-duty": { label: "Stamp duty", icon: FileText, render: () => <StampDutyCalculator /> },
   prepayment: { label: "Prepayment", icon: TrendingDown, render: () => <PrepaymentCalculator /> },
+  "money-saver": { label: "Money saver", icon: PiggyBank, render: () => <MoneySaverCalculator /> },
   "balance-transfer": { label: "Balance transfer", icon: ArrowLeftRight, render: () => <BalanceTransferCalculator /> },
   "loan-comparison": { label: "Compare loans", icon: GitCompare, render: () => <LoanComparisonCalculator /> },
   "working-capital": { label: "Working capital", icon: Building2, render: () => <WorkingCapitalCalculator /> },

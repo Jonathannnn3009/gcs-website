@@ -5,6 +5,7 @@ import {
   ShieldCheck,
   FileText,
   TrendingDown,
+  PiggyBank,
   ArrowLeftRight,
   GitCompare,
   Building2,
@@ -17,6 +18,7 @@ import { EmiCalculator } from "@/components/emi-calculator";
 import { EligibilityCalculator } from "@/components/eligibility-calculator";
 import { StampDutyCalculator } from "@/components/stamp-duty-calculator";
 import { PrepaymentCalculator } from "@/components/prepayment-calculator";
+import { MoneySaverCalculator } from "@/components/money-saver-calculator";
 import { BalanceTransferCalculator } from "@/components/balance-transfer-calculator";
 import { LoanComparisonCalculator } from "@/components/loan-comparison-calculator";
 import { WorkingCapitalCalculator } from "@/components/working-capital-calculator";
@@ -32,7 +34,7 @@ export const Route = createFileRoute("/tools")({
       {
         name: "description",
         content:
-          "Nine free calculators — EMI, eligibility, stamp duty, prepayment, balance transfer, loan comparison, working capital, CGTMSE fee and LAP eligibility.",
+          "Ten free calculators — EMI, eligibility, stamp duty, prepayment, money saver, balance transfer, loan comparison, working capital, CGTMSE fee and LAP eligibility.",
       },
       { property: "og:title", content: "Loan Calculators & Tools" },
       {
@@ -57,6 +59,7 @@ const TOOLS: Tool[] = [
   { id: "eligibility", icon: ShieldCheck, label: "Eligibility Calculator", sub: "Find your maximum loan amount", render: () => <EligibilityCalculator /> },
   { id: "stamp-duty", icon: FileText, label: "Stamp Duty Calculator", sub: "State-wise registration costs", render: () => <StampDutyCalculator /> },
   { id: "prepayment", icon: TrendingDown, label: "Prepayment Calculator", sub: "Tenure & interest you'll save", render: () => <PrepaymentCalculator /> },
+  { id: "money-saver", icon: PiggyBank, label: "Money Saver Calculator", sub: "Interest saved on spare cash", render: () => <MoneySaverCalculator /> },
   { id: "balance-transfer", icon: ArrowLeftRight, label: "Balance Transfer Calculator", sub: "Is switching lenders worth it", render: () => <BalanceTransferCalculator /> },
   { id: "loan-comparison", icon: GitCompare, label: "Loan Comparison", sub: "Compare offers side by side", render: () => <LoanComparisonCalculator /> },
   { id: "working-capital", icon: Building2, label: "Working Capital Estimator", sub: "MSME limit — exclusive to GCS", render: () => <WorkingCapitalCalculator /> },
@@ -65,7 +68,7 @@ const TOOLS: Tool[] = [
 ];
 
 // The order the calculators are listed in, whatever order the CRM list is saved in.
-const ORDER = ["emi", "eligibility", "balance-transfer", "loan-comparison", "prepayment", "lap-ltv", "working-capital", "cgtmse", "stamp-duty"];
+const ORDER = ["emi", "eligibility", "balance-transfer", "loan-comparison", "prepayment", "money-saver", "lap-ltv", "working-capital", "cgtmse", "stamp-duty"];
 
 const TOOL_IDS = TOOLS.map((t) => t.id);
 
@@ -115,7 +118,7 @@ function ToolsPage() {
               Know Your Numbers. <span className="gold-text">Then Apply with Confidence.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Nine free calculators covering every loan on our desk — from EMI and eligibility to
+              Ten free calculators covering every loan on our desk — from EMI and eligibility to
               CGTMSE fees. Pick a calculator from the menu. No signup required.
             </p>
           </Reveal>

@@ -40,6 +40,87 @@ export function remainingBalance(
   return Math.max(balance, 0);
 }
 
+/** What a "money saver" (overdraft-style) loan works out to, month by month. */
+export type MoneySaverResult = {
+  /** The ordinary EMI on the full amount: what you would pay without parking any money. */
+  emi: number;
+  /** The average monthly payment once the interest benefit is taken off (emi minus avgMonthlySaving). */
+  avgOutflow: number;
+  /** The interest benefit spread evenly over the tenure. */
+  avgMonthlySaving: number;
+  /** The whole interest benefit: the sum of every month's benefit. Zero when nothing is parked. */
+  totalSaving: number;
+  /** The yearly rate the loan effectively costs after the benefit, in percent. */
+  effectiveRatePct: number;
+  /** Interest over the tenure with no money parked, and after the benefit. */
+  interestWithout: number;
+  interestNet: number;
+  /** The same story year by year. */
+  yearly: { year: number; opening: number; interest: number; benefit: number; outflow: number }[];
+};
+
+/**
+ * A money saver loan keeps a normal repayment schedule (so the tenure stays the same) but charges
+ * interest only on the balance minus the money you keep in the loan account. Each month the
+ * interest on the parked money, never more than the outstanding balance, is taken off what you pay.
+ * Works month by month with whole-rupee rounding, the way a lender's statement does.
+ */
+export function moneySaver(principal: number, annualRatePct: number, months: number, parked: number): MoneySaverResult {
+  const empty: MoneySaverResult = { emi: 0, avgOutflow: 0, avgMonthlySaving: 0, totalSaving: 0, effectiveRatePct: annualRatePct, interestWithout: 0, interestNet: 0, yearly: [] };
+  if (!(principal > 0) || !(months > 0) || !(annualRatePct >= 0)) return empty;
+  const r = annualRatePct / 1200;
+  const plain = r === 0 ? principal / months : (principal * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+  const emiAmount = Math.ceil(plain - 1e-9);
+  const parkedAmount = Math.max(parked, 0);
+
+  let balance = principal;
+  let totalSaving = 0;
+  let interestWithout = 0;
+  let interestNet = 0;
+  const yearly: MoneySaverResult["yearly"] = [];
+  for (let m = 1; m <= months && balance > 0; m++) {
+    const interest = Math.round((balance * annualRatePct) / 1200);
+    const principalPart = balance <= emiAmount ? balance : emiAmount - interest;
+    const benefit = Math.round((Math.min(parkedAmount, balance) * annualRatePct) / 1200);
+    const netInterest = interest - benefit;
+    const outflow = principalPart + netInterest;
+    const yr = Math.ceil(m / 12);
+    let row = yearly[yr - 1];
+    if (!row) {
+      row = { year: yr, opening: balance, interest: 0, benefit: 0, outflow: 0 };
+      yearly[yr - 1] = row;
+    }
+    row.interest += interest;
+    row.benefit += benefit;
+    row.outflow += outflow;
+    totalSaving += benefit;
+    interestWithout += interest;
+    interestNet += netInterest;
+    balance -= principalPart;
+  }
+
+  const avgMonthlySaving = totalSaving / months;
+  const avgOutflow = emiAmount - avgMonthlySaving;
+
+  // The yearly rate at which payments of avgOutflow repay the loan over the same tenure.
+  let effectiveRatePct = annualRatePct;
+  if (avgOutflow * months > principal && avgOutflow > 0) {
+    let lo = 0;
+    let hi = r * 1.5 + 1e-6;
+    for (let i = 0; i < 80; i++) {
+      const mid = (lo + hi) / 2;
+      const pv = mid === 0 ? avgOutflow * months : (avgOutflow * (1 - Math.pow(1 + mid, -months))) / mid;
+      if (pv > principal) lo = mid;
+      else hi = mid;
+    }
+    effectiveRatePct = ((lo + hi) / 2) * 1200;
+  } else if (avgOutflow * months <= principal) {
+    effectiveRatePct = 0;
+  }
+
+  return { emi: emiAmount, avgOutflow, avgMonthlySaving, totalSaving, effectiveRatePct, interestWithout, interestNet, yearly };
+}
+
 export function formatCurrency(n: number): string {
   if (!isFinite(n) || isNaN(n)) return "—";
   if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`;
