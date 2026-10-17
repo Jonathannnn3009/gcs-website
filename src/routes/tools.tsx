@@ -151,7 +151,7 @@ function ToolsPage() {
           {/* Laptop and desktop: fixed, scrollable side menu */}
           <nav
             aria-label="Calculators"
-            className="sticky top-24 hidden max-h-[calc(100vh-7rem)] overflow-y-auto rounded-3xl border border-border bg-white p-4 shadow-[var(--shadow-card)] lg:block dark:bg-card"
+            className="sticky top-24 hidden max-h-[calc(100vh-7rem)] overflow-y-auto rounded-3xl border border-[oklch(0.84_0.05_245)] bg-[oklch(0.91_0.04_245)] p-4 shadow-[var(--shadow-card)] lg:block dark:border-border dark:bg-card"
           >
             <p className="px-3 pt-1 pb-3 text-xs font-extrabold tracking-[0.2em] text-gold-dark uppercase">
               Calculators
@@ -167,8 +167,8 @@ function ToolsPage() {
                       aria-current={on ? "true" : undefined}
                       className={`flex w-full items-center gap-3 rounded-xl border-l-4 px-3 py-2.5 text-left transition-colors ${
                         on
-                          ? "border-navy bg-bg-light dark:bg-background"
-                          : "border-transparent hover:bg-gold/5"
+                          ? "border-navy bg-white shadow-sm dark:bg-background"
+                          : "border-transparent hover:bg-white/60 dark:hover:bg-gold/5"
                       }`}
                     >
                       <span
