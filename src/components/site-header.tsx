@@ -62,7 +62,7 @@ export function SiteHeader() {
           : "border-transparent bg-white/80 backdrop-blur-md dark:bg-card/80"
       }`}
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-5 py-3.5 sm:px-8 lg:px-6 xl:gap-4 min-[1360px]:max-w-[88rem] min-[1536px]:max-w-[100rem] min-[1536px]:px-10 min-[1800px]:max-w-[112rem]">
+      <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-5 py-3.5 sm:px-8 lg:px-6 xl:gap-4 min-[1360px]:max-w-[120rem] min-[1536px]:px-10">
         {/* Logo — fixed width, never shrinks even if the nav grows */}
         <Link
           to="/"
@@ -76,7 +76,7 @@ export function SiteHeader() {
         {/* Right side */}
         <div className="flex min-w-0 items-center justify-end gap-2 2xl:gap-4">
           {/* Desktop nav */}
-          <nav className="hidden flex-1 items-center justify-end gap-2.5 min-[1360px]:flex min-[1536px]:gap-1 min-[1800px]:gap-0">
+          <nav className="hidden flex-1 items-center justify-end gap-[0.45em] text-[clamp(15.5px,calc(1.6vw_-_5.9px),25px)] min-[1360px]:flex">
             {NAV.map((link) => {
               if (link.dropdown) {
                 return (
@@ -94,7 +94,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-0.5 rounded-md px-1 py-2 text-[16px] min-[1536px]:px-2.5 min-[1536px]:text-[18px] min-[1800px]:px-4 min-[1800px]:text-[22px] font-semibold whitespace-nowrap transition-colors hover:text-foreground"
+                      className="group relative flex items-center gap-0.5 rounded-md px-[0.35em] py-2 font-semibold whitespace-nowrap transition-colors hover:text-foreground"
                     >
                       {link.label}
                       <ChevronDown
@@ -389,7 +389,7 @@ export function SiteHeader() {
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
-                  className="relative rounded-md px-1 py-2 text-[16px] min-[1536px]:px-2.5 min-[1536px]:text-[18px] min-[1800px]:px-4 min-[1800px]:text-[22px] font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-1 min-[1536px]:after:left-2.5 min-[1800px]:after:left-4 after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-0.5rem)] min-[1536px]:hover:after:w-[calc(100%-1.25rem)] min-[1800px]:hover:after:w-[calc(100%-2rem)]"
+                  className="relative rounded-md px-[0.35em] py-2 font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-[0.35em] after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-0.7em)]"
                 >
                   {link.label}
                 </Link>
@@ -400,7 +400,7 @@ export function SiteHeader() {
           <LanguageSwitcher className="hidden sm:inline-flex" />
 
           {/* Apply CTA */}
-          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-4 xl:text-[16px] min-[1536px]:px-6 min-[1536px]:py-2.5 min-[1536px]:text-[18px] min-[1800px]:px-8 min-[1800px]:text-[22px]">
+          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-[1.1em] xl:text-[clamp(15.5px,calc(1.6vw_-_5.9px),25px)] min-[1536px]:py-2.5">
             Contact Us
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
