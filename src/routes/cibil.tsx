@@ -687,7 +687,7 @@ function CibilPage() {
                 ))}
               </ol>
             </div>
-            <div className="rounded-2xl navy-panel border border-white/10 [&_.text-navy]:text-white [&_.text-muted-foreground]:text-white/70 p-6">
+            <div className="rounded-2xl border border-[oklch(0.88_0.04_245)] bg-[oklch(0.965_0.022_245)] p-6 dark:border-gold/15 dark:bg-card">
               <span className="grid h-10 w-10 place-items-center rounded-lg bg-white text-gold-dark dark:bg-card">
                 <FileSearch className="h-5 w-5" />
               </span>
@@ -702,7 +702,7 @@ function CibilPage() {
                 </li>
               </ul>
             </div>
-            <div className="rounded-2xl navy-panel border border-white/10 [&_.text-navy]:text-white [&_.text-muted-foreground]:text-white/70 p-6">
+            <div className="rounded-2xl border border-[oklch(0.88_0.04_245)] bg-[oklch(0.965_0.022_245)] p-6 dark:border-gold/15 dark:bg-card">
               <span className="grid h-10 w-10 place-items-center rounded-lg bg-white text-gold-dark">
                 <Gauge className="h-5 w-5" />
               </span>
