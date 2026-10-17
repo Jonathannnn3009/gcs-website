@@ -94,7 +94,7 @@ export function SiteHeader() {
                       activeOptions={{ exact: false }}
                       activeProps={{ className: "text-foreground" }}
                       inactiveProps={{ className: "text-muted-foreground" }}
-                      className="group relative flex items-center gap-0.5 rounded-md px-[calc(var(--s)/2)] py-2 font-semibold whitespace-nowrap transition-colors hover:text-foreground"
+                      className="group relative flex items-center gap-0.5 rounded-md px-[calc(var(--s)/2)] py-2 font-medium whitespace-nowrap transition-colors hover:text-foreground"
                     >
                       {link.label}
                       <ChevronDown
@@ -389,7 +389,7 @@ export function SiteHeader() {
                   activeOptions={{ exact: link.to === "/" }}
                   activeProps={{ className: "text-foreground after:w-full" }}
                   inactiveProps={{ className: "text-muted-foreground" }}
-                  className="relative rounded-md px-[calc(var(--s)/2)] py-2 font-semibold whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-[calc(var(--s)/2)] after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-var(--s))]"
+                  className="relative rounded-md px-[calc(var(--s)/2)] py-2 font-medium whitespace-nowrap transition-colors after:absolute after:bottom-0.5 after:left-[calc(var(--s)/2)] after:h-0.5 after:w-0 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-foreground hover:after:w-[calc(100%-var(--s))]"
                 >
                   {link.label}
                 </Link>
