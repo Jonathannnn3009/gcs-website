@@ -54,6 +54,7 @@ export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string })
   const [product, setProduct] = useState("Home Loan");
   const [amount, setAmount] = useState(5000000);
   const [cases, setCases] = useState(2);
+  const [rate, setRate] = useState<number | null>(null);
 
   const current = options.find((o) => o.product === product) ?? options[0];
   if (!current) return null;
@@ -64,8 +65,13 @@ export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string })
   const presets = [amtMin, Math.round((amtMin + amtMax) / 2 / amtStep) * amtStep, amtMax]
     .filter((v, i, a) => a.indexOf(v) === i)
     .map((v) => ({ label: lakhs(v).replace(".00", ""), value: v }));
-  const perCaseLow = (amountUsed * current.range.min) / 100;
-  const perCaseHigh = (amountUsed * current.range.max) / 100;
+  // The commission slider follows the loan type too, within that type's own range.
+  const { min: rateMin, max: rateMax } = current.range;
+  const rateStep = rateMax <= 0.2 ? 0.01 : 0.05;
+  const rateUsed = Math.min(Math.max(rate ?? rateMax, rateMin), rateMax);
+  const perCase = (amountUsed * rateUsed) / 100;
+  const perCaseLow = (amountUsed * rateMin) / 100;
+  const perCaseHigh = (amountUsed * rateMax) / 100;
 
   return (
     <>
@@ -81,7 +87,10 @@ export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string })
                     key={o.product}
                     type="button"
                     aria-pressed={on}
-                    onClick={() => setProduct(o.product)}
+                    onClick={() => {
+                      setProduct(o.product);
+                      setRate(null);
+                    }}
                     className={`rounded-full border px-3.5 py-1.5 text-xs font-bold transition-all duration-300 hover:-translate-y-0.5 active:scale-95 ${
                       on
                         ? "border-navy bg-navy text-white"
@@ -108,16 +117,28 @@ export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string })
             presets={presets}
           />
           <SliderField
-            label="Loans you refer in a month"
+            label="Commission"
+            value={rateUsed}
+            onChange={setRate}
+            min={rateMin}
+            max={rateMax}
+            step={rateStep}
+            suffix="%"
+            minLabel={`${rateMin}%`}
+            maxLabel={`${rateMax}%`}
+            ariaLabel="Commission percentage"
+          />
+          <SliderField
+            label="Number of files in a month"
             value={cases}
             onChange={setCases}
             min={1}
             max={10}
             step={1}
-            suffix={cases === 1 ? "loan" : "loans"}
+            suffix={cases === 1 ? "file" : "files"}
             minLabel="1"
             maxLabel="10"
-            ariaLabel="Loans referred per month"
+            ariaLabel="Number of files in a month"
           />
         </div>
 
@@ -125,21 +146,31 @@ export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string })
           <p className="text-sm text-muted-foreground">
             You could earn about <span className="font-bold text-red-600">*</span>
           </p>
-          <p className="mt-1 flex flex-wrap items-baseline gap-x-2 font-heading text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-            <span className="whitespace-nowrap">{inr(perCaseLow * cases)}</span>
-            <span className="text-xl text-gold-dark">–</span>
-            <span className="whitespace-nowrap">{inr(perCaseHigh * cases)}</span>
+          <p className="mt-1 font-heading text-3xl font-extrabold whitespace-nowrap text-navy sm:text-4xl dark:text-white">
+            {inr(perCase * cases)}
           </p>
           <p className="text-sm text-muted-foreground">a month</p>
           <dl className="mt-5 space-y-2 border-t border-gold/25 pt-4 text-sm">
             <div className="flex justify-between gap-3">
-              <dt className="text-muted-foreground">Commission range</dt>
+              <dt className="text-muted-foreground">Commission selected</dt>
+              <dd className="font-bold text-navy dark:text-white">{Number(rateUsed.toFixed(2))}%</dd>
+            </div>
+            <div className="flex justify-between gap-3">
+              <dt className="text-muted-foreground">Per file</dt>
+              <dd className="font-bold text-navy dark:text-white">{inr(perCase)}</dd>
+            </div>
+            <div className="flex justify-between gap-3">
+              <dt className="text-muted-foreground">Number of files</dt>
+              <dd className="font-bold text-navy dark:text-white">{cases}</dd>
+            </div>
+            <div className="flex justify-between gap-3">
+              <dt className="text-muted-foreground">Range for this loan</dt>
               <dd className="font-bold text-navy dark:text-white">
-                {current.range.min}% – {current.range.max}%
+                {rateMin}% – {rateMax}%
               </dd>
             </div>
             <div className="flex justify-between gap-3">
-              <dt className="text-muted-foreground">Per loan</dt>
+              <dt className="text-muted-foreground">Per file, low to high</dt>
               <dd className="font-bold text-navy dark:text-white">
                 {inr(perCaseLow)} – {inr(perCaseHigh)}
               </dd>
