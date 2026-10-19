@@ -33,6 +33,15 @@ const ROWS: { icon: LucideIcon; label: string; values: [string, string, string] 
   },
 ];
 
+// One soft colour per row, carried across the label and all three cells so each row reads as a band.
+const ROW_TINTS = [
+  { cell: "bg-[#e6effc] dark:bg-card", icon: "bg-[#cfe0fa] text-[#2556b0]", card: "bg-[#e6effc]" },
+  { cell: "bg-[#fbf1d3] dark:bg-card", icon: "bg-[#f5e2a8] text-[#8a6410]", card: "bg-[#fbf1d3]" },
+  { cell: "bg-[#def4e9] dark:bg-card", icon: "bg-[#c2ebd6] text-[#1f7a52]", card: "bg-[#def4e9]" },
+  { cell: "bg-[#ece6fb] dark:bg-card", icon: "bg-[#dcd2f7] text-[#5a3fb0]", card: "bg-[#ece6fb]" },
+  { cell: "bg-[#fde6e2] dark:bg-card", icon: "bg-[#f9cfc8] text-[#b0412f]", card: "bg-[#fde6e2]" },
+] as const;
+
 const HEAD_STYLES = [
   "bg-gradient-to-b from-[#16306b] to-[#0d1f4d]",
   "bg-gradient-to-b from-[#0d1f4d] to-[#081338]",
@@ -71,7 +80,7 @@ export function LenderComparison() {
           {ROWS.map((row, ri) => (
             <div key={row.label} className="contents">
               <div className="flex items-center gap-3 py-5 pr-4">
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
+                <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${ROW_TINTS[ri % ROW_TINTS.length]!.icon}`}>
                   <row.icon className="h-4 w-4" />
                 </span>
                 <span className="text-sm font-bold text-navy dark:text-white">{row.label}</span>
@@ -79,7 +88,7 @@ export function LenderComparison() {
               {row.values.map((v, ci) => (
                 <div
                   key={ci}
-                  className={`flex items-center justify-center border-x border-b border-border bg-white px-4 py-5 text-center text-sm text-foreground dark:bg-card ${
+                  className={`flex items-center justify-center border-x border-b border-white/70 ${ROW_TINTS[ri % ROW_TINTS.length]!.cell} px-4 py-5 text-center text-sm font-medium text-foreground ${
                     ri === ROWS.length - 1 ? "rounded-b-2xl" : ""
                   }`}
                 >
@@ -93,16 +102,16 @@ export function LenderComparison() {
 
       {/* phones: one small card per factor */}
       <div className="mx-auto mt-8 max-w-xl space-y-4 md:hidden">
-        {ROWS.map((row) => (
+        {ROWS.map((row, ri) => (
           <Reveal key={row.label}>
-            <div className="rounded-2xl border border-border bg-white p-4 dark:bg-card">
+            <div className={`rounded-2xl border border-white/70 p-4 shadow-[var(--shadow-card)] ${ROW_TINTS[ri % ROW_TINTS.length]!.card} dark:bg-card`}>
               <div className="flex items-center gap-3">
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
+                <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${ROW_TINTS[ri % ROW_TINTS.length]!.icon}`}>
                   <row.icon className="h-4 w-4" />
                 </span>
                 <p className="text-sm font-bold text-navy dark:text-white">{row.label}</p>
               </div>
-              <dl className="mt-3 divide-y divide-border text-sm">
+              <dl className="mt-3 divide-y divide-black/10 text-sm">
                 {COLUMNS.map((c, i) => (
                   <div key={c} className="flex items-baseline justify-between gap-4 py-2">
                     <dt className="text-xs font-semibold text-muted-foreground">{c}</dt>

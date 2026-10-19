@@ -307,7 +307,31 @@ function ProcessStepper() {
   const step = STEPS[active] ?? STEPS[0]!;
 
   return (
-    <div>
+    <>
+      {/* Phones: every step in view at once, top to bottom, with nothing to tap */}
+      <ol className="mx-auto max-w-md sm:hidden">
+        {STEPS.map((s, i) => (
+          <li key={s.title} className="relative flex gap-4 pb-6 last:pb-0">
+            {i < STEPS.length - 1 && (
+              <span aria-hidden className="absolute top-12 bottom-0 left-6 w-0.5 -translate-x-1/2 bg-gold/40" />
+            )}
+            <span className="relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-gold bg-gold text-sm font-bold text-navy shadow-[var(--shadow-gold)]">
+              {i + 1}
+            </span>
+            <div className="min-w-0 flex-1 rounded-2xl border border-gold/20 bg-white p-4 shadow-[var(--shadow-card)] dark:bg-card">
+              <div className="flex items-center gap-3">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-navy to-navy-soft text-gold">
+                  <s.icon className="h-5 w-5" />
+                </span>
+                <h3 className="font-heading text-base font-bold text-navy dark:text-white">{s.title}</h3>
+              </div>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+    <div className="hidden sm:block">
       <div className="relative flex items-center justify-between">
         <span
           aria-hidden
@@ -367,6 +391,7 @@ function ProcessStepper() {
         </button>
       </div>
     </div>
+    </>
   );
 }
 
@@ -535,6 +560,7 @@ function HomePage() {
       </Section>
 
       {/* ─── PERSONA + WHY US (merged, interactive) ───── */}
+      <div className="bg-gradient-to-b from-bg-light via-[#e9f0fb] to-bg-light dark:bg-none">
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
@@ -556,8 +582,10 @@ function HomePage() {
           </div>
         </Reveal>
       </Section>
+      </div>
 
       {/* ─── BANKS VS US ──────────────────────────────── */}
+      <div className="bg-gradient-to-b from-bg-light via-[#fbf3dc] to-bg-light dark:bg-none">
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
@@ -570,11 +598,14 @@ function HomePage() {
           <CompareColumns />
         </Reveal>
       </Section>
+      </div>
 
       {/* ─── WHICH KIND OF LENDER ─────────────────────── */}
+      <div className="bg-gradient-to-b from-bg-light via-[#e4ecf9] to-bg-light dark:bg-none">
       <Section className="pt-0">
         <LenderComparison />
       </Section>
+      </div>
 
       {/* ─── HOW IT WORKS (click-through stepper) ─────── */}
       <Section className="pt-0">
