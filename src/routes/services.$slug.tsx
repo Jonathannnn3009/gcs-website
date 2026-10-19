@@ -137,217 +137,9 @@ function ProductDetailPage() {
     product.documentCategories?.find((c) => c.label === presetCategory) ??
     product.documentCategories?.[0];
 
-  return (
-    <>
-      {/* Hero */}
-      <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Reveal animate={false}>
-            <div className={`grid gap-0 overflow-hidden rounded-3xl ${
-                product.facts.length >= 5
-                  ? "lg:grid-cols-[2.9fr_1fr]"
-                  : product.facts.length === 4
-                    ? "lg:grid-cols-[2.3fr_1fr]"
-                    : "lg:grid-cols-[1.4fr_1fr]"
-              }`}>
-              {/* Navy card */}
-              <div className="navy-panel relative overflow-hidden p-8 sm:p-12">
-                <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
-                <p className="relative flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/50 uppercase">
-                  <Link to="/" className="hover:text-white">
-                    Home
-                  </Link>
-                  <span className="text-gold">/</span>
-                  <Link to="/services" className="hover:text-white">
-                    Services
-                  </Link>
-                  <span className="text-gold">/</span>
-                  <span className="text-white">{product.title}</span>
-                </p>
-
-                <div className="relative mt-6 flex items-center gap-3">
-                  <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-gold/30 text-gold-light">
-                    <product.icon className="h-7 w-7" />
-                  </span>
-                  <span className="rounded-full border border-gold/30 px-3 py-1 text-xs font-bold tracking-wide text-gold-light">
-                    {code}
-                  </span>
-                </div>
-
-                <h1 className="relative mt-5 font-heading text-4xl font-bold text-white sm:text-5xl">
-                  {product.title}
-                </h1>
-                <p className="relative mt-2 font-heading text-lg italic text-gold-light">
-                  {product.tagline}
-                </p>
-
-                <FactsStrip facts={product.facts} />
-
-                <div className="relative mt-8 flex flex-wrap items-center gap-5">
-                  {questionnaire ? (
-                    <a
-                      href="#apply"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        document.getElementById("apply")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                      }}
-                      className="gold-btn py-3.5 text-base"
-                    >
-                      Apply for {code} <ArrowRight className="h-4 w-4" />
-                    </a>
-                  ) : (
-                    <Link to="/contact" className="gold-btn py-3.5 text-base">
-                      Apply for {code} <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  )}
-                  <a
-                    href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm font-bold text-white/70 transition-colors hover:text-white"
-                  >
-                    or message on WhatsApp <ArrowRight className="h-3.5 w-3.5" />
-                  </a>
-                </div>
-              </div>
-
-              {/* At-a-glance snapshot */}
-              <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-8 lg:flex dark:bg-gold/10">
-                <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
-                  At A Glance
-                </p>
-                {product.minimalDisclosure ? (
-                  <ul className="space-y-4">
-                    {product.facts.map((fact) => (
-                      <li key={fact.label} className="flex items-start gap-2.5">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
-                        <span className="text-sm leading-snug text-foreground">
-                          <span className="font-bold text-navy dark:text-white">{fact.label}:</span> {fact.value}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <ul className="space-y-5">
-                    {product.eligibility.slice(0, 5).map((item) => (
-                      <li key={item} className="flex items-start gap-3">
-                        <Check className="mt-1 h-4 w-4 shrink-0 text-gold-dark" />
-                        <span className="text-[15px] leading-relaxed text-foreground">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {!product.minimalDisclosure && (
-                  <a
-                    href="#qualify"
-                    className="inline-flex items-center gap-1.5 self-start text-xs font-bold text-gold-dark transition-colors hover:text-navy dark:hover:text-white"
-                  >
-                    {product.eligibility.length > 5
-                      ? `See all ${product.eligibility.length} requirements`
-                      : "See what you will need"}
-                    <ArrowRight className="h-3.5 w-3.5 rotate-90" />
-                  </a>
-                )}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* The file — one continuous dossier panel instead of several stacked cards */}
-      <Section>
-        <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
-          {/* LEFT: the dossier */}
-          <Reveal animate={false}>
-            <div className="overflow-hidden rounded-2xl border border-gold/15 bg-white dark:bg-card">
-              <div className="p-7 sm:p-9">
-                <p className="eyebrow">The Short Version</p>
-                <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-                  What {product.title} actually does for you.
-                </h2>
-                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                  {product.about}
-                </p>
-              </div>
-
-              {product.minimalDisclosure ? (
-                <>
-                  {product.pullQuote ? (
-                    <>
-                      <div className="border-t border-dashed border-border" />
-                      <div className="p-7 sm:p-9">
-                        <p className="border-l-2 border-gold pl-4 text-base leading-relaxed font-medium text-navy italic dark:text-white">
-                          "{product.pullQuote}"
-                        </p>
-                      </div>
-                    </>
-                  ) : null}
-
-                  {product.features.length > 0 ? (
-                    <>
-                      <div className="border-t border-dashed border-border" />
-                      <div className="p-7 sm:p-9">
-                        <p className="eyebrow">Why Clients Choose This</p>
-                        <ul className="mt-5 space-y-2.5">
-                          {product.features.map((item) => (
-                            <li
-                              key={item}
-                              className="flex items-start gap-2.5 text-sm leading-relaxed text-foreground"
-                            >
-                              <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </>
-                  ) : null}
-
-                  <div className="border-t border-dashed border-border" />
-                  <div className="navy-panel p-7 text-center sm:p-9">
-                    <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
-                      For More Information
-                    </p>
-                    <p className="mt-3 text-sm leading-relaxed text-white/70">
-                      Terms vary case to case — call or WhatsApp us and a senior expert will talk
-                      you through the details directly.
-                    </p>
-                    <div className="mt-5 flex flex-wrap justify-center gap-3">
-                      <a href={CONTACT.phoneHref} className="gold-btn py-3 text-sm">
-                        Call {CONTACT.phone} <ArrowRight className="h-3.5 w-3.5" />
-                      </a>
-                      <a
-                        href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-md border border-white/20 px-5 py-3 text-sm font-bold text-white/80 transition-colors hover:border-gold/40 hover:text-white"
-                      >
-                        WhatsApp Us
-                      </a>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-              <div className="border-t border-dashed border-border" />
-
-              <div className="p-7 sm:p-9">
-                <TopicHeader icon={ListChecks} title="What's included" />
-                <ul className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
-                  {product.features.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-3 text-[15px] leading-relaxed text-foreground"
-                    >
-                      <CheckBadge />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="border-t border-dashed border-border" />
-
+  // "Do you qualify?" and the paperwork checklist download, shared by the full layout and by the
+  // short layout of products that carry eligibility details.
+  const qualifyBlock = product ? (
               <div>
                 <div id="qualify" className="scroll-mt-28 p-7 sm:p-9">
                   <TopicHeader icon={UserCheck} title="Do you qualify?" />
@@ -504,7 +296,232 @@ function ProductDetailPage() {
                   </div>
                 </div>
               </div>
+  ) : null;
 
+  return (
+    <>
+      {/* Hero */}
+      <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal animate={false}>
+            <div className={`grid gap-0 overflow-hidden rounded-3xl ${
+                product.facts.length >= 5
+                  ? "lg:grid-cols-[2.9fr_1fr]"
+                  : product.facts.length === 4
+                    ? "lg:grid-cols-[2.3fr_1fr]"
+                    : "lg:grid-cols-[1.4fr_1fr]"
+              }`}>
+              {/* Navy card */}
+              <div className="navy-panel relative overflow-hidden p-8 sm:p-12">
+                <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
+                <p className="relative flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/50 uppercase">
+                  <Link to="/" className="hover:text-white">
+                    Home
+                  </Link>
+                  <span className="text-gold">/</span>
+                  <Link to="/services" className="hover:text-white">
+                    Services
+                  </Link>
+                  <span className="text-gold">/</span>
+                  <span className="text-white">{product.title}</span>
+                </p>
+
+                <div className="relative mt-6 flex items-center gap-3">
+                  <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-gold/30 text-gold-light">
+                    <product.icon className="h-7 w-7" />
+                  </span>
+                  <span className="rounded-full border border-gold/30 px-3 py-1 text-xs font-bold tracking-wide text-gold-light">
+                    {code}
+                  </span>
+                </div>
+
+                <h1 className="relative mt-5 font-heading text-4xl font-bold text-white sm:text-5xl">
+                  {product.title}
+                </h1>
+                {product.heroNote ? (
+                  <p className="relative mt-3 inline-block rounded-full border border-gold/40 bg-gold/10 px-3.5 py-1 text-xs font-bold tracking-wide text-gold-light uppercase">
+                    {product.heroNote}
+                  </p>
+                ) : null}
+                <p className="relative mt-2 font-heading text-lg italic text-gold-light">
+                  {product.tagline}
+                </p>
+
+                <FactsStrip facts={product.facts} />
+
+                <div className="relative mt-8 flex flex-wrap items-center gap-5">
+                  {questionnaire ? (
+                    <a
+                      href="#apply"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById("apply")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="gold-btn py-3.5 text-base"
+                    >
+                      Apply for {code} <ArrowRight className="h-4 w-4" />
+                    </a>
+                  ) : (
+                    <Link to="/contact" className="gold-btn py-3.5 text-base">
+                      Apply for {code} <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  )}
+                  <a
+                    href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm font-bold text-white/70 transition-colors hover:text-white"
+                  >
+                    or message on WhatsApp <ArrowRight className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              </div>
+
+              {/* At-a-glance snapshot */}
+              <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-8 lg:flex dark:bg-gold/10">
+                <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
+                  At A Glance
+                </p>
+                {product.minimalDisclosure ? (
+                  <ul className="space-y-4">
+                    {product.facts.map((fact) => (
+                      <li key={fact.label} className="flex items-start gap-2.5">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                        <span className="text-sm leading-snug text-foreground">
+                          <span className="font-bold text-navy dark:text-white">{fact.label}:</span> {fact.value}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <ul className="space-y-5">
+                    {product.eligibility.slice(0, 5).map((item) => (
+                      <li key={item} className="flex items-start gap-3">
+                        <Check className="mt-1 h-4 w-4 shrink-0 text-gold-dark" />
+                        <span className="text-[15px] leading-relaxed text-foreground">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {!product.minimalDisclosure && (
+                  <a
+                    href="#qualify"
+                    className="inline-flex items-center gap-1.5 self-start text-xs font-bold text-gold-dark transition-colors hover:text-navy dark:hover:text-white"
+                  >
+                    {product.eligibility.length > 5
+                      ? `See all ${product.eligibility.length} requirements`
+                      : "See what you will need"}
+                    <ArrowRight className="h-3.5 w-3.5 rotate-90" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* The file — one continuous dossier panel instead of several stacked cards */}
+      <Section>
+        <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
+          {/* LEFT: the dossier */}
+          <Reveal animate={false}>
+            <div className="overflow-hidden rounded-2xl border border-gold/15 bg-white dark:bg-card">
+              <div className="p-7 sm:p-9">
+                <p className="eyebrow">The Short Version</p>
+                <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
+                  What {product.title} actually does for you.
+                </h2>
+                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                  {product.about}
+                </p>
+              </div>
+
+              {product.minimalDisclosure ? (
+                <>
+                  {product.pullQuote ? (
+                    <>
+                      <div className="border-t border-dashed border-border" />
+                      <div className="p-7 sm:p-9">
+                        <p className="border-l-2 border-gold pl-4 text-base leading-relaxed font-medium text-navy italic dark:text-white">
+                          "{product.pullQuote}"
+                        </p>
+                      </div>
+                    </>
+                  ) : null}
+
+                  {product.features.length > 0 ? (
+                    <>
+                      <div className="border-t border-dashed border-border" />
+                      <div className="p-7 sm:p-9">
+                        <p className="eyebrow">Why Clients Choose This</p>
+                        <ul className="mt-5 space-y-2.5">
+                          {product.features.map((item) => (
+                            <li
+                              key={item}
+                              className="flex items-start gap-2.5 text-sm leading-relaxed text-foreground"
+                            >
+                              <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </>
+                  ) : null}
+
+                  {product.eligibility.length > 0 ? (
+                    <>
+                      <div className="border-t border-dashed border-border" />
+                      {qualifyBlock}
+                    </>
+                  ) : null}
+
+                  <div className="border-t border-dashed border-border" />
+                  <div className="navy-panel p-7 text-center sm:p-9">
+                    <p className="text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
+                      For More Information
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed text-white/70">
+                      Terms vary case to case — call or WhatsApp us and a senior expert will talk
+                      you through the details directly.
+                    </p>
+                    <div className="mt-5 flex flex-wrap justify-center gap-3">
+                      <a href={CONTACT.phoneHref} className="gold-btn py-3 text-sm">
+                        Call {CONTACT.phone} <ArrowRight className="h-3.5 w-3.5" />
+                      </a>
+                      <a
+                        href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-md border border-white/20 px-5 py-3 text-sm font-bold text-white/80 transition-colors hover:border-gold/40 hover:text-white"
+                      >
+                        WhatsApp Us
+                      </a>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+              <div className="border-t border-dashed border-border" />
+
+              <div className="p-7 sm:p-9">
+                <TopicHeader icon={ListChecks} title="What's included" />
+                <ul className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+                  {product.features.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 text-[15px] leading-relaxed text-foreground"
+                    >
+                      <CheckBadge />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="border-t border-dashed border-border" />
+
+              {qualifyBlock}
               {product.charges ? <ChargesBlock charges={product.charges} /> : null}
               {product.nri ? <NriBlock nri={product.nri} /> : null}
                 </>

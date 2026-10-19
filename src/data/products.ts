@@ -79,6 +79,8 @@ export type Product = {
   documentCategories?: { label: string; description: string; items: string[] }[];
   /** For sensitive/informal products we don't want to spell out publicly — show only the top facts, then a direct "contact us" instead of features/eligibility/documents. */
   minimalDisclosure?: boolean;
+  /** A short line shown as a pill under the title, for who the product is (or is not) for. */
+  heroNote?: string;
   /** A short highlighted line shown above the USPs on a minimal-disclosure product's page. */
   pullQuote?: string;
   /** Extra questions asked in the checklist-download form, on top of name/phone — per Mahesh's intake list for these products. */
@@ -1579,7 +1581,6 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From ~2.70% per month" },
       { label: "Turnaround", value: "24 – 48 hours" },
       { label: "Security", value: "No property required" },
-      { label: "Who it is for", value: "Self-employed businesses, not salaried" },
     ],
     about:
       "Short-term funds without collateral from private lenders, for self-employed businesses with a steady turnover who need cash quickly. This product is not for salaried individuals. Minimum business turnover is generally ₹20 Cr+ for Mumbai, Hyderabad, Bangalore and Chennai, and ₹100 Cr+ for the rest of India, as per lender policy. Private credit usually costs much more than bank loans, so we share every rate and repayment term in writing before you decide.",
@@ -1597,8 +1598,14 @@ export const PRODUCTS: Product[] = [
       "Interest is never cut upfront — you receive the full agreed funding amount",
       "Processing fee and documentation charges as per the applicable structure",
     ],
-    eligibility: [],
-    documents: [],
+    eligibility: [
+      "Self-employed businesses only: an individual, a partnership firm or a company. This product is not for salaried individuals",
+      "A business with consistent turnover",
+      "Turnover of ₹20 Cr+ for Mumbai, Hyderabad, Bangalore and Chennai, and ₹100 Cr+ for the rest of India, as per lender policy",
+      "Repayment secured through post-dated cheques (PDCs), as per the lender's structure",
+    ],
+    documents: [KYC, "Purpose note and repayment plan"],
+    heroNote: "Only for self-employed",
     minimalDisclosure: true,
   },
 ];
