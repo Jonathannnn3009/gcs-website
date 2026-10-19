@@ -33,13 +33,13 @@ const ROWS: { icon: LucideIcon; label: string; values: [string, string, string] 
   },
 ];
 
-// One soft colour per row, carried across the label and all three cells so each row reads as a band.
+// Row colours follow the site theme: navy-tinted blue and gold, alternating, carried across the icon and all three cells.
 const ROW_TINTS = [
-  { cell: "bg-[#e6effc] dark:bg-card", icon: "bg-[#cfe0fa] text-[#2556b0]", card: "bg-[#e6effc]" },
-  { cell: "bg-[#fbf1d3] dark:bg-card", icon: "bg-[#f5e2a8] text-[#8a6410]", card: "bg-[#fbf1d3]" },
-  { cell: "bg-[#def4e9] dark:bg-card", icon: "bg-[#c2ebd6] text-[#1f7a52]", card: "bg-[#def4e9]" },
-  { cell: "bg-[#ece6fb] dark:bg-card", icon: "bg-[#dcd2f7] text-[#5a3fb0]", card: "bg-[#ece6fb]" },
-  { cell: "bg-[#fde6e2] dark:bg-card", icon: "bg-[#f9cfc8] text-[#b0412f]", card: "bg-[#fde6e2]" },
+  { cell: "bg-[#e5ebf6] dark:bg-card", icon: "bg-[#0d1f4d] text-gold-light", card: "bg-[#e5ebf6]" },
+  { cell: "bg-[#fbf1d4] dark:bg-card", icon: "bg-gold text-navy", card: "bg-[#fbf1d4]" },
+  { cell: "bg-[#d9e4f6] dark:bg-card", icon: "bg-[#16306b] text-gold-light", card: "bg-[#d9e4f6]" },
+  { cell: "bg-[#f8e8b8] dark:bg-card", icon: "bg-gold text-navy", card: "bg-[#f8e8b8]" },
+  { cell: "bg-[#e5ebf6] dark:bg-card", icon: "bg-[#0d1f4d] text-gold-light", card: "bg-[#e5ebf6]" },
 ] as const;
 
 const HEAD_STYLES = [
