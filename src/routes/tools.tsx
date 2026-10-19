@@ -154,9 +154,9 @@ function ToolsPage() {
           {/* Laptop and desktop: fixed, scrollable side menu */}
           <nav
             aria-label="Calculators"
-            className="sticky top-24 hidden max-h-[calc(100vh-7rem)] overflow-y-auto rounded-3xl border border-[oklch(0.72_0.07_245)] bg-[oklch(0.83_0.06_245)] p-4 shadow-[var(--shadow-card)] lg:block dark:border-border dark:bg-card"
+            className="navy-panel sticky top-24 hidden max-h-[calc(100vh-7rem)] overflow-y-auto rounded-3xl border border-white/10 p-4 shadow-[var(--shadow-lift)] lg:block"
           >
-            <p className="px-3 pt-1 pb-3 text-xs font-extrabold tracking-[0.2em] text-gold-dark uppercase">
+            <p className="px-3 pt-1 pb-3 text-xs font-extrabold tracking-[0.2em] text-gold uppercase">
               Calculators
             </p>
             <ul className="space-y-1">
@@ -170,20 +170,20 @@ function ToolsPage() {
                       aria-current={on ? "true" : undefined}
                       className={`flex w-full items-center gap-3 rounded-xl border-l-4 px-3 py-2.5 text-left transition-colors ${
                         on
-                          ? "border-navy bg-[oklch(0.74_0.09_245)] shadow-sm dark:bg-background"
-                          : "border-transparent hover:bg-white/60 dark:hover:bg-gold/5"
+                          ? "border-gold bg-white/12 shadow-sm"
+                          : "border-transparent hover:bg-white/8"
                       }`}
                     >
                       <span
-                        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-soft text-gold-dark dark:bg-gold/15"
+                        className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${on ? "bg-gold text-navy" : "bg-white/10 text-gold-light"}`}
                       >
                         <t.icon className="h-5 w-5" />
                       </span>
                       <span className="min-w-0">
-                        <span className="block text-sm leading-snug font-bold text-navy dark:text-white">
+                        <span className="block text-sm leading-snug font-bold text-white">
                           {t.label}
                         </span>
-                        <span className="block text-xs text-muted-foreground">{t.sub}</span>
+                        <span className="block text-xs text-white/60">{t.sub}</span>
                       </span>
                     </button>
                   </li>

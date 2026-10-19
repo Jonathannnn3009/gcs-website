@@ -1,5 +1,6 @@
 import { CalcExpertButton } from "@/components/calc-expert-button";
 import { useMemo, useState } from "react";
+import { ChevronDown, Table2 } from "lucide-react";
 import { formatCurrency, formatINR, moneySaver, type MoneySaverMonth } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
 
@@ -40,7 +41,6 @@ export function MoneySaverCalculator() {
 
   // The schedule, month by month as a lender's sheet shows it, or added up year by year.
   const [view, setView] = useState<"month" | "year">("month");
-  const per = view === "month" ? "Monthly" : "Yearly";
   const rows = useMemo<ScheduleRow[]>(() => {
     if (view === "month") return result.monthly.map((m) => ({ ...m, n: m.month }));
     const years: ScheduleRow[] = [];
@@ -147,16 +147,19 @@ export function MoneySaverCalculator() {
           <div className="relative flex w-full flex-1 flex-col justify-center overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-[50px]"></div>
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-              Interest benefit during entire tenure (Considering excess amount)
+              Total interest saved
+            </p>
+            <p className="relative mt-1 text-[11px] text-muted-foreground">
+              Over the full tenure, with your balance kept in the account
             </p>
             <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl dark:text-white">
               {formatINR(result.totalSaving)}
             </p>
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>
-            <div className="relative mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="relative mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="hero-stat relative overflow-hidden rounded-2xl border border-gold/40 bg-white/60 px-4 py-4 sm:col-span-2 dark:bg-card/60">
                 <p className="text-[11px] font-bold tracking-wider text-gold-dark uppercase">
-                  Effective reduced ROI
+                  Effective ROI
                 </p>
                 <p className="mt-1 text-3xl font-extrabold sm:text-4xl">
                   <span className="text-muted-foreground">{rate.toFixed(2)}%</span>{" "}
@@ -164,24 +167,27 @@ export function MoneySaverCalculator() {
                   <span className="hero-stat-text">{result.effectiveRatePct.toFixed(2)}%</span>
                 </p>
               </div>
-              <div>
-                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  Monthly Outflow (Without considering excess amount)
+              {[
+                { label: "Monthly outflow", note: "Without the balance", value: formatINR(result.emi) },
+                {
+                  label: "Avg. monthly outflow",
+                  note: "With the balance",
+                  value: formatINR(Math.round(result.avgOutflow)),
+                },
+              ].map((t) => (
+                <div key={t.label} className="rounded-xl border border-border bg-white/60 px-4 py-3 dark:bg-card/60">
+                  <p className="text-[11px] font-bold tracking-wider text-navy uppercase dark:text-white">
+                    {t.label}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">{t.note}</p>
+                  <p className="mt-1 text-lg font-extrabold text-gold">{t.value}</p>
+                </div>
+              ))}
+              <div className="rounded-xl border border-border bg-white/60 px-4 py-3 sm:col-span-2 dark:bg-card/60">
+                <p className="text-[11px] font-bold tracking-wider text-navy uppercase dark:text-white">
+                  Avg. monthly saving
                 </p>
-                <p className="mt-1 text-lg font-extrabold text-gold">{formatINR(result.emi)}</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  Avg. Monthly Outflow (Considering excess amount)
-                </p>
-                <p className="mt-1 text-lg font-extrabold text-gold">
-                  {formatINR(Math.round(result.avgOutflow))}
-                </p>
-              </div>
-              <div className="sm:col-span-2">
-                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  Average Monthly Interest benefit
-                </p>
+                <p className="text-[11px] text-muted-foreground">Interest saved each month, on average</p>
                 <p className="mt-1 text-lg font-extrabold text-gold">
                   {formatINR(Math.round(result.avgMonthlySaving))}
                 </p>
@@ -199,15 +205,18 @@ export function MoneySaverCalculator() {
         </div>
       </div>
 
-      <details className="group mt-8 rounded-2xl border border-border bg-white/60 dark:bg-card/60">
-        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-sm font-bold text-navy dark:text-white">
-          See the full repayment schedule
-          <span className="text-xs font-semibold text-gold-dark transition-transform duration-300 group-open:rotate-180">
-            ▼
+      <details className="group mt-8">
+        <summary className="navy-panel flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-5 py-3.5 text-sm font-bold text-white shadow-[var(--shadow-card)] transition-transform duration-200 hover:-translate-y-0.5 [&::-webkit-details-marker]:hidden">
+          <span className="flex items-center gap-2.5">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-gold text-navy">
+              <Table2 className="h-4 w-4" />
+            </span>
+            See the full repayment schedule
           </span>
+          <ChevronDown className="h-5 w-5 text-gold-light transition-transform duration-300 group-open:rotate-180" />
         </summary>
-        <div className="px-5 pb-5">
-          <div className="mb-3 inline-flex rounded-lg border border-border p-0.5 text-xs font-bold">
+        <div className="pt-4">
+          <div className="mb-3 inline-flex rounded-xl border border-gold/40 bg-gold-pale/40 p-1 text-xs font-bold">
             {(["month", "year"] as const).map((v) => (
               <button
                 key={v}
@@ -215,8 +224,8 @@ export function MoneySaverCalculator() {
                 onClick={() => setView(v)}
                 className={`rounded-md px-3 py-1.5 transition-colors ${
                   view === v
-                    ? "bg-navy text-white"
-                    : "text-muted-foreground hover:text-navy dark:hover:text-white"
+                    ? "bg-navy text-white shadow-sm"
+                    : "text-navy/70 hover:text-navy dark:hover:text-white"
                 }`}
               >
                 By {v}
@@ -224,23 +233,30 @@ export function MoneySaverCalculator() {
             ))}
           </div>
           <div className="max-h-[32rem] overflow-auto rounded-xl border border-border/60">
-            <table className="w-full min-w-[1000px] text-right text-[13px]">
+            <table className="w-full min-w-[880px] text-right text-[13px]">
               <thead className="sticky top-0 z-10 bg-white dark:bg-card">
                 <tr className="border-b border-border align-bottom text-[10px] leading-snug font-bold tracking-wider text-muted-foreground uppercase">
-                  <th className="px-3 py-3 text-left">{view === "month" ? "Sr No." : "Year"}</th>
-                  <th className="px-3 py-3">Sanction limit</th>
-                  <th className="px-3 py-3">{per} Outflow (Net of Interest Benefit)</th>
-                  <th className="px-3 py-3">{per} Principal recovery</th>
-                  <th className="px-3 py-3">
-                    {per} Interest recovery (If &quot;No&quot; balance maintained in Money Saver
-                    A/c)
+                  <th className="px-3 py-3 text-left">{view === "month" ? "Month" : "Year"}</th>
+                  <th className="px-3 py-3" title="Loan outstanding at the start (the sanction limit)">
+                    Outstanding
                   </th>
-                  <th className="px-3 py-3">{per} Interest recovery (Net of Interest Benefit)</th>
-                  <th className="px-3 py-3">
-                    Approx. Interest benefit for the {view} on average daily balance maintained
+                  <th className="px-3 py-3" title="What you pay in the period, after the interest benefit">
+                    Payment
                   </th>
-                  <th className="px-3 py-3">
-                    Average daily balance maintained in the A/c during previous {view}
+                  <th className="px-3 py-3" title="Principal recovered in the period">
+                    Principal paid
+                  </th>
+                  <th className="px-3 py-3" title='Interest if no balance is kept in the Money Saver account'>
+                    Interest, no balance
+                  </th>
+                  <th className="px-3 py-3" title="Interest after the benefit from your balance">
+                    Interest, with balance
+                  </th>
+                  <th className="px-3 py-3 text-gold-dark" title="Approx. interest saved in the period on the average daily balance kept">
+                    Interest saved
+                  </th>
+                  <th className="px-3 py-3" title="Average daily balance kept in the account during the previous period">
+                    Avg. balance kept
                   </th>
                 </tr>
               </thead>
@@ -276,6 +292,11 @@ export function MoneySaverCalculator() {
               </tfoot>
             </table>
           </div>
+          <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
+            Payment is what you pay after the interest benefit. Interest, no balance is the interest if nothing
+            is kept in the account. Interest saved is the approximate benefit on the average daily balance you
+            keep. Hover over a heading for its full meaning.
+          </p>
         </div>
       </details>
     </div>
