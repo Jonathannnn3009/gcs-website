@@ -213,7 +213,7 @@ function CibilAdvisoryPage() {
       </Section>
 
       <Section className="pt-0" id="talk">
-        <div className="grid gap-8 rounded-2xl border border-gold/25 panel-light p-8 sm:p-12 lg:grid-cols-[1fr_480px] lg:items-stretch">
+        <div className="grid gap-8 rounded-2xl border border-blue-soft-border bg-blue-soft p-8 sm:p-12 lg:grid-cols-[1fr_480px] lg:items-stretch dark:border-gold/15 dark:bg-card">
           <Reveal>
             <p className="eyebrow">Talk to Us</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">

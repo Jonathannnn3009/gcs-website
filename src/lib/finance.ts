@@ -55,8 +55,25 @@ export type MoneySaverResult = {
   /** Interest over the tenure with no money parked, and after the benefit. */
   interestWithout: number;
   interestNet: number;
-  /** The same story year by year. */
-  yearly: { year: number; opening: number; interest: number; benefit: number; outflow: number }[];
+  /** The month-by-month schedule, with the same columns as a lender's money saver sheet. */
+  monthly: MoneySaverMonth[];
+};
+
+export type MoneySaverMonth = {
+  month: number;
+  /** Loan balance at the start of the month. */
+  opening: number;
+  /** What you pay in the month: principal plus interest net of the benefit. */
+  outflow: number;
+  principal: number;
+  /** Interest if no money were kept in the account. */
+  interest: number;
+  /** Interest after the benefit. */
+  netInterest: number;
+  /** The benefit for the month on the balance kept in the account. */
+  benefit: number;
+  /** Balance kept in the account, which earns the benefit. */
+  parked: number;
 };
 
 /**
@@ -66,41 +83,47 @@ export type MoneySaverResult = {
  * Works month by month with whole-rupee rounding, the way a lender's statement does.
  */
 export function moneySaver(principal: number, annualRatePct: number, months: number, parked: number): MoneySaverResult {
-  const empty: MoneySaverResult = { emi: 0, avgOutflow: 0, avgMonthlySaving: 0, totalSaving: 0, effectiveRatePct: annualRatePct, interestWithout: 0, interestNet: 0, yearly: [] };
+  const empty: MoneySaverResult = { emi: 0, avgOutflow: 0, avgMonthlySaving: 0, totalSaving: 0, effectiveRatePct: annualRatePct, interestWithout: 0, interestNet: 0, monthly: [] };
   if (!(principal > 0) || !(months > 0) || !(annualRatePct >= 0)) return empty;
   const r = annualRatePct / 1200;
+  const pct = annualRatePct / 100;
   const plain = r === 0 ? principal / months : (principal * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
   const emiAmount = Math.ceil(plain - 1e-9);
   const parkedAmount = Math.max(parked, 0);
 
   let balance = principal;
-  let totalSaving = 0;
+  let totalOutflow = 0;
   let interestWithout = 0;
   let interestNet = 0;
-  const yearly: MoneySaverResult["yearly"] = [];
+  const monthly: MoneySaverMonth[] = [];
   for (let m = 1; m <= months && balance > 0; m++) {
-    const interest = Math.round((balance * annualRatePct) / 1200);
+    // Worked in the order the lender's sheet does it, so the rupees come out the same.
+    const interest = Math.round((balance * pct) / 12);
     const principalPart = balance <= emiAmount ? balance : emiAmount - interest;
-    const benefit = Math.round((Math.min(parkedAmount, balance) * annualRatePct) / 1200);
+    const benefit = Math.round((Math.min(parkedAmount, balance) * pct) / 12);
     const netInterest = interest - benefit;
     const outflow = principalPart + netInterest;
-    const yr = Math.ceil(m / 12);
-    let row = yearly[yr - 1];
-    if (!row) {
-      row = { year: yr, opening: balance, interest: 0, benefit: 0, outflow: 0 };
-      yearly[yr - 1] = row;
-    }
-    row.interest += interest;
-    row.benefit += benefit;
-    row.outflow += outflow;
-    totalSaving += benefit;
+    monthly.push({
+      month: m,
+      opening: balance,
+      outflow,
+      principal: principalPart,
+      interest,
+      netInterest,
+      benefit,
+      parked: parkedAmount,
+    });
+    totalOutflow += outflow;
     interestWithout += interest;
     interestNet += netInterest;
     balance -= principalPart;
   }
 
-  const avgMonthlySaving = totalSaving / months;
-  const avgOutflow = emiAmount - avgMonthlySaving;
+  // As in the sheet: the average outflow is everything paid over the tenure divided by the tenure, the average
+  // monthly benefit is the plain monthly payment less that, and the benefit over the tenure is that times the tenure.
+  const avgOutflow = totalOutflow / months;
+  const avgMonthlySaving = emiAmount - avgOutflow;
+  const totalSaving = avgMonthlySaving * months;
 
   // The yearly rate at which payments of avgOutflow repay the loan over the same tenure.
   let effectiveRatePct = annualRatePct;
@@ -118,7 +141,7 @@ export function moneySaver(principal: number, annualRatePct: number, months: num
     effectiveRatePct = 0;
   }
 
-  return { emi: emiAmount, avgOutflow, avgMonthlySaving, totalSaving, effectiveRatePct, interestWithout, interestNet, yearly };
+  return { emi: emiAmount, avgOutflow, avgMonthlySaving, totalSaving, effectiveRatePct, interestWithout, interestNet, monthly };
 }
 
 export function formatCurrency(n: number): string {

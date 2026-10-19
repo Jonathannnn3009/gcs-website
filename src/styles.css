@@ -76,6 +76,9 @@
   /* Darker shade of Gold, for small gold text on light backgrounds */
   --gold-dark: #9c7410;
   --bg-light: #f7f8fa;
+  /* Soft blue for closing / call-to-action boxes that carry an important note */
+  --blue-soft: oklch(0.965 0.022 245);
+  --blue-soft-border: oklch(0.88 0.04 245);
   --ink: #111827;
 
   /* Light theme */
@@ -192,6 +195,8 @@
   --color-navy-deep: var(--navy-deep);
   --color-gold-pale: var(--gold-pale);
   --color-bg-light: var(--bg-light);
+  --color-blue-soft: var(--blue-soft);
+  --color-blue-soft-border: var(--blue-soft-border);
   --color-ink: var(--ink);
   /* Serif display face for headings; Cinzel echoes the logo's wordmark */
   --font-heading: "Playfair Display", "Noto Serif Devanagari", Georgia, "Times New Roman", serif;

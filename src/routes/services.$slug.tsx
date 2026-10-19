@@ -526,7 +526,7 @@ function ProductDetailPage() {
       {/* Why GCS, a next step, and the standard note on what depends on the lender */}
       <Section className="pt-0">
         <Reveal animate={false}>
-          <div className="rounded-2xl border border-[oklch(0.88_0.04_245)] bg-[oklch(0.965_0.022_245)] p-7 sm:p-9 dark:border-gold/15 dark:bg-card">
+          <div className="rounded-2xl border border-blue-soft-border bg-blue-soft p-7 sm:p-9 dark:border-gold/15 dark:bg-card">
             <p className="eyebrow">Why Growth Capital Services</p>
             <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
               One conversation, many lenders to compare.

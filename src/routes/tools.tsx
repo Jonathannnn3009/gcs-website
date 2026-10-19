@@ -154,7 +154,7 @@ function ToolsPage() {
           {/* Laptop and desktop: fixed, scrollable side menu */}
           <nav
             aria-label="Calculators"
-            className="sticky top-24 hidden max-h-[calc(100vh-7rem)] overflow-y-auto rounded-3xl border border-[oklch(0.84_0.05_245)] bg-[oklch(0.91_0.04_245)] p-4 shadow-[var(--shadow-card)] lg:block dark:border-border dark:bg-card"
+            className="sticky top-24 hidden max-h-[calc(100vh-7rem)] overflow-y-auto rounded-3xl border border-[oklch(0.72_0.07_245)] bg-[oklch(0.83_0.06_245)] p-4 shadow-[var(--shadow-card)] lg:block dark:border-border dark:bg-card"
           >
             <p className="px-3 pt-1 pb-3 text-xs font-extrabold tracking-[0.2em] text-gold-dark uppercase">
               Calculators
@@ -176,7 +176,7 @@ function ToolsPage() {
                     >
                       <span
                         className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${
-                          on ? "bg-navy text-gold-light" : "bg-gold-pale/60 text-gold-dark dark:bg-gold/15"
+                          on ? "bg-navy text-gold-light" : "bg-blue-soft text-gold-dark dark:bg-gold/15"
                         }`}
                       >
                         <t.icon className="h-5 w-5" />

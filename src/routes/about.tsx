@@ -216,10 +216,17 @@ function AboutPage() {
                       key={p.slug}
                       to="/services/$slug"
                       params={{ slug: p.slug }}
-                      className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:shadow-[var(--shadow-card)] dark:bg-card"
+                      className="group relative flex items-center justify-between gap-3 overflow-hidden rounded-xl border border-border bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-soft-border hover:shadow-[var(--shadow-card)] dark:bg-card"
                     >
-                      <span className="text-[14px] font-bold text-foreground">{p.title}</span>
-                      <ArrowUpRight className="h-4 w-4 shrink-0 text-gold/60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gold" />
+                      {/* soft blue that sweeps in from the left and fades out to the right on hover */}
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 origin-left scale-x-0 bg-[linear-gradient(90deg,var(--blue-soft-border)_0%,var(--blue-soft)_55%,transparent_100%)] transition-transform duration-500 ease-out group-hover:scale-x-100 dark:hidden"
+                      />
+                      <span className="relative text-[14px] font-bold text-foreground transition-transform duration-300 group-hover:translate-x-1">
+                        {p.title}
+                      </span>
+                      <ArrowUpRight className="relative h-4 w-4 shrink-0 text-gold/60 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-125 group-hover:text-gold-dark" />
                     </Link>
                   ))}
                 </div>

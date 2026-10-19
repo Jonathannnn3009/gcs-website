@@ -637,11 +637,10 @@ function PartnerPage() {
         <Reveal delay={80}>
           <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-card)]">
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[640px] text-left text-sm">
+              <table className="w-full min-w-[520px] text-left text-sm">
                 <thead className="bg-bg-light/70 text-[11px] font-bold tracking-wide text-navy uppercase">
                   <tr>
                     <th className="px-6 py-4">Loan Product</th>
-                    <th className="px-6 py-4">Commission Range</th>
                     <th className="px-6 py-4">Avg. Loan Amount</th>
                     <th className="px-6 py-4">Potential Earning / Deal</th>
                   </tr>
@@ -650,7 +649,6 @@ function PartnerPage() {
                   {commissionRows.map((row) => (
                     <tr key={row.product} className="transition-colors hover:bg-bg-light/50">
                       <td className="px-6 py-4 font-bold text-navy">{row.product}</td>
-                      <td className="px-6 py-4 text-muted-foreground">{row.range}</td>
                       <td className="px-6 py-4 text-muted-foreground">{row.avgAmount}</td>
                       <td className="px-6 py-4 font-bold text-gold-dark">{row.earning}</td>
                     </tr>

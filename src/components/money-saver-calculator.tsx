@@ -1,6 +1,6 @@
 import { CalcExpertButton } from "@/components/calc-expert-button";
 import { useMemo, useState } from "react";
-import { formatCurrency, formatINR, moneySaver } from "@/lib/finance";
+import { formatCurrency, formatINR, moneySaver, type MoneySaverMonth } from "@/lib/finance";
 import { SliderField } from "@/components/slider-field";
 
 const LOAN_PRESETS = [
@@ -18,6 +18,8 @@ const PARKED_PRESETS = [
   { label: "₹25 L", value: 2500000 },
 ];
 
+type ScheduleRow = Omit<MoneySaverMonth, "month"> & { n: number };
+
 /**
  * A "money saver" loan works like an overdraft on a home loan: the money you keep in the loan account
  * reduces the balance interest is charged on, while the repayment schedule (and tenure) stays as it was.
@@ -25,15 +27,50 @@ const PARKED_PRESETS = [
 export function MoneySaverCalculator() {
   const [principal, setPrincipal] = useState(5000000);
   const [rate, setRate] = useState(9);
-  const [years, setYears] = useState(20);
+  const [months, setMonths] = useState(240);
   const [parked, setParked] = useState(500000);
 
   // Money parked beyond the loan itself earns no benefit, so the figure is kept within the loan amount.
   const parkedUsed = Math.min(parked, principal);
 
   const result = useMemo(
-    () => moneySaver(principal, rate, years * 12, parkedUsed),
-    [principal, rate, years, parkedUsed],
+    () => moneySaver(principal, rate, months, parkedUsed),
+    [principal, rate, months, parkedUsed],
+  );
+
+  // The schedule, month by month as a lender's sheet shows it, or added up year by year.
+  const [view, setView] = useState<"month" | "year">("month");
+  const per = view === "month" ? "Monthly" : "Yearly";
+  const rows = useMemo<ScheduleRow[]>(() => {
+    if (view === "month") return result.monthly.map((m) => ({ ...m, n: m.month }));
+    const years: ScheduleRow[] = [];
+    for (const m of result.monthly) {
+      const y = Math.ceil(m.month / 12);
+      const row = years[y - 1];
+      if (!row) years[y - 1] = { ...m, n: y };
+      else {
+        row.outflow += m.outflow;
+        row.principal += m.principal;
+        row.interest += m.interest;
+        row.netInterest += m.netInterest;
+        row.benefit += m.benefit;
+      }
+    }
+    return years;
+  }, [result, view]);
+  const total = useMemo(
+    () =>
+      result.monthly.reduce(
+        (t, m) => ({
+          outflow: t.outflow + m.outflow,
+          principal: t.principal + m.principal,
+          interest: t.interest + m.interest,
+          netInterest: t.netInterest + m.netInterest,
+          benefit: t.benefit + m.benefit,
+        }),
+        { outflow: 0, principal: 0, interest: 0, netInterest: 0, benefit: 0 },
+      ),
+    [result],
   );
 
   return (
@@ -52,7 +89,7 @@ export function MoneySaverCalculator() {
       <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
         <div className="flex flex-col gap-7 lg:justify-evenly">
           <SliderField
-            label="Loan Amount (Sanction Limit)"
+            label="Sanction limit"
             value={principal}
             onChange={setPrincipal}
             min={100000}
@@ -61,12 +98,12 @@ export function MoneySaverCalculator() {
             format={formatCurrency}
             minLabel="₹1 L"
             maxLabel="₹10 Cr"
-            ariaLabel="Loan amount"
+            ariaLabel="Sanction limit"
             presets={LOAN_PRESETS}
           />
 
           <SliderField
-            label="Interest Rate (p.a.)"
+            label="ROI (%)"
             value={rate}
             onChange={setRate}
             min={5}
@@ -75,24 +112,24 @@ export function MoneySaverCalculator() {
             suffix="%"
             minLabel="5%"
             maxLabel="24%"
-            ariaLabel="Interest rate"
+            ariaLabel="ROI (%)"
           />
 
           <SliderField
-            label="Loan Tenure"
-            value={years}
-            onChange={setYears}
-            min={1}
-            max={30}
+            label="Tenure in months"
+            value={months}
+            onChange={setMonths}
+            min={12}
+            max={360}
             step={1}
-            suffix={years === 1 ? "Year" : "Years"}
-            minLabel="1 Yr"
-            maxLabel="30 Yrs"
-            ariaLabel="Loan tenure in years"
+            suffix="Months"
+            minLabel="12"
+            maxLabel="360"
+            ariaLabel="Tenure in months"
           />
 
           <SliderField
-            label="Average Balance Kept in the Account"
+            label="Avg Daily balance maintained in A/c"
             value={parkedUsed}
             onChange={setParked}
             min={0}
@@ -101,7 +138,7 @@ export function MoneySaverCalculator() {
             format={formatCurrency}
             minLabel="₹0"
             maxLabel={formatCurrency(principal)}
-            ariaLabel="Average balance kept in the loan account"
+            ariaLabel="Avg Daily balance maintained in A/c"
             presets={PARKED_PRESETS.filter((p) => p.value <= principal)}
           />
         </div>
@@ -110,22 +147,22 @@ export function MoneySaverCalculator() {
           <div className="relative flex w-full flex-1 flex-col justify-center overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-[50px]"></div>
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-              Interest Saved Over the Loan
+              Interest benefit during entire tenure (Considering excess amount)
             </p>
             <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              {formatCurrency(result.totalSaving)}
+              {formatINR(result.totalSaving)}
             </p>
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>
             <div className="relative mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  Monthly Payment Without Parking
+                  Monthly Outflow (Without considering excess amount)
                 </p>
                 <p className="mt-1 text-lg font-extrabold text-gold">{formatINR(result.emi)}</p>
               </div>
               <div>
                 <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  Average Monthly Payment With Parking
+                  Avg. Monthly Outflow (Considering excess amount)
                 </p>
                 <p className="mt-1 text-lg font-extrabold text-gold">
                   {formatINR(Math.round(result.avgOutflow))}
@@ -133,7 +170,7 @@ export function MoneySaverCalculator() {
               </div>
               <div>
                 <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  Average Monthly Saving
+                  Average Monthly Interest benefit
                 </p>
                 <p className="mt-1 text-lg font-extrabold text-gold">
                   {formatINR(Math.round(result.avgMonthlySaving))}
@@ -141,7 +178,7 @@ export function MoneySaverCalculator() {
               </div>
               <div>
                 <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  Effective Interest Rate
+                  Effective reduced ROI
                 </p>
                 <p className="mt-1 text-lg font-extrabold text-gold">
                   {rate.toFixed(2)}% <span className="text-muted-foreground">→</span>{" "}
@@ -150,9 +187,11 @@ export function MoneySaverCalculator() {
               </div>
             </div>
             <p className="relative mt-5 text-[11px] text-muted-foreground">
-              Interest is charged on your balance minus the money you keep in the account, and only
-              up to what you still owe. Your tenure stays the same, so the saving shows up as a
-              lower monthly outflow. Actual terms and charges depend on the lender.
+              Note: Daily interest will be calculated on the principal outstanding minus the excess
+              amount. However, if the excess amount is greater than the principal outstanding then
+              excess amount will be capped upto the outstanding principal and accordingly the
+              interest will be calculated. At any given point of time interest benefit will not be
+              available on the excess amount deposited over and above the outstanding principal.
             </p>
           </div>
           <CalcExpertButton />
@@ -161,38 +200,81 @@ export function MoneySaverCalculator() {
 
       <details className="group mt-8 rounded-2xl border border-border bg-white/60 dark:bg-card/60">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-sm font-bold text-navy dark:text-white">
-          See the year-by-year picture
+          See the full repayment schedule
           <span className="text-xs font-semibold text-gold-dark transition-transform duration-300 group-open:rotate-180">
             ▼
           </span>
         </summary>
-        <div className="overflow-x-auto px-5 pb-5">
-          <table className="w-full min-w-[520px] text-right text-sm">
-            <thead>
-              <tr className="border-b border-border text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                <th className="py-2 pr-3 text-left">Year</th>
-                <th className="px-3 py-2">Balance at start</th>
-                <th className="px-3 py-2">Interest charged</th>
-                <th className="px-3 py-2">Interest saved</th>
-                <th className="py-2 pl-3">You pay in the year</th>
-              </tr>
-            </thead>
-            <tbody>
-              {result.yearly.map((row) => (
-                <tr key={row.year} className="border-b border-border/60 last:border-0">
-                  <td className="py-2 pr-3 text-left font-semibold text-navy dark:text-white">
-                    {row.year}
-                  </td>
-                  <td className="px-3 py-2">{formatCurrency(row.opening)}</td>
-                  <td className="px-3 py-2">{formatCurrency(row.interest)}</td>
-                  <td className="px-3 py-2 font-semibold text-gold-dark">
-                    {formatCurrency(row.benefit)}
-                  </td>
-                  <td className="py-2 pl-3">{formatCurrency(row.outflow)}</td>
+        <div className="px-5 pb-5">
+          <div className="mb-3 inline-flex rounded-lg border border-border p-0.5 text-xs font-bold">
+            {(["month", "year"] as const).map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setView(v)}
+                className={`rounded-md px-3 py-1.5 transition-colors ${
+                  view === v
+                    ? "bg-navy text-white"
+                    : "text-muted-foreground hover:text-navy dark:hover:text-white"
+                }`}
+              >
+                By {v}
+              </button>
+            ))}
+          </div>
+          <div className="max-h-[32rem] overflow-auto rounded-xl border border-border/60">
+            <table className="w-full min-w-[1000px] text-right text-[13px]">
+              <thead className="sticky top-0 z-10 bg-white dark:bg-card">
+                <tr className="border-b border-border align-bottom text-[10px] leading-snug font-bold tracking-wider text-muted-foreground uppercase">
+                  <th className="px-3 py-3 text-left">{view === "month" ? "Sr No." : "Year"}</th>
+                  <th className="px-3 py-3">Sanction limit</th>
+                  <th className="px-3 py-3">{per} Outflow (Net of Interest Benefit)</th>
+                  <th className="px-3 py-3">{per} Principal recovery</th>
+                  <th className="px-3 py-3">
+                    {per} Interest recovery (If &quot;No&quot; balance maintained in Money Saver
+                    A/c)
+                  </th>
+                  <th className="px-3 py-3">{per} Interest recovery (Net of Interest Benefit)</th>
+                  <th className="px-3 py-3">
+                    Approx. Interest benefit for the {view} on average daily balance maintained
+                  </th>
+                  <th className="px-3 py-3">
+                    Average daily balance maintained in the A/c during previous {view}
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {rows.map((row) => (
+                  <tr key={row.n} className="border-b border-border/60">
+                    <td className="px-3 py-2 text-left font-semibold text-navy dark:text-white">
+                      {row.n}
+                    </td>
+                    <td className="px-3 py-2">{formatINR(row.opening)}</td>
+                    <td className="px-3 py-2">{formatINR(row.outflow)}</td>
+                    <td className="px-3 py-2">{formatINR(row.principal)}</td>
+                    <td className="px-3 py-2">{formatINR(row.interest)}</td>
+                    <td className="px-3 py-2">{formatINR(row.netInterest)}</td>
+                    <td className="px-3 py-2 font-semibold text-gold-dark">
+                      {formatINR(row.benefit)}
+                    </td>
+                    <td className="px-3 py-2">{formatINR(row.parked)}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot className="sticky bottom-0 bg-white font-extrabold text-navy dark:bg-card dark:text-white">
+                <tr className="border-t-2 border-gold/30">
+                  <td className="px-3 py-3 text-left">Total</td>
+                  <td className="px-3 py-3" />
+                  <td className="px-3 py-3">{formatINR(total.outflow)}</td>
+                  <td className="px-3 py-3">{formatINR(total.principal)}</td>
+                  <td className="px-3 py-3">{formatINR(total.interest)}</td>
+                  <td className="px-3 py-3">{formatINR(total.netInterest)}</td>
+                  <td className="px-3 py-3 text-gold-dark">{formatINR(total.benefit)}</td>
+                  <td className="px-3 py-3" />
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </details>
     </div>

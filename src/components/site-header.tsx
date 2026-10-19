@@ -79,7 +79,7 @@ export function SiteHeader() {
         {/* Right side */}
         <div className="flex min-w-0 items-center justify-end gap-2 2xl:gap-4">
           {/* Desktop nav */}
-          <nav className="hidden flex-1 items-center justify-end gap-0 text-[clamp(15px,calc(1.35vw_-_3.2px),22px)] [--s:clamp(20px,calc(4.28vw_-_36.9px),45.3px)] min-[1360px]:flex">
+          <nav className="hidden flex-1 items-center justify-center gap-0 text-[clamp(15px,calc(1.35vw_-_3.2px),22px)] [--s:clamp(20px,calc(4.28vw_-_36.9px),45.3px)] min-[1360px]:flex">
             {NAV.map((link) => {
               if (link.dropdown) {
                 return (
