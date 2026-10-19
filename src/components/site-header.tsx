@@ -7,7 +7,8 @@ import { BrandLogo } from "@/components/brand-logo";
 import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { NAV_CIBIL, NAV_HEADER, NAV_PARTNER, NAV_TOOLS } from "@/data/page-lists";
 import { useList, useProductGroups } from "@/lib/page-lists";
-import { CA_LEGAL_MENU, categoryAnchor } from "@/data/ca-legal-menu";
+import { CA_LEGAL_MENU } from "@/data/ca-legal-menu";
+import { CaLegalMenuItem } from "@/components/ca-legal-menu-item";
 
 
 
@@ -358,23 +359,13 @@ export function SiteHeader() {
                                   </Link>
                                   <div className="mt-2 space-y-0.5">
                                     {group.items.map((item) => (
-                                      <Link
+                                      <CaLegalMenuItem
                                         key={item.category}
-                                        to="/ca-legal-services"
-                                        hash={categoryAnchor(item.category)}
-                                        onClick={() => setActiveDropdown(null)}
-                                        className="group/ca flex items-center gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-gold/5"
-                                      >
-                                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gold-pale/50 text-gold-dark transition-colors duration-300 group-hover/ca:bg-gold group-hover/ca:text-navy dark:bg-gold/15">
-                                          <item.icon className="h-4 w-4" />
-                                        </span>
-                                        <span className="min-w-0">
-                                          <span className="block text-[13px] leading-snug font-semibold text-foreground">
-                                            {item.category}
-                                          </span>
-                                          <span className="block text-[11px] text-muted-foreground">{item.desc}</span>
-                                        </span>
-                                      </Link>
+                                        category={item.category}
+                                        icon={item.icon}
+                                        desc={item.desc}
+                                        onNavigate={() => setActiveDropdown(null)}
+                                      />
                                     ))}
                                   </div>
                                 </div>
