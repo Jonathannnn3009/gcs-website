@@ -45,11 +45,11 @@ export const CA_LEGAL_MENU: CaLegalMenuGroup[] = [
     anchor: "sheetal-associates",
     heading: "Legal Services",
     items: [
+      { category: "Legal Drafting", icon: FileSignature, desc: "Agreements, affidavits, notices" },
       { category: "Property Legal Services", icon: Scale, desc: "Title checks, deeds, POA" },
       { category: "Housing Society Services", icon: Home, desc: "Share transfer, society NOC" },
       { category: "SRA / MHADA / MMRDA", icon: Landmark, desc: "Flat transfer documentation" },
       { category: "Redevelopment", icon: HardHat, desc: "Society redevelopment papers" },
-      { category: "Legal Drafting", icon: FileSignature, desc: "Agreements, affidavits, notices" },
       {
         category: "NRI & Family Property Services",
         icon: Globe,
