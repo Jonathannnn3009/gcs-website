@@ -53,7 +53,7 @@ export const Route = createFileRoute("/cibil")({
 });
 
 const fieldClass =
-  "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20 dark:bg-card dark:text-white";
+  "mt-1.5 w-full rounded-lg border border-[#cdd8ec] bg-[#f1f5fc] px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:bg-white focus:ring-2 focus:ring-gold/20 dark:border-border dark:bg-card dark:text-white";
 const labelClass =
   "block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white";
 
@@ -304,7 +304,7 @@ function CibilFlow() {
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-lift)] dark:bg-card">
+    <div className="overflow-hidden rounded-2xl border border-[#c9d5ea] bg-white shadow-[0_18px_50px_-18px_rgba(11,24,73,0.28)] dark:border-border dark:bg-card">
       <div className="navy-panel px-5 py-4 sm:px-8">
         <StepIndicator step={step} />
       </div>
@@ -750,6 +750,7 @@ function CibilPage() {
         </ol>
       </Section>
 
+      <div className="bg-gradient-to-b from-[#dfe9f7] via-[#eaf1fa] to-transparent">
       <Section className="pt-8 sm:pt-10">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
           <CibilFlow />
@@ -788,6 +789,7 @@ function CibilPage() {
           </aside>
         </div>
       </Section>
+      </div>
 
       <PageCalculators
         ids={["credit-score", "emi", "eligibility"]}
