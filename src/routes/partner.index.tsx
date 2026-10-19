@@ -651,7 +651,10 @@ function PartnerPage() {
                     <tr key={row.product} className="transition-colors hover:bg-bg-light/50">
                       <td className="px-6 py-4 font-bold text-navy">{row.product}</td>
                       <td className="px-6 py-4 text-muted-foreground">{row.avgAmount}</td>
-                      <td className="px-6 py-4 font-bold text-gold-dark">{row.earning}</td>
+                      <td className="px-6 py-4 font-bold text-gold-dark">
+                        {row.earning}
+                        <span className="ml-0.5 font-bold text-red-600" aria-hidden="true">*</span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -659,7 +662,8 @@ function PartnerPage() {
             </div>
           </div>
           <p className="mt-3 text-xs text-muted-foreground italic">
-            Commission rates may vary based on lender, loan amount and partner tier.
+            <span className="font-bold text-red-600 not-italic">* </span>Commission rates may vary based on
+            lender, loan amount and partner tier.
           </p>
         </Reveal>
       </Section>

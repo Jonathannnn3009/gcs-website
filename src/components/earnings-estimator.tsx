@@ -15,18 +15,27 @@ function parseRange(range: string): Range | null {
   return Number.isFinite(min) && Number.isFinite(max) ? { min, max } : null;
 }
 
+/** "₹30L – ₹1Cr" -> {3000000, 10000000}; null if the row has no usable amounts. */
+function parseAmountRange(label: string): Range | null {
+  const one = (t: string): number | null => {
+    const m = t.match(/([\d.]+)\s*(L|Cr)/i);
+    if (!m) return null;
+    return Number(m[1]) * (m[2]!.toLowerCase() === "cr" ? 10000000 : 100000);
+  };
+  const parts = label.split(/[–-]/);
+  if (parts.length < 2) return null;
+  const min = one(parts[0]!);
+  const max = one(parts[1]!);
+  return min !== null && max !== null && max >= min ? { min, max } : null;
+}
+
 const inr = (n: number) => `₹${Math.round(n).toLocaleString("en-IN")}`;
 const lakhs = (n: number) =>
   n >= 10000000
     ? `₹${(n / 10000000).toFixed(2)} Cr`
     : `₹${(n / 100000).toFixed(n % 100000 ? 1 : 0)} L`;
 
-const AMOUNT_PRESETS = [
-  { label: "₹10 L", value: 1000000 },
-  { label: "₹25 L", value: 2500000 },
-  { label: "₹50 L", value: 5000000 },
-  { label: "₹1 Cr", value: 10000000 },
-];
+const DEFAULT_AMOUNTS: Range = { min: 100000, max: 100000000 };
 
 /** Interactive "what could I earn" estimate, driven by the published partner rate card. Used on the Agent and Freelancer pages. */
 export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string }) {
@@ -34,8 +43,12 @@ export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string })
   const options = useMemo(
     () =>
       rows
-        .map((r) => ({ product: r.product, range: parseRange(r.range) }))
-        .filter((o): o is { product: string; range: Range } => o.range !== null),
+        .map((r) => ({
+          product: r.product,
+          range: parseRange(r.range),
+          amounts: parseAmountRange(r.avgAmount) ?? DEFAULT_AMOUNTS,
+        }))
+        .filter((o): o is { product: string; range: Range; amounts: Range } => o.range !== null),
     [rows],
   );
   const [product, setProduct] = useState("Home Loan");
@@ -44,8 +57,15 @@ export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string })
 
   const current = options.find((o) => o.product === product) ?? options[0];
   if (!current) return null;
-  const perCaseLow = (amount * current.range.min) / 100;
-  const perCaseHigh = (amount * current.range.max) / 100;
+  // The amount slider follows the loan type: each type has its own usual range.
+  const { min: amtMin, max: amtMax } = current.amounts;
+  const amountUsed = Math.min(Math.max(amount, amtMin), amtMax);
+  const amtStep = amtMax > 10000000 ? 500000 : 100000;
+  const presets = [amtMin, Math.round((amtMin + amtMax) / 2 / amtStep) * amtStep, amtMax]
+    .filter((v, i, a) => a.indexOf(v) === i)
+    .map((v) => ({ label: lakhs(v).replace(".00", ""), value: v }));
+  const perCaseLow = (amountUsed * current.range.min) / 100;
+  const perCaseHigh = (amountUsed * current.range.max) / 100;
 
   return (
     <>
@@ -76,16 +96,16 @@ export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string })
           </div>
           <SliderField
             label="Typical loan amount"
-            value={amount}
+            value={amountUsed}
             onChange={setAmount}
-            min={100000}
-            max={100000000}
-            step={100000}
+            min={amtMin}
+            max={amtMax}
+            step={amtStep}
             format={lakhs}
-            minLabel="₹1 L"
-            maxLabel="₹10 Cr"
+            minLabel={lakhs(amtMin).replace(".00", "")}
+            maxLabel={lakhs(amtMax).replace(".00", "")}
             ariaLabel="Typical loan amount"
-            presets={AMOUNT_PRESETS}
+            presets={presets}
           />
           <SliderField
             label="Loans you refer in a month"
@@ -102,7 +122,9 @@ export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string })
         </div>
 
         <div className="flex flex-col rounded-2xl border border-gold/25 bg-gold-pale/25 p-5 sm:p-6">
-          <p className="text-sm text-muted-foreground">You could earn about</p>
+          <p className="text-sm text-muted-foreground">
+            You could earn about <span className="font-bold text-red-600">*</span>
+          </p>
           <p className="mt-1 flex flex-wrap items-baseline gap-x-2 font-heading text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
             <span className="whitespace-nowrap">{inr(perCaseLow * cases)}</span>
             <span className="text-xl text-gold-dark">–</span>
@@ -124,7 +146,8 @@ export function EarningsEstimator({ joinHref = "#join" }: { joinHref?: string })
             </div>
           </dl>
           <p className="mt-4 text-xs leading-relaxed text-muted-foreground italic">
-            An indicative estimate for loans that are disbursed, not a promise. The actual payout
+            <span className="font-bold text-red-600 not-italic">* </span>Commission rates may vary based on
+            lender, loan amount and partner tier. An indicative estimate for loans that are disbursed, not a promise. The actual payout
             depends on the lender, the loan type, the loan amount, your partner tier and the final
             sanctioned terms.
           </p>
