@@ -518,12 +518,14 @@ PRIVATE_FUNDING = dict(
             "items": [
                 "KYC — Photo ID (PAN, Aadhaar) & address proof",
                 "Purpose note and repayment plan",
+                "The same checklist applies to an individual, a partnership firm and a company",
             ],
         },
         {
             "title": "Basic Eligibility",
             "items": [
-                "-Self-employed, with turnover up to Rs.30 Cr",
+                "-Self-employed businesses, not salaried individuals",
+                "-Turnover of Rs.20 Cr+ for Mumbai, Hyderabad, Bangalore and Chennai, and Rs.100 Cr+ for the rest of India, as per lender policy",
                 "-A credible, time-bound plan to repay or refinance",
             ],
         },
