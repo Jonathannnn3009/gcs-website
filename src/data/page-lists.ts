@@ -167,23 +167,23 @@ export const ABOUT_STATS = [
 export const ABOUT_WHY = [
   {
     title: "Real Choice, Not One Bank",
-    body: "75+ banks and NBFCs in our network, so your file gets more than one shot at approval.",
+    body: "We work with 75+ banks and NBFCs, so your file has more than one chance to get approved.",
   },
   {
     title: "Senior Experts, Not a Call Centre",
-    body: "The same experienced expert stays with your file from the first call to disbursal.",
+    body: "The same experienced expert looks after your file from the first call until the money reaches you.",
   },
   {
     title: "Built For Speed",
-    body: "Documentation and structuring done right the first time, so approvals don't stall.",
+    body: "We get your papers and loan details right the first time, so your approval is not delayed.",
   },
   {
     title: "Nothing Hidden",
-    body: "Rate, fees and terms — all in writing, before you sign anything.",
+    body: "The interest rate, fees and terms are given to you in writing before you sign anything.",
   },
   {
-    title: "Structured Around You",
-    body: "Your loan packaged around your actual profile, not squeezed into a lender's template.",
+    title: "Planned Around You",
+    body: "Your loan is planned around your own income and needs, not forced into a bank's fixed format.",
   },
 ];
 

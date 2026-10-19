@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AboutTabs } from "@/components/about-tabs";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Eye, Landmark, SlidersHorizontal, UserCheck, Zap } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { BankMarquee } from "@/components/bank-marquee";
 import { CONTACT } from "@/data/site";
@@ -8,6 +8,9 @@ import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { ABOUT_PROCESS, ABOUT_STATS, ABOUT_WHY } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
 import { useProductGroups } from "@/lib/page-lists";
+
+// One animated icon beside each "why choose us" point, in the same order as the list.
+const WHY_ICONS = [Landmark, UserCheck, Zap, Eye, SlidersHorizontal];
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -164,16 +167,34 @@ function AboutPage() {
           <div className="mt-12 border-t border-border">
             {WHY_CHOOSE.map((w, i) => (
               <Reveal key={i} delay={i * 70}>
-                <div className="flex flex-col gap-2 border-b border-border py-6 sm:flex-row sm:items-baseline sm:gap-10 sm:py-7">
+                <div className="group flex flex-col gap-2 border-b border-border py-6 sm:flex-row sm:items-center sm:gap-10 sm:py-7">
                   <span className="font-heading shrink-0 text-2xl italic text-gold-dark sm:w-16">
                     № {String(i + 1).padStart(2, "0")}
                   </span>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <h3 className="text-lg font-extrabold text-navy dark:text-white">{w.title}</h3>
                     <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
                       {w.body}
                     </p>
                   </div>
+                  {(() => {
+                    const Icon = WHY_ICONS[i % WHY_ICONS.length]!;
+                    return (
+                      <span
+                        aria-hidden="true"
+                        className="relative hidden shrink-0 sm:block"
+                        style={{ animationDelay: `${i * 450}ms` }}
+                      >
+                        <span className="absolute inset-0 -m-3 rounded-full bg-gold/15 blur-xl transition-opacity duration-500 group-hover:bg-gold/30" />
+                        <span
+                          className="float-animation relative grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-navy to-navy-soft text-gold shadow-[var(--shadow-card)] transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110"
+                          style={{ animationDelay: `${i * 450}ms` }}
+                        >
+                          <Icon className="h-7 w-7" />
+                        </span>
+                      </span>
+                    );
+                  })()}
                 </div>
               </Reveal>
             ))}
