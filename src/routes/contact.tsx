@@ -134,13 +134,14 @@ function ContactPage() {
                 </ul>
 
                 <div className="relative mt-auto pt-8">
-                  <p className="font-heading text-xl font-bold text-gold-light">
-                    Your Loan Deserves Expert Attention
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-white/75">
+                  <p className="font-heading text-base italic leading-relaxed text-white/80">
+                    "<span className="font-bold text-gold-light not-italic">Your Loan Deserves Expert Attention.</span>{" "}
                     Your loan is handled by an experienced professional who understands your profile,
                     carefully structures the right approach and supports you through every stage up
-                    to disbursement.
+                    to disbursement."
+                  </p>
+                  <p className="mt-2 text-[11px] font-bold tracking-[0.18em] text-gold-light uppercase">
+                    — The Growth Capital Services Team
                   </p>
                 </div>
               </div>
