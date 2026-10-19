@@ -383,11 +383,11 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
     ],
   },
   "loan-against-securities": {
-    intro: "You borrow against your shares and bonds while staying invested. Here is how it works.",
+    intro: "You borrow against your stocks, ETFs or mutual funds while staying invested. Here is how it works.",
     steps: [
       s(
         "Share your holdings",
-        "Tell us which shares, mutual funds or bonds you hold and how much you need.",
+        "Tell us which stocks, ETFs or mutual funds you hold and how much you need.",
       ),
       s(
         "Value the portfolio",
@@ -396,7 +396,7 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
       s("Choose a lender", "We compare lenders on rate and the share of the value they will lend."),
       s(
         "Pledge the securities",
-        "You submit KYC and pledge the securities through your depository.",
+        "You submit KYC and pledge the securities. Up to ₹1 Cr is fully digital; larger limits need some paperwork too.",
       ),
       s("Limit set and funds used", "The lender sets your limit, and you draw what you need."),
     ],
