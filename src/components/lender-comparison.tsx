@@ -33,20 +33,12 @@ const ROWS: { icon: LucideIcon; label: string; values: [string, string, string] 
   },
 ];
 
-// One colour per row, strong enough to stand apart from the page and from the next row.
-const ROW_TINTS = [
-  { cell: "bg-[#cfe2fb] border-[#a9c8f3] dark:bg-card", icon: "bg-[#2a63c4] text-white", card: "bg-[#cfe2fb]" },
-  { cell: "bg-[#fadf97] border-[#f0c868] dark:bg-card", icon: "bg-[#b07a0a] text-white", card: "bg-[#fadf97]" },
-  { cell: "bg-[#bfe8d8] border-[#97d6bf] dark:bg-card", icon: "bg-[#14815f] text-white", card: "bg-[#bfe8d8]" },
-  { cell: "bg-[#ddd3f7] border-[#c4b5f0] dark:bg-card", icon: "bg-[#6a49c8] text-white", card: "bg-[#ddd3f7]" },
-  { cell: "bg-[#f9cdc2] border-[#f0aa9a] dark:bg-card", icon: "bg-[#c44a30] text-white", card: "bg-[#f9cdc2]" },
+// One colour per column (per kind of lender), carried from the heading down through every cell.
+const COL_TINTS = [
+  { head: "bg-[#2a63c4]", cell: "bg-[#d6e5fb] border-[#a9c8f3]", dot: "bg-[#2a63c4]" },
+  { head: "bg-[#b07a0a]", cell: "bg-[#fbe6a8] border-[#f0c868]", dot: "bg-[#b07a0a]" },
+  { head: "bg-[#14815f]", cell: "bg-[#c8ecdd] border-[#97d6bf]", dot: "bg-[#14815f]" },
 ] as const;
-
-const HEAD_STYLES = [
-  "bg-gradient-to-b from-[#16306b] to-[#0d1f4d]",
-  "bg-gradient-to-b from-[#0d1f4d] to-[#081338]",
-  "bg-gradient-to-b from-[#0a1633] to-[#050b1f]",
-];
 
 /**
  * A plain-language table of how the main kinds of lender usually differ. It is a general guide,
@@ -71,16 +63,16 @@ export function LenderComparison() {
           {COLUMNS.map((c, i) => (
             <div
               key={c}
-              className={`rounded-2xl px-4 py-4 text-center text-sm font-bold text-white ${HEAD_STYLES[i]}`}
+              className={`rounded-2xl px-4 py-4 text-center text-sm font-bold text-white shadow-sm ${COL_TINTS[i]!.head}`}
             >
               {c}
             </div>
           ))}
 
-          {ROWS.map((row, ri) => (
+          {ROWS.map((row) => (
             <div key={row.label} className="contents">
               <div className="flex items-center gap-3 py-5 pr-4">
-                <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${ROW_TINTS[ri % ROW_TINTS.length]!.icon}`}>
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-navy text-gold-light">
                   <row.icon className="h-4 w-4" />
                 </span>
                 <span className="text-sm font-bold text-navy dark:text-white">{row.label}</span>
@@ -88,7 +80,7 @@ export function LenderComparison() {
               {row.values.map((v, ci) => (
                 <div
                   key={ci}
-                  className={`flex items-center justify-center rounded-xl border ${ROW_TINTS[ri % ROW_TINTS.length]!.cell} px-4 py-5 text-center text-sm font-semibold text-navy shadow-sm dark:text-white`}
+                  className={`flex items-center justify-center rounded-xl border ${COL_TINTS[ci]!.cell} px-4 py-5 text-center text-sm font-semibold text-navy shadow-sm dark:bg-card dark:text-white`}
                 >
                   {v}
                 </div>
@@ -100,20 +92,26 @@ export function LenderComparison() {
 
       {/* phones: one small card per factor */}
       <div className="mx-auto mt-8 max-w-xl space-y-4 md:hidden">
-        {ROWS.map((row, ri) => (
+        {ROWS.map((row) => (
           <Reveal key={row.label}>
-            <div className={`rounded-2xl border ${ROW_TINTS[ri % ROW_TINTS.length]!.cell} p-4 shadow-sm`}>
+            <div className="rounded-2xl border border-border bg-white p-4 shadow-sm dark:bg-card">
               <div className="flex items-center gap-3">
-                <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${ROW_TINTS[ri % ROW_TINTS.length]!.icon}`}>
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-navy text-gold-light">
                   <row.icon className="h-4 w-4" />
                 </span>
                 <p className="text-sm font-bold text-navy dark:text-white">{row.label}</p>
               </div>
-              <dl className="mt-3 divide-y divide-black/10 text-sm">
+              <dl className="mt-3 space-y-2 text-sm">
                 {COLUMNS.map((c, i) => (
-                  <div key={c} className="flex items-baseline justify-between gap-4 py-2">
-                    <dt className="text-xs font-semibold text-muted-foreground">{c}</dt>
-                    <dd className="text-right font-medium text-foreground">{row.values[i]}</dd>
+                  <div
+                    key={c}
+                    className={`flex items-baseline justify-between gap-4 rounded-lg border px-3 py-2 ${COL_TINTS[i]!.cell} dark:bg-card`}
+                  >
+                    <dt className="flex items-center gap-2 text-xs font-bold text-navy dark:text-white">
+                      <span className={`h-2 w-2 shrink-0 rounded-full ${COL_TINTS[i]!.dot}`} />
+                      {c}
+                    </dt>
+                    <dd className="text-right font-semibold text-navy dark:text-white">{row.values[i]}</dd>
                   </div>
                 ))}
               </dl>
