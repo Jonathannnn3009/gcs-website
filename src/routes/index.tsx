@@ -601,7 +601,7 @@ function HomePage() {
       </div>
 
       {/* ─── WHICH KIND OF LENDER ─────────────────────── */}
-      <div className="bg-gradient-to-b from-bg-light via-[#e4ecf9] to-bg-light dark:bg-none">
+      <div>
       <Section className="pt-0">
         <LenderComparison />
       </Section>

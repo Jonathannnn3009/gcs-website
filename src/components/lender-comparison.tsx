@@ -33,13 +33,13 @@ const ROWS: { icon: LucideIcon; label: string; values: [string, string, string] 
   },
 ];
 
-// Row colours follow the site theme: navy-tinted blue and gold, alternating, carried across the icon and all three cells.
+// One colour per row, strong enough to stand apart from the page and from the next row.
 const ROW_TINTS = [
-  { cell: "bg-[#e5ebf6] dark:bg-card", icon: "bg-[#0d1f4d] text-gold-light", card: "bg-[#e5ebf6]" },
-  { cell: "bg-[#fbf1d4] dark:bg-card", icon: "bg-gold text-navy", card: "bg-[#fbf1d4]" },
-  { cell: "bg-[#d9e4f6] dark:bg-card", icon: "bg-[#16306b] text-gold-light", card: "bg-[#d9e4f6]" },
-  { cell: "bg-[#f8e8b8] dark:bg-card", icon: "bg-gold text-navy", card: "bg-[#f8e8b8]" },
-  { cell: "bg-[#e5ebf6] dark:bg-card", icon: "bg-[#0d1f4d] text-gold-light", card: "bg-[#e5ebf6]" },
+  { cell: "bg-[#cfe2fb] border-[#a9c8f3] dark:bg-card", icon: "bg-[#2a63c4] text-white", card: "bg-[#cfe2fb]" },
+  { cell: "bg-[#fadf97] border-[#f0c868] dark:bg-card", icon: "bg-[#b07a0a] text-white", card: "bg-[#fadf97]" },
+  { cell: "bg-[#bfe8d8] border-[#97d6bf] dark:bg-card", icon: "bg-[#14815f] text-white", card: "bg-[#bfe8d8]" },
+  { cell: "bg-[#ddd3f7] border-[#c4b5f0] dark:bg-card", icon: "bg-[#6a49c8] text-white", card: "bg-[#ddd3f7]" },
+  { cell: "bg-[#f9cdc2] border-[#f0aa9a] dark:bg-card", icon: "bg-[#c44a30] text-white", card: "bg-[#f9cdc2]" },
 ] as const;
 
 const HEAD_STYLES = [
@@ -66,12 +66,12 @@ export function LenderComparison() {
 
       {/* wide screens: the table */}
       <Reveal delay={80} className="mt-10 hidden md:block">
-        <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,1fr))] gap-x-3">
+        <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,1fr))] gap-x-3 gap-y-3">
           <div />
           {COLUMNS.map((c, i) => (
             <div
               key={c}
-              className={`rounded-t-2xl px-4 py-4 text-center text-sm font-bold text-white ${HEAD_STYLES[i]}`}
+              className={`rounded-2xl px-4 py-4 text-center text-sm font-bold text-white ${HEAD_STYLES[i]}`}
             >
               {c}
             </div>
@@ -88,9 +88,7 @@ export function LenderComparison() {
               {row.values.map((v, ci) => (
                 <div
                   key={ci}
-                  className={`flex items-center justify-center border-x border-b border-white/70 ${ROW_TINTS[ri % ROW_TINTS.length]!.cell} px-4 py-5 text-center text-sm font-medium text-foreground ${
-                    ri === ROWS.length - 1 ? "rounded-b-2xl" : ""
-                  }`}
+                  className={`flex items-center justify-center rounded-xl border ${ROW_TINTS[ri % ROW_TINTS.length]!.cell} px-4 py-5 text-center text-sm font-semibold text-navy shadow-sm dark:text-white`}
                 >
                   {v}
                 </div>
@@ -104,7 +102,7 @@ export function LenderComparison() {
       <div className="mx-auto mt-8 max-w-xl space-y-4 md:hidden">
         {ROWS.map((row, ri) => (
           <Reveal key={row.label}>
-            <div className={`rounded-2xl border border-white/70 p-4 shadow-[var(--shadow-card)] ${ROW_TINTS[ri % ROW_TINTS.length]!.card} dark:bg-card`}>
+            <div className={`rounded-2xl border ${ROW_TINTS[ri % ROW_TINTS.length]!.cell} p-4 shadow-sm`}>
               <div className="flex items-center gap-3">
                 <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${ROW_TINTS[ri % ROW_TINTS.length]!.icon}`}>
                   <row.icon className="h-4 w-4" />
