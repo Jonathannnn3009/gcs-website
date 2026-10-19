@@ -65,7 +65,7 @@ export function SiteHeader() {
           : "border-transparent bg-white/80 backdrop-blur-md dark:bg-card/80"
       }`}
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-5 py-3.5 sm:px-8 lg:px-6 xl:gap-4 min-[1360px]:max-w-[120rem] min-[1536px]:px-10">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-5 py-3.5 sm:px-8 lg:px-6 xl:gap-4 min-[1360px]:max-w-[120rem] min-[1536px]:px-10">
         {/* Logo — fixed width, never shrinks even if the nav grows */}
         <Link
           to="/"
@@ -79,7 +79,7 @@ export function SiteHeader() {
         {/* Right side */}
         <div className="flex min-w-0 items-center justify-end gap-2 2xl:gap-4">
           {/* Desktop nav */}
-          <nav className="hidden flex-1 items-center justify-center gap-0 text-[clamp(15px,calc(1.35vw_-_3.2px),22px)] [--s:clamp(20px,calc(4.28vw_-_36.9px),45.3px)] min-[1360px]:flex">
+          <nav className="hidden flex-1 items-center justify-center gap-0 text-[15px] min-[1500px]:absolute min-[1500px]:inset-x-0 min-[1500px]:mx-auto min-[1500px]:w-max min-[1500px]:flex-none [--s:clamp(20px,calc(4.28vw_-_36.9px),45.3px)] min-[1360px]:flex">
             {NAV.map((link) => {
               if (link.dropdown) {
                 return (
@@ -476,7 +476,7 @@ export function SiteHeader() {
           <LanguageSwitcher className="hidden sm:inline-flex" />
 
           {/* Apply CTA */}
-          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-[1.1em] xl:text-[clamp(15px,calc(1.35vw_-_3.2px),22px)] min-[1536px]:py-2.5">
+          <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-[1.1em] xl:text-[15px] min-[1536px]:py-2.5">
             Contact Us
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>

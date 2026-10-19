@@ -170,14 +170,12 @@ function ToolsPage() {
                       aria-current={on ? "true" : undefined}
                       className={`flex w-full items-center gap-3 rounded-xl border-l-4 px-3 py-2.5 text-left transition-colors ${
                         on
-                          ? "border-navy bg-white shadow-sm dark:bg-background"
+                          ? "border-navy bg-[oklch(0.74_0.09_245)] shadow-sm dark:bg-background"
                           : "border-transparent hover:bg-white/60 dark:hover:bg-gold/5"
                       }`}
                     >
                       <span
-                        className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${
-                          on ? "bg-navy text-gold-light" : "bg-blue-soft text-gold-dark dark:bg-gold/15"
-                        }`}
+                        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-soft text-gold-dark dark:bg-gold/15"
                       >
                         <t.icon className="h-5 w-5" />
                       </span>

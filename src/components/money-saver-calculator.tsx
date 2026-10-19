@@ -154,6 +154,16 @@ export function MoneySaverCalculator() {
             </p>
             <div className="relative mt-5 h-px w-full bg-gold/20"></div>
             <div className="relative mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="hero-stat relative overflow-hidden rounded-2xl border border-gold/40 bg-white/60 px-4 py-4 sm:col-span-2 dark:bg-card/60">
+                <p className="text-[11px] font-bold tracking-wider text-gold-dark uppercase">
+                  Effective reduced ROI
+                </p>
+                <p className="mt-1 text-3xl font-extrabold sm:text-4xl">
+                  <span className="text-muted-foreground">{rate.toFixed(2)}%</span>{" "}
+                  <span className="text-muted-foreground">→</span>{" "}
+                  <span className="hero-stat-text">{result.effectiveRatePct.toFixed(2)}%</span>
+                </p>
+              </div>
               <div>
                 <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
                   Monthly Outflow (Without considering excess amount)
@@ -168,21 +178,12 @@ export function MoneySaverCalculator() {
                   {formatINR(Math.round(result.avgOutflow))}
                 </p>
               </div>
-              <div>
+              <div className="sm:col-span-2">
                 <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
                   Average Monthly Interest benefit
                 </p>
                 <p className="mt-1 text-lg font-extrabold text-gold">
                   {formatINR(Math.round(result.avgMonthlySaving))}
-                </p>
-              </div>
-              <div>
-                <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  Effective reduced ROI
-                </p>
-                <p className="mt-1 text-lg font-extrabold text-gold">
-                  {rate.toFixed(2)}% <span className="text-muted-foreground">→</span>{" "}
-                  {result.effectiveRatePct.toFixed(2)}%
                 </p>
               </div>
             </div>

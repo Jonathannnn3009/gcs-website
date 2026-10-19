@@ -133,7 +133,7 @@ function PartnerForm() {
     const id = code.trim().toUpperCase().replace(/\s+/g, "-");
     const next: typeof errors = {};
     if (!digits) next.phone = "Enter the 10-digit mobile number registered with us";
-    if (!PARTNER_ID.test(id)) next.code = "Enter your GCS ID, for example GCS-BSA-001";
+    if (!PARTNER_ID.test(id)) next.code = "Enter your Partner ID, for example GCS-BSA-001";
     setErrors(next);
     if (next.phone || next.code || !digits) return;
     leaveHandoff({ kind: "partner", phone: digits, code: id });
@@ -161,7 +161,7 @@ function PartnerForm() {
         </div>
         <div>
           <label htmlFor={`${uid}-code`} className={labelClass}>
-            GCS ID <span className="text-gold">*</span>
+            Partner ID <span className="text-gold">*</span>
           </label>
           <input
             id={`${uid}-code`}
@@ -173,7 +173,7 @@ function PartnerForm() {
             maxLength={24}
           />
           <p className="mt-1.5 text-xs text-muted-foreground">
-            The partner ID GCS gave you when you joined.
+            The Partner ID GCS gave you when you joined.
           </p>
           <Err text={errors.code} />
         </div>
@@ -194,6 +194,7 @@ const RESEND_SECONDS = 30;
  */
 function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
   const uid = useId();
+  const idName = kind === "client" ? "GCS ID" : "Partner ID";
   const [step, setStep] = useState<"phone" | "code" | "done" | "none">("phone");
   const [phone, setPhone] = useState("");
   const [code, setCode] = useState("");
@@ -263,12 +264,14 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
           <Check className="h-6 w-6" />
         </span>
         <h2 className="mt-4 text-lg font-extrabold text-navy dark:text-white">
-          {step === "done" ? "Your GCS ID is on its way" : "We have no GCS ID for this number"}
+          {step === "done"
+            ? `Your ${idName} is on its way`
+            : `We have no ${idName} for this number`}
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           {step === "done"
             ? `We have sent it by SMS to ${shown}. When it arrives, come back and enter it with your mobile number.`
-            : `Your number ${shown} is confirmed, but no GCS ID is held against it yet. Call ${CONTACT.phone} and an expert will help.`}
+            : `Your number ${shown} is confirmed, but no ${idName} is held against it yet. Call ${CONTACT.phone} and an expert will help.`}
         </p>
         {back}
       </div>
@@ -277,11 +280,11 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
 
   return (
     <div>
-      <h2 className="text-lg font-extrabold text-navy dark:text-white">Get your GCS ID</h2>
+      <h2 className="text-lg font-extrabold text-navy dark:text-white">Get your {idName}</h2>
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
         {kind === "client"
           ? "Enter the mobile number on your loan file. We will text a code to confirm it is you, then text you your GCS ID."
-          : "Enter the mobile number you joined GCS with. We will text a code to confirm it is you, then text you your partner GCS ID."}
+          : "Enter the mobile number you joined GCS with. We will text a code to confirm it is you, then text you your Partner ID."}
       </p>
 
       {step === "phone" ? (
@@ -308,7 +311,7 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
       ) : (
         <form onSubmit={verify} noValidate className="mt-5">
           <p className="text-[13px] leading-relaxed text-muted-foreground">
-            If a GCS ID is held for {shown}, we have texted it a 6-digit code.{" "}
+            If a {idName} is held for {shown}, we have texted it a 6-digit code.{" "}
             <button
               type="button"
               onClick={() => {
@@ -335,7 +338,7 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
           />
           <Err text={error} />
           <button type="submit" disabled={busy} className={submitClass}>
-            {busy ? "Checking…" : "Send me my GCS ID"}
+            {busy ? "Checking…" : `Send me my ${idName}`}
             <Arrow />
           </button>
           <p className="mt-3 text-[13px] text-muted-foreground">
@@ -375,12 +378,12 @@ const SIDE: Record<Who, { eyebrow: string; title: string; text: string; points: 
   partner: {
     eyebrow: "For partners",
     title: "Partner sign in",
-    text: "Enter your registered mobile number and your partner GCS ID, and we will take you to your partner portal. There you sign in with your password.",
+    text: "Enter your registered mobile number and your Partner ID, and we will take you to your partner portal. There you sign in with your password.",
     points: [
       "Every client you have referred, in one place",
       "Where each file stands, from referral to disbursal",
       "Your commission structure",
-      "Lost your GCS ID? Confirm your mobile number and we text it to you",
+      "Lost your Partner ID? Confirm your mobile number and we text it to you",
     ],
   },
 };
@@ -493,7 +496,7 @@ function TrackApplicationPage() {
                         onClick={() => setRecover(true)}
                         className="mt-4 text-[13px] font-semibold text-gold-dark hover:underline"
                       >
-                        Do not have a GCS ID?
+                        {who === "client" ? "Do not have a GCS ID?" : "Do not have a Partner ID?"}
                       </button>
                     </>
                   )}
