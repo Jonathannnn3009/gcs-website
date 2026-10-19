@@ -607,3 +607,15 @@ COPIES = {
         "overdraft-limit", "bill-discounting", "working-capital-term-loan",
     ],
 }
+
+# Fuller lists, kept in their own file: Project Funding (from the construction-finance sheet),
+# Loan Against Securities and Private Funding.
+from data_expanded import (  # noqa: E402
+    LOAN_AGAINST_SECURITIES as _LAS_FULL,
+    PRIVATE_FUNDING as _PF_FULL,
+    PROJECT_FUNDING as _PROJECT_FULL,
+)
+
+LOAN_CHECKLISTS["project-funding"] = _PROJECT_FULL
+LOAN_CHECKLISTS["loan-against-securities"] = _LAS_FULL
+LOAN_CHECKLISTS["private-funding"] = _PF_FULL

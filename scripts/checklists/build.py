@@ -17,6 +17,7 @@ from pypdf import PdfReader
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from data_ca_legal import SERVICES  # noqa: E402
+from data_ca_legal_detail import DETAIL  # noqa: E402
 import json  # noqa: E402
 from data_loans import COPIES, LOAN_CHECKLISTS  # noqa: E402
 from render import build_pdf  # noqa: E402
@@ -58,6 +59,9 @@ def split_condition(text):
     return text
 
 
+# Lists that run over more than one page
+LONGER = {"project-funding": 3, "loan-against-securities": 2, "private-funding": 2}
+
 built = []
 layouts = {}
 
@@ -65,7 +69,9 @@ layouts = {}
 for slug, spec in LOAN_CHECKLISTS.items():
     if only and only not in slug:
         continue
-    layouts[slug] = build_fitting(slug, spec["title"], spec["sections"], spec.get("subtitle"))
+    layouts[slug] = build_fitting(
+        slug, spec["title"], spec["sections"], spec.get("subtitle"), pages=LONGER.get(slug, 1)
+    )
     built.append(slug)
     for copy in COPIES.get(slug, []):
         shutil.copyfile(path_for(slug), path_for(copy))
@@ -103,7 +109,10 @@ for slug, title, division, documents in SERVICES:
         },
         {"title": "Documents Typically Required", "items": [split_condition(d) for d in documents]},
     ]
-    if slug in FULL_GROUPS:
+    if slug in DETAIL:
+        sections = sections[:1] + DETAIL[slug]
+        layouts[slug] = build_fitting(slug, title, sections, "Document checklist for this service.", pages=2)
+    elif slug in FULL_GROUPS:
         sections = sections[:1] + [
             {"callout": "The exact documents depend on your income sources. <b>You only need to provide the "
              "documents that apply to you.</b> Additional documents may be asked for after your case is reviewed."}
