@@ -232,9 +232,9 @@ export function MoneySaverCalculator() {
               </button>
             ))}
           </div>
-          <div className="max-h-[32rem] overflow-auto rounded-xl border border-border/60">
-            <table className="w-full min-w-[880px] text-right text-[13px]">
-              <thead className="sticky top-0 z-10 bg-white dark:bg-card">
+          <div className="max-h-[32rem] overflow-auto rounded-xl border border-[#aebbd6]">
+            <table className="w-full min-w-[880px] border-collapse text-right text-[13px] [&_td]:border [&_td]:border-[#c4cfe4] [&_th]:border [&_th]:border-[#aebbd6]">
+              <thead className="sticky top-0 z-10 bg-[#e8eef9] dark:bg-card">
                 <tr className="border-b border-border align-bottom text-[10px] leading-snug font-bold tracking-wider text-muted-foreground uppercase">
                   <th className="px-3 py-3 text-left">{view === "month" ? "Month" : "Year"}</th>
                   <th className="px-3 py-3" title="Loan outstanding at the start (the sanction limit)">
@@ -278,7 +278,7 @@ export function MoneySaverCalculator() {
                   </tr>
                 ))}
               </tbody>
-              <tfoot className="sticky bottom-0 bg-white font-extrabold text-navy dark:bg-card dark:text-white">
+              <tfoot className="sticky bottom-0 bg-[#e8eef9] font-extrabold text-navy dark:bg-card dark:text-white">
                 <tr className="border-t-2 border-gold/30">
                   <td className="px-3 py-3 text-left">Total</td>
                   <td className="px-3 py-3" />
