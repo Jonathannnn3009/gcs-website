@@ -729,8 +729,10 @@ function CibilPage() {
         </div>
       </section>
 
+      {/* One soft blue wash behind the steps and the form, so there is no hard edge between them */}
+      <div className="bg-gradient-to-b from-bg-light via-[#e6eef9] to-bg-light dark:bg-none">
       {/* The four steps, read left to right before the form */}
-      <Section className="pt-6 pb-0 sm:pt-8">
+      <Section className="!pb-0 pt-6 sm:pt-8">
         <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {HOW_IT_WORKS.map((st, i) => (
             <li
@@ -750,7 +752,6 @@ function CibilPage() {
         </ol>
       </Section>
 
-      <div className="bg-gradient-to-b from-[#dfe9f7] via-[#eaf1fa] to-transparent">
       <Section className="pt-8 sm:pt-10">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
           <CibilFlow />
