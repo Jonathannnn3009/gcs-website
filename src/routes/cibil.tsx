@@ -271,8 +271,8 @@ function CibilFlow() {
 
   if (done && bureau) {
     return (
-      <div className="flex flex-col items-center rounded-2xl navy-panel border border-white/10 [&_.text-navy]:text-white [&_.text-muted-foreground]:text-white/70 p-8 text-center sm:p-10">
-        <span className="grid h-14 w-14 place-items-center rounded-full bg-gold/15 text-gold-light ring-1 ring-gold/30">
+      <div className="flex flex-col items-center rounded-2xl border border-border bg-white p-8 text-center shadow-[var(--shadow-card)] sm:p-10 dark:bg-card">
+        <span className="grid h-14 w-14 place-items-center rounded-full bg-gold/15 text-gold-dark ring-1 ring-gold/30">
           <Check className="h-7 w-7" />
         </span>
         <h3 className="tracking-normal mt-5 text-xl font-extrabold text-navy dark:text-white">
@@ -294,7 +294,7 @@ function CibilFlow() {
           <button
             type="button"
             onClick={reset}
-            className="rounded-lg border border-white/20 px-5 py-2.5 text-sm font-bold text-navy transition-colors hover:bg-white/10 dark:text-white"
+            className="rounded-lg border border-border px-5 py-2.5 text-sm font-bold text-navy transition-colors hover:bg-gold/10 dark:text-white"
           >
             Request another report
           </button>
@@ -304,12 +304,15 @@ function CibilFlow() {
   }
 
   return (
-    <div className="rounded-2xl navy-panel border border-white/10 [&_.text-navy]:text-white [&_.text-muted-foreground]:text-white/70 p-5 shadow-[var(--shadow-lift)] sm:p-8">
-      <StepIndicator step={step} />
+    <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-lift)] dark:bg-card">
+      <div className="navy-panel px-5 py-4 sm:px-8">
+        <StepIndicator step={step} />
+      </div>
+      <div className="p-5 sm:p-8">
 
       {/* Step 1 — details */}
       {step === 1 && (
-        <form onSubmit={onSubmitDetails} noValidate className="mt-8">
+        <form onSubmit={onSubmitDetails} noValidate>
           <h3 className="tracking-normal text-xl font-extrabold text-navy dark:text-white">First, your details</h3>
           <p className="mt-2 text-sm text-muted-foreground">
             We need these to pull your report. Enter them exactly as they appear on your PAN card
@@ -484,7 +487,7 @@ function CibilFlow() {
 
       {/* Step 2 — bureau */}
       {step === 2 && (
-        <div className="mt-8">
+        <div>
           <BackButton onClick={() => setStep(1)} />
           <h3 className="tracking-normal mt-3 text-xl font-extrabold text-navy dark:text-white">
             Which credit bureau's report do you need?
@@ -502,9 +505,9 @@ function CibilFlow() {
                   setLastPulled(null);
                   setStep(3);
                 }}
-                className="group flex items-start gap-3 rounded-xl border border-white/15 bg-white/5 p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
+                className="group flex items-start gap-3 rounded-xl border border-border bg-white p-4 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-card"
               >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold/15 text-gold-light ring-1 ring-gold/30 transition-colors group-hover:bg-gold group-hover:text-[#0b1530]">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold/15 text-gold-dark ring-1 ring-gold/30 transition-colors group-hover:bg-gold group-hover:text-[#0b1530]">
                   <Gauge className="h-5 w-5" />
                 </span>
                 <span className="min-w-0">
@@ -523,7 +526,7 @@ function CibilFlow() {
 
       {/* Step 3 — when they last took a report (for our records) */}
       {step === 3 && bureau && (
-        <div className="mt-8">
+        <div>
           <BackButton onClick={() => setStep(2)} />
           <h3 className="tracking-normal mt-3 text-xl font-extrabold text-navy dark:text-white">
             When did you last take your {bureau.name} report?
@@ -537,7 +540,7 @@ function CibilFlow() {
                   setLastPulled(o.id);
                   setStep(4);
                 }}
-                className="group flex w-full items-center justify-between gap-3 rounded-xl border border-white/15 bg-white/5 p-4 text-left transition-all duration-300 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-background"
+                className="group flex w-full items-center justify-between gap-3 rounded-xl border border-border bg-white p-4 text-left transition-all duration-300 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-card"
               >
                 <span>
                   <span className="block text-sm font-extrabold text-navy dark:text-white">
@@ -554,7 +557,7 @@ function CibilFlow() {
 
       {/* Step 4 — payment */}
       {step === 4 && bureau && (
-        <div className="mt-8">
+        <div>
           <BackButton onClick={() => setStep(3)} />
           <h3 className="tracking-normal mt-3 text-xl font-extrabold text-navy dark:text-white">
             Pay ₹{REPORT_PRICE} by UPI
@@ -569,7 +572,7 @@ function CibilFlow() {
               <ol className="space-y-2 text-sm text-muted-foreground">
                 <li>1. Scan the QR with any UPI app (GPay, PhonePe, Paytm, BHIM…).</li>
                 <li>
-                  2. Pay exactly <strong className="text-gold-light">₹{REPORT_PRICE}</strong>.
+                  2. Pay exactly <strong className="text-gold-dark">₹{REPORT_PRICE}</strong>.
                 </li>
                 <li>3. Enter the 12-digit UTR / transaction ID below.</li>
               </ol>
@@ -613,6 +616,7 @@ function CibilFlow() {
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 }
@@ -766,19 +770,18 @@ function CibilPage() {
                 </li>
               </ul>
             </div>
-            <div className="navy-panel relative overflow-hidden rounded-2xl p-6">
-              <div className="pointer-events-none absolute -top-8 -right-8 h-32 w-32 rounded-full bg-gold/15 blur-[50px]" />
-              <span className="relative grid h-10 w-10 place-items-center rounded-lg bg-white/10 text-gold-light ring-1 ring-white/15">
+            <div className="rounded-2xl border border-blue-soft-border bg-blue-soft p-6 dark:border-gold/15 dark:bg-card">
+              <span className="grid h-10 w-10 place-items-center rounded-lg bg-white text-gold-dark dark:bg-card">
                 <Gauge className="h-5 w-5" />
               </span>
-              <h3 className="tracking-normal relative mt-3 text-sm font-extrabold text-white">
+              <h3 className="tracking-normal mt-3 text-sm font-extrabold text-navy dark:text-white">
                 Credit Score Estimator
               </h3>
-              <p className="relative mt-2 text-xs leading-relaxed text-white/70">
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                 Not sure where you stand? Get an indicative score range in a minute, before you
                 request your report.
               </p>
-              <Link to="/credit-score-estimator" className="relative mt-4 gold-btn px-4 py-2.5">
+              <Link to="/credit-score-estimator" className="mt-4 gold-btn px-4 py-2.5">
                 Try the estimator <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
