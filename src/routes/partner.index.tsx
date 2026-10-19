@@ -43,6 +43,7 @@ import { isValidEmail } from "@/lib/validation";
 import { useFaqs } from "@/lib/site-content";
 import { submitLead } from "@/lib/leads";
 import { useCommissionStructure } from "@/lib/commission";
+import { EarningsEstimator } from "@/components/earnings-estimator";
 import { COMMISSION_STRUCTURE } from "@/data/commission-fallback";
 import {
   PARTNER_BENEFITS,
@@ -660,6 +661,21 @@ function PartnerPage() {
           <p className="mt-3 text-xs text-muted-foreground italic">
             Commission rates may vary based on lender, loan amount and partner tier.
           </p>
+        </Reveal>
+      </Section>
+
+      {/* What could I earn: the same estimator the Freelancer page has */}
+      <Section className="pt-0">
+        <Reveal>
+          <SectionHeading
+            eyebrow="What You Could Earn"
+            title="Work out your own numbers."
+            description="Pick a loan type, a typical amount and how many clients you might refer in a month."
+            align="center"
+          />
+        </Reveal>
+        <Reveal delay={80} className="mx-auto mt-10 max-w-5xl">
+          <EarningsEstimator joinHref="#register" />
         </Reveal>
       </Section>
 
