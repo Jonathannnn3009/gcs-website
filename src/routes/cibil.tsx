@@ -9,7 +9,11 @@ import {
   Gauge,
   Lock,
   MessageCircle,
+  QrCode,
+  ShieldCheck,
   Smartphone,
+  UserRound,
+  type LucideIcon,
 } from "lucide-react";
 import { Section } from "@/components/section";
 import { PageCalculators } from "@/components/page-calculators";
@@ -613,21 +617,59 @@ function CibilFlow() {
   );
 }
 
-const howItWorks = () => [
+const howItWorks = (): { title: string; text: string; icon: LucideIcon }[] => [
   {
     title: "Share your details",
-    text: "PAN, date of birth and address — exactly as on your records.",
+    text: "PAN, date of birth and address, exactly as on your records.",
+    icon: UserRound,
   },
-  { title: "Choose your bureau", text: "TransUnion CIBIL, Experian, Equifax or CRIF High Mark." },
   {
-    title: "Tell us when you last took your report",
+    title: "Choose your bureau",
+    text: "TransUnion CIBIL, Experian, Equifax or CRIF High Mark.",
+    icon: Gauge,
+  },
+  {
+    title: "Tell us your last report",
     text: "A quick question so we have the full picture.",
+    icon: FileSearch,
   },
   {
     title: "Pay by UPI QR",
-    text: "One flat price for any bureau. We then pull your report and send it to you.",
+    text: "One flat price for any bureau. We pull your report and send it to you.",
+    icon: QrCode,
   },
 ];
+
+/** A decorative 300 to 900 score dial for the hero. It shows the scale, not a real score. */
+function ScoreDial() {
+  return (
+    <div className="relative mx-auto w-full max-w-[320px] rounded-3xl border border-white/15 bg-white/[0.06] p-6 backdrop-blur-sm">
+      <div className="pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full bg-gold/20 blur-[60px]" />
+      <svg viewBox="0 0 240 150" className="relative w-full" role="img" aria-label="A credit score dial from 300 to 900">
+        <defs>
+          <linearGradient id="cibil-dial" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#e0614f" />
+            <stop offset="45%" stopColor="#e4b028" />
+            <stop offset="100%" stopColor="#38b27a" />
+          </linearGradient>
+        </defs>
+        <path d="M 20 130 A 100 100 0 0 1 220 130" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="16" strokeLinecap="round" />
+        <path d="M 20 130 A 100 100 0 0 1 220 130" fill="none" stroke="url(#cibil-dial)" strokeWidth="16" strokeLinecap="round" />
+        <line x1="120" y1="130" x2="177" y2="73" stroke="#fff" strokeWidth="4" strokeLinecap="round" />
+        <circle cx="120" cy="130" r="9" fill="#e4b028" />
+        <circle cx="120" cy="130" r="3.5" fill="#0b1849" />
+        <text x="20" y="148" fill="rgba(255,255,255,0.65)" fontSize="11" fontWeight="700" textAnchor="middle">300</text>
+        <text x="220" y="148" fill="rgba(255,255,255,0.65)" fontSize="11" fontWeight="700" textAnchor="middle">900</text>
+      </svg>
+      <p className="relative mt-2 text-center text-[11px] font-bold tracking-[0.2em] text-gold-light uppercase">
+        Credit score range
+      </p>
+      <p className="relative mt-1 text-center text-xs leading-relaxed text-white/65">
+        Know where you stand before you apply for a loan.
+      </p>
+    </div>
+  );
+}
 
 function CibilPage() {
   const HOW_IT_WORKS = howItWorks();
@@ -638,55 +680,77 @@ function CibilPage() {
           <Reveal animate={false}>
             <div className="navy-panel relative overflow-hidden rounded-3xl p-8 sm:p-12">
               <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
-              <div className="relative">
-                <p className="eyebrow">CIBIL &amp; Credit Reports</p>
-                <h1 style={{ fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }} className="mt-4 text-3xl leading-tight font-extrabold text-white sm:text-5xl">
-                  Get Your Credit Report, <span className="gold-text">Without the Hassle.</span>
-                </h1>
-                <p className="mt-4 max-w-2xl text-base text-white/70">
-                  Pick your credit bureau, pay by UPI QR and share a few details — our team pulls
-                  your TransUnion CIBIL, Experian, Equifax or CRIF High Mark report and sends it to
-                  you.
-                </p>
-                <Link
-                  to="/credit-score-estimator"
-                  className="mt-5 inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2.5 text-sm font-bold text-white/85 transition-colors hover:border-gold/40 hover:text-white"
-                >
-                  <Gauge className="h-4 w-4 text-gold" />
-                  Not sure where you stand? Try our Credit Score Estimator
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+              <div className="absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-[#2f5fd0]/20 blur-[90px]" />
+              <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,0.8fr)]">
+                <div>
+                  <p className="eyebrow">CIBIL &amp; Credit Reports</p>
+                  <h1 style={{ fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }} className="mt-4 text-3xl leading-tight font-extrabold text-white sm:text-5xl">
+                    Get Your Credit Report, <span className="gold-text">Without the Hassle.</span>
+                  </h1>
+                  <p className="mt-4 max-w-2xl text-base text-white/70">
+                    Pick your credit bureau, pay by UPI QR and share a few details. Our team pulls
+                    your TransUnion CIBIL, Experian, Equifax or CRIF High Mark report and sends it
+                    to you.
+                  </p>
+                  <ul className="mt-6 flex flex-wrap gap-2.5">
+                    {[
+                      { icon: ShieldCheck, text: "Soft enquiry, no score impact" },
+                      { icon: QrCode, text: `Flat ₹${REPORT_PRICE}, paid by UPI` },
+                      { icon: Gauge, text: "4 credit bureaus" },
+                    ].map((c) => (
+                      <li
+                        key={c.text}
+                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-3.5 py-1.5 text-xs font-semibold text-white/85"
+                      >
+                        <c.icon className="h-3.5 w-3.5 text-gold" />
+                        {c.text}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    to="/credit-score-estimator"
+                    className="mt-6 inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2.5 text-sm font-bold text-white/85 transition-colors hover:border-gold/40 hover:text-white"
+                  >
+                    <Gauge className="h-4 w-4 text-gold" />
+                    Not sure where you stand? Try our Credit Score Estimator
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+                <div className="hidden lg:block">
+                  <ScoreDial />
+                </div>
               </div>
             </div>
           </Reveal>
         </div>
       </section>
 
-      <Section>
+      {/* The four steps, read left to right before the form */}
+      <Section className="pt-6 pb-0 sm:pt-8">
+        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {HOW_IT_WORKS.map((st, i) => (
+            <li
+              key={st.title}
+              className="group relative overflow-hidden rounded-2xl border border-border bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[var(--shadow-lift)] dark:bg-card"
+            >
+              <span className="pointer-events-none absolute -top-3 right-3 font-heading text-6xl font-extrabold text-gold/15">
+                {i + 1}
+              </span>
+              <span className="relative grid h-11 w-11 place-items-center rounded-xl bg-navy text-gold-light transition-colors group-hover:bg-gold group-hover:text-navy">
+                <st.icon className="h-5 w-5" />
+              </span>
+              <p className="relative mt-4 text-sm font-extrabold text-navy dark:text-white">{st.title}</p>
+              <p className="relative mt-1 text-xs leading-relaxed text-muted-foreground">{st.text}</p>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
+      <Section className="pt-8 sm:pt-10">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
           <CibilFlow />
 
           <aside className="space-y-5">
-            <div className="rounded-2xl border border-border bg-white p-6 dark:bg-card">
-              <p className="eyebrow">How it works</p>
-              <ol className="mt-4 space-y-4">
-                {HOW_IT_WORKS.map((s, i) => (
-                  <li key={s.title} className="flex gap-3">
-                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-navy text-xs font-bold text-gold-light">
-                      {i + 1}
-                    </span>
-                    <span>
-                      <span className="block text-sm font-bold text-navy dark:text-white">
-                        {s.title}
-                      </span>
-                      <span className="block text-xs leading-relaxed text-muted-foreground">
-                        {s.text}
-                      </span>
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            </div>
             <div className="rounded-2xl border border-blue-soft-border bg-blue-soft p-6 dark:border-gold/15 dark:bg-card">
               <span className="grid h-10 w-10 place-items-center rounded-lg bg-white text-gold-dark dark:bg-card">
                 <FileSearch className="h-5 w-5" />
@@ -695,28 +759,26 @@ function CibilPage() {
                 Good to know
               </h3>
               <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted-foreground">
-                <li>Checking your own report is a soft enquiry — it doesn't lower your score.</li>
+                <li>Checking your own report is a soft enquiry. It doesn't lower your score.</li>
                 <li>
                   Growth Capital Services is independent of TransUnion CIBIL, Experian, Equifax and
                   CRIF High Mark; their names only tell us which report you want.
                 </li>
               </ul>
             </div>
-            <div className="rounded-2xl border border-blue-soft-border bg-blue-soft p-6 dark:border-gold/15 dark:bg-card">
-              <span className="grid h-10 w-10 place-items-center rounded-lg bg-white text-gold-dark">
+            <div className="navy-panel relative overflow-hidden rounded-2xl p-6">
+              <div className="pointer-events-none absolute -top-8 -right-8 h-32 w-32 rounded-full bg-gold/15 blur-[50px]" />
+              <span className="relative grid h-10 w-10 place-items-center rounded-lg bg-white/10 text-gold-light ring-1 ring-white/15">
                 <Gauge className="h-5 w-5" />
               </span>
-              <h3 className="tracking-normal mt-3 text-sm font-extrabold text-navy dark:text-white">
+              <h3 className="tracking-normal relative mt-3 text-sm font-extrabold text-white">
                 Credit Score Estimator
               </h3>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+              <p className="relative mt-2 text-xs leading-relaxed text-white/70">
                 Not sure where you stand? Get an indicative score range in a minute, before you
                 request your report.
               </p>
-              <Link
-                to="/credit-score-estimator"
-                className="mt-4 gold-btn px-4 py-2.5"
-              >
+              <Link to="/credit-score-estimator" className="relative mt-4 gold-btn px-4 py-2.5">
                 Try the estimator <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
