@@ -397,21 +397,25 @@ DETAIL = {
     ],
     "property-title-verification": [
         {
-            "title": "Seller & Property Details",
+            "title": "Core Ownership & Title Documents",
             "items": [
-                "KYC of all the owners || PAN card, Aadhaar card, address proof",
-                "Full address and description of the property",
-                "Survey number, CTS number, plot number and area",
+                "Original registered Sale Deed, Conveyance Deed or other ownership document",
+                "Previous title deeds and chain of ownership documents, where required",
+                "Latest Index II",
+                "Latest Property Card / 7/12 Extract / 8A Extract, as applicable",
+                "Latest mutation entries and supporting orders, if applicable",
+                "Latest property tax bill and paid receipts",
+                "Complete property details, including area, address, CTS / Survey / Gat number, as applicable",
+                "Details of mortgages, loans, encumbrances, litigation or third-party claims, if any",
+                "Power of Attorney, if applicable",
             ],
         },
         {
-            "title": "Chain Of Title",
+            "title": "Owner / Seller Details",
             "items": [
-                "All earlier deeds || Sale deeds, gift deeds, wills, partition, conveyance, last 30 years",
-                "Registration receipts and Index II extracts",
-                "7/12 extract, property card or city survey record, and mutation entries",
-                "Encumbrance certificate || Last 30 years",
+                "KYC of all the owners || PAN card, Aadhaar card, address proof",
                 "Legal heir certificate and death certificate || If the property was inherited",
+                "Registration receipts of the earlier deeds",
             ],
         },
         {
@@ -421,15 +425,16 @@ DETAIL = {
                 "Society share certificate and NOC || For a society flat",
                 "Approved plans, Commencement Certificate, Occupancy Certificate",
                 "RERA registration certificate || For new projects",
-                "Property tax receipts, electricity and maintenance bills",
+                "Electricity and maintenance bills",
             ],
         },
         {
             "title": "Other Checks",
             "items": [
+                "Encumbrance certificate || Last 30 years",
                 "NOC and loan closure papers from any bank || If the property was mortgaged",
                 "Court orders or litigation details || If any",
-                "Development Agreement and Power of Attorney || If any",
+                "Development Agreement || If any",
             ],
         },
     ],
@@ -504,7 +509,6 @@ DETAIL = {
             "items": [
                 "Two witnesses with ID proof",
                 "Stamp duty and registration fee",
-                "Declaration that the gift is made without payment || For a gift deed",
             ],
         },
     ],

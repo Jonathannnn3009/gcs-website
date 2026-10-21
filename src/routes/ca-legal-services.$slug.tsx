@@ -335,7 +335,7 @@ function ProfessionalServiceDetailPage() {
 
               <div className="bg-secondary/40 p-5 text-xs leading-relaxed text-muted-foreground">
                 This service is arranged through our associated professionals —{" "}
-                {service.division === "CA Services" ? "our CA Services team" : "Sheetal Associates"}{" "}
+                {service.division === "CA Services" ? "our CA Services team" : "our Professional Legal Services team"}{" "}
                 — who handle the work through their own professional process. Requirements,
                 documentation and timelines vary case to case.
               </div>

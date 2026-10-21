@@ -16,7 +16,7 @@ export const Route = createFileRoute("/ca-legal-services/")({
       {
         name: "description",
         content:
-          "Tax, GST, accounting and business registration through our associated CA Services team, and property, society, SRA/MHADA/MMRDA and legal documentation through Sheetal Associates.",
+          "Tax, GST, accounting and business registration through our associated CA Services team, and property, society, SRA/MHADA/MMRDA and legal documentation through our Professional Legal Services team.",
       },
       { property: "og:title", content: "CA & Legal Services | Growth Capital Services" },
       {
@@ -51,7 +51,7 @@ function CaLegalServicesPage() {
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
               Alongside our loan business, we connect you with our associated professionals — our
-              CA Services team for tax, GST and business compliance, and Sheetal Associates for
+              CA Services team for tax, GST and business compliance, and our Professional Legal Services team for
               property and legal documentation — each handling the work through their own
               professional process, with GCS as your single point of contact.
             </p>

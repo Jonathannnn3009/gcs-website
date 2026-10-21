@@ -618,7 +618,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     category: "Property Legal Services",
     title: "Property Title Verification & Due Diligence",
     summary:
-      "Review of ownership documents, title chain, encumbrances and approvals before a property purchase. We flag anything that could complicate the sale — a pending litigation, an unclear share, or a missing approval — before you commit funds.",
+      "We undertake comprehensive verification of property title and ownership documents, including the chain of title, encumbrances, charges, mortgages, claims, pending litigation and property records. We identify title defects, ownership discrepancies and missing documents, assess potential legal risks, and provide appropriate legal observations and recommendations to facilitate informed decisions.",
     whoNeedsIt:
       "Buyers wanting a professional check on a property's title and documentation before committing. Especially important for resale flats, ancestral property, or anything without a clean, recent chain of ownership.",
     process: [
@@ -627,9 +627,15 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Written observations shared with you",
     ],
     documents: [
-      "Title documents/chain",
-      "7/12 extract or property card",
-      "Encumbrance certificate, where available",
+      "Original registered Sale Deed, Conveyance Deed or other ownership document",
+      "Previous title deeds and chain of ownership documents, where required",
+      "Latest Index II",
+      "Latest Property Card / 7/12 Extract / 8A Extract, as applicable",
+      "Latest mutation entries and supporting orders, if applicable",
+      "Latest property tax bill and paid receipts",
+      "Complete property details, including area, address, CTS / Survey / Gat number, as applicable",
+      "Details of mortgages, loans, encumbrances, litigation or third-party claims, if any",
+      "Power of Attorney, if applicable",
     ],
   },
   {
@@ -692,7 +698,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     category: "Housing Society Services",
     title: "Housing Society Share Transfer",
     summary:
-      "Documentation support for transferring share certificates and flat ownership within a housing society. We prepare the transfer application in the format each society typically expects, to avoid back-and-forth.",
+      "We provide legal documentation assistance for the transfer of society shares and flat ownership in housing societies. Our services include preparation and review of transfer applications, forms, declarations and supporting documents in accordance with applicable laws, society bye-laws and prescribed procedures, ensuring accurate and smooth completion of the transfer formalities.",
     whoNeedsIt:
       "Flat owners transferring ownership after a sale, gift or family transfer within a co-operative society. Required whenever a flat changes hands, since the society's own records must be updated alongside the deed.",
     process: [

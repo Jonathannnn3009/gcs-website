@@ -100,7 +100,7 @@ def full_sections(groups):
 for slug, title, division, documents in SERVICES:
     if only and only not in slug:
         continue
-    associate = "our CA Services team" if division == "CA Services" else "Sheetal Associates"
+    associate = "our CA Services team" if division == "CA Services" else "Professional Legal Services"
     sections = [
         {
             "callout": f"<b>Handled through {associate}.</b> This service is arranged through our associated "
