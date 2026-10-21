@@ -47,7 +47,8 @@ def employment_income(slips: int, title="Income Documents", note="For salaried p
             EMPLOYMENT_PROOF,
             f"Salary slips || Latest {slips} months",
             "Salary and savings account statements || Latest 12 months",
-            "Form 16 (Part A & Part B) & Form 26AS || Latest 2 years",
+            "Form 16 (Part A & Part B) || Latest year",
+            "Form 26AS || Latest 2 years",
             "ITR || Last 2 years | If income is taxable",
         ],
     }
@@ -80,6 +81,18 @@ BUSINESS_PROOF = {
         "PAN card, Memorandum & Articles of Association (MOA & AOA) / Resolution, list of Directors & "
         "Shareholders on company letterhead duly attested by CA, Certificate of Incorporation, Shop Act "
         "licence, Udyam registration certificate, GST registration certificate || tag:Pvt Ltd company",
+    ],
+}
+
+BUSINESS_DETAILS = {
+    "title": "Business Details",
+    "note": "Party-wise and promoter information",
+    "items": [
+        "Top 5 customers and top 5 suppliers — party-wise details",
+        "Latest order copies",
+        "Company profile — brief profile and background of the promoters",
+        "Loan end-use details",
+        "Debtors ageing, party-wise || Last and current financial year",
     ],
 }
 
@@ -202,7 +215,8 @@ HOME_LOAN_NRI = dict(
                 "Salary and savings account statements || Latest 12 months",
                 "Bank statements of salary account and other active accounts of the applicant, including "
                 "NRE / NRO accounts || 12 months",
-                "Form 16 (Part A & Part B) & Form 26AS || Latest 2 years",
+                "Form 16 (Part A & Part B) || Latest year",
+                "Form 26AS || Latest 2 years",
                 "ITR || Last 2 years | If income is taxable",
             ],
         },
@@ -311,27 +325,25 @@ WCL_CC_OD_LC_BG = dict(
             title="Income & Financial Documents",
         ),
         BUSINESS_PROOF,
+        BUSINESS_DETAILS,
         RENT_AND_EXISTING_LOANS,
         balance_transfer(),
         {
-            "title": "Property Docs — Mortgage / Purchase (Resale)",
+            "title": "Property Docs",
             "note": "Commercial / Industrial",
             "items": PROPERTY_RESALE_ITEMS,
-        },
-        {
-            "title": "Property Docs — Builder Purchase",
-            "note": "Commercial / Industrial",
-            "items": PROPERTY_BUILDER_ITEMS,
         },
     ],
 )
 
 # ── other loan products (same shared blocks, plus their own extras) ───────
 BALANCE_TRANSFER_PRODUCT = dict(
-    title="Balance Transfer",
+    title="Balance Transfer & Top-Up",
     sections=[
         KYC_INDIVIDUAL,
         employment_income(4, title="Employment & Income"),
+        self_employed_income(),
+        BUSINESS_PROOF,
         RENT_AND_EXISTING_LOANS,
         balance_transfer(),
         {"title": "Property Docs (If Secured)", "items": PROPERTY_RESALE_ITEMS},
@@ -344,6 +356,7 @@ BUSINESS_LOAN = dict(
         KYC_BUSINESS,
         self_employed_income(),
         BUSINESS_PROOF,
+        BUSINESS_DETAILS,
         {
             "title": "Additional Documents",
             "items": [
@@ -360,6 +373,7 @@ CGTMSE = dict(
         KYC_BUSINESS,
         self_employed_income(),
         BUSINESS_PROOF,
+        BUSINESS_DETAILS,
         {
             "title": "CGTMSE-Specific Documents",
             "items": ["Udyam / MSME registration certificate", "Project report / business plan"],
@@ -393,7 +407,7 @@ UNSECURED_TERM_LOAN = dict(
 
 UNSECURED_DOD = dict(
     title="Unsecured DOD",
-    sections=[KYC_BUSINESS, self_employed_income(), BUSINESS_PROOF],
+    sections=[KYC_BUSINESS, self_employed_income(), BUSINESS_PROOF, BUSINESS_DETAILS],
 )
 
 PROJECT_FUNDING = dict(
@@ -460,7 +474,8 @@ HOME_LOAN_GENERIC = dict(
             "items": [
                 "Salary slips || Latest 4 months",
                 "Salary and savings account statements || Latest 12 months",
-                "Form 16 (Part A & Part B) & Form 26AS || Latest 2 years",
+                "Form 16 (Part A & Part B) || Latest year",
+                "Form 26AS || Latest 2 years",
                 "ITR || Last 2 years | If income is taxable",
                 "Employment proof — Company ID / Offer letter / Appointment letter "
                 "|| 3 year continuity proof required",

@@ -720,7 +720,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     category: "Housing Society Services",
     title: "Society NOC & Membership Documentation",
     summary:
-      "Assistance obtaining society NOCs and completing membership documentation for a flat. We follow up directly with the managing committee so the NOC doesn't get stuck in a routine backlog.",
+      "Assistance in obtaining Society NOCs and completing membership documentation for Flat/Shop-related transactions, including preparation and scrutiny of requisite forms and supporting documents.",
     whoNeedsIt:
       "New or existing members needing an NOC for sale, mortgage or other society-related purposes. Also useful if the society is delaying membership paperwork for a flat you've already purchased.",
     process: [
@@ -747,7 +747,18 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
       "Application and supporting documents prepared",
       "Coordination with the relevant authority until completion",
     ],
-    documents: [KYC, "SRA allotment/agreement documents", "Reason for transfer"],
+    documents: [
+      "Copy of Annexure II issued or certified by the competent authority.",
+      "Copy of the SRA Allotment Letter / Ownership Letter.",
+      "Copy of the Society Share Certificate.",
+      "Aadhaar Card of the existing holder.",
+      "Aadhaar Card of the spouse, where applicable.",
+      "Photographs, allotment records or other records relating to the rehabilitation allotment, as applicable.",
+      "Copy of the possession letter or other possession record, if available.",
+      "Copy of the original rehabilitation agreement or other relevant allotment documents, if available.",
+      "Details of the SRA scheme, building, flat number and allotment date.",
+      "Details of any previous transfer, mortgage, litigation or restriction affecting the tenement.",
+    ],
   },
   {
     slug: "mhada-flat-transfer",
@@ -756,9 +767,9 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     category: "SRA / MHADA / MMRDA",
     title: "MHADA Flat Transfer Documentation",
     summary:
-      "Documentation assistance for MHADA flat transfers, including family transfers, subject to MHADA norms. We coordinate directly with the MHADA office to keep the application moving.",
+      "Assistance in MHADA flat transfer documentation, including family transfers, subject to applicable MHADA rules and eligibility requirements, comprising preparation and scrutiny of requisite documents, applications and undertakings.",
     whoNeedsIt:
-      "MHADA flat owners transferring the flat within the family or to an eligible buyer. Transfer conditions differ by MHADA scheme and lease terms, so it's worth confirming eligibility early.",
+      "MHADA flat or shop owners who wish to transfer their property to a family member or an eligible buyer. We assist in verifying ownership documents, applicable MHADA rules, eligibility criteria, and required approvals to ensure compliance with the relevant scheme regulations and lease conditions.",
     process: [
       "Transfer type and MHADA eligibility reviewed",
       "Application and supporting documents prepared",
