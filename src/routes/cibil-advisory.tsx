@@ -1,23 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
+  BadgeCheck,
   Briefcase,
   Building2,
+  Check,
   ClipboardCheck,
   FileSearch,
   Gauge,
+  GraduationCap,
   Handshake,
+  LineChart,
   ListChecks,
   MessageCircle,
   SearchCheck,
   ShieldCheck,
+  Star,
+  TrendingUp,
   UserCheck,
-  Wallet,
   type LucideIcon,
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { LeadForm } from "@/components/lead-form";
+import { BusinessVisual, GrowthStairs, IndividualVisual, ScorePhone } from "@/components/cibil-visuals";
 import { CONTACT } from "@/data/site";
 
 export const Route = createFileRoute("/cibil-advisory")({
@@ -39,62 +45,121 @@ export const Route = createFileRoute("/cibil-advisory")({
   component: CibilAdvisoryPage,
 });
 
-const HELPS: { icon: LucideIcon; title: string; text: string }[] = [
-  {
-    icon: FileSearch,
-    title: "Credit report review",
-    text: "We go through your credit report with you and explain it in simple words, including what lenders see.",
-  },
+type Item = { icon: LucideIcon; title: string; text: string };
+
+const WHY_CREDIT = [
+  "May improve your chances of loan approval",
+  "May help you get a lower interest rate",
+  "May open the way to higher credit limits",
+  "Gives you access to more financial products",
+  "Builds a stronger financial profile",
+];
+
+const FOR_INDIVIDUALS: Item[] = [
   {
     icon: Gauge,
-    title: "Understanding your score",
-    text: "Learn what affects your CIBIL score, and which things may have helped or hurt it.",
+    title: "Credit Score Guidance & Monitoring",
+    text: "A step-by-step plan to work on your score, with regular check-ins on how it is moving.",
   },
   {
-    icon: SearchCheck,
-    title: "Spotting errors",
-    text: "We help you spot mistakes, such as a wrong account or a wrong status, and guide you on how to ask the bureau or lender to correct them.",
-  },
-  {
-    icon: Wallet,
-    title: "Dues and closed accounts",
-    text: "Guidance on overdue, settled or closed accounts, and the steps that may help your profile over time.",
-  },
-  {
-    icon: Building2,
-    title: "CMR for businesses",
-    text: "For MSMEs: understand your CIBIL MSME Rank (CMR) and what lenders look at in a business credit report.",
-  },
-  {
-    icon: ListChecks,
-    title: "A step-by-step plan",
-    text: "A simple action plan for you: what to pay first, how much credit to use, and when to apply for new credit.",
-  },
-  {
-    icon: ClipboardCheck,
-    title: "Loan readiness",
-    text: "Get your profile and documents ready before you apply, so that you approach suitable lenders with more confidence.",
+    icon: FileSearch,
+    title: "Credit Report Review & Error Spotting",
+    text: "We go through your report, spot mistakes and guide you on getting them corrected with the bureau.",
   },
   {
     icon: Handshake,
-    title: "Loan support",
-    text: "When you are ready, we compare loan options from 75+ Banks and NBFCs and guide you through the application.",
+    title: "Loan Assistance & Financial Advisory",
+    text: "Help choosing the right loan or card for your profile, with options compared from 75+ Banks and NBFCs.",
+  },
+  {
+    icon: GraduationCap,
+    title: "Credit Education & Guidance",
+    text: "Plain-language advice on dues, closed accounts and credit use, so you stay credit healthy.",
   },
 ];
+const INDIVIDUAL_BENEFITS = [
+  "See your credit score clearly",
+  "Know why a loan was turned down",
+  "Get expert guidance on fixing issues",
+  "Be ready to apply, sooner",
+];
 
-const AUDIENCE: { icon: LucideIcon; title: string; text: string }[] = [
+const FOR_BUSINESSES: Item[] = [
+  {
+    icon: Building2,
+    title: "Commercial Credit Report (CMR) Review",
+    text: "We explain your Commercial Credit Report and your CIBIL MSME Rank (CMR) in simple words.",
+  },
+  {
+    icon: Briefcase,
+    title: "Business Credit Advisory",
+    text: "Guidance on building your business credit, and what lenders look at before they lend.",
+  },
+  {
+    icon: LineChart,
+    title: "Credit Rating Guidance",
+    text: "A focused plan to work on your CMR (1 is the lowest risk, 10 the highest).",
+  },
+  {
+    icon: ClipboardCheck,
+    title: "Loan Assistance for Business / MSME",
+    text: "Get funding-ready and approach the right lenders for your business needs.",
+  },
+];
+const BUSINESS_BENEFITS = [
+  "Get ready for MSME loans",
+  "Understand your business rating",
+  "Be better placed for lender terms",
+  "Plan your business growth",
+];
+
+const AUDIENCE: Item[] = [
   { icon: UserCheck, title: "Salaried people", text: "Planning a home, car or personal loan and want to know where they stand." },
   { icon: Briefcase, title: "Business owners", text: "Self-employed and professionals who need credit for their work." },
   { icon: Building2, title: "MSMEs", text: "Small and medium businesses who want to understand their business credit report." },
   { icon: ShieldCheck, title: "Anyone turned down", text: "People whose loan was declined and who want to know why, and what to do next." },
 ];
 
-const STEPS = [
-  { title: "Share your details", text: "Tell us a little about yourself and what you need. We ask for your consent first." },
-  { title: "Review your report", text: "We go through your credit report together and mark what matters." },
-  { title: "Get your plan", text: "You get a clear list of next steps, in simple words." },
-  { title: "Check your options", text: "When you are ready, we compare loan options that may suit your profile." },
+const STEPS: Item[] = [
+  { icon: FileSearch, title: "Fetch your credit report", text: "We help you get your official report from the credit bureau, with your consent." },
+  { icon: SearchCheck, title: "Analyse and spot issues", text: "Our team reads your report and marks errors or negative items." },
+  { icon: ListChecks, title: "Prepare an action plan", text: "You get a clear plan, with the most important steps first." },
+  { icon: Handshake, title: "Resolve and follow up", text: "We guide you on raising disputes with the bureau or lender, and on following them up." },
+  { icon: TrendingUp, title: "Track your progress", text: "Keep an eye on your report as you work towards your target score." },
 ];
+
+function ServiceCards({ items }: { items: Item[] }) {
+  return (
+    <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      {items.map((h) => (
+        <div key={h.title} className="h-full rounded-2xl border border-border bg-white p-5 text-center dark:bg-card">
+          <span className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
+            <h.icon className="h-5 w-5" />
+          </span>
+          <h3 className="mt-3 text-sm font-extrabold text-navy dark:text-white" style={{ letterSpacing: "0" }}>
+            {h.title}
+          </h3>
+          <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{h.text}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BenefitStrip({ items, icon: Icon }: { items: string[]; icon: LucideIcon }) {
+  return (
+    <ul className="navy-panel mt-8 grid gap-4 rounded-2xl p-5 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map((b) => (
+        <li key={b} className="flex items-center gap-3 text-sm font-semibold text-white">
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/25 text-gold-light">
+            <Icon className="h-4 w-4" />
+          </span>
+          {b}
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 function CibilAdvisoryPage() {
   return (
@@ -146,30 +211,84 @@ function CibilAdvisoryPage() {
         </div>
       </section>
 
+      {/* Why credit matters */}
       <Section className="pt-0">
-        <Reveal>
-          <SectionHeading
-            eyebrow="How We Can Help"
-            title="From reading your report to getting loan-ready."
-            description="Many people only look at their score. We look at the whole report, and help you decide what to do next."
-            align="center"
-          />
-        </Reveal>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {HELPS.map((h, i) => (
-            <Reveal key={h.title} delay={i * 40}>
-              <div className="h-full rounded-2xl border border-border bg-white p-6 dark:bg-card">
-                <span className="grid h-11 w-11 place-items-center rounded-lg bg-gold-pale/60 text-gold-dark dark:bg-gold/15">
-                  <h.icon className="h-5 w-5" />
-                </span>
-                <h3 className="mt-4 text-base font-bold text-navy dark:text-white" style={{ letterSpacing: "0" }}>
-                  {h.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{h.text}</p>
-              </div>
-            </Reveal>
-          ))}
+        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <Reveal>
+            <p className="eyebrow">Credit Basics</p>
+            <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
+              Why credit <span className="gold-text-static italic">matters.</span>
+            </h2>
+            <p className="mt-2 text-lg font-bold text-gold-dark">Your credit score is your financial passport.</p>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
+              A credit score is a three-digit number (300 to 900) that shows how reliably you have handled credit in
+              the past. It helps banks and financial institutions decide whether to give you a loan, a credit card
+              or another financial product.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {WHY_CREDIT.map((w) => (
+                <li key={w} className="flex items-center gap-3 text-[15px] font-semibold text-navy dark:text-white">
+                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-navy text-gold-light">
+                    <Check className="h-3.5 w-3.5" strokeWidth={3.5} />
+                  </span>
+                  {w}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+          <Reveal delay={100}>
+            <ScorePhone />
+            <p className="mt-3 text-center text-[11px] text-muted-foreground">
+              An example to explain the idea, not a real score.
+            </p>
+          </Reveal>
         </div>
+      </Section>
+
+      {/* Services for individuals */}
+      <div className="bg-gradient-to-b from-bg-light via-[#e9f0fb] to-bg-light dark:bg-none">
+        <Section className="pt-12">
+          <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+            <Reveal>
+              <p className="eyebrow">Our Services · Individuals</p>
+              <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">For individuals.</h2>
+              <p className="mt-2 text-base text-muted-foreground">
+                Understand your credit and get ready for the loan you want.
+              </p>
+              <ServiceCards items={FOR_INDIVIDUALS} />
+            </Reveal>
+            <Reveal delay={100}>
+              <IndividualVisual />
+              <p className="mt-3 text-center text-[11px] text-muted-foreground">Examples to explain the idea.</p>
+            </Reveal>
+          </div>
+          <Reveal delay={60}>
+            <BenefitStrip items={INDIVIDUAL_BENEFITS} icon={BadgeCheck} />
+          </Reveal>
+        </Section>
+      </div>
+
+      {/* Services for businesses */}
+      <Section>
+        <div className="grid items-center gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+          <Reveal className="order-2 lg:order-1" delay={100}>
+            <BusinessVisual />
+            <p className="mt-3 text-center text-[11px] text-muted-foreground">Examples to explain the idea.</p>
+          </Reveal>
+          <Reveal className="order-1 lg:order-2">
+            <p className="eyebrow">Our Services · Business</p>
+            <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
+              For businesses <span className="text-gold-dark">(MSME &amp; corporate).</span>
+            </h2>
+            <p className="mt-2 text-base text-muted-foreground">
+              Build your business credit and get ready for growth funding.
+            </p>
+            <ServiceCards items={FOR_BUSINESSES} />
+          </Reveal>
+        </div>
+        <Reveal delay={60}>
+          <BenefitStrip items={BUSINESS_BENEFITS} icon={Star} />
+        </Reveal>
       </Section>
 
       <Section className="pt-0">
@@ -193,23 +312,37 @@ function CibilAdvisoryPage() {
 
       <Section className="pt-0">
         <Reveal>
-          <SectionHeading eyebrow="How It Works" title="Four simple steps." align="center" />
+          <SectionHeading
+            eyebrow="How It Works"
+            title="Five simple steps."
+            description="No jargon. A clear path, one step at a time."
+            align="center"
+          />
         </Reveal>
-        <ol className="mx-auto mt-10 grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mx-auto mt-12 grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {STEPS.map((s, i) => (
             <Reveal key={s.title} delay={i * 60}>
-              <li className="h-full rounded-2xl border border-border bg-white p-6 dark:bg-card">
-                <span className="grid h-9 w-9 place-items-center rounded-full bg-navy text-sm font-bold text-gold-light">
-                  {i + 1}
+              <li className="relative h-full rounded-2xl border border-border bg-white p-5 pt-7 text-center dark:bg-card">
+                <span className="absolute -top-4 left-1/2 grid h-8 w-8 -translate-x-1/2 place-items-center rounded-full bg-navy text-xs font-bold text-gold-light ring-4 ring-bg-light dark:ring-background">
+                  {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 className="mt-4 text-base font-bold text-navy dark:text-white" style={{ letterSpacing: "0" }}>
+                <s.icon className="mx-auto h-6 w-6 text-gold-dark" />
+                <h3 className="mt-3 text-sm font-extrabold text-navy dark:text-white" style={{ letterSpacing: "0" }}>
                   {s.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
+                <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{s.text}</p>
               </li>
             </Reveal>
           ))}
         </ol>
+        <Reveal delay={120}>
+          <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row">
+            <GrowthStairs />
+            <p className="max-w-xs text-center font-heading text-2xl font-bold text-navy sm:text-right dark:text-white">
+              A step-by-step journey towards <span className="gold-text-static">a stronger credit future.</span>
+            </p>
+          </div>
+        </Reveal>
       </Section>
 
       <Section className="pt-0" id="talk">
@@ -236,7 +369,8 @@ function CibilAdvisoryPage() {
               Growth Capital Services is a loan consultant. We are not a credit bureau or a lender. Only the credit
               bureau and the lender can correct or change what is in your report, after their own checks. We cannot
               promise a change in your score or the approval of a loan. Results depend on your credit history, your
-              profile and each lender&apos;s policy.
+              profile and each lender&apos;s policy. The scores, ranks and tick-lists shown on this page are examples
+              to explain the idea, not real data.
             </p>
           </Reveal>
           <Reveal delay={100} className="h-full">
