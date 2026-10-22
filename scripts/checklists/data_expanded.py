@@ -66,6 +66,7 @@ PROJECT_FUNDING = dict(
                 "Audited balance sheet, profit & loss account and CA reports || Last 3 years",
                 "Income Tax Returns of the firm / company with computation of income || Last 3 years",
                 "ITRs of all Partners / Directors with computation of income || Last 2 years",
+                "Form 26AS of the firm / company and of the Partners / Directors || Latest 2 years",
                 "Bank statements of all current and savings accounts, including the RERA account || Last 12 months",
                 "GST registration certificate and GSTR 3B returns || Last 12 months",
                 "Memorandum & Articles of Association, or Partnership Deed, with the list of Directors / Partners "
@@ -192,6 +193,7 @@ LOAN_AGAINST_SECURITIES = dict(
             "items": [
                 "Latest bank statements || Last 6 months",
                 "Income Tax Returns with computation of income || Last 3 years | Limits above ₹3 Cr",
+                "Form 26AS || Latest 2 years | Limits above ₹3 Cr",
                 "Salary slips, or business income proof || If the lender asks",
                 "Details of existing loans and EMIs || If any",
             ],
@@ -248,6 +250,7 @@ PRIVATE_FUNDING = dict(
                 "Bank statements of all current accounts || Last 12 months",
                 "GST returns (GSTR 3B and GSTR 1) || Last 12 months",
                 "Income Tax Returns with financial statements || Last 2 to 3 years",
+                "Form 26AS || Latest 2 years",
                 "Details of existing loans, and the loan statements of account || If any",
             ],
         },

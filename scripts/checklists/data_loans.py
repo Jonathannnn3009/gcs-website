@@ -279,7 +279,6 @@ EDUCATION_LOAN = dict(
         },
         employment_income(4, title="Co-Applicant — Salaried", note="For salaried persons"),
         self_employed_income(
-            gstr=False,
             title="Co-Applicant — Business",
             note="For businessman / self-employed",
         ),
@@ -356,7 +355,6 @@ BUSINESS_LOAN = dict(
         KYC_BUSINESS,
         self_employed_income(),
         BUSINESS_PROOF,
-        BUSINESS_DETAILS,
         {
             "title": "Additional Documents",
             "items": [
@@ -373,7 +371,6 @@ CGTMSE = dict(
         KYC_BUSINESS,
         self_employed_income(),
         BUSINESS_PROOF,
-        BUSINESS_DETAILS,
         {
             "title": "CGTMSE-Specific Documents",
             "items": ["Udyam / MSME registration certificate", "Project report / business plan"],
@@ -407,7 +404,7 @@ UNSECURED_TERM_LOAN = dict(
 
 UNSECURED_DOD = dict(
     title="Unsecured DOD",
-    sections=[KYC_BUSINESS, self_employed_income(), BUSINESS_PROOF, BUSINESS_DETAILS],
+    sections=[KYC_BUSINESS, self_employed_income(), BUSINESS_PROOF],
 )
 
 PROJECT_FUNDING = dict(
@@ -552,16 +549,8 @@ MACHINE_LOAN = dict(
     subtitle="Take your business to the next level.",
     sections=[
         KYC_BUSINESS,
+        self_employed_income(extra=["*Lighter requirements may apply for smaller loans, as per lender policy."]),
         BUSINESS_PROOF,
-        {
-            "title": "Banking & Financials",
-            "note": "Lighter requirements may apply for smaller loans, as per lender policy",
-            "items": [
-                "Business current and savings account bank statements || Latest 12 months",
-                "ITRs and financial statements || Latest 2 years | Where required",
-                "GSTR 3B || Latest 12 months",
-            ],
-        },
         {
             "title": "Machinery Documents",
             "items": [
