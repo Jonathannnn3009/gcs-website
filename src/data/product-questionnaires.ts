@@ -595,11 +595,74 @@ const BALANCE_TRANSFER: Questionnaire = {
     "Loan eligibility, balance transfer, top-up amount, interest rate, tenure, charges and approval are subject to the applicant's financial and credit profile, existing repayment history, property assessment and the respective Bank or NBFC's lending policy.",
 };
 
+// ───────────── Private Funding ─────────────
+const PRIVATE_FUNDING: Questionnaire = {
+  slugs: ["private-funding"],
+  title: "Tell Us About Your Business",
+  intro: "Private Funding is for self-employed businesses. Share a few basic details and we will review your options.",
+  topic: "Private funding",
+  amountKey: "fundingRequired",
+  steps: [
+    {
+      title: "Your business profile",
+      fields: [
+        {
+          key: "profile",
+          label: "Business profile",
+          kind: "choice",
+          required: true,
+          options: ["Proprietorship", "Partnership", "LLP", "Private Limited", "Limited Company", "Other"],
+        },
+        { key: "industry", label: "Industry / Nature of Business", kind: "text", required: true },
+        { key: "city", label: "City", kind: "text", required: true, placeholder: "e.g. Mumbai" },
+      ],
+    },
+    {
+      title: "Your latest annual business turnover",
+      fields: [{ key: "turnover", label: "Annual Turnover", kind: "amount", required: true, placeholder: "e.g. 25,00,00,000" }],
+    },
+    {
+      title: "How much funding do you require?",
+      fields: [
+        {
+          key: "fundingRequired",
+          label: "Funding Required",
+          kind: "amount",
+          required: true,
+          placeholder: "e.g. 5,00,00,000",
+          help: "Private Funding is usually ₹1 Cr to ₹50 Cr.",
+        },
+        {
+          key: "purpose",
+          label: "Purpose",
+          kind: "choice",
+          options: [
+            "Working Capital",
+            "Business Expansion",
+            "Short-Term Cash Flow",
+            "Purchase of Stock",
+            "Business Opportunity",
+            "Existing Business Obligation",
+            "Other",
+          ],
+        },
+      ],
+    },
+  ],
+  finalTitle: "Check Your Private Funding Options",
+  finalText:
+    "Share these basic details and Growth Capital Services can review your business profile and help explore suitable private funding options.",
+  button: "Check My Options",
+  disclaimer:
+    "Funding amount, tenure, interest rate, turnaround and approval are subject to the business profile, turnover, documents and the respective lender's policy. Private Funding is only for self-employed businesses.",
+};
+
 export const QUESTIONNAIRES: Questionnaire[] = [
   PROJECT,
   overdraft("Dropline Overdraft", ["dlod"], "Dropline overdraft", "Dropline OD"),
   overdraft("Overdraft", ["overdraft-limit"], "Overdraft", "Overdraft"),
   BALANCE_TRANSFER,
+  PRIVATE_FUNDING,
 ];
 
 export const questionnaireFor = (slug: string): Questionnaire | undefined =>
