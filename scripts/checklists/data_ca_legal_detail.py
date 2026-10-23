@@ -814,13 +814,15 @@ DETAIL = {
     ],
     "nri-property-documentation": [
         {
-            "title": "Applicant Abroad",
+            "title": "Common Documents Required From The NRI",
             "items": [
-                "Passport, all pages",
-                "Visa, OCI or PIO card, and work permit or residence proof abroad",
-                "Overseas address proof and Indian address proof",
-                "PAN card and Aadhaar card || If held",
-                "Passport size photographs",
+                "Valid Passport.",
+                "Overseas address proof.",
+                "Indian address proof, if available or required.",
+                "PAN Card.",
+                "Recent passport-size photographs, if required.",
+                "Overseas residence permit, visa or other residency-status evidence, where applicable.",
+                "NRI status and tax-residency details, as relevant to the transaction.",
             ],
         },
         {
