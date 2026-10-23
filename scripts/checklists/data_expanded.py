@@ -221,7 +221,7 @@ PRIVATE_FUNDING = dict(
     sections=[
         {
             "callout": "<b>For self-employed businesses only</b> (an individual, a partnership firm or a company). "
-            "It is not for salaried individuals. Documentation is kept minimal, and the checklist is the same "
+            "It is not for salaried individuals. The checklist is the same "
             "for an individual, a partnership firm and a company. Funding is generally for businesses with a "
             "turnover of Rs.20 Cr+ (Mumbai, Hyderabad, Bangalore, Chennai) or Rs.100 Cr+ (rest of India), as per "
             "lender policy."
@@ -237,21 +237,47 @@ PRIVATE_FUNDING = dict(
             ],
         },
         {
-            "title": "Business Proof",
+            "title": "Income Documents",
+            "note": "For businessman / self-employed",
             "items": [
-                "GST registration certificate, Udyam registration certificate, Shop Act licence",
-                "Certificate of Incorporation, Partnership Deed or MOA & AOA || As per your business type",
-                "Office address proof — ownership document or rent agreement",
+                "ITRs, BS & P&L statements and Computation of Income (COI), duly certified / audited by a Chartered "
+                "Accountant with UIDN — with full financials including 3CB & 3CD, Audit Report and all schedules "
+                "|| Latest 3 years",
+                "Business Current and Savings account bank statements (all existing loan EMI reflection account "
+                "statements) || Latest 12 months",
+                "Form 26AS || Latest 2 years",
+                "GSTR 3B || Latest 12 months",
             ],
         },
         {
-            "title": "Turnover & Banking",
+            "title": "Business Proof",
+            "note": "As per your business type",
             "items": [
-                "Bank statements of all current accounts || Last 12 months",
-                "GST returns (GSTR 3B and GSTR 1) || Last 12 months",
-                "Income Tax Returns with financial statements || Last 2 to 3 years",
-                "Form 26AS || Latest 2 years",
-                "Details of existing loans, and the loan statements of account || If any",
+                "Shop Act licence, Udyam registration certificate, GST registration certificate || tag:Proprietor",
+                "PAN card, registered Partnership Deed, list of Partners & shareholding pattern on company letterhead "
+                "duly attested by CA, Shop Act licence, Udyam registration certificate, GST registration certificate "
+                "|| tag:Partnership firm",
+                "PAN card, Memorandum & Articles of Association (MOA & AOA) / Resolution, list of Directors & "
+                "Shareholders on company letterhead duly attested by CA, Certificate of Incorporation, Shop Act "
+                "licence, Udyam registration certificate, GST registration certificate || tag:Pvt Ltd company",
+            ],
+        },
+        {
+            "title": "Business Details",
+            "note": "Party-wise and promoter information",
+            "items": [
+                "Top 5 customers and top 5 suppliers — party-wise details",
+                "Latest order copies",
+                "Company profile — brief profile and background of the promoters",
+                "Loan end-use details",
+                "Debtors ageing, party-wise || Last and current financial year",
+            ],
+        },
+        {
+            "title": "Existing Loans & Net Worth",
+            "items": [
+                "!All loan sanction letters & Loan SOA (EMI obligation & details sheet) || In case of any existing loan",
+                "CA attested Net worth certificate",
             ],
         },
         {
