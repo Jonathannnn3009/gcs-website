@@ -38,7 +38,7 @@ type Props = {
   heading?: string;
   description?: string;
   serviceTitle?: string;
-  /** CA Services filings vary by income type — ask upfront there; skip for Sheetal Associates legal work. */
+  /** CA Services filings vary by income type — ask upfront there; skip for legal work. */
   showIncomeType?: boolean;
   /** A larger card that stretches to the height of whatever sits beside it. */
   roomy?: boolean;

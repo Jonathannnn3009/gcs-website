@@ -64,8 +64,8 @@ PROJECT_FUNDING = dict(
             "title": "Builder Financials & Business Proof",
             "items": [
                 "Audited balance sheet, profit & loss account and CA reports || Last 3 years",
-                "Income Tax Returns of the firm / company with computation of income || Last 3 years",
-                "ITRs of all Partners / Directors with computation of income || Last 2 years",
+                "Income Tax Returns of the firm / company and of all Partners / Directors, with computation of income "
+                "|| Last 3 years",
                 "Form 26AS of the firm / company and of the Partners / Directors || Latest 2 years",
                 "Bank statements of all current and savings accounts, including the RERA account || Last 12 months",
                 "GST registration certificate and GSTR 3B returns || Last 12 months",

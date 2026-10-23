@@ -42,7 +42,7 @@ export const CA_LEGAL_MENU: CaLegalMenuGroup[] = [
     ],
   },
   {
-    anchor: "sheetal-associates",
+    anchor: "legal-services",
     heading: "Legal Services",
     items: [
       { category: "Legal Drafting", icon: FileSignature, desc: "Agreements, affidavits, notices" },

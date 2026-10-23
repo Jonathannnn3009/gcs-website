@@ -22,11 +22,10 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-export type ServiceDivision = "CA Services" | "Sheetal Associates";
+export type ServiceDivision = "CA Services" | "Legal Services";
 
-/** What visitors see as the division's heading; the key above stays as the internal id. */
-export const divisionLabel = (division: ServiceDivision): string =>
-  division === "Sheetal Associates" ? "Legal Services" : division;
+/** What visitors see as the division's heading. */
+export const divisionLabel = (division: ServiceDivision): string => division;
 
 /** The fuller write-up some services carry: when present, the service page shows it in place of the short lists. */
 export type ServiceDetail = {
@@ -76,7 +75,7 @@ export const SERVICE_DIVISIONS: { division: ServiceDivision; categories: string[
     ],
   },
   {
-    division: "Sheetal Associates",
+    division: "Legal Services",
     categories: [
       "Property Legal Services",
       "Housing Society Services",
@@ -91,7 +90,7 @@ export const SERVICE_DIVISIONS: { division: ServiceDivision; categories: string[
 const KYC = "PAN, Aadhaar and address proof";
 
 /**
- * CA Services and Sheetal Associates are associated professionals GCS
+ * CA Services and Legal Services are associated professionals GCS
  * connects clients to — not regulated work GCS performs itself. Keep copy
  * factual/process-level (no personal claims, no invented credentials).
  */
@@ -610,11 +609,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     documents: [KYC, "Business registration proof, for TAN/DSC in a company or firm's name"],
   },
 
-  // ── Sheetal Associates · Property Legal Services ───────
+  // ── Legal Services · Property Legal Services ───────
   {
     slug: "property-title-verification",
     icon: Search,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "Property Legal Services",
     title: "Property Title Verification & Due Diligence",
     summary:
@@ -641,7 +640,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
   {
     slug: "sale-agreement-sale-deed",
     icon: ScrollText,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "Property Legal Services",
     title: "Sale Agreement & Sale Deed Drafting",
     summary:
@@ -658,7 +657,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
   {
     slug: "gift-release-deed",
     icon: Gift,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "Property Legal Services",
     title: "Gift Deed & Release Deed Documentation",
     summary:
@@ -675,7 +674,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
   {
     slug: "power-of-attorney-drafting",
     icon: KeyRound,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "Property Legal Services",
     title: "Power of Attorney Drafting",
     summary:
@@ -690,11 +689,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     documents: [KYC, "Details of the person being authorised"],
   },
 
-  // ── Sheetal Associates · Housing Society Services ──────
+  // ── Legal Services · Housing Society Services ──────
   {
     slug: "society-share-transfer",
     icon: Users,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "Housing Society Services",
     title: "Housing Society Share Transfer",
     summary:
@@ -716,7 +715,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
   {
     slug: "society-noc-membership",
     icon: FileCheck,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "Housing Society Services",
     title: "Society NOC & Membership Documentation",
     summary:
@@ -731,11 +730,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     documents: [KYC, "Share certificate", "Reason/purpose for the NOC"],
   },
 
-  // ── Sheetal Associates · SRA / MHADA / MMRDA ───────────
+  // ── Legal Services · SRA / MHADA / MMRDA ───────────
   {
     slug: "sra-flat-transfer",
     icon: Building,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "SRA / MHADA / MMRDA",
     title: "SRA Flat Transfer Documentation",
     summary:
@@ -763,7 +762,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
   {
     slug: "mhada-flat-transfer",
     icon: Building2,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "SRA / MHADA / MMRDA",
     title: "MHADA Flat Transfer Documentation",
     summary:
@@ -780,7 +779,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
   {
     slug: "mmrda-property-documentation",
     icon: Landmark,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "SRA / MHADA / MMRDA",
     title: "MMRDA Property Documentation",
     summary:
@@ -795,11 +794,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     documents: ["Allotment/agreement documents", "Reason for the request"],
   },
 
-  // ── Sheetal Associates · Redevelopment ─────────────────
+  // ── Legal Services · Redevelopment ─────────────────
   {
     slug: "society-redevelopment-documentation",
     icon: HardHat,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "Redevelopment",
     title: "Society Redevelopment Documentation",
     summary:
@@ -818,11 +817,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     ],
   },
 
-  // ── Sheetal Associates · Legal Drafting ────────────────
+  // ── Legal Services · Legal Drafting ────────────────
   {
     slug: "legal-drafting-agreements-affidavits",
     icon: ScrollText,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "Legal Drafting",
     title: "Legal Drafting — Agreements, Affidavits & Notices",
     summary:
@@ -839,7 +838,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
   {
     slug: "public-notice-publication",
     icon: Megaphone,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "Legal Drafting",
     title: "Public Notice Publication",
     summary:
@@ -857,11 +856,11 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
     ],
   },
 
-  // ── Sheetal Associates · NRI & Family Property Services ─
+  // ── Legal Services · NRI & Family Property Services ─
   {
     slug: "nri-property-documentation",
     icon: Globe,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "NRI & Family Property Services",
     title: "NRI Property Documentation",
     summary:
@@ -882,7 +881,7 @@ export const PROFESSIONAL_SERVICES: ProfessionalService[] = [
   {
     slug: "will-succession-documentation",
     icon: HeartHandshake,
-    division: "Sheetal Associates",
+    division: "Legal Services",
     category: "NRI & Family Property Services",
     title: "Will & Succession Documentation",
     summary:

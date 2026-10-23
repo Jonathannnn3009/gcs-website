@@ -39,7 +39,8 @@ RENT_ITEM = "!Other rent income — rent agreement along with rent reflection in
 LOAN_ITEM = "!All loan sanction letters & Loan SOA (EMI obligation & details sheet) || In case of any existing loan"
 
 
-def employment_income(slips: int, title="Income Documents", note="For salaried persons"):
+def employment_income(slips: int, title="Income Documents", note="For salaried persons", itr=True):
+    """`itr=False` where the same checklist already asks for the ITR in its self-employed section: it is asked once."""
     return {
         "title": title,
         "note": note,
@@ -49,8 +50,8 @@ def employment_income(slips: int, title="Income Documents", note="For salaried p
             "Salary and savings account statements || Latest 12 months",
             "Form 16 (Part A & Part B) || Latest year",
             "Form 26AS || Latest 2 years",
-            "ITR || Last 2 years | If income is taxable",
-        ],
+        ]
+        + (["ITR || Last 2 years | If income is taxable"] if itr else []),
     }
 
 
@@ -217,7 +218,6 @@ HOME_LOAN_NRI = dict(
                 "NRE / NRO accounts || 12 months",
                 "Form 16 (Part A & Part B) || Latest year",
                 "Form 26AS || Latest 2 years",
-                "ITR || Last 2 years | If income is taxable",
             ],
         },
         RENT_AND_EXISTING_LOANS,
@@ -241,7 +241,7 @@ CAR_LOAN = dict(
     title="Car Loan",
     sections=[
         {**KYC_BUSINESS, "note": "Applicant & Co-Applicant(s)"},
-        employment_income(6, title="Income — Salaried Persons", note=None),
+        employment_income(6, title="Income — Salaried Persons", note=None, itr=False),
         self_employed_income(title="Income — Businessman / Self-Employed", note=None),
         BUSINESS_PROOF,
         RENT_AND_EXISTING_LOANS,
@@ -277,7 +277,7 @@ EDUCATION_LOAN = dict(
                 "Passport size photo",
             ],
         },
-        employment_income(4, title="Co-Applicant — Salaried", note="For salaried persons"),
+        employment_income(4, title="Co-Applicant — Salaried", note="For salaried persons", itr=False),
         self_employed_income(
             title="Co-Applicant — Business",
             note="For businessman / self-employed",
@@ -288,9 +288,6 @@ EDUCATION_LOAN = dict(
             "title": "Collateral / Property Docs",
             "note": "Depends on loan amount — for secured cases",
             "items": PROPERTY_MORTGAGE_ITEMS,
-        },
-        {
-            "callout": "<b>Note:</b> we may ask for some more documents after the credit review."
         },
     ],
 )
@@ -340,7 +337,7 @@ BALANCE_TRANSFER_PRODUCT = dict(
     title="Balance Transfer & Top-Up",
     sections=[
         KYC_INDIVIDUAL,
-        employment_income(4, title="Employment & Income"),
+        employment_income(4, title="Employment & Income", itr=False),
         self_employed_income(),
         BUSINESS_PROOF,
         RENT_AND_EXISTING_LOANS,
@@ -446,7 +443,7 @@ PROFESSIONAL_LOAN = dict(
     title="Professional Loan",
     sections=[
         KYC_INDIVIDUAL,
-        employment_income(4, title="Income — Salaried Professionals", note=None),
+        employment_income(4, title="Income — Salaried Professionals", note=None, itr=False),
         self_employed_income(title="Income — Self-Employed / Own Practice", note=None),
         RENT_AND_EXISTING_LOANS,
         {
@@ -473,7 +470,6 @@ HOME_LOAN_GENERIC = dict(
                 "Salary and savings account statements || Latest 12 months",
                 "Form 16 (Part A & Part B) || Latest year",
                 "Form 26AS || Latest 2 years",
-                "ITR || Last 2 years | If income is taxable",
                 "Employment proof — Company ID / Offer letter / Appointment letter "
                 "|| 3 year continuity proof required",
             ],
@@ -513,7 +509,7 @@ HOME_LOAN_GENERIC = dict(
             "items": [
                 "-Resident Indian, generally 23–65 years (up to around 70 for self-employed) at loan maturity",
                 "-Salaried with take-home income from about Rs.25,000 per month, or self-employed with "
-                "2–3 years of ITR",
+                "2–3 years in business",
                 "-A CIBIL score near 700 gets the sharpest rate; lower scores are reviewed case by case, "
                 "not auto-rejected",
             ],

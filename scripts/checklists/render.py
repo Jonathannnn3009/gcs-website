@@ -64,6 +64,7 @@ MARK_PATH = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file
 PHONE = "+91 88280 01700"
 PHONE2 = "+91 88280 03900"
 EMAIL = "growthcs17@gmail.com"
+INK_NOTE = colors.HexColor("#071230")
 FOOTER_NOTE = (
     "Send clear photos or scans of the documents that apply to you on WhatsApp. "
     "Indicative list — our team will confirm before login."
@@ -639,6 +640,8 @@ def draw_later_header(c, meta):
 
 
 class NumberedCanvas(rl_canvas.Canvas):
+    EXTRA = None  # a bold note above the usual footer line, set per document by build_pdf
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._saved = []
@@ -657,9 +660,16 @@ class NumberedCanvas(rl_canvas.Canvas):
 
     def _footer(self, total):
         y = 9.5 * mm
+        rule = y + 3.6 * mm
+        if self.EXTRA:
+            rule = y + 7.4 * mm
         self.setStrokeColor(HAIR)
         self.setLineWidth(0.6)
-        self.line(CONTENT_X, y + 3.6 * mm, CONTENT_X + CONTENT_W, y + 3.6 * mm)
+        self.line(CONTENT_X, rule, CONTENT_X + CONTENT_W, rule)
+        if self.EXTRA:
+            self.setFillColor(INK_NOTE)
+            self.setFont("Helvetica-Bold", 7.4)
+            self.drawString(CONTENT_X, y + 3.7 * mm, self.EXTRA)
         self.setFillColor(FAINT)
         self.setFont("Helvetica", 6.8)
         self.drawString(CONTENT_X, y, FOOTER_NOTE)
@@ -667,7 +677,7 @@ class NumberedCanvas(rl_canvas.Canvas):
 
 
 # ── document builder ──────────────────────────────────────────────────────
-def build_pdf(path, title, sections, subtitle=None, columns=1, size=None):
+def build_pdf(path, title, sections, subtitle=None, columns=1, size=None, footer_extra=None):
     """sections: list of dicts —
          {"title", "note"?, "items": [...]}                  checklist table
          {"title", "note"?, "form": [(group_title, [(label, span)...])], "cols"?}   fill-in lines
@@ -738,7 +748,8 @@ def build_pdf(path, title, sections, subtitle=None, columns=1, size=None):
         author="Growth Capital Services",
         subject="Document checklist",
     )
-    bottom = 16 * mm
+    NumberedCanvas.EXTRA = footer_extra
+    bottom = 20 * mm if footer_extra else 16 * mm
     top_later = 22 * mm
 
     def frames(top, ident):

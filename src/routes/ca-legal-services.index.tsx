@@ -80,7 +80,7 @@ function CaLegalServicesPage() {
         <div className="space-y-10">
           {SERVICE_DIVISIONS.map(({ division }, di) => {
             const services = allServices.filter((s) => s.division === division);
-            const isLegal = division === "Sheetal Associates";
+            const isLegal = division === "Legal Services";
             return (
               <Reveal key={division} delay={di * 80}>
                 <div
