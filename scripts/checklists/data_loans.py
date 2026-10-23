@@ -352,12 +352,10 @@ BUSINESS_LOAN = dict(
         KYC_BUSINESS,
         self_employed_income(),
         BUSINESS_PROOF,
+        RENT_AND_EXISTING_LOANS,
         {
             "title": "Additional Documents",
-            "items": [
-                "Proof of business ownership",
-                "Existing loan sanction letter and latest SOA || If any",
-            ],
+            "items": ["Proof of business ownership"],
         },
     ],
 )
@@ -368,6 +366,7 @@ CGTMSE = dict(
         KYC_BUSINESS,
         self_employed_income(),
         BUSINESS_PROOF,
+        RENT_AND_EXISTING_LOANS,
         {
             "title": "CGTMSE-Specific Documents",
             "items": ["Udyam / MSME registration certificate", "Project report / business plan"],
@@ -381,6 +380,7 @@ LEASE_RENTAL = dict(
         KYC_BUSINESS,
         self_employed_income(),
         BUSINESS_PROOF,
+        RENT_AND_EXISTING_LOANS,
         {
             "title": "Lease & Rental Documents",
             "items": [
@@ -401,7 +401,7 @@ UNSECURED_TERM_LOAN = dict(
 
 UNSECURED_DOD = dict(
     title="Unsecured DOD",
-    sections=[KYC_BUSINESS, self_employed_income(), BUSINESS_PROOF],
+    sections=[KYC_BUSINESS, self_employed_income(), BUSINESS_PROOF, RENT_AND_EXISTING_LOANS],
 )
 
 PROJECT_FUNDING = dict(
@@ -501,6 +501,8 @@ HOME_LOAN_GENERIC = dict(
                 "KYC — Photo ID (PAN, Aadhaar, Passport) & address proof",
                 "Property papers — agreement, title chain, tax receipts",
                 "Passport size photographs of applicant & co-applicant",
+                RENT_ITEM,
+                LOAN_ITEM,
             ],
         },
         {
@@ -565,6 +567,7 @@ COMMERCIAL_VEHICLE = dict(
         KYC_INDIVIDUAL,
         BUSINESS_PROOF,
         self_employed_income(),
+        RENT_AND_EXISTING_LOANS,
         {
             "title": "Vehicle Documents",
             "items": [

@@ -19,6 +19,14 @@ KYC_FIRM = {
     ],
 }
 
+RENT_AND_LOANS = {
+    "title": "Rent & Existing Loans",
+    "items": [
+        "!Other rent income — rent agreement along with rent reflection in bank statements || If any",
+        "!All loan sanction letters & Loan SOA (EMI obligation & details sheet) || In case of any existing loan",
+    ],
+}
+
 # ── Project Funding (construction finance) ────────────────────────────────
 PROJECT_FUNDING = dict(
     title="Project Funding",
@@ -74,10 +82,10 @@ PROJECT_FUNDING = dict(
                 "Board resolution / partners' authority letter to borrow and create security",
                 "Net worth statement of promoters, and CIBIL consent of the firm and promoters",
                 "List of all completed and ongoing projects || Area, units, status, sales and funding",
-                "Details of all existing loans — sanction letters and loan statements of account || If any",
                 "Group company details and contingent liabilities, including guarantees given || If any",
             ],
         },
+        RENT_AND_LOANS,
         {
             "title": "Project Documents",
             "items": [
@@ -195,9 +203,9 @@ LOAN_AGAINST_SECURITIES = dict(
                 "Income Tax Returns with computation of income || Last 3 years | Limits above ₹3 Cr",
                 "Form 26AS || Latest 2 years | Limits above ₹3 Cr",
                 "Salary slips, or business income proof || If the lender asks",
-                "Details of existing loans and EMIs || If any",
             ],
         },
+        RENT_AND_LOANS,
         {
             "title": "Promoter Funding",
             "note": "Only if promoters are pledging shares of their own company, subject to the approved company list",
@@ -276,6 +284,7 @@ PRIVATE_FUNDING = dict(
         {
             "title": "Existing Loans & Net Worth",
             "items": [
+                "!Other rent income — rent agreement along with rent reflection in bank statements || If any",
                 "!All loan sanction letters & Loan SOA (EMI obligation & details sheet) || In case of any existing loan",
                 "CA attested Net worth certificate",
             ],
