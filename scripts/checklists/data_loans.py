@@ -547,6 +547,7 @@ MACHINE_LOAN = dict(
         KYC_BUSINESS,
         self_employed_income(extra=["*Lighter requirements may apply for smaller loans, as per lender policy."]),
         BUSINESS_PROOF,
+        RENT_AND_EXISTING_LOANS,
         {
             "title": "Machinery Documents",
             "items": [
