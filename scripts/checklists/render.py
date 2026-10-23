@@ -64,7 +64,6 @@ MARK_PATH = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file
 PHONE = "+91 88280 01700"
 PHONE2 = "+91 88280 03900"
 EMAIL = "growthcs17@gmail.com"
-INK_NOTE = colors.HexColor("#071230")
 FOOTER_NOTE = (
     "Send clear photos or scans of the documents that apply to you on WhatsApp. "
     "Indicative list — our team will confirm before login."
@@ -651,9 +650,12 @@ def draw_later_header(c, meta):
     c.line(CONTENT_X, top - 2.4 * mm, CONTENT_X + CONTENT_W, top - 2.4 * mm)
 
 
-class NumberedCanvas(rl_canvas.Canvas):
-    EXTRA = None  # a bold note above the usual footer line, set per document by build_pdf
+# Said at the foot of every checklist: the other things GCS helps with.
+PRODUCTS_LEAD = "Growth Capital Services also offers:  "
+PRODUCTS = "Home Loan  |  Balance Transfer & Top-Up  |  Loan Against Property  |  Business & MSME Finance  |  Car Loan  |  Education Loan"
 
+
+class NumberedCanvas(rl_canvas.Canvas):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._saved = []
@@ -672,16 +674,21 @@ class NumberedCanvas(rl_canvas.Canvas):
 
     def _footer(self, total):
         y = 9.5 * mm
-        rule = y + 3.6 * mm
-        if self.EXTRA:
-            rule = y + 7.4 * mm
+        rule = y + 7.4 * mm
         self.setStrokeColor(HAIR)
         self.setLineWidth(0.6)
         self.line(CONTENT_X, rule, CONTENT_X + CONTENT_W, rule)
-        if self.EXTRA:
-            self.setFillColor(INK_NOTE)
-            self.setFont("Helvetica-Bold", 7.4)
-            self.drawString(CONTENT_X, y + 3.7 * mm, self.EXTRA)
+        # the products line: the lead in bold, the products in navy, sized to fit the width
+        size = 7.0
+        while size > 5.6 and (
+            stringWidth(PRODUCTS_LEAD, "Helvetica-Bold", size) + stringWidth(PRODUCTS, "Helvetica", size) > CONTENT_W
+        ):
+            size -= 0.2
+        self.setFillColor(NAVY)
+        self.setFont("Helvetica-Bold", size)
+        self.drawString(CONTENT_X, y + 3.7 * mm, PRODUCTS_LEAD)
+        self.setFont("Helvetica", size)
+        self.drawString(CONTENT_X + stringWidth(PRODUCTS_LEAD, "Helvetica-Bold", size), y + 3.7 * mm, PRODUCTS)
         self.setFillColor(FAINT)
         self.setFont("Helvetica", 6.8)
         self.drawString(CONTENT_X, y, FOOTER_NOTE)
@@ -689,7 +696,7 @@ class NumberedCanvas(rl_canvas.Canvas):
 
 
 # ── document builder ──────────────────────────────────────────────────────
-def build_pdf(path, title, sections, subtitle=None, columns=1, size=None, footer_extra=None):
+def build_pdf(path, title, sections, subtitle=None, columns=1, size=None, end_note=None):
     """sections: list of dicts —
          {"title", "note"?, "items": [...]}                  checklist table
          {"title", "note"?, "form": [(group_title, [(label, span)...])], "cols"?}   fill-in lines
@@ -751,6 +758,10 @@ def build_pdf(path, title, sections, subtitle=None, columns=1, size=None, footer
                 story.append(table)
         story.append(Spacer(1, 4.2 * mm if two else 5.0 * mm))
 
+    if end_note:
+        note_style = ParagraphStyle("EndNote", fontName="Helvetica-Bold", fontSize=8.2, leading=11, textColor=NAVY_DEEP)
+        story.append(KeepTogether([Spacer(1, 1.5 * mm), Paragraph(esc_rupee(end_note), note_style)]))
+
     meta = {"title": title, "subtitle": subtitle}
     first_top = 51 * mm
     doc = BaseDocTemplate(
@@ -760,8 +771,7 @@ def build_pdf(path, title, sections, subtitle=None, columns=1, size=None, footer
         author="Growth Capital Services",
         subject="Document checklist",
     )
-    NumberedCanvas.EXTRA = footer_extra
-    bottom = 20 * mm if footer_extra else 16 * mm
+    bottom = 20 * mm
     top_later = 22 * mm
 
     def frames(top, ident):

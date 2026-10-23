@@ -41,14 +41,14 @@ def pages_of(slug):
 ATTEMPTS = [(1, 8.6), (2, 8.0), (2, 7.8), (2, 7.6), (2, 7.4), (2, 7.2), (2, 6.9)]
 
 
-# Said at the foot of every loan checklist (not the CA and legal ones: there is no credit review).
-LOAN_FOOTER = "NOTE - We may ask some more documents post credit review*"
+# Said right after the last row of every loan checklist (not the CA and legal ones: there is no credit review).
+LOAN_END_NOTE = "NOTE - We may ask some more documents post credit review*"
 
 
-def build_fitting(slug, title, sections, subtitle=None, pages=1, footer_extra=None):
+def build_fitting(slug, title, sections, subtitle=None, pages=1, end_note=None):
     allowed = max(pages, 2 if any("form" in s for s in sections) else 1)  # a fill-in sheet gets its own page
     for columns, size in ATTEMPTS:
-        build_pdf(path_for(slug), title, sections, subtitle=subtitle, columns=columns, size=size, footer_extra=footer_extra)
+        build_pdf(path_for(slug), title, sections, subtitle=subtitle, columns=columns, size=size, end_note=end_note)
         if pages_of(slug) <= allowed:
             return columns, size
     return columns, size  # best effort
@@ -64,7 +64,7 @@ def split_condition(text):
 
 
 # Lists that run over more than one page
-LONGER = {"project-funding": 3, "loan-against-securities": 2, "private-funding": 1}
+LONGER = {"project-funding": 3, "loan-against-securities": 1, "private-funding": 1}
 
 built = []
 layouts = {}
@@ -75,7 +75,7 @@ for slug, spec in LOAN_CHECKLISTS.items():
         continue
     layouts[slug] = build_fitting(
         slug, spec["title"], spec["sections"], spec.get("subtitle"), pages=LONGER.get(slug, 1),
-        footer_extra=LOAN_FOOTER,
+        end_note=LOAN_END_NOTE,
     )
     built.append(slug)
     for copy in COPIES.get(slug, []):
