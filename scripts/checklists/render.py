@@ -615,7 +615,19 @@ def draw_first_header(c, meta):
     c.drawString(CONTENT_X, y - 9 * mm, title)
     c.setFillColor(MUTED)
     c.setFont("Helvetica", 8.2)
-    c.drawString(CONTENT_X, y - 14 * mm, meta["subtitle"])
+    # a long subtitle wraps (at most two lines) so it never runs under the contact details on the right
+    max_sub_w = CONTENT_W - 50 * mm
+    lines, cur = [], ""
+    for word in meta["subtitle"].split():
+        trial = (cur + " " + word).strip()
+        if stringWidth(trial, "Helvetica", 8.2) <= max_sub_w or not cur:
+            cur = trial
+        else:
+            lines.append(cur)
+            cur = word
+    lines.append(cur)
+    for i, ln in enumerate(lines[:2]):
+        c.drawString(CONTENT_X, y - (14 + 3.4 * i) * mm, ln)
 
     c.setFillColor(NAVY)
     c.setFont("Helvetica-Bold", 8.2)
