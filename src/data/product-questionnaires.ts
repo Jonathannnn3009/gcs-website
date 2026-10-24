@@ -40,7 +40,7 @@ const rupee = "e.g. 50,00,000";
 const PROJECT: Questionnaire = {
   slugs: ["project-funding"],
   title: "Tell Us About Your Project",
-  intro: "Please share a few basic details so we can understand your project and funding requirement.",
+  intro: "Just a few quick steps to understand your project better. Share what you can: only two answers are required, and approximate figures are fine.",
   topic: "Project funding",
   amountKey: "fundingRequired",
   steps: [
@@ -225,7 +225,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
   return {
     slugs,
     title: "Tell Us About Your Funding Requirement",
-    intro: `Please answer a few basic questions so we can understand your requirement and assess suitable ${name} options.`,
+    intro: `Just a few quick steps to understand your ${name.toLowerCase()} requirement better. Approximate answers are fine, and we will take it from there.`,
     topic,
     amountKey: "limit",
     steps: [
@@ -431,7 +431,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
 const BALANCE_TRANSFER: Questionnaire = {
   slugs: ["balance-transfer"],
   title: "Tell Us About Your Existing Loan & Additional Funding Requirement",
-  intro: "Home Loan, Loan Against Property or Drop-Line Overdraft: share a few details and we will review your options.",
+  intro: "Just a few quick steps to understand your existing loan better. Approximate answers are fine, and we will take it from there.",
   topic: "Balance transfer and top-up",
   amountKey: "topUp",
   steps: [
@@ -634,7 +634,7 @@ const BALANCE_TRANSFER: Questionnaire = {
 const PRIVATE_FUNDING: Questionnaire = {
   slugs: ["private-funding"],
   title: "Tell Us About Your Business",
-  intro: "Private Funding is for self-employed businesses. Share a few basic details and we will review your options.",
+  intro: "Just a few quick steps to understand your business better. Private Funding is for self-employed businesses, and approximate answers are fine.",
   topic: "Private funding",
   amountKey: "fundingRequired",
   steps: [
