@@ -148,7 +148,10 @@ export function MoneySaverCalculator() {
           <div className="relative flex w-full flex-1 flex-col justify-center overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-[50px]"></div>
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-              Interest benefit during entire tenure (Considering excess amount)
+              Total interest saved
+            </p>
+            <p className="relative mt-1 text-[11px] text-muted-foreground">
+              Over the full tenure, with your balance kept in the account
             </p>
             <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl dark:text-white">
               {formatINR(result.totalSaving)}
@@ -166,10 +169,10 @@ export function MoneySaverCalculator() {
                 </p>
               </div>
               {[
-                { label: "Monthly Outflow", note: "(Without considering excess amount)", value: formatINR(result.emi) },
+                { label: "Monthly Payment Without Parking", note: "", value: formatINR(result.emi) },
                 {
-                  label: "Avg. Monthly Outflow",
-                  note: "(Considering excess amount)",
+                  label: "Average Monthly Payment With Parking",
+                  note: "",
                   value: formatINR(Math.round(result.avgOutflow)),
                 },
               ].map((t) => (
@@ -177,7 +180,7 @@ export function MoneySaverCalculator() {
                   <p className="text-[11px] font-bold tracking-wider text-navy uppercase dark:text-white">
                     {t.label}
                   </p>
-                  <p className="text-[11px] text-muted-foreground">{t.note}</p>
+                  {t.note ? <p className="text-[11px] text-muted-foreground">{t.note}</p> : null}
                   <p className="mt-1 text-lg font-extrabold text-gold">{t.value}</p>
                 </div>
               ))}
@@ -233,19 +236,36 @@ export function MoneySaverCalculator() {
             <table className="w-full min-w-[880px] border-collapse text-right text-[13px] [&_td]:border [&_td]:border-[#c4cfe4] [&_th]:border [&_th]:border-[#aebbd6]">
               <thead className="sticky top-0 z-10 bg-[#e8eef9] dark:bg-card">
                 <tr className="border-b border-border align-bottom text-[10px] leading-snug font-bold tracking-wider text-muted-foreground uppercase">
-                  <th className="px-3 py-3 text-left">{view === "month" ? "Sr No." : "Year"}</th>
-                  <th className="px-3 py-3">Sanction limit</th>
-                  <th className="px-3 py-3">{per} Outflow (Net of Interest Benefit)</th>
-                  <th className="px-3 py-3">{per} Principal recovery</th>
-                  <th className="px-3 py-3">
-                    {per} Interest recovery (If &quot;No&quot; balance maintained in Money Saver A/c)
+                  <th className="px-3 py-3 text-left">{view === "month" ? "Month" : "Year"}</th>
+                  <th className="px-3 py-3" title="Sanction limit: the loan outstanding at the start">
+                    Balance at start
                   </th>
-                  <th className="px-3 py-3">{per} Interest recovery (Net of Interest Benefit)</th>
-                  <th className="px-3 py-3 text-gold-dark">
-                    Approx. Interest benefit for the {view} on average daily balance maintained
+                  <th className="px-3 py-3" title={`${per} Outflow (Net of Interest Benefit)`}>
+                    You pay in the {view}
                   </th>
-                  <th className="px-3 py-3">
-                    Average daily balance maintained in the A/c during previous {view}
+                  <th className="px-3 py-3" title={`${per} Principal recovery`}>
+                    Principal paid
+                  </th>
+                  <th
+                    className="px-3 py-3"
+                    title={`${per} Interest recovery (If "No" balance maintained in Money Saver A/c)`}
+                  >
+                    Interest charged
+                  </th>
+                  <th className="px-3 py-3" title={`${per} Interest recovery (Net of Interest Benefit)`}>
+                    Interest payable
+                  </th>
+                  <th
+                    className="px-3 py-3 text-gold-dark"
+                    title={`Approx. Interest benefit for the ${view} on average daily balance maintained`}
+                  >
+                    Interest saved
+                  </th>
+                  <th
+                    className="px-3 py-3"
+                    title={`Average daily balance maintained in the A/c during previous ${view}`}
+                  >
+                    Avg. balance kept
                   </th>
                 </tr>
               </thead>
