@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import { ChevronDown, type LucideIcon } from "lucide-react";
 import { categoryAnchor } from "@/data/ca-legal-menu";
 import { PROFESSIONAL_SERVICES } from "@/data/professional-services";
@@ -24,14 +24,23 @@ export function CaLegalMenuItem({
   category,
   icon,
   desc,
+  open,
+  onToggle,
   onNavigate,
 }: {
   category: string;
   icon: LucideIcon;
   desc: string;
+  /** Only one category is open at a time; the menu keeps track of which. */
+  open: boolean;
+  onToggle: () => void;
   onNavigate: () => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const box = useRef<HTMLDivElement>(null);
+  // When a list opens near the bottom of the menu, bring it into view inside the menu.
+  useEffect(() => {
+    if (open) box.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [open]);
   const services = PROFESSIONAL_SERVICES.filter((s) => s.category === category);
 
   const text = (
@@ -60,8 +69,8 @@ export function CaLegalMenuItem({
   }
 
   return (
-    <div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
-      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)} className={rowClass}>
+    <div ref={box}>
+      <button type="button" aria-expanded={open} onClick={onToggle} className={rowClass}>
         <Tile icon={icon} />
         {text}
         <ChevronDown

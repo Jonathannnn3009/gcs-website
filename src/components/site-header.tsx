@@ -39,6 +39,11 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  // Which CA & Legal category has its list of services open (one at a time, opened by clicking)
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
+  useEffect(() => {
+    if (activeDropdown !== "ca") setOpenCategory(null);
+  }, [activeDropdown]);
   const [menuTop, setMenuTop] = useState(72);
   const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -320,7 +325,10 @@ export function SiteHeader() {
                         style={{ top: menuTop }}
                       >
                         <div className="pointer-events-auto pt-2" style={{ animation: "gcs-scale-in 200ms ease both" }}>
-                          <div className="flex w-[820px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card">
+                          <div
+                            className="flex w-[820px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card"
+                            style={{ height: "min(31rem, calc(100vh - " + menuTop + "px - 1rem))" }}
+                          >
                             {/* Left: the navy gradient panel */}
                             <div className="navy-panel relative flex w-[240px] shrink-0 flex-col p-7">
                               <div className="pointer-events-none absolute -top-10 -left-10 h-44 w-44 rounded-full bg-gold/15 blur-[60px]" />
@@ -346,7 +354,7 @@ export function SiteHeader() {
                             </div>
 
                             {/* Right: the two teams and what each covers */}
-                            <div className="grid min-w-0 flex-1 grid-cols-2 content-start gap-x-3 p-5">
+                            <div className="grid min-w-0 flex-1 grid-cols-2 content-start gap-x-3 overflow-y-auto overscroll-contain p-5">
                               {CA_LEGAL_MENU.map((group) => (
                                 <div key={group.anchor} className="min-w-0">
                                   <Link
@@ -364,7 +372,14 @@ export function SiteHeader() {
                                         category={item.category}
                                         icon={item.icon}
                                         desc={item.desc}
-                                        onNavigate={() => setActiveDropdown(null)}
+                                        open={openCategory === item.category}
+                                        onToggle={() =>
+                                          setOpenCategory((c) => (c === item.category ? null : item.category))
+                                        }
+                                        onNavigate={() => {
+                                          setOpenCategory(null);
+                                          setActiveDropdown(null);
+                                        }}
                                       />
                                     ))}
                                   </div>
