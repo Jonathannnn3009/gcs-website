@@ -241,7 +241,7 @@ export function MoneySaverCalculator() {
                     Balance at start
                   </th>
                   <th className="px-3 py-3" title={`${per} Outflow (Net of Interest Benefit)`}>
-                    You pay in the {view}
+                    {per} outflow
                   </th>
                   <th className="px-3 py-3" title={`${per} Principal recovery`}>
                     Principal paid
