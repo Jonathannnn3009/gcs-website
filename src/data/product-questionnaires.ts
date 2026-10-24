@@ -49,7 +49,7 @@ const PROJECT: Questionnaire = {
       fields: [
         {
           key: "projectType",
-          label: "Project type or industry",
+          label: "Industry",
           kind: "choice",
           dropdown: true,
           required: true,
@@ -73,14 +73,12 @@ const PROJECT: Questionnaire = {
             "Education / Institution",
             "Renewable Energy (Solar / Wind)",
             "Data Centre / IT Park",
-            "Expansion of Existing Business",
-            "New Business / Greenfield Project",
             "Other",
           ],
         },
         {
           key: "projectTypeOther",
-          label: "Please mention your project or industry",
+          label: "Please mention your industry",
           kind: "text",
           showWhen: { key: "projectType", values: ["Other"] },
         },
