@@ -382,7 +382,17 @@ function ProductDetailPage() {
                 <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
                   At A Glance
                 </p>
-                {product.minimalDisclosure ? (
+                {product.minimalDisclosure && product.eligibility.length > 0 ? (
+                  // The terms are already in the strip on the left, so here show who the product is for.
+                  <ul className="space-y-4">
+                    {product.eligibility.slice(0, 5).map((item) => (
+                      <li key={item} className="flex items-start gap-2.5">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                        <span className="text-sm leading-snug text-foreground">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : product.minimalDisclosure ? (
                   <ul className="space-y-4">
                     {product.facts.map((fact) => (
                       <li key={fact.label} className="flex items-start gap-2.5">
@@ -403,7 +413,7 @@ function ProductDetailPage() {
                     ))}
                   </ul>
                 )}
-                {!product.minimalDisclosure && (
+                {(!product.minimalDisclosure || product.eligibility.length > 0) && (
                   <a
                     href="#qualify"
                     className="inline-flex items-center gap-1.5 self-start text-xs font-bold text-gold-dark transition-colors hover:text-navy dark:hover:text-white"

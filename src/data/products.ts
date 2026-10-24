@@ -1667,7 +1667,7 @@ export const PRODUCTS: Product[] = [
       "Rate and terms worked out on your business profile, turnover and profitability",
     ],
     eligibility: [
-      "Self-employed businesses only: an individual, a partnership firm or a company. Not for salaried individuals",
+      "Self-employed businesses only. Not for salaried individuals",
       "Businesses with consistent turnover",
       "₹20–25 Cr+ turnover for Hyderabad, Bangalore, Mumbai and Chennai",
       "₹100 Cr+ turnover for the rest of India",
