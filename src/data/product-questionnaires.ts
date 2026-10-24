@@ -7,7 +7,7 @@ export type ShowWhen = { key: string; values: string[] };
 type Base = { key: string; label: string; help?: string; required?: boolean; showWhen?: ShowWhen };
 
 export type QuestionField =
-  | (Base & { kind: "choice"; options: string[] })
+  | (Base & { kind: "choice"; options: string[]; /** A dropdown instead of buttons, for a long list. */ dropdown?: boolean })
   | (Base & { kind: "multi"; options: string[] })
   | (Base & { kind: "text"; placeholder?: string; long?: boolean })
   | (Base & { kind: "amount"; placeholder?: string; /** 0 is a valid answer, e.g. "no EMIs". */ allowZero?: boolean })
@@ -45,22 +45,34 @@ const PROJECT: Questionnaire = {
   amountKey: "fundingRequired",
   steps: [
     {
-      title: "What is the project type or industry?",
+      title: "Tell us about the project",
       fields: [
         {
           key: "projectType",
-          label: "Select your project",
+          label: "Project type or industry",
           kind: "choice",
+          dropdown: true,
           required: true,
           options: [
-            "Manufacturing",
             "Real Estate / Construction",
+            "Residential Township / Housing",
+            "Commercial Project / Mall / Office",
             "Infrastructure",
-            "Hotel / Hospitality",
-            "Hospital / Healthcare",
-            "Education",
-            "Renewable Energy",
-            "Commercial Project",
+            "Manufacturing",
+            "Engineering & Fabrication",
+            "Steel / Metal / Mining",
+            "Textile & Apparel",
+            "Food Processing / Agro",
+            "Cold Storage / Warehousing / Logistics",
+            "Pharma / Chemicals",
+            "Plastic / Rubber / Packaging",
+            "Automobile & Auto Components",
+            "Electrical / Electronics / IT Hardware",
+            "Hotel / Hospitality / Tourism",
+            "Hospital / Healthcare / Diagnostics",
+            "Education / Institution",
+            "Renewable Energy (Solar / Wind)",
+            "Data Centre / IT Park",
             "Expansion of Existing Business",
             "New Business / Greenfield Project",
             "Other",
@@ -68,19 +80,15 @@ const PROJECT: Questionnaire = {
         },
         {
           key: "projectTypeOther",
-          label: "Please mention your project",
+          label: "Please mention your project or industry",
           kind: "text",
           showWhen: { key: "projectType", values: ["Other"] },
         },
-      ],
-    },
-    {
-      title: "What is the current stage of the project?",
-      fields: [
         {
           key: "stage",
-          label: "Current stage",
+          label: "Current stage of the project",
           kind: "choice",
+          dropdown: true,
           options: [
             "Planning Stage",
             "Land Identified",
@@ -89,23 +97,20 @@ const PROJECT: Questionnaire = {
             "Construction / Setup Started",
             "Partially Completed",
             "Existing Project – Expansion",
+            "Other",
           ],
         },
-      ],
-    },
-    {
-      title: "What is the total project cost?",
-      help: "Include the approximate total cost of land, building, plant & machinery, setup and other project expenses, as applicable.",
-      fields: [{ key: "projectCost", label: "Total project cost", kind: "amount", placeholder: rupee }],
-    },
-    {
-      title: "How much funding do you require?",
-      fields: [
-        { key: "fundingRequired", label: "Funding required", kind: "amount", required: true, placeholder: rupee },
+        {
+          key: "stageOther",
+          label: "Please mention the stage",
+          kind: "text",
+          showWhen: { key: "stage", values: ["Other"] },
+        },
         {
           key: "purpose",
-          label: "Main purpose",
+          label: "Main purpose of the funding",
           kind: "choice",
+          dropdown: true,
           options: [
             "Land / Property",
             "Construction",
@@ -114,23 +119,37 @@ const PROJECT: Questionnaire = {
             "Expansion",
             "Working Capital",
             "Multiple Purposes",
+            "Other",
           ],
+        },
+        {
+          key: "purposeOther",
+          label: "Please mention the purpose",
+          kind: "text",
+          showWhen: { key: "purpose", values: ["Other"] },
         },
       ],
     },
     {
-      title: "What is your own contribution to the project?",
-      help: "Mention how much has already been invested and how much additional promoter contribution is available.",
+      title: "Project cost and funding",
+      help: "For the total project cost, include the approximate cost of land, building, plant & machinery, setup and other project expenses, as applicable.",
       fields: [
-        { key: "ownContribution", label: "Your contribution (₹ or %)", kind: "text", placeholder: "e.g. ₹1 Cr or 25%" },
+        { key: "projectCost", label: "Total project cost", kind: "amount", placeholder: rupee },
+        { key: "fundingRequired", label: "Funding required", kind: "amount", required: true, placeholder: rupee },
+        {
+          key: "ownContribution",
+          label: "Your own contribution so far, and what more you can add (₹ or %)",
+          kind: "text",
+          placeholder: "e.g. ₹1 Cr or 25%",
+        },
       ],
     },
     {
-      title: "What security or collateral is available?",
+      title: "Security and project papers",
       fields: [
         {
           key: "security",
-          label: "Select all that apply",
+          label: "What security or collateral is available? (select all that apply)",
           kind: "multi",
           options: [
             "Project Property",
@@ -143,31 +162,50 @@ const PROJECT: Questionnaire = {
             "No Additional Collateral",
           ],
         },
-        { key: "securityValue", label: "Approximate value", kind: "amount", placeholder: rupee },
+        { key: "securityValue", label: "Approximate value of the security", kind: "amount", placeholder: rupee },
+        {
+          key: "dpr",
+          label: "Are the project report (DPR) and main approvals ready?",
+          kind: "choice",
+          dropdown: true,
+          options: ["Yes", "In Process", "No"],
+        },
       ],
     },
     {
       title: "Tell us about the promoter or existing business",
-      help: "For a new project, please mention the promoters' relevant business or industry experience.",
       fields: [
         { key: "businessName", label: "Business / company name", kind: "text" },
         {
           key: "constitution",
           label: "Constitution",
           kind: "choice",
-          options: ["Proprietorship", "Partnership", "LLP", "Pvt. Ltd.", "Ltd."],
+          dropdown: true,
+          options: ["Proprietorship", "Partnership", "LLP", "Pvt. Ltd.", "Ltd.", "Trust / Society", "Other"],
+        },
+        {
+          key: "constitutionOther",
+          label: "Please mention the constitution",
+          kind: "text",
+          showWhen: { key: "constitution", values: ["Other"] },
         },
         { key: "yearsInBusiness", label: "Years in business", kind: "text", placeholder: "e.g. 8 years" },
-        { key: "turnover", label: "Latest annual turnover", kind: "amount", placeholder: rupee },
-        { key: "profit", label: "Profit / cash accruals", kind: "text", placeholder: "e.g. ₹40 Lakh" },
-        { key: "existingLoans", label: "Existing loans / banking facilities, if any", kind: "text", long: true },
-        { key: "experience", label: "Promoters' experience (for a new project)", kind: "text", long: true },
       ],
     },
     {
-      title: "Are the project report (DPR) and required approvals ready?",
+      title: "Business numbers",
+      help: "Approximate figures are fine.",
       fields: [
-        { key: "dpr", label: "Project report / DPR", kind: "choice", options: ["Yes", "In Process", "No"] },
+        { key: "turnover", label: "Latest annual turnover", kind: "amount", placeholder: rupee },
+        { key: "profit", label: "Profit / cash accruals", kind: "text", placeholder: "e.g. ₹40 Lakh" },
+        { key: "existingLoans", label: "Existing loans / banking facilities, if any", kind: "text", long: true },
+      ],
+    },
+    {
+      title: "Experience and approvals",
+      help: "For a new project, please mention the promoters' relevant business or industry experience.",
+      fields: [
+        { key: "experience", label: "Promoters' experience (for a new project)", kind: "text", long: true },
         {
           key: "approvals",
           label: "Status of major approvals, licences, permissions and registrations",

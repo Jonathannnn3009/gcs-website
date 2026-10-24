@@ -129,7 +129,22 @@ export function ProductQuestionnaire({
           {f.required ? <span className="text-gold-dark"> *</span> : null}
         </p>
         {f.help ? <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{f.help}</p> : null}
-        {f.kind === "choice" && (
+        {f.kind === "choice" && f.dropdown && (
+          <select
+            value={value}
+            onChange={(e) => set(f.key, e.target.value)}
+            className={`${field} cursor-pointer`}
+            aria-label={f.label}
+          >
+            <option value="">Select</option>
+            {f.options.map((o) => (
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ))}
+          </select>
+        )}
+        {f.kind === "choice" && !f.dropdown && (
           <div className="mt-2 flex flex-wrap gap-2">
             {f.options.map((o) => (
               <button
