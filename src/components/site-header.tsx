@@ -376,6 +376,7 @@ export function SiteHeader() {
                                         onToggle={() =>
                                           setOpenCategory((c) => (c === item.category ? null : item.category))
                                         }
+                                        onHover={() => setOpenCategory(item.category)}
                                         onNavigate={() => {
                                           setOpenCategory(null);
                                           setActiveDropdown(null);

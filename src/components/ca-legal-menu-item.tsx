@@ -26,6 +26,7 @@ export function CaLegalMenuItem({
   desc,
   open,
   onToggle,
+  onHover,
   onNavigate,
 }: {
   category: string;
@@ -34,9 +35,23 @@ export function CaLegalMenuItem({
   /** Only one category is open at a time; the menu keeps track of which. */
   open: boolean;
   onToggle: () => void;
+  /** The pointer rests on this row: the menu opens this one (and closes the one before it). */
+  onHover: () => void;
   onNavigate: () => void;
 }) {
   const box = useRef<HTMLDivElement>(null);
+  // A short pause before opening, so a pointer sweeping down the menu does not open every list on the way.
+  const wait = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const enter = () => {
+    if (wait.current) clearTimeout(wait.current);
+    wait.current = setTimeout(onHover, 110);
+  };
+  const leave = () => {
+    if (wait.current) clearTimeout(wait.current);
+  };
+  useEffect(() => () => {
+    if (wait.current) clearTimeout(wait.current);
+  }, []);
   // When a list opens near the bottom of the menu, bring it into view inside the menu.
   useEffect(() => {
     if (open) box.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -52,7 +67,14 @@ export function CaLegalMenuItem({
 
   if (services.length === 1) {
     return (
-      <Link to="/ca-legal-services/$slug" params={{ slug: services[0]!.slug }} onClick={onNavigate} className={rowClass}>
+      <Link
+        to="/ca-legal-services/$slug"
+        params={{ slug: services[0]!.slug }}
+        onClick={onNavigate}
+        onMouseEnter={enter}
+        onMouseLeave={leave}
+        className={rowClass}
+      >
         <Tile icon={icon} />
         {text}
       </Link>
@@ -61,7 +83,14 @@ export function CaLegalMenuItem({
 
   if (services.length === 0) {
     return (
-      <Link to="/ca-legal-services" hash={categoryAnchor(category)} onClick={onNavigate} className={rowClass}>
+      <Link
+        to="/ca-legal-services"
+        hash={categoryAnchor(category)}
+        onClick={onNavigate}
+        onMouseEnter={enter}
+        onMouseLeave={leave}
+        className={rowClass}
+      >
         <Tile icon={icon} />
         {text}
       </Link>
@@ -69,7 +98,7 @@ export function CaLegalMenuItem({
   }
 
   return (
-    <div ref={box}>
+    <div ref={box} onMouseEnter={enter} onMouseLeave={leave}>
       <button type="button" aria-expanded={open} onClick={onToggle} className={rowClass}>
         <Tile icon={icon} />
         {text}
