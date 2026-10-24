@@ -535,7 +535,7 @@ PRIVATE_FUNDING = dict(
             "title": "Basic Eligibility",
             "items": [
                 "-Self-employed businesses, not salaried individuals",
-                "-Turnover of Rs.20 Cr+ for Mumbai, Hyderabad, Bangalore and Chennai, and Rs.100 Cr+ for the rest of India, as per lender policy",
+                "-Turnover of Rs.20-25 Cr+ for Mumbai, Hyderabad, Bangalore and Chennai, and Rs.100 Cr+ for the rest of India, as per lender policy",
                 "-A credible, time-bound plan to repay or refinance",
             ],
         },

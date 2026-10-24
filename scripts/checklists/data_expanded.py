@@ -231,7 +231,7 @@ PRIVATE_FUNDING = dict(
             "callout": "<b>For self-employed businesses only</b> (an individual, a partnership firm or a company). "
             "It is not for salaried individuals. The checklist is the same "
             "for an individual, a partnership firm and a company. Funding is generally for businesses with a "
-            "turnover of Rs.20 Cr+ (Mumbai, Hyderabad, Bangalore, Chennai) or Rs.100 Cr+ (rest of India), as per "
+            "turnover of Rs.20-25 Cr+ (Mumbai, Hyderabad, Bangalore, Chennai) or Rs.100 Cr+ (rest of India), as per "
             "lender policy."
         },
         {
