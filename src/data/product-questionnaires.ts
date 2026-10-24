@@ -157,13 +157,12 @@ const PROJECT: Questionnaire = {
             "Land",
             "Plant & Machinery",
             "Other Security",
-            "No Additional Collateral",
           ],
         },
         { key: "securityValue", label: "Approximate value of the security", kind: "amount", placeholder: rupee },
         {
           key: "dpr",
-          label: "Are the project report (DPR) and main approvals ready?",
+          label: "Are the Detailed Project Report and the main approvals ready?",
           kind: "choice",
           dropdown: true,
           options: ["Yes", "In Process", "No"],
@@ -341,7 +340,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
           },
           {
             key: "loanEmi",
-            label: "EMI / monthly obligation",
+            label: "Monthly instalment / monthly obligation",
             kind: "amount",
             allowZero: true,
             placeholder: "e.g. 25,000",
@@ -349,13 +348,13 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
           },
           {
             key: "existingOdCc",
-            label: "Existing OD / CC limit, if any",
+            label: "Existing overdraft / cash credit limit, if any",
             kind: "amount",
             allowZero: true,
             placeholder: rupee,
             showWhen: { key: "hasLoans", values: ["Yes"] },
           },
-          { key: "loanBank", label: "Current Bank / NBFC", kind: "text", showWhen: { key: "hasLoans", values: ["Yes"] } },
+          { key: "loanBank", label: "Current bank or finance company", kind: "text", showWhen: { key: "hasLoans", values: ["Yes"] } },
         ],
       },
       {
@@ -377,7 +376,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
         fields: [
           { key: "primaryBank", label: "Primary bank name", kind: "text" },
           { key: "monthlyCredits", label: "Average monthly banking / credits", kind: "amount", placeholder: "e.g. 5,00,000" },
-          { key: "emiReturn", label: "Any EMI or cheque return in recent months?", kind: "choice", options: YES_NO },
+          { key: "emiReturn", label: "Any missed monthly instalment or cheque return in recent months?", kind: "choice", options: YES_NO },
           { key: "overdue", label: "Any current overdue?", kind: "choice", options: YES_NO },
           { key: "cibil", label: "Approximate CIBIL score, if known", kind: "text", placeholder: "e.g. 740" },
         ],
@@ -389,26 +388,26 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
             key: "freshOrBt",
             label: "Requirement",
             kind: "choice",
-            options: [`Fresh ${bt}`, "Balance Transfer of Existing OD / Loan", "Balance Transfer + Additional Funding"],
+            options: [`Fresh ${bt}`, "Balance Transfer of Existing Overdraft / Loan", "Balance Transfer + Additional Funding"],
           },
           {
             key: "btLender",
             label: "Existing lender",
             kind: "text",
-            showWhen: { key: "freshOrBt", values: ["Balance Transfer of Existing OD / Loan", "Balance Transfer + Additional Funding"] },
+            showWhen: { key: "freshOrBt", values: ["Balance Transfer of Existing Overdraft / Loan", "Balance Transfer + Additional Funding"] },
           },
           {
             key: "btOutstanding",
             label: "Current outstanding / limit",
             kind: "amount",
             placeholder: rupee,
-            showWhen: { key: "freshOrBt", values: ["Balance Transfer of Existing OD / Loan", "Balance Transfer + Additional Funding"] },
+            showWhen: { key: "freshOrBt", values: ["Balance Transfer of Existing Overdraft / Loan", "Balance Transfer + Additional Funding"] },
           },
           {
             key: "btRate",
             label: "Current rate of interest",
             kind: "percent",
-            showWhen: { key: "freshOrBt", values: ["Balance Transfer of Existing OD / Loan", "Balance Transfer + Additional Funding"] },
+            showWhen: { key: "freshOrBt", values: ["Balance Transfer of Existing Overdraft / Loan", "Balance Transfer + Additional Funding"] },
           },
           {
             key: "btExtra",
@@ -424,7 +423,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
     finalText: `Based on these basic details, Growth Capital Services can understand your financial requirement and help explore suitable ${name} options from its network of Banks & NBFCs.`,
     button: "Check Your Eligibility",
     disclaimer:
-      "Eligibility, OD limit, interest rate, tenure, property acceptability, repayment structure, charges and approval are subject to the applicant's financial and credit profile, property assessment and the respective Bank or NBFC's lending policy.",
+      "Eligibility, overdraft limit, interest rate, tenure, property acceptability, repayment structure, charges and approval are subject to the applicant's financial and credit profile, property assessment and the respective Bank or NBFC's lending policy.",
   };
 }
 
@@ -444,7 +443,7 @@ const BALANCE_TRANSFER: Questionnaire = {
           label: "Existing facility",
           kind: "choice",
           required: true,
-          options: ["Home Loan", "Loan Against Property (LAP)", "Dropline Overdraft (DLOD)"],
+          options: ["Home Loan", "Loan Against Property", "Dropline Overdraft"],
         },
         {
           key: "requirement",
@@ -458,11 +457,11 @@ const BALANCE_TRANSFER: Questionnaire = {
     {
       title: "What are your existing loan details?",
       fields: [
-        { key: "bank", label: "Existing Bank / NBFC", kind: "text" },
+        { key: "bank", label: "Existing bank or finance company", kind: "text" },
         { key: "original", label: "Original loan / sanctioned amount", kind: "amount", placeholder: rupee },
         { key: "outstanding", label: "Current outstanding", kind: "amount", placeholder: rupee },
         { key: "rate", label: "Current interest rate", kind: "percent" },
-        { key: "emi", label: "Current EMI / monthly obligation", kind: "amount", placeholder: "e.g. 45,000" },
+        { key: "emi", label: "Current monthly instalment / monthly obligation", kind: "amount", placeholder: "e.g. 45,000" },
         { key: "tenure", label: "Remaining tenure", kind: "text", placeholder: "e.g. 12 years" },
       ],
     },
@@ -502,7 +501,7 @@ const BALANCE_TRANSFER: Questionnaire = {
           key: "track",
           label: "Repayment track",
           kind: "choice",
-          options: ["Regular EMI Payments", "Some Delays / Bounces", "Current Overdue"],
+          options: ["Regular Monthly Instalment Payments", "Some Delays / Bounces", "Current Overdue"],
         },
         {
           key: "trackReason",
@@ -589,13 +588,13 @@ const BALANCE_TRANSFER: Questionnaire = {
         },
         {
           key: "otherEmi",
-          label: "EMI / monthly obligation",
+          label: "Monthly instalment / monthly obligation",
           kind: "amount",
             allowZero: true,
           placeholder: "e.g. 20,000",
           showWhen: { key: "hasLoans", values: ["Yes"] },
         },
-        { key: "otherBank", label: "Bank / NBFC", kind: "text", showWhen: { key: "hasLoans", values: ["Yes"] } },
+        { key: "otherBank", label: "Bank or finance company", kind: "text", showWhen: { key: "hasLoans", values: ["Yes"] } },
       ],
     },
     {
@@ -693,12 +692,71 @@ const PRIVATE_FUNDING: Questionnaire = {
     "Funding amount, tenure, interest rate, turnaround and approval are subject to the business profile, turnover, documents and the respective lender's policy. Private Funding is only for self-employed businesses.",
 };
 
+
+// ───────────── The same layout everywhere ─────────────
+// Long lists are dropdowns, picking "Other" opens a "please mention" box, and the questions come three
+// to a screen (questions that only appear after an earlier answer ride along with their screen).
+function polish(q: Questionnaire, titles: string[]): Questionnaire {
+  const flat: QuestionField[] = [];
+  for (const step of q.steps) {
+    for (const f of step.fields) {
+      const field: QuestionField =
+        f.kind === "choice" && f.options.length > 2 ? { ...f, dropdown: true } : f;
+      flat.push(field);
+      if (field.kind === "choice" && field.options.includes("Other") && !field.showWhen) {
+        flat.push({
+          key: `${field.key}Other`,
+          label: "Please mention",
+          kind: "text",
+          showWhen: { key: field.key, values: ["Other"] },
+        });
+      }
+    }
+  }
+  const screens: QuestionField[][] = [];
+  let base = 0;
+  for (const f of flat) {
+    if (!f.showWhen) {
+      if (base >= 3 || screens.length === 0) {
+        screens.push([]);
+        base = 0;
+      }
+      base += 1;
+    } else if (screens.length === 0) {
+      screens.push([]);
+    }
+    screens[screens.length - 1]!.push(f);
+  }
+  const steps: QuestionStep[] = screens.map((fields, i) => ({
+    title: titles[i] ?? "A few more details",
+    fields,
+  }));
+  return { ...q, steps };
+}
+
+const OVERDRAFT_TITLES = [
+  "Your profile, limit and income",
+  "Experience, existing loans and property",
+  "Property details",
+  "Banking and repayment",
+  "Credit profile and type of requirement",
+];
+const BT_TITLES = [
+  "Your existing facility",
+  "Existing loan details",
+  "Monthly instalment, tenure and top-up",
+  "Repayment track and your profile",
+  "Property details",
+  "Other loans and credit profile",
+];
+const PRIVATE_TITLES = ["Your business", "Turnover and funding"];
+
 export const QUESTIONNAIRES: Questionnaire[] = [
   PROJECT,
-  overdraft("Dropline Overdraft", ["dlod"], "Dropline overdraft", "Dropline OD"),
-  overdraft("Overdraft", ["overdraft-limit"], "Overdraft", "Overdraft"),
-  BALANCE_TRANSFER,
-  PRIVATE_FUNDING,
+  polish(overdraft("Dropline Overdraft", ["dlod"], "Dropline overdraft", "Dropline Overdraft"), OVERDRAFT_TITLES),
+  polish(overdraft("Overdraft", ["overdraft-limit"], "Overdraft", "Overdraft"), OVERDRAFT_TITLES),
+  polish(BALANCE_TRANSFER, BT_TITLES),
+  polish(PRIVATE_FUNDING, PRIVATE_TITLES),
 ];
 
 export const questionnaireFor = (slug: string): Questionnaire | undefined =>
