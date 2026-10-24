@@ -41,6 +41,7 @@ export function MoneySaverCalculator() {
 
   // The schedule, month by month as a lender's sheet shows it, or added up year by year.
   const [view, setView] = useState<"month" | "year">("month");
+  const per = view === "month" ? "Monthly" : "Yearly";
   const rows = useMemo<ScheduleRow[]>(() => {
     if (view === "month") return result.monthly.map((m) => ({ ...m, n: m.month }));
     const years: ScheduleRow[] = [];
@@ -147,10 +148,7 @@ export function MoneySaverCalculator() {
           <div className="relative flex w-full flex-1 flex-col justify-center overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-[50px]"></div>
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-              Total interest saved
-            </p>
-            <p className="relative mt-1 text-[11px] text-muted-foreground">
-              Over the full tenure, with your balance kept in the account
+              Interest benefit during entire tenure (Considering excess amount)
             </p>
             <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl dark:text-white">
               {formatINR(result.totalSaving)}
@@ -159,7 +157,7 @@ export function MoneySaverCalculator() {
             <div className="relative mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="hero-stat relative overflow-hidden rounded-2xl border border-gold/40 bg-white/60 px-4 py-4 sm:col-span-2 dark:bg-card/60">
                 <p className="text-[11px] font-bold tracking-wider text-gold-dark uppercase">
-                  Effective ROI
+                  Effective reduced ROI
                 </p>
                 <p className="mt-1 text-3xl font-extrabold sm:text-4xl">
                   <span className="text-muted-foreground">{rate.toFixed(2)}%</span>{" "}
@@ -168,10 +166,10 @@ export function MoneySaverCalculator() {
                 </p>
               </div>
               {[
-                { label: "Monthly outflow", note: "Without the balance", value: formatINR(result.emi) },
+                { label: "Monthly Outflow", note: "(Without considering excess amount)", value: formatINR(result.emi) },
                 {
-                  label: "Avg. monthly outflow",
-                  note: "With the balance",
+                  label: "Avg. Monthly Outflow",
+                  note: "(Considering excess amount)",
                   value: formatINR(Math.round(result.avgOutflow)),
                 },
               ].map((t) => (
@@ -185,9 +183,8 @@ export function MoneySaverCalculator() {
               ))}
               <div className="rounded-xl border border-border bg-white/60 px-4 py-3 sm:col-span-2 dark:bg-card/60">
                 <p className="text-[11px] font-bold tracking-wider text-navy uppercase dark:text-white">
-                  Avg. monthly saving
+                  Average Monthly Interest benefit
                 </p>
-                <p className="text-[11px] text-muted-foreground">Interest saved each month, on average</p>
                 <p className="mt-1 text-lg font-extrabold text-gold">
                   {formatINR(Math.round(result.avgMonthlySaving))}
                 </p>
@@ -236,27 +233,19 @@ export function MoneySaverCalculator() {
             <table className="w-full min-w-[880px] border-collapse text-right text-[13px] [&_td]:border [&_td]:border-[#c4cfe4] [&_th]:border [&_th]:border-[#aebbd6]">
               <thead className="sticky top-0 z-10 bg-[#e8eef9] dark:bg-card">
                 <tr className="border-b border-border align-bottom text-[10px] leading-snug font-bold tracking-wider text-muted-foreground uppercase">
-                  <th className="px-3 py-3 text-left">{view === "month" ? "Month" : "Year"}</th>
-                  <th className="px-3 py-3" title="Loan outstanding at the start (the sanction limit)">
-                    Outstanding
+                  <th className="px-3 py-3 text-left">{view === "month" ? "Sr No." : "Year"}</th>
+                  <th className="px-3 py-3">Sanction limit</th>
+                  <th className="px-3 py-3">{per} Outflow (Net of Interest Benefit)</th>
+                  <th className="px-3 py-3">{per} Principal recovery</th>
+                  <th className="px-3 py-3">
+                    {per} Interest recovery (If &quot;No&quot; balance maintained in Money Saver A/c)
                   </th>
-                  <th className="px-3 py-3" title="What you pay in the period, after the interest benefit">
-                    Payment
+                  <th className="px-3 py-3">{per} Interest recovery (Net of Interest Benefit)</th>
+                  <th className="px-3 py-3 text-gold-dark">
+                    Approx. Interest benefit for the {view} on average daily balance maintained
                   </th>
-                  <th className="px-3 py-3" title="Principal recovered in the period">
-                    Principal paid
-                  </th>
-                  <th className="px-3 py-3" title='Interest if no balance is kept in the Money Saver account'>
-                    Interest, no balance
-                  </th>
-                  <th className="px-3 py-3" title="Interest after the benefit from your balance">
-                    Interest, with balance
-                  </th>
-                  <th className="px-3 py-3 text-gold-dark" title="Approx. interest saved in the period on the average daily balance kept">
-                    Interest saved
-                  </th>
-                  <th className="px-3 py-3" title="Average daily balance kept in the account during the previous period">
-                    Avg. balance kept
+                  <th className="px-3 py-3">
+                    Average daily balance maintained in the A/c during previous {view}
                   </th>
                 </tr>
               </thead>
