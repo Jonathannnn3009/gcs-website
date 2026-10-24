@@ -40,7 +40,7 @@ const rupee = "e.g. 50,00,000";
 const PROJECT: Questionnaire = {
   slugs: ["project-funding"],
   title: "Tell Us About Your Project",
-  intro: "Just a few quick steps to understand your project better. Share what you can: only two answers are required, and approximate figures are fine.",
+  intro: "Just a few quick steps to understand your project better. Share what you can: only two answers are required.",
   topic: "Project funding",
   amountKey: "fundingRequired",
   steps: [
@@ -191,7 +191,6 @@ const PROJECT: Questionnaire = {
     },
     {
       title: "Business numbers",
-      help: "Approximate figures are fine.",
       fields: [
         { key: "turnover", label: "Latest annual turnover", kind: "amount", placeholder: rupee },
         { key: "profit", label: "Profit / cash accruals", kind: "text", placeholder: "e.g. ₹40 Lakh" },
@@ -225,7 +224,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
   return {
     slugs,
     title: "Tell Us About Your Funding Requirement",
-    intro: `Just a few quick steps to understand your ${name.toLowerCase()} requirement better. Approximate answers are fine, and we will take it from there.`,
+    intro: `Just a few quick steps to understand your ${name.toLowerCase()} requirement better, and we will take it from there.`,
     topic,
     amountKey: "limit",
     steps: [
@@ -431,7 +430,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
 const BALANCE_TRANSFER: Questionnaire = {
   slugs: ["balance-transfer"],
   title: "Tell Us About Your Existing Loan & Additional Funding Requirement",
-  intro: "Just a few quick steps to understand your existing loan better. Approximate answers are fine, and we will take it from there.",
+  intro: "Just a few quick steps to understand your existing loan better, and we will take it from there.",
   topic: "Balance transfer and top-up",
   amountKey: "topUp",
   steps: [
@@ -634,7 +633,7 @@ const BALANCE_TRANSFER: Questionnaire = {
 const PRIVATE_FUNDING: Questionnaire = {
   slugs: ["private-funding"],
   title: "Tell Us About Your Business",
-  intro: "Just a few quick steps to understand your business better. Private Funding is for self-employed businesses, and approximate answers are fine.",
+  intro: "Just a few quick steps to understand your business better. Private Funding is for self-employed businesses.",
   topic: "Private funding",
   amountKey: "fundingRequired",
   steps: [
