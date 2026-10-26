@@ -251,25 +251,30 @@ export function ProductQuestionnaire({
   const current = config.steps[step];
 
   return (
-    <div id="apply" className="scroll-mt-28 rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] sm:p-7 dark:bg-card">
-      <p className="mb-2 text-xs text-muted-foreground italic">
-        Just a few steps to understand you better, so we can give you the right information faster.
-      </p>
-      <p className="text-[11px] font-bold tracking-[0.2em] text-gold-dark uppercase">{productTitle}</p>
-      <h3 className="mt-1.5 text-xl font-extrabold text-navy dark:text-white" style={{ letterSpacing: "0" }}>
-        {config.title}
-      </h3>
-      {step === 0 && <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{config.intro}</p>}
+    <div
+      id="apply"
+      className="flex scroll-mt-28 flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-card)] lg:max-h-[calc(100vh-8rem)] dark:bg-card"
+    >
+      {/* Heading and progress stay put at the top */}
+      <div className="shrink-0 px-6 pt-6 sm:px-7 sm:pt-7">
+        <p className="text-[11px] font-bold tracking-[0.2em] text-gold-dark uppercase">{productTitle}</p>
+        <h3 className="mt-1.5 text-xl font-extrabold text-navy dark:text-white" style={{ letterSpacing: "0" }}>
+          {config.title}
+        </h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground italic">{config.intro}</p>
 
-      <div className="mt-4 flex items-center gap-3">
-        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-border">
-          <div className="h-full rounded-full bg-gold transition-all duration-500" style={{ width: `${((position + 1) / screens.length) * 100}%` }} />
+        <div className="mt-4 flex items-center gap-3">
+          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-border">
+            <div className="h-full rounded-full bg-gold transition-all duration-500" style={{ width: `${((position + 1) / screens.length) * 100}%` }} />
+          </div>
+          <span className="text-xs font-semibold text-muted-foreground">
+            {position + 1} of {screens.length}
+          </span>
         </div>
-        <span className="text-xs font-semibold text-muted-foreground">
-          {position + 1} of {screens.length}
-        </span>
       </div>
 
+      {/* The questions scroll inside the card when the screen is short */}
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-4 sm:px-7">
       {!onContact && current ? (
         <div className="mt-5 space-y-5">
           <h4 className="text-[15px] font-bold text-navy dark:text-white" style={{ letterSpacing: "0" }}>
@@ -313,7 +318,13 @@ export function ProductQuestionnaire({
         </div>
       )}
 
-      <div className="mt-6 flex items-center justify-between gap-3">
+      <p className="mt-6 border-t border-dashed border-border pt-4 text-[11px] leading-relaxed text-muted-foreground">
+        {config.disclaimer}
+      </p>
+      </div>
+
+      {/* Back and Next stay in view at the bottom */}
+      <div className="flex shrink-0 items-center justify-between gap-3 border-t border-border bg-white px-6 py-4 sm:px-7 dark:bg-card">
         {step > 0 ? (
           <button
             type="button"
@@ -338,10 +349,6 @@ export function ProductQuestionnaire({
           </button>
         )}
       </div>
-
-      <p className="mt-5 border-t border-dashed border-border pt-4 text-[11px] leading-relaxed text-muted-foreground">
-        {config.disclaimer}
-      </p>
     </div>
   );
 }

@@ -40,7 +40,7 @@ const rupee = "e.g. 50,00,000";
 const PROJECT: Questionnaire = {
   slugs: ["project-funding"],
   title: "Tell Us About Your Project",
-  intro: "Just a few quick steps to understand your project better. Share what you can: only two answers are required.",
+  intro: "Just a few steps to understand you better, so we can give you the right information faster.",
   topic: "Project funding",
   amountKey: "fundingRequired",
   steps: [
@@ -224,7 +224,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
   return {
     slugs,
     title: "Tell Us About Your Funding Requirement",
-    intro: `Just a few quick steps to understand your ${name.toLowerCase()} requirement better, and we will take it from there.`,
+    intro: "Just a few steps to understand you better, so we can give you the right information faster.",
     topic,
     amountKey: "limit",
     steps: [
@@ -430,7 +430,7 @@ function overdraft(name: string, slugs: string[], topic: string, bt: string): Qu
 const BALANCE_TRANSFER: Questionnaire = {
   slugs: ["balance-transfer"],
   title: "Tell Us About Your Existing Loan & Additional Funding Requirement",
-  intro: "Just a few quick steps to understand your existing loan better, and we will take it from there.",
+  intro: "Just a few steps to understand you better, so we can give you the right information faster.",
   topic: "Balance transfer and top-up",
   amountKey: "topUp",
   steps: [
@@ -633,7 +633,7 @@ const BALANCE_TRANSFER: Questionnaire = {
 const PRIVATE_FUNDING: Questionnaire = {
   slugs: ["private-funding"],
   title: "Tell Us About Your Business",
-  intro: "Just a few quick steps to understand your business better. Private Funding is for self-employed businesses.",
+  intro: "Just a few steps to understand you better, so we can give you the right information faster.",
   topic: "Private funding",
   amountKey: "fundingRequired",
   steps: [
