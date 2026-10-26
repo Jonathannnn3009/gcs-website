@@ -54,9 +54,9 @@ export function FollowUpFlow({
   const [cibilLater, setCibilLater] = useState(false);
   const scroller = useRef<HTMLDivElement>(null);
 
-  // Each step starts at the top of the form's own scroll area.
+  // Each step starts at the top. The page wraps this card in the one scroll area (the consultation form's).
   useEffect(() => {
-    scroller.current?.scrollTo({ top: 0 });
+    scroller.current?.closest<HTMLElement>(".gcs-scroll")?.scrollTo({ top: 0 });
   }, [step]);
 
   const all = useMemo(() => form.steps.flatMap((s) => s.fields), [form]);
@@ -145,10 +145,7 @@ export function FollowUpFlow({
     return (
       <div className={card}>
         <div className="h-1 bg-gradient-to-r from-navy via-navy-soft to-gold" />
-        <div
-          ref={scroller}
-          className="max-h-[80vh] overflow-y-auto overscroll-contain p-6 sm:max-h-[calc(100vh-8rem)] sm:p-7"
-        >
+        <div ref={scroller} className="p-6 sm:p-7">
           <p className="flex items-center gap-2 text-sm font-semibold text-navy dark:text-white">
             <Check className="h-4 w-4 text-gold-dark" /> Thank you, {basics.name.split(" ")[0]}. We
             have your enquiry.
@@ -193,7 +190,8 @@ export function FollowUpFlow({
             {stepFields(step).map((f) => (
               <QuestionFieldInput
                 key={f.key}
-                f={f}
+                // Single-answer questions are dropdowns; the pick-several ones stay as buttons
+                f={f.kind === "choice" ? { ...f, dropdown: true } : f}
                 value={answers[f.key] ?? ""}
                 set={set}
                 error={errors[f.key]}
