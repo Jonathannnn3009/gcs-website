@@ -216,3 +216,18 @@ export function useStampDutyRates(): typeof STAMP_DUTY_RATES {
   }
   return Object.keys(out).length > 0 ? out : STAMP_DUTY_RATES;
 }
+
+const LOAN_AMOUNT_FIELD: ChecklistIntakeField = {
+  key: "loanAmount",
+  label: "Loan Amount Required",
+  type: "text",
+  placeholder: "e.g. 50,00,000",
+  format: "amount",
+};
+
+/** Every loan's checklist form asks for the loan amount, last, unless the loan already asks for it. */
+export function withLoanAmount(fields: ChecklistIntakeField[] | undefined): ChecklistIntakeField[] {
+  const list = fields ?? [];
+  const asked = list.some((f) => f.key === "loanAmount" || /loan amount/i.test(f.label));
+  return asked ? list : [...list, LOAN_AMOUNT_FIELD];
+}

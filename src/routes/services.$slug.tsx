@@ -24,7 +24,7 @@ import { useProduct } from "@/lib/site-content";
 import { FactsStrip } from "@/components/facts-strip";
 import { CheckBadge, TopicHeader } from "@/components/topic-header";
 import { ChargesBlock, NriBlock } from "@/components/product-extras";
-import { useIntakeFields } from "@/lib/page-lists";
+import { useIntakeFields, withLoanAmount } from "@/lib/page-lists";
 import { CONTACT, waLink } from "@/data/site";
 import { PageCalculators } from "@/components/page-calculators";
 import { PRODUCT_CALCULATORS } from "@/data/page-calculators";
@@ -126,7 +126,7 @@ function productCode(title: string): string {
 function ProductDetailPage() {
   const { slug } = Route.useParams();
   const product = useProduct(getProduct(slug));
-  const intakeFields = useIntakeFields(slug, product?.checklistIntake);
+  const intakeFields = withLoanAmount(useIntakeFields(slug, product?.checklistIntake));
   const [presetCategory, setPresetCategory] = useState<string | null>(null);
   useEffect(() => setPresetCategory(null), [slug]);
   if (MERGED_INTO[slug]) return <Navigate to="/services/$slug" params={{ slug: MERGED_INTO[slug]! }} replace />;
