@@ -81,6 +81,14 @@ export type Product = {
   minimalDisclosure?: boolean;
   /** A short line shown as a pill under the title, for who the product is (or is not) for. */
   heroNote?: string;
+  /** What the money can be used for, as its own list under "What's included". */
+  uses?: { heading: string; items: string[] };
+  /** Several programmes of one product side by side (for example loan-amount bands), each with its own terms. */
+  optionTiers?: { heading: string; intro?: string; tiers: { title: string; points: { label: string; value: string }[] }[] };
+  /** The "Why apply through us" paragraph, where the product has its own words for it. */
+  whyGcs?: string;
+  /** The important note for this product, shown at the foot of the page in place of the standard one. */
+  importantNote?: string;
   /** A short highlighted line shown above the USPs on a minimal-disclosure product's page. */
   pullQuote?: string;
   /** Extra questions asked in the checklist-download form, on top of name/phone — per Mahesh's intake list for these products. */
@@ -831,6 +839,117 @@ export const PRODUCTS: Product[] = [
     ],
   },
   {
+    slug: "micro-lap",
+    icon: Home,
+    title: "Micro Loan Against Property (Micro LAP)",
+    tagline: "Your Property Can Help Meet Your Funding Needs",
+    group: "Property Finance",
+    facts: [
+      { label: "Loan amount", value: "₹3 Lakh to ₹20 Lakh*" },
+      { label: "Tenure", value: "12 to 120 months*" },
+      { label: "Indicative rate", value: "19% to 24% p.a. reducing*" },
+      { label: "For", value: "Salaried and self-employed" },
+    ],
+    about:
+      "Get funds against your eligible property for business or personal financial needs, while continuing to own and use your property. Micro Loan Against Property (Micro LAP) is designed for eligible salaried and self-employed customers looking for relatively smaller property-backed funding with simple assessment and documentation. Explore property-backed funding options generally ranging from ₹3 Lakh to ₹20 Lakh*. The applicable loan amount depends on the selected program, property value, income / repayment capacity, credit profile and lender policy.",
+    features: [
+      "Loan amount up to ₹20 Lakh*",
+      "Available for eligible salaried and self-employed customers",
+      "Funding against eligible property",
+      "Longer repayment tenure available under eligible programs",
+      "Different assessment options depending on the property and customer profile",
+      "Clubbed / family income may be considered under eligible programs",
+      "Higher LTV may be available depending on the applicable scheme and property",
+      "ITR and GST may not be required under certain eligible programs",
+      "Simple documentation",
+      "Business or eligible personal funding requirements can be considered",
+    ],
+    optionTiers: {
+      heading: "Available Micro LAP options",
+      intro: "Three programmes, by loan amount. The one that applies to you depends on your property and profile.",
+      tiers: [
+        {
+          title: "₹3 Lakh to ₹7.5 Lakh*",
+          points: [
+            { label: "Tenure", value: "12 to 60 months" },
+            { label: "Indicative rate", value: "23% to 24% p.a. reducing*" },
+            { label: "Property requirement", value: "Registered Sale Deed" },
+            { label: "Valuation", value: "Physical valuation may not be required under the applicable program" },
+            { label: "Legal", value: "Property search / document verification as per lender policy" },
+            { label: "Mortgage structure", value: "Negative lien may be considered under the applicable program" },
+          ],
+        },
+        {
+          title: "₹5 Lakh to ₹10 Lakh*",
+          points: [
+            { label: "Tenure", value: "12 to 84 months" },
+            { label: "Indicative rate", value: "21% to 22% p.a. reducing*" },
+            { label: "Property documents", value: "Registered Sale Deed / applicable property records such as Namuna 8, 7/12, etc." },
+            { label: "Valuation", value: "Desktop or technical valuation, as applicable" },
+            { label: "Legal", value: "Title Search Report (TSR) and legal verification" },
+            { label: "Mortgage", value: "Registered Mortgage (RM) or Equitable Mortgage (EM), as applicable" },
+          ],
+        },
+        {
+          title: "₹10 Lakh to ₹20 Lakh*",
+          points: [
+            { label: "Tenure", value: "12 to 120 months" },
+            { label: "Indicative rate", value: "19% to 20% p.a. reducing*" },
+            { label: "Property documents", value: "Registered Sale Deed / applicable property records such as Namuna 8, 7/12, etc." },
+            { label: "Valuation", value: "Physical and technical valuation" },
+            { label: "Legal", value: "Title Search Report (TSR) and legal verification" },
+            { label: "Mortgage", value: "Registered Mortgage (RM) or Equitable Mortgage (EM), as applicable" },
+          ],
+        },
+      ],
+    },
+    uses: {
+      heading: "What can the funds be used for?",
+      items: [
+        "Business expansion",
+        "Working capital",
+        "Purchase of stock / inventory",
+        "Business cash flow requirements",
+        "Education",
+        "Medical expenses",
+        "Home renovation",
+        "Other eligible business or personal requirements",
+      ],
+    },
+    eligibility: [
+      "Salaried individuals",
+      "Self-employed professionals",
+      "Business owners",
+      "Proprietors",
+      "Partners / Directors, subject to lender criteria",
+      "Family or clubbed income may also be considered under certain eligible programs",
+    ],
+    documents: [
+      "Registered Sale Deed",
+      "Property ownership documents",
+      "Namuna 8 / 7/12 extract, where applicable",
+      "Other title / property documents required for legal and technical verification",
+      "The exact documentation depends on the property type, location and the lender's legal requirements",
+    ],
+    charges: {
+      intro: "Charges may include the following. The lender confirms what applies to you.",
+      rows: [
+        { label: "Login fee", value: "May be charged by the lender" },
+        { label: "Processing fee", value: "May be charged by the lender" },
+        { label: "Legal charges", value: "For the legal check of the property" },
+        { label: "Technical / valuation charges", value: "For the valuation of the property" },
+        { label: "Mortgage / documentation charges", value: "May be charged by the lender" },
+        { label: "Stamp duty and statutory charges", value: "Where applicable" },
+        { label: "Other charges", value: "Other applicable lender charges" },
+      ],
+      note: "The complete applicable charges should be communicated to you before you proceed with the loan application.",
+    },
+    whyGcs:
+      "Every property and customer profile can be different. Our team reviews your funding requirement, income profile, property details, existing obligations and credit profile to help you explore suitable Micro LAP options available through our network of Banks & NBFCs.",
+    importantNote:
+      "The above information is indicative and based on available product parameters. Loan amount, interest rate, tenure, LTV, documentation, fees, legal / technical requirements and approval are subject to the applicant's profile, property assessment, credit assessment and the respective lender's prevailing policy. Availability without ITR / GST applies only to eligible programs and is not guaranteed.",
+  },
+  {
     slug: "lease-rental-discounting",
     icon: Store,
     title: "Lease Rental Discounting",
@@ -973,6 +1092,63 @@ export const PRODUCTS: Product[] = [
     documents: [KYC, "Proof of business ownership"],
     charges: CHARGES_UNSECURED,
     documentCategories: BUSINESS_DOC_CATEGORIES,
+  },
+  {
+    slug: "micro-business-loan",
+    icon: Store,
+    title: "Micro Business Loan",
+    tagline: "Small Business. Simple Funding. More Growth.",
+    group: "Business Growth",
+    facts: [
+      { label: "Loan amount", value: "Up to ₹10 Lakh*" },
+      { label: "Security", value: "No property collateral required*" },
+      { label: "ITR", value: "May not be required under eligible programs*" },
+      { label: "GST", value: "May not be required under eligible programs*" },
+      { label: "Documentation", value: "Simple, subject to lender policy" },
+    ],
+    about:
+      "Get unsecured business funding for your day-to-day business needs, without providing property as collateral. Designed for eligible small business owners, shopkeepers, traders and self-employed customers who need funds to manage or grow their business.",
+    uses: {
+      heading: "What can you use the loan for?",
+      items: [
+        "Purchase of stock or inventory",
+        "Working capital needs",
+        "Business expansion",
+        "Shop or workplace renovation",
+        "Purchase of small business equipment",
+        "Managing short-term business cash flow",
+        "Other eligible business expenses",
+      ],
+    },
+    features: [
+      "Loan amount up to ₹10 Lakh*",
+      "No property collateral required*",
+      "ITR may not be required under eligible programs*",
+      "GST may not be required under eligible programs*",
+      "Assessment based on business profile, banking and lender criteria",
+      "Simple documentation, subject to lender policy",
+    ],
+    eligibility: [
+      "Shopkeepers",
+      "Traders",
+      "Retailers",
+      "Small manufacturers",
+      "Service businesses",
+      "Proprietors",
+      "Self-employed business owners",
+      "Other eligible micro and small businesses",
+    ],
+    documents: [
+      "KYC documents: PAN, Aadhaar and other applicable KYC documents",
+      "Latest bank statements: generally the latest 6 months' banking may be required",
+      "Business proof: proof showing the business is operational, generally for the required business vintage",
+      "Business ownership / address proof: applicable business premises or ownership / address proof, such as an electricity bill or other acceptable document",
+      "Additional documents may be requested depending on your profile and lender policy",
+    ],
+    whyGcs:
+      "Tell us about your business and funding requirement. Our team will review your profile and help you explore suitable Micro Business Loan options available through our network of Banks & NBFCs.",
+    importantNote:
+      "Loan amount, eligibility, interest rate, tenure, fees, documentation and approval depend on the applicant's business profile, banking, credit assessment and the respective lender's current policy. “No ITR” or “No GST” may be available only under specific eligible lending programs and should not be considered applicable to every case.",
   },
   {
     slug: "cgtmse",

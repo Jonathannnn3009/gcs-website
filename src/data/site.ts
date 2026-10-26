@@ -102,6 +102,19 @@ export const SERVICES: Service[] = [
     ],
   },
   {
+    id: "micro-lap",
+    title: "Micro Loan Against Property (Micro LAP)",
+    tagline: "Your property can help meet your funding needs",
+    description:
+      "Smaller property-backed funding from ₹3 Lakh to ₹20 Lakh for eligible salaried and self-employed customers, with simple assessment.",
+    highlights: [
+      "Loan amount up to ₹20 Lakh*",
+      "Salaried and self-employed customers",
+      "Longer tenure under eligible programs",
+      "ITR and GST may not be needed under certain programs*",
+    ],
+  },
+  {
     id: "business-loan",
     title: "Business Loan & Working Capital",
     tagline: "Fuel day-to-day growth",
@@ -111,6 +124,19 @@ export const SERVICES: Service[] = [
       "Unsecured business loans up to ₹75 lakh",
       "Bank limit enhancement & takeover",
       "GST / banking / balance-sheet programmes",
+    ],
+  },
+  {
+    id: "micro-business-loan",
+    title: "Micro Business Loan",
+    tagline: "Small business. Simple funding. More growth.",
+    description:
+      "Unsecured funding for day-to-day needs of eligible small business owners, shopkeepers, traders and the self-employed.",
+    highlights: [
+      "Loan amount up to ₹10 Lakh*",
+      "No property collateral required*",
+      "ITR and GST may not be required under eligible programs*",
+      "Simple documentation, subject to lender policy",
     ],
   },
   {

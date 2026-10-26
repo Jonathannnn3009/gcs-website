@@ -6,8 +6,10 @@ import {
   FileCheck2,
   FileText,
   Landmark,
+  Layers,
   ListChecks,
   UserCheck,
+  Wallet,
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
@@ -89,6 +91,8 @@ const PROCESS = [
 // Short names the team wants on the Apply button, where the automatic initials read wrongly.
 const CODE_OVERRIDES: Record<string, string> = {
   "loan-against-property": "LAP",
+  "micro-business-loan": "Micro Business Loan",
+  "micro-lap": "Micro LAP",
   "loan-against-securities": "LAS",
   "balance-transfer": "BT & Top Up",
   dlod: "DL-OD",
@@ -529,6 +533,50 @@ function ProductDetailPage() {
                 </ul>
               </div>
 
+              {product.uses ? (
+                <>
+                  <div className="border-t border-dashed border-border" />
+                  <div className="p-7 sm:p-9">
+                    <TopicHeader icon={Wallet} title={product.uses.heading} />
+                    <ul className="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+                      {product.uses.items.map((item) => (
+                        <li key={item} className="flex items-start gap-3 text-[15px] leading-relaxed text-foreground">
+                          <CheckBadge />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              ) : null}
+
+              {product.optionTiers ? (
+                <>
+                  <div className="border-t border-dashed border-border" />
+                  <div className="p-7 sm:p-9">
+                    <TopicHeader icon={Layers} title={product.optionTiers.heading} />
+                    {product.optionTiers.intro ? (
+                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{product.optionTiers.intro}</p>
+                    ) : null}
+                    <div className="mt-6 grid gap-4 lg:grid-cols-3">
+                      {product.optionTiers.tiers.map((tier) => (
+                        <div key={tier.title} className="overflow-hidden rounded-xl border border-gold/25 bg-white dark:bg-card">
+                          <p className="navy-panel px-4 py-3 text-sm font-extrabold text-gold-light">{tier.title}</p>
+                          <dl className="divide-y divide-border px-4 text-[13px]">
+                            {tier.points.map((pt) => (
+                              <div key={pt.label} className="py-2.5">
+                                <dt className="text-[11px] font-bold tracking-wide text-muted-foreground uppercase">{pt.label}</dt>
+                                <dd className="mt-0.5 leading-snug font-medium text-foreground">{pt.value}</dd>
+                              </div>
+                            ))}
+                          </dl>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              ) : null}
+
               <div className="border-t border-dashed border-border" />
 
               {qualifyBlock}
@@ -562,8 +610,8 @@ function ProductDetailPage() {
               One conversation, many lenders to compare.
             </h2>
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
-              We are a loan consultant, not the lender. We help you compare options from 75+ Banks
-              and NBFCs, prepare your documents, and follow your application through each step.
+              {product.whyGcs ??
+                "We are a loan consultant, not the lender. We help you compare options from 75+ Banks and NBFCs, prepare your documents, and follow your application through each step."}
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Link to="/tools" hash="eligibility" className="gold-btn py-3 text-sm">
@@ -580,10 +628,8 @@ function ProductDetailPage() {
             </div>
             <p className="mt-6 border-t border-dashed border-border pt-4 text-xs leading-relaxed text-muted-foreground">
               <span className="font-bold text-navy dark:text-white">Important note: </span>
-              Interest rate, loan amount, tenure, charges, eligibility, approval and disbursement
-              depend on the policy of the respective Bank or NBFC, your profile, credit assessment
-              and the applicable terms. Growth Capital Services is a loan consultant and does not
-              lend money itself. The details on this page are for general information.
+              {product.importantNote ??
+                "Interest rate, loan amount, tenure, charges, eligibility, approval and disbursement depend on the policy of the respective Bank or NBFC, your profile, credit assessment and the applicable terms. Growth Capital Services is a loan consultant and does not lend money itself. The details on this page are for general information."}
             </p>
           </div>
         </Reveal>

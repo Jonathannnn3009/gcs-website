@@ -138,6 +138,26 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
       ),
     ],
   },
+  "micro-business-loan": {
+    intro: "A micro business loan is assessed on your business and banking. Here is how we get you from need to funds.",
+    steps: [
+      s("Tell us about the business", "Share what the business does, how long it has run and what you need the money for."),
+      s("Check the basics", "We look at your banking and business proof to see which lender programs may suit you."),
+      s("Choose a lender", "We shortlist lenders whose terms suit a small business and compare their offers."),
+      s("Submit the papers", "You provide KYC, 6 months of bank statements, business proof and ownership or address proof."),
+      s("Sanction and funds", "The lender reviews and sanctions, and the money reaches your account."),
+    ],
+  },
+  "micro-lap": {
+    intro: "A micro loan against property depends on your property and profile. Here is how we get you from need to funds.",
+    steps: [
+      s("Tell us your requirement", "Share how much you need, what for, and details of your property."),
+      s("Review property and profile", "We look at the property papers, your income and your existing loans to see which program may suit you."),
+      s("Choose a lender and program", "We compare lenders and the loan-amount band that fits you, with their charges."),
+      s("Legal and valuation checks", "The lender carries out its legal and technical checks, which differ by program."),
+      s("Sanction and funds", "After sanction and mortgage formalities, the loan is disbursed."),
+    ],
+  },
   "business-loan": {
     intro:
       "A business loan is decided mostly on your business records. Here is how we get you from need to funds.",

@@ -20,6 +20,8 @@ export const PRODUCT_CALCULATORS: Record<string, CalcId[]> = {
   "balance-transfer": ["balance-transfer", "prepayment", "emi"],
   dlod: ["lap-ltv", "emi"],
   "business-loan": ["emi", "eligibility", "loan-comparison"],
+  "micro-business-loan": ["emi", "eligibility", "loan-comparison"],
+  "micro-lap": ["lap-ltv", "emi", "eligibility"],
   cgtmse: ["cgtmse", "emi"],
   "unsecured-dod": ["emi"],
   "project-funding": ["emi", "loan-comparison"],

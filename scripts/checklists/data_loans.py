@@ -623,3 +623,38 @@ from data_expanded import (  # noqa: E402
 LOAN_CHECKLISTS["project-funding"] = _PROJECT_FULL
 LOAN_CHECKLISTS["loan-against-securities"] = _LAS_FULL
 LOAN_CHECKLISTS["private-funding"] = _PF_FULL
+
+
+# ── Micro Business Loan and Micro LAP ─────────────────────────────────────
+# The same lists as Business Loan and LAP, without the papers the flyers say are not needed
+# (ITRs and financials, Form 26AS, GSTR 3B), and with the 6 months of banking the flyer asks for.
+import copy  # noqa: E402
+
+_NOT_NEEDED = ("ITRs,", "Form 26AS", "GSTR 3B")
+
+
+def _without_itr_gst(spec, title, bank_months=None):
+    out = copy.deepcopy(spec)
+    out["title"] = title
+    for sec in out["sections"]:
+        if "items" in sec:
+            sec["items"] = [
+                (it.replace("Latest 12 months", f"Latest {bank_months} months") if bank_months else it)
+                for it in sec["items"]
+                if not it.lstrip("!").startswith(_NOT_NEEDED)
+            ]
+            if sec.get("title") == "Income Documents":
+                sec["title"] = "Banking Documents"
+                sec["note"] = "No ITR or GST returns needed under eligible programs"
+    return out
+
+
+MICRO_BUSINESS_LOAN = _without_itr_gst(BUSINESS_LOAN, "Micro Business Loan", bank_months=6)
+for _sec in MICRO_BUSINESS_LOAN["sections"]:
+    if _sec.get("title") == "Business Proof":
+        _sec["note"] = "As per your business type, generally for the last 1 year of business"
+    if _sec.get("title") == "Additional Documents":
+        _sec["items"] = ["Proof of business ownership / address, such as an electricity bill or other acceptable document"]
+MICRO_LAP = _without_itr_gst(LAP_DLOD, "Micro Loan Against Property (Micro LAP)")
+LOAN_CHECKLISTS["micro-business-loan"] = MICRO_BUSINESS_LOAN
+LOAN_CHECKLISTS["micro-lap"] = MICRO_LAP
