@@ -274,7 +274,7 @@ export function ProductQuestionnaire({
       </div>
 
       {/* The questions scroll inside the card when the screen is short */}
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-4 sm:px-7">
+      <div className="gcs-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-4 sm:px-7">
       {!onContact && current ? (
         <div className="mt-5 space-y-5">
           <h4 className="text-[15px] font-bold text-navy dark:text-white" style={{ letterSpacing: "0" }}>

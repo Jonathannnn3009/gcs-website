@@ -413,6 +413,23 @@
   box-decoration-break: clone;
 }
 
+/* A scrollbar you can see: thin, navy thumb on a pale track. Used where a card scrolls inside itself. */
+@utility gcs-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.45 0.08 265) oklch(0.93 0.01 260);
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: oklch(0.93 0.01 260);
+    border-radius: 999px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: oklch(0.45 0.08 265);
+    border-radius: 999px;
+  }
+}
+
 @utility gold-text-static {
   background-image: var(--gradient-gold-text);
   -webkit-background-clip: text;

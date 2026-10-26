@@ -544,7 +544,10 @@ function ProductDetailPage() {
             {questionnaire ? (
               <ProductQuestionnaire config={questionnaire} productSlug={product.slug} productTitle={product.title} />
             ) : (
-              <LeadForm defaultLoanType={product.title} source={`service-enquiry-${product.slug}`} />
+              // On a short screen the form scrolls inside itself, with a scrollbar you can see, instead of running below the page
+              <div className="gcs-scroll rounded-2xl pr-1 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain">
+                <LeadForm defaultLoanType={product.title} source={`service-enquiry-${product.slug}`} />
+              </div>
             )}
           </Reveal>
         </div>
