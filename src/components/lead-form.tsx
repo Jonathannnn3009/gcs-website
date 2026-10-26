@@ -2,7 +2,9 @@ import { useId, useState, type ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
 import { APPLICANT_CATEGORY_LABELS, PRODUCTS } from "@/data/products";
-import { submitLead } from "@/lib/leads";
+import { submitLead, submitLeadForFollowUp, type FollowUpPass } from "@/lib/leads";
+import { followUpFor } from "@/data/follow-up-forms";
+import { FollowUpFlow } from "@/components/follow-up-flow";
 import { isValidEmail } from "@/lib/validation";
 import { Toast } from "@/components/toast";
 import { FORM_LOAN_TYPES } from "@/data/page-lists";
@@ -100,6 +102,8 @@ export function LeadForm({
   const [errors, setErrors] = useState<Partial<Fields>>({});
   const [showToast, setShowToast] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  // After a loan with a detailed second form is submitted, that form replaces this one.
+  const [followUp, setFollowUp] = useState<{ pass: FollowUpPass | null; basics: Fields & { slug: string; title: string }; detail: string } | null>(null);
 
   const set = (key: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setValues((v) => ({ ...v, [key]: e.target.value }));
@@ -156,7 +160,7 @@ export function LeadForm({
       .join(", ");
 
     setSubmitting(true);
-    await submitLead({
+    const lead = {
       name: values.name.trim(),
       phone: values.phone.trim(),
       email: values.email.trim(),
@@ -165,13 +169,44 @@ export function LeadForm({
       amount: values.loanAmount,
       source,
       detail,
-    });
+    };
+    const second = followUpFor(productSlug);
+    if (second) {
+      const pass = await submitLeadForFollowUp(lead);
+      setSubmitting(false);
+      setFollowUp({ pass, basics: { ...values, city, slug: productSlug!, title: values.loanType }, detail });
+      return;
+    }
+    await submitLead(lead);
     setSubmitting(false);
 
     setValues(initial);
     setErrors({});
     setShowToast(true);
   };
+
+  const secondForm = followUp ? followUpFor(followUp.basics.slug) : undefined;
+  if (followUp && secondForm) {
+    const b = followUp.basics;
+    return (
+      <FollowUpFlow
+        form={secondForm}
+        pass={followUp.pass}
+        firstDetail={followUp.detail}
+        basics={{
+          name: b.name.trim(),
+          phone: b.phone.trim(),
+          email: b.email.trim(),
+          city: b.city,
+          category: b.applicantCategory,
+          productSlug: b.slug,
+          productTitle: b.title,
+          source,
+          amount: b.loanAmount,
+        }}
+      />
+    );
+  }
 
   return (
     <>
@@ -331,7 +366,7 @@ export function LeadForm({
             disabled={submitting}
             className="group mt-6 flex w-full items-center justify-center gap-3 disabled:opacity-70 rounded-lg bg-navy py-3.5 text-sm font-bold text-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-soft"
           >
-            Apply Now
+            Submit
             <span className="grid h-7 w-7 place-items-center rounded-full bg-gold text-navy transition-transform duration-300 group-hover:translate-x-0.5">
               <ArrowRight className="h-3.5 w-3.5" />
             </span>

@@ -5,6 +5,7 @@ import type { QuestionField, Questionnaire } from "@/data/product-questionnaires
 import { normalizePhone } from "@/lib/lead-dedupe";
 import { amountTooLow, isValidEmail, MIN_AMOUNT, MIN_LOAN_AMOUNT } from "@/lib/validation";
 import { submitLead } from "@/lib/leads";
+import { QuestionFieldInput } from "@/components/question-field";
 
 type Answers = Record<string, string>;
 
@@ -113,123 +114,6 @@ export function ProductQuestionnaire({
     setDone(true);
   };
 
-  const chip = (selected: boolean) =>
-    `rounded-full border px-3.5 py-2 text-[13px] font-semibold transition-all duration-200 ${
-      selected
-        ? "border-navy bg-navy text-white dark:border-gold dark:bg-gold dark:text-navy"
-        : "border-border bg-white text-navy hover:border-gold hover:bg-gold-pale/30 dark:bg-card dark:text-white"
-    }`;
-
-  const render = (f: QuestionField) => {
-    const value = answers[f.key] ?? "";
-    return (
-      <div key={f.key}>
-        <p className={labelCls}>
-          {f.label}
-          {f.required ? <span className="text-gold-dark"> *</span> : null}
-        </p>
-        {f.help ? <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{f.help}</p> : null}
-        {f.kind === "choice" && f.dropdown && (
-          <select
-            value={value}
-            onChange={(e) => set(f.key, e.target.value)}
-            className={`${field} cursor-pointer`}
-            aria-label={f.label}
-          >
-            <option value="">Select</option>
-            {f.options.map((o) => (
-              <option key={o} value={o}>
-                {o}
-              </option>
-            ))}
-          </select>
-        )}
-        {f.kind === "choice" && !f.dropdown && (
-          <div className="mt-2 flex flex-wrap gap-2">
-            {f.options.map((o) => (
-              <button
-                key={o}
-                type="button"
-                aria-pressed={value === o}
-                onClick={() => set(f.key, value === o && !f.required ? "" : o)}
-                className={chip(value === o)}
-              >
-                {o}
-              </button>
-            ))}
-          </div>
-        )}
-        {f.kind === "multi" && (
-          <div className="mt-2 flex flex-wrap gap-2">
-            {f.options.map((o) => {
-              const picked = value ? value.split(", ") : [];
-              const on = picked.includes(o);
-              return (
-                <button
-                  key={o}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => set(f.key, (on ? picked.filter((p) => p !== o) : [...picked, o]).join(", "))}
-                  className={chip(on)}
-                >
-                  {o}
-                </button>
-              );
-            })}
-          </div>
-        )}
-        {f.kind === "text" &&
-          (f.long ? (
-            <textarea
-              rows={2}
-              value={value}
-              maxLength={300}
-              onChange={(e) => set(f.key, e.target.value)}
-              placeholder={f.placeholder}
-              className={field}
-              aria-label={f.label}
-            />
-          ) : (
-            <input
-              value={value}
-              maxLength={120}
-              onChange={(e) => set(f.key, e.target.value)}
-              placeholder={f.placeholder}
-              className={field}
-              aria-label={f.label}
-            />
-          ))}
-        {f.kind === "amount" && (
-          <div className="relative">
-            <span className="pointer-events-none absolute top-[0.85rem] left-3.5 text-sm text-muted-foreground">₹</span>
-            <input
-              inputMode="numeric"
-              value={value}
-              onChange={(e) => set(f.key, indian(e.target.value))}
-              placeholder={f.placeholder}
-              className={`${field} pl-8`}
-              aria-label={f.label}
-            />
-          </div>
-        )}
-        {f.kind === "percent" && (
-          <div className="relative">
-            <input
-              inputMode="decimal"
-              value={value}
-              onChange={(e) => set(f.key, e.target.value.replace(/[^\d.]/g, "").slice(0, 5))}
-              placeholder="e.g. 9.25"
-              className={`${field} pr-9`}
-              aria-label={f.label}
-            />
-            <span className="pointer-events-none absolute top-[0.85rem] right-3.5 text-sm text-muted-foreground">%</span>
-          </div>
-        )}
-        {errors[f.key] ? <p className="mt-1 text-xs text-destructive">{errors[f.key]}</p> : null}
-      </div>
-    );
-  };
-
   if (done) {
     return (
       <div id="apply" className="scroll-mt-28 rounded-2xl border border-gold/30 bg-white p-7 text-center shadow-[var(--shadow-card)] dark:bg-card">
@@ -281,7 +165,9 @@ export function ProductQuestionnaire({
             {current.title}
           </h4>
           {current.help ? <p className="-mt-3 text-xs leading-relaxed text-muted-foreground">{current.help}</p> : null}
-          {stepFields(step).map(render)}
+          {stepFields(step).map((f) => (
+            <QuestionFieldInput key={f.key} f={f} value={answers[f.key] ?? ""} set={set} error={errors[f.key]} />
+          ))}
         </div>
       ) : (
         <div className="mt-5 space-y-4">

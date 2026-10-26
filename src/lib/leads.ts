@@ -121,6 +121,49 @@ export async function submitLead(lead: Lead): Promise<void> {
   if (outcome === "retry") writeQueue([...readQueue(), { payload, queuedAt: Date.now() }]);
 }
 
+/** The pass the CRM hands back with a new enquiry; it lets the optional second form add to that one lead. */
+export type FollowUpPass = { id: string; token: string };
+
+/** Like submitLead, but returns the pass for the second form, or null when the CRM could not be reached. */
+export async function submitLeadForFollowUp(lead: Lead): Promise<FollowUpPass | null> {
+  if (typeof window === "undefined") return null;
+  const payload = toPayload(lead);
+  if (!payload) return null;
+  try {
+    const captchaToken = await getCaptchaToken();
+    const res = await fetch(`${CRM_API}/public/leads`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(captchaToken ? { ...payload, captchaToken } : payload),
+    });
+    if (res.ok) {
+      const json = (await res.json().catch(() => null)) as { id?: string; followUpToken?: string } | null;
+      return json?.id && json.followUpToken ? { id: json.id, token: json.followUpToken } : null;
+    }
+    if (res.status !== 400 && res.status !== 422) writeQueue([...readQueue(), { payload, queuedAt: Date.now() }]);
+  } catch {
+    writeQueue([...readQueue(), { payload, queuedAt: Date.now() }]);
+  }
+  return null;
+}
+
+/** Adds the second form's answers to the lead just created. Returns whether the CRM took them. */
+export async function addLeadDetails(
+  pass: FollowUpPass,
+  extra: { detail: string; employmentType?: "SALARIED" | "SELF_EMPLOYED"; monthlyIncome?: number },
+): Promise<boolean> {
+  try {
+    const res = await fetch(`${CRM_API}/public/leads/${encodeURIComponent(pass.id)}/details`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: pass.token, ...extra, detail: clip(extra.detail, 2000) }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 /** Re-sends enquiries that couldn't be delivered earlier. Safe to call on every page load. */
 export async function flushPendingLeads(): Promise<void> {
   if (typeof window === "undefined") return;
