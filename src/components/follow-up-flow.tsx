@@ -160,6 +160,22 @@ export function FollowUpFlow({
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{form.intro}</p>
               <p className="mt-2 text-sm font-semibold text-navy dark:text-white">{form.choice}</p>
+              <div className="mt-4 flex flex-col gap-3 rounded-xl border border-gold/30 bg-gold-pale/30 p-4 dark:bg-gold/10">
+                <p className="flex items-start gap-2 text-[13px] leading-relaxed text-navy dark:text-white">
+                  <FileText className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                  <span>
+                    <strong>Your CIBIL report</strong> helps our experts understand your credit
+                    profile and make a more accurate assessment. Get it now, or share it later.
+                  </span>
+                </p>
+                <Link
+                  to="/cibil"
+                  target="_blank"
+                  className="gold-btn cibil-btn justify-center py-2.5 text-sm"
+                >
+                  Get my CIBIL report <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
             </>
           ) : null}
           <p className="mt-4 text-[11px] font-bold tracking-[0.2em] text-gold-dark uppercase">
@@ -270,7 +286,7 @@ export function FollowUpFlow({
               readily available, you can share it later.
             </p>
             <div className="mt-4 flex flex-col gap-2">
-              <Link to="/cibil" className="gold-btn justify-center py-2.5 text-sm">
+              <Link to="/cibil" className="gold-btn cibil-btn justify-center py-2.5 text-sm">
                 Get my CIBIL report <ArrowRight className="h-4 w-4" />
               </Link>
               <button

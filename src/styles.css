@@ -640,6 +640,30 @@
   }
 }
 
+@keyframes gcs-cibil-shine {
+  0% { left: -100%; }
+  55%, 100% { left: 100%; }
+}
+
+@keyframes gcs-nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
+/* The CIBIL report button: a gold button with a soft pulsing glow, a light sweeping across it and a nudging arrow. */
+@utility cibil-btn {
+  animation: gcs-pulse-gold 2.4s ease-in-out infinite;
+
+  &::before {
+    transition: none;
+    animation: gcs-cibil-shine 2.8s ease-in-out infinite;
+  }
+
+  & > svg:last-child {
+    animation: gcs-nudge 1.4s ease-in-out infinite;
+  }
+}
+
 @keyframes gcs-spin-slow {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
