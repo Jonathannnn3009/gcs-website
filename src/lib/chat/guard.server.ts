@@ -8,7 +8,7 @@ import { OFF_TOPIC, type ChatTurn } from "./config";
 
 export type Topic = "on_topic" | "off_topic" | "unknown";
 
-const DEFAULT_GUARD_MODEL = "gpt-4.1-nano";
+const DEFAULT_GUARD_MODEL = "gpt-4.1-mini"; // gpt-4.1-nano was retired by OpenAI
 /** Looks again at anything the first check calls off topic. */
 const CONFIRM_MODEL = "gpt-4.1-mini";
 const GUARD_TIMEOUT_MS = 4000;

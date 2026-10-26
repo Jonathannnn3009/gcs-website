@@ -252,6 +252,9 @@ export function ProductQuestionnaire({
 
   return (
     <div id="apply" className="scroll-mt-28 rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] sm:p-7 dark:bg-card">
+      <p className="mb-2 text-xs text-muted-foreground italic">
+        Just a few steps to understand you better, so we can give you the right information faster.
+      </p>
       <p className="text-[11px] font-bold tracking-[0.2em] text-gold-dark uppercase">{productTitle}</p>
       <h3 className="mt-1.5 text-xl font-extrabold text-navy dark:text-white" style={{ letterSpacing: "0" }}>
         {config.title}

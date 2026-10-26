@@ -693,7 +693,7 @@ export const PRODUCTS: Product[] = [
     checklistIntake: [
       {
         key: "loanRequirement",
-        label: "Loan Requirement",
+        label: "Loan Type",
         type: "select",
         options: ["Home Loan", "Balance Transfer", "Top-Up", "Other"],
       },

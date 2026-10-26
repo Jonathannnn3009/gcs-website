@@ -198,7 +198,7 @@ export const TOOL_DEFINITIONS = [
     function: {
       name: "get_loan_product_info",
       description:
-        "Full details of one GCS loan: key facts, who qualifies, features, and the documents needed (including by applicant type). Use before answering specific questions about a loan's eligibility, documents or features.",
+        "Full details of one GCS loan: key facts, who qualifies and features. The itemised document checklist is not included: it is a gated download on the loan's page. Use before answering specific questions about a loan's eligibility or features.",
       parameters: {
         type: "object",
         properties: {
@@ -591,15 +591,13 @@ function toolProduct(a: Args, snap: SiteSnapshot): ToolOutput {
       about: p.about,
       features: p.features,
       who_qualifies: p.eligibility,
-      documents: p.documents,
-      ...(p.documentCategories
-        ? {
-            documents_by_applicant_type: p.documentCategories.map((c) => ({
-              applicant: c.label,
-              documents: c.items,
-            })),
-          }
-        : {}),
+      // The itemised checklist is the website's gated download (name and mobile number first), so
+      // only the kinds of document are shared here, never the items.
+      document_kinds: [...new Set((p.documentCategories ?? []).map((c) => c.label))].length
+        ? "Identity and address proof, income proof, bank statements, and property or business papers, depending on the applicant."
+        : "Identity and address proof, income proof and bank statements.",
+      checklist_note:
+        "Do not list individual documents. Say the full checklist is on the loan's page under \"Download checklist\" and asks for name and mobile number.",
     },
   };
 }

@@ -148,7 +148,31 @@ export function htmlToText(html: string): { title: string; text: string } {
     }
     lines.push(line);
   }
-  return { title, text: lines.join("\n") };
+  return { title, text: withheldChecklist(lines).join("\n") };
+}
+
+/**
+ * The itemised "paperwork you'll need" lists sit next to the gated checklist download (name and mobile
+ * number first). The assistant must not hand that list out in chat, so the block is replaced by a pointer.
+ * The block runs from its heading to the line that offers the PDF.
+ */
+const CHECKLIST_END = /^this is the usual list\b/i;
+const CHECKLIST_START = /(paperwork|documents?)\b.*\b(you['’]?ll need|needed|required)|^what you['’]?ll need/i;
+export function withheldChecklist(lines: string[]): string[] {
+  const end = lines.findIndex((l) => CHECKLIST_END.test(l));
+  if (end < 0) return lines;
+  let start = end;
+  for (let i = end - 1; i >= 0 && end - i <= 60; i--) {
+    if (CHECKLIST_START.test(lines[i]!) && lines[i]!.length < 60) {
+      start = i;
+      break;
+    }
+  }
+  return [
+    ...lines.slice(0, start),
+    "The itemised document checklist is a download on this loan's own page, under \"Download checklist\", and asks for the visitor's name and mobile number. It is not given out in chat: do not list it, and do not give a file link. You may name the kinds of document in one line and point to the page.",
+    ...lines.slice(end + 1),
+  ];
 }
 
 // ── fetching, with a short cache ────────────────────────────────────────────
