@@ -1,9 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, ChevronDown, MessageCircle, Pencil, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  ChevronDown,
+  MessageCircle,
+  Pencil,
+  ShieldCheck,
+} from "lucide-react";
 import { CONTACT } from "@/data/site";
-import { CITY_OPTIONS, CONSENT_TEXT, CONSENT_VERSION, FLOWS, titleCase, visibleSteps, type Flow, type Step } from "@/data/advisor-flows";
+import {
+  CITY_OPTIONS,
+  CONSENT_TEXT,
+  CONSENT_VERSION,
+  FLOWS,
+  titleCase,
+  visibleSteps,
+  type Flow,
+  type Step,
+} from "@/data/advisor-flows";
 import { normalizePhone } from "@/lib/lead-dedupe";
-import { amountTooLow, isValidEmail, MIN_AMOUNT } from "@/lib/validation";
+import { amountProblem, isValidEmail, MAX_AMOUNT, MIN_AMOUNT } from "@/lib/validation";
 import { submitLead } from "@/lib/leads";
 
 type Answers = Record<string, string>;
@@ -117,21 +134,27 @@ export function LoanAdvisor() {
       return;
     }
     if (v && step.minLength && v.length < step.minLength) {
-      setError(step.kind === "city" ? "Please type your city name." : "Please add a few more words so our expert understands.");
+      setError(
+        step.kind === "city"
+          ? "Please type your city name."
+          : "Please add a few more words so our expert understands.",
+      );
       return;
     }
     if (step.kind === "number" && v && !Number.isFinite(Number(v))) {
       setError("Please enter a number.");
       return;
     }
-    if (step.kind === "amount" && v && amountTooLow(Number(v), { min: step.min, allowZero: step.allowZero })) {
-      const floor = rupees(String(step.min ?? MIN_AMOUNT));
-      setError(
-        step.allowZero
-          ? `Please enter 0 if none, or at least ${floor}.`
-          : `Please enter at least ${floor}. An approximate figure is fine.`,
+    if (step.kind === "amount" && v) {
+      const msg = amountProblem(
+        Number(v),
+        { min: step.min ?? MIN_AMOUNT, max: MAX_AMOUNT },
+        { allowZero: step.allowZero },
       );
-      return;
+      if (msg) {
+        setError(`${msg}. An approximate figure is fine.`);
+        return;
+      }
     }
     record(v);
   };
@@ -156,7 +179,10 @@ export function LoanAdvisor() {
     const cleanPhone = normalizePhone(phone);
     if (name.trim().length < 2) return setError("Please enter your name.");
     if (!cleanPhone) return setError("Please enter a valid 10-digit mobile number.");
-    if (email.trim() && !isValidEmail(email)) return setError("Please enter a valid email address, like name@example.com, or leave it blank.");
+    if (email.trim() && !isValidEmail(email))
+      return setError(
+        "Please enter a valid email address, like name@example.com, or leave it blank.",
+      );
     if (!agreed) return setError("Please tick the box to let us contact you about this enquiry.");
     setError("");
     setSending(true);
@@ -171,8 +197,11 @@ export function LoanAdvisor() {
     ].join("\n");
 
     const slug =
-      flow.id === "vehicle" && answers["vehicle_condition"] === "Used" ? "used-car-loan" : flow.productSlug;
-    const cityValue = answers["city"] || answers["business_city"] || answers["registration_city"] || "";
+      flow.id === "vehicle" && answers["vehicle_condition"] === "Used"
+        ? "used-car-loan"
+        : flow.productSlug;
+    const cityValue =
+      answers["city"] || answers["business_city"] || answers["registration_city"] || "";
     const amountValue = answers["requested_amount"] || answers["asset_value"] || "";
 
     await submitLead({
@@ -209,13 +238,16 @@ export function LoanAdvisor() {
         {/* the one thing to remember before typing anything */}
         <p className="flex items-start gap-2 text-xs leading-relaxed text-white/60">
           <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-          Share only what is asked. Never type OTPs, passwords, PINs, PAN or Aadhaar numbers here — if
-          documents are needed, our team will send a safe way to share them.
+          Share only what is asked. Never type OTPs, passwords, PINs, PAN or Aadhaar numbers here —
+          if documents are needed, our team will send a safe way to share them.
         </p>
 
         {phase === "pick" && (
           <div className="mt-8">
-            <h2 className="tracking-normal text-2xl font-bold text-white sm:text-3xl" style={{ fontFamily: "var(--font-sans)" }}>
+            <h2
+              className="tracking-normal text-2xl font-bold text-white sm:text-3xl"
+              style={{ fontFamily: "var(--font-sans)" }}
+            >
               Welcome to GCS. What are you looking for?
             </h2>
             <p className="mt-2 text-sm text-white/70">Pick one — a few short questions follow.</p>
@@ -238,7 +270,11 @@ export function LoanAdvisor() {
         {phase === "ask" && flow && step && (
           <div className="mt-8">
             <div className="flex items-center justify-between gap-3">
-              <button type="button" onClick={back} className="inline-flex items-center gap-1.5 text-xs font-bold text-white/70 transition-colors hover:text-white">
+              <button
+                type="button"
+                onClick={back}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-white/70 transition-colors hover:text-white"
+              >
                 <ArrowLeft className="h-3.5 w-3.5" /> Back
               </button>
               <p className="text-xs font-semibold text-white/60">
@@ -246,7 +282,10 @@ export function LoanAdvisor() {
               </p>
             </div>
             <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full rounded-full bg-gold transition-all duration-500" style={{ width: `${((idx + 1) / steps.length) * 100}%` }} />
+              <div
+                className="h-full rounded-full bg-gold transition-all duration-500"
+                style={{ width: `${((idx + 1) / steps.length) * 100}%` }}
+              />
             </div>
 
             {answered.length > 0 && !fixing && (
@@ -254,13 +293,18 @@ export function LoanAdvisor() {
                 {answered.slice(-3).map((s) => (
                   <li key={s.key} className="flex flex-wrap items-baseline gap-x-2 text-white/55">
                     <span>{s.label}:</span>
-                    <span className="font-semibold text-gold-light">{show(s, answers[s.key] ?? "")}</span>
+                    <span className="font-semibold text-gold-light">
+                      {show(s, answers[s.key] ?? "")}
+                    </span>
                   </li>
                 ))}
               </ul>
             )}
 
-            <h2 className="mt-6 tracking-normal text-xl font-bold text-white sm:text-2xl" style={{ fontFamily: "var(--font-sans)" }}>
+            <h2
+              className="mt-6 tracking-normal text-xl font-bold text-white sm:text-2xl"
+              style={{ fontFamily: "var(--font-sans)" }}
+            >
               {step.question}
             </h2>
             {step.hint && <p className="mt-2 text-sm text-white/65">{step.hint}</p>}
@@ -273,14 +317,20 @@ export function LoanAdvisor() {
                     type="button"
                     onClick={() => record(o)}
                     className={`rounded-full border px-4 py-2.5 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:border-gold hover:bg-gold/15 ${
-                      answers[step.key] === o ? "border-gold bg-gold/20 text-white" : "border-white/20 bg-white/5 text-white/90"
+                      answers[step.key] === o
+                        ? "border-gold bg-gold/20 text-white"
+                        : "border-white/20 bg-white/5 text-white/90"
                     }`}
                   >
                     {o}
                   </button>
                 ))}
                 {step.optional && (
-                  <button type="button" onClick={() => record("")} className="rounded-full px-3 py-2.5 text-sm font-semibold text-white/60 underline-offset-4 hover:text-white hover:underline">
+                  <button
+                    type="button"
+                    onClick={() => record("")}
+                    className="rounded-full px-3 py-2.5 text-sm font-semibold text-white/60 underline-offset-4 hover:text-white hover:underline"
+                  >
                     Skip
                   </button>
                 )}
@@ -353,19 +403,35 @@ export function LoanAdvisor() {
                   autoFocus
                   inputMode={step.kind === "text" ? "text" : "decimal"}
                   value={step.kind === "amount" ? draft.replace(/\D/g, "") : draft}
-                  onChange={(e) => setDraft(step.kind === "amount" ? e.target.value.replace(/\D/g, "") : e.target.value)}
-                  placeholder={step.placeholder ?? (step.kind === "amount" ? "Amount in rupees" : "")}
+                  onChange={(e) =>
+                    setDraft(
+                      step.kind === "amount"
+                        ? e.target.value.replace(/\D/g, "").slice(0, 11)
+                        : e.target.value,
+                    )
+                  }
+                  placeholder={
+                    step.placeholder ?? (step.kind === "amount" ? "Amount in rupees" : "")
+                  }
                   maxLength={120}
                   aria-label={step.question}
                   className={inputCls}
                 />
-                {step.kind === "amount" && draft && <p className="mt-2 text-sm font-semibold text-gold-light">{rupees(draft.replace(/\D/g, ""))}</p>}
+                {step.kind === "amount" && draft && (
+                  <p className="mt-2 text-sm font-semibold text-gold-light">
+                    {rupees(draft.replace(/\D/g, ""))}
+                  </p>
+                )}
                 <div className="mt-4 flex flex-wrap items-center gap-4">
                   <button type="submit" className="gold-btn px-6 py-3">
                     Next <ArrowRight className="h-4 w-4" />
                   </button>
                   {step.optional && (
-                    <button type="button" onClick={() => record("")} className="text-sm font-semibold text-white/60 underline-offset-4 hover:text-white hover:underline">
+                    <button
+                      type="button"
+                      onClick={() => record("")}
+                      className="text-sm font-semibold text-white/60 underline-offset-4 hover:text-white hover:underline"
+                    >
                       Skip
                     </button>
                   )}
@@ -376,7 +442,12 @@ export function LoanAdvisor() {
 
             <p className="mt-8 text-xs text-white/55">
               Prefer to speak to someone?{" "}
-              <a href={CONTACT.whatsappLink} target="_blank" rel="noreferrer" className="font-bold text-gold-light underline-offset-4 hover:underline">
+              <a
+                href={CONTACT.whatsappLink}
+                target="_blank"
+                rel="noreferrer"
+                className="font-bold text-gold-light underline-offset-4 hover:underline"
+              >
                 Talk to a person on WhatsApp
               </a>
             </p>
@@ -385,50 +456,110 @@ export function LoanAdvisor() {
 
         {phase === "review" && flow && (
           <div className="mt-8">
-            <button type="button" onClick={back} className="inline-flex items-center gap-1.5 text-xs font-bold text-white/70 transition-colors hover:text-white">
+            <button
+              type="button"
+              onClick={back}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-white/70 transition-colors hover:text-white"
+            >
               <ArrowLeft className="h-3.5 w-3.5" /> Back
             </button>
-            <h2 className="mt-4 tracking-normal text-xl font-bold text-white sm:text-2xl" style={{ fontFamily: "var(--font-sans)" }}>
+            <h2
+              className="mt-4 tracking-normal text-xl font-bold text-white sm:text-2xl"
+              style={{ fontFamily: "var(--font-sans)" }}
+            >
               Check your answers
             </h2>
-            <p className="mt-2 text-sm text-white/65">{flow.label}. Tap the pencil to change anything.</p>
+            <p className="mt-2 text-sm text-white/65">
+              {flow.label}. Tap the pencil to change anything.
+            </p>
 
             <ul className="mt-5 divide-y divide-white/10 rounded-2xl border border-white/15 bg-white/5">
               {steps.map((s, i) => (
                 <li key={s.key} className="flex items-center gap-3 px-4 py-3">
                   <div className="min-w-0 flex-1">
-                    <p className="text-[11px] font-bold tracking-wide text-white/50 uppercase">{s.label}</p>
-                    <p className="text-sm font-semibold text-white">{show(s, answers[s.key] ?? "")}</p>
+                    <p className="text-[11px] font-bold tracking-wide text-white/50 uppercase">
+                      {s.label}
+                    </p>
+                    <p className="text-sm font-semibold text-white">
+                      {show(s, answers[s.key] ?? "")}
+                    </p>
                   </div>
-                  <button type="button" onClick={() => goTo(i, true)} aria-label={`Change ${s.label}`} className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-gold-light transition-colors hover:bg-white/10">
+                  <button
+                    type="button"
+                    onClick={() => goTo(i, true)}
+                    aria-label={`Change ${s.label}`}
+                    className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-gold-light transition-colors hover:bg-white/10"
+                  >
                     <Pencil className="h-4 w-4" />
                   </button>
                 </li>
               ))}
             </ul>
 
-            <h3 className="mt-8 tracking-normal text-base font-bold text-white">How can we reach you?</h3>
+            <h3 className="mt-8 tracking-normal text-base font-bold text-white">
+              How can we reach you?
+            </h3>
             <div className="mt-3 grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="adv-name" className={`${labelCls} text-white`}>Your name <span className="text-gold">*</span></label>
-                <input id="adv-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" maxLength={120} className={`${inputCls} mt-1.5`} />
+                <label htmlFor="adv-name" className={`${labelCls} text-white`}>
+                  Your name <span className="text-gold">*</span>
+                </label>
+                <input
+                  id="adv-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="name"
+                  maxLength={120}
+                  className={`${inputCls} mt-1.5`}
+                />
               </div>
               <div>
-                <label htmlFor="adv-phone" className={`${labelCls} text-white`}>Mobile number <span className="text-gold">*</span></label>
-                <input id="adv-phone" value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="tel" autoComplete="tel" placeholder="10-digit mobile" maxLength={16} className={`${inputCls} mt-1.5`} />
+                <label htmlFor="adv-phone" className={`${labelCls} text-white`}>
+                  Mobile number <span className="text-gold">*</span>
+                </label>
+                <input
+                  id="adv-phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  inputMode="tel"
+                  autoComplete="tel"
+                  placeholder="10-digit mobile"
+                  maxLength={16}
+                  className={`${inputCls} mt-1.5`}
+                />
               </div>
               <div className="sm:col-span-2">
-                <label htmlFor="adv-email" className={`${labelCls} text-white`}>Email (optional)</label>
-                <input id="adv-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" maxLength={160} className={`${inputCls} mt-1.5`} />
+                <label htmlFor="adv-email" className={`${labelCls} text-white`}>
+                  Email (optional)
+                </label>
+                <input
+                  id="adv-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  maxLength={160}
+                  className={`${inputCls} mt-1.5`}
+                />
               </div>
             </div>
 
             <label className="mt-5 flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-white/75">
-              <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-[#e4b028]" />
+              <input
+                type="checkbox"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-[#e4b028]"
+              />
               <span>{CONSENT_TEXT}</span>
             </label>
             {error && <p className="mt-3 text-sm text-[#ffb4b4]">{error}</p>}
-            <button type="button" onClick={send} disabled={sending} className="gold-btn mt-6 px-6 py-3 disabled:opacity-60">
+            <button
+              type="button"
+              onClick={send}
+              disabled={sending}
+              className="gold-btn mt-6 px-6 py-3 disabled:opacity-60"
+            >
               {sending ? "Sending…" : "Send to a GCS expert"} <ArrowRight className="h-4 w-4" />
             </button>
           </div>
@@ -439,17 +570,30 @@ export function LoanAdvisor() {
             <span className="grid h-14 w-14 place-items-center rounded-full bg-gold/15 text-gold-light ring-1 ring-gold/30">
               <Check className="h-7 w-7" />
             </span>
-            <h2 className="mt-5 tracking-normal text-xl font-bold text-white sm:text-2xl" style={{ fontFamily: "var(--font-sans)" }}>
+            <h2
+              className="mt-5 tracking-normal text-xl font-bold text-white sm:text-2xl"
+              style={{ fontFamily: "var(--font-sans)" }}
+            >
               Thank you — we have your details.
             </h2>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-white/70">
-              A GCS loan expert will check the options that may suit your profile and contact you. This is an enquiry, not a loan approval — a lender decides after its own assessment.
+              A GCS loan expert will check the options that may suit your profile and contact you.
+              This is an enquiry, not a loan approval — a lender decides after its own assessment.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <a href={CONTACT.whatsappLink} target="_blank" rel="noreferrer" className="gold-btn px-5 py-2.5">
+              <a
+                href={CONTACT.whatsappLink}
+                target="_blank"
+                rel="noreferrer"
+                className="gold-btn px-5 py-2.5"
+              >
                 <MessageCircle className="h-4 w-4" /> Message us on WhatsApp
               </a>
-              <button type="button" onClick={restart} className="rounded-lg border border-white/20 px-5 py-2.5 text-sm font-bold text-white/85 transition-colors hover:bg-white/10">
+              <button
+                type="button"
+                onClick={restart}
+                className="rounded-lg border border-white/20 px-5 py-2.5 text-sm font-bold text-white/85 transition-colors hover:bg-white/10"
+              >
                 Start another enquiry
               </button>
             </div>

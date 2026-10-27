@@ -40,7 +40,14 @@ export type ProductGroup =
 export type ShowWhen = { key: string; values: string[] };
 
 export type ChecklistIntakeField =
-  | { key: string; label: string; type: "text"; placeholder?: string; format?: "amount"; showWhen?: ShowWhen }
+  | {
+      key: string;
+      label: string;
+      type: "text";
+      placeholder?: string;
+      format?: "amount";
+      showWhen?: ShowWhen;
+    }
   | { key: string; label: string; type: "select"; options: string[]; showWhen?: ShowWhen }
   | { key: string; label: string; type: "date"; showWhen?: ShowWhen };
 
@@ -86,7 +93,11 @@ export type Product = {
   /** What the money can be used for, as its own list under "What's included". */
   uses?: { heading: string; items: string[] };
   /** Several programmes of one product side by side (for example loan-amount bands), each with its own terms. */
-  optionTiers?: { heading: string; intro?: string; tiers: { title: string; points: { label: string; value: string }[] }[] };
+  optionTiers?: {
+    heading: string;
+    intro?: string;
+    tiers: { title: string; points: { label: string; value: string }[] }[];
+  };
   /** The "Why apply through us" paragraph, where the product has its own words for it. */
   whyGcs?: string;
   /** The important note for this product, shown at the foot of the page in place of the standard one. */
@@ -206,10 +217,14 @@ const BUSINESS_DOC_CATEGORIES = [
     items: COMPANY_DOCS,
   },
 ];
+
+// Overdrafts are also taken by salaried applicants, so their "You Are" list starts with Salaried, then the business types.
+const OVERDRAFT_DOC_CATEGORIES = [APPLICANT_DOC_CATEGORIES[0]!, ...BUSINESS_DOC_CATEGORIES];
 const LRD_DOC_CATEGORIES = [
   {
     label: "Individual owner",
-    description: "You own the let-out property in your own name, or jointly with family. The lender looks at the lease, the rent you receive and your income tax returns. A registered lease with a reliable tenant, and rent paid regularly into your bank account, makes the file strong.",
+    description:
+      "You own the let-out property in your own name, or jointly with family. The lender looks at the lease, the rent you receive and your income tax returns. A registered lease with a reliable tenant, and rent paid regularly into your bank account, makes the file strong.",
     items: [
       "Owner's KYC: PAN, Aadhaar and address proof",
       "Registered lease deed and the tenant's KYC",
@@ -220,7 +235,8 @@ const LRD_DOC_CATEGORIES = [
   },
   {
     label: "Company / Firm",
-    description: "The property is owned by a company, firm or LLP. The lender checks the entity's papers, the lease and the tenant, the rent received and the financials. The loan is usually repaid from the rent, so a long lease with a well-known tenant is a big plus.",
+    description:
+      "The property is owned by a company, firm or LLP. The lender checks the entity's papers, the lease and the tenant, the rent received and the financials. The loan is usually repaid from the rent, so a long lease with a well-known tenant is a big plus.",
     items: [
       "Constitution papers: incorporation certificate, MOA and AOA, or partnership deed",
       "KYC of the company or firm and of its directors or partners",
@@ -234,7 +250,8 @@ const LRD_DOC_CATEGORIES = [
 const EDUCATION_DOC_CATEGORIES = [
   {
     label: "Student",
-    description: "The person who will study. The lender looks at the course and the institution, the total cost and your academic record, along with a co-applicant who shares the loan. Having your admission letter and fee details ready speeds things up, and for study abroad your visa papers come in later.",
+    description:
+      "The person who will study. The lender looks at the course and the institution, the total cost and your academic record, along with a co-applicant who shares the loan. Having your admission letter and fee details ready speeds things up, and for study abroad your visa papers come in later.",
     items: [
       "Student's KYC: PAN or Aadhaar, and passport for study abroad",
       "Admission letter or offer letter from the institution",
@@ -246,12 +263,14 @@ const EDUCATION_DOC_CATEGORIES = [
   },
   {
     label: "Co-applicant: Salaried",
-    description: "A parent or guardian in India who earns a salary and shares the loan. The lender looks at their salary slips, bank statements, tax returns and credit history, because they are the main source of repayment during and after the course.",
+    description:
+      "A parent or guardian in India who earns a salary and shares the loan. The lender looks at their salary slips, bank statements, tax returns and credit history, because they are the main source of repayment during and after the course.",
     items: SALARIED_DOCS,
   },
   {
     label: "Co-applicant: Self-Employed",
-    description: "A parent or guardian in India who runs a business or practises a profession. The lender looks at their tax returns, financial statements, business bank statements and credit history, because they are the main source of repayment during and after the course.",
+    description:
+      "A parent or guardian in India who runs a business or practises a profession. The lender looks at their tax returns, financial statements, business bank statements and credit history, because they are the main source of repayment during and after the course.",
     items: SELF_EMPLOYED_DOCS,
   },
 ];
@@ -471,7 +490,6 @@ const CHARGES_VEHICLE: ChargesInfo = {
   note: CHARGES_NOTE,
 };
 
-
 const CHARGES_INTRO =
   "Besides interest, a lender may charge a few fees. It helps to know them before you apply, so there are no surprises.";
 const CHARGES_LIMIT: ChargesInfo = {
@@ -515,7 +533,8 @@ const CHARGES_COMMERCIAL: ChargesInfo = {
     },
     {
       label: "Stamp duty and registration",
-      value: "These follow your state's rules and apply when the loan documents and mortgage are registered.",
+      value:
+        "These follow your state's rules and apply when the loan documents and mortgage are registered.",
     },
     {
       label: "Foreclosure and part-prepayment",
@@ -565,8 +584,7 @@ const CHARGES_CGTMSE: ChargesInfo = {
     },
     {
       label: "Foreclosure and part-prepayment",
-      value:
-        "Closing early may carry a charge depending on the lender. Ask before you prepay.",
+      value: "Closing early may carry a charge depending on the lender. Ask before you prepay.",
     },
   ],
   note: CHARGES_NOTE,
@@ -804,7 +822,6 @@ export const PRODUCTS: Product[] = [
       "Salaried, self-employed professional or self-employed business owner",
       "If salaried, generally at least 1 year with your current employer",
       "A CIBIL score of around 750 or above may help you get better terms; lower scores are reviewed case by case",
-      "Residential, commercial or industrial property that can be pledged as security",
     ],
     documents: [KYC, PROPERTY_DOCS, PHOTOS],
     documentCategories: APPLICANT_DOC_CATEGORIES,
@@ -853,31 +870,25 @@ export const PRODUCTS: Product[] = [
       { label: "For", value: "Salaried and self-employed" },
     ],
     glance: [
-      { label: "Purpose", value: "General or business use (not housing)" },
-      { label: "Loan size", value: "₹3 L to ₹20 L (kicker up to ₹5 L for top profiles)" },
-      { label: "Tenor", value: "12 to 120 months" },
-      { label: "LTV (with insurance)", value: "55% self-occupied residential; 50% others" },
-      { label: "Property accepted", value: "Self-occupied residential or commercial, mixed use" },
-      { label: "Distance limit", value: "35 km main branch / 25 km spoke" },
-      { label: "Base FOIR", value: "Same slabs; hard cap of 65%" },
+      { label: "Purpose", value: "Business or personal use, not for buying a home" },
+      { label: "Property accepted", value: "Self-occupied residential, commercial or mixed-use property" },
+      { label: "Share of property value", value: "Up to 55% for a self-occupied home and 50% for other property, with insurance" },
+      { label: "Property location", value: "Within about 35 km of the lender's main branch, or 25 km of a smaller branch" },
+      { label: "Your EMIs", value: "All your EMIs together can take up to 65% of your income" },
     ],
     about:
       "Get funds against your eligible property for business or personal financial needs, while continuing to own and use your property. Micro Loan Against Property (Micro LAP) is designed for eligible salaried and self-employed customers looking for relatively smaller property-backed funding with simple assessment and documentation. Explore property-backed funding options generally ranging from ₹3 Lakh to ₹20 Lakh*. The applicable loan amount depends on the selected program, property value, income / repayment capacity, credit profile and lender policy.",
     features: [
-      "Loan amount up to ₹20 Lakh*",
-      "Available for eligible salaried and self-employed customers",
-      "Funding against eligible property",
       "Longer repayment tenure available under eligible programs",
       "Different assessment options depending on the property and customer profile",
-      "Clubbed / family income may be considered under eligible programs",
       "Higher LTV may be available depending on the applicable scheme and property",
       "ITR and GST may not be required under certain eligible programs",
       "Simple documentation",
-      "Business or eligible personal funding requirements can be considered",
     ],
     optionTiers: {
       heading: "Available Micro LAP options",
-      intro: "Three programmes, by loan amount. The one that applies to you depends on your property and profile.",
+      intro:
+        "Three programmes, by loan amount. The one that applies to you depends on your property and profile.",
       tiers: [
         {
           title: "₹3 Lakh to ₹7.5 Lakh*",
@@ -885,9 +896,18 @@ export const PRODUCTS: Product[] = [
             { label: "Tenure", value: "12 to 60 months" },
             { label: "Indicative rate", value: "23% to 24% p.a. reducing*" },
             { label: "Property requirement", value: "Registered Sale Deed" },
-            { label: "Valuation", value: "Physical valuation may not be required under the applicable program" },
-            { label: "Legal", value: "Property search / document verification as per lender policy" },
-            { label: "Mortgage structure", value: "Negative lien may be considered under the applicable program" },
+            {
+              label: "Valuation",
+              value: "Physical valuation may not be required under the applicable program",
+            },
+            {
+              label: "Legal",
+              value: "Property search / document verification as per lender policy",
+            },
+            {
+              label: "Mortgage structure",
+              value: "Negative lien may be considered under the applicable program",
+            },
           ],
         },
         {
@@ -895,10 +915,17 @@ export const PRODUCTS: Product[] = [
           points: [
             { label: "Tenure", value: "12 to 84 months" },
             { label: "Indicative rate", value: "21% to 22% p.a. reducing*" },
-            { label: "Property documents", value: "Registered Sale Deed / applicable property records such as Namuna 8, 7/12, etc." },
+            {
+              label: "Property documents",
+              value:
+                "Registered Sale Deed / applicable property records such as Namuna 8, 7/12, etc.",
+            },
             { label: "Valuation", value: "Desktop or technical valuation, as applicable" },
             { label: "Legal", value: "Title Search Report (TSR) and legal verification" },
-            { label: "Mortgage", value: "Registered Mortgage (RM) or Equitable Mortgage (EM), as applicable" },
+            {
+              label: "Mortgage",
+              value: "Registered Mortgage (RM) or Equitable Mortgage (EM), as applicable",
+            },
           ],
         },
         {
@@ -906,10 +933,17 @@ export const PRODUCTS: Product[] = [
           points: [
             { label: "Tenure", value: "12 to 120 months" },
             { label: "Indicative rate", value: "19% to 20% p.a. reducing*" },
-            { label: "Property documents", value: "Registered Sale Deed / applicable property records such as Namuna 8, 7/12, etc." },
+            {
+              label: "Property documents",
+              value:
+                "Registered Sale Deed / applicable property records such as Namuna 8, 7/12, etc.",
+            },
             { label: "Valuation", value: "Physical and technical valuation" },
             { label: "Legal", value: "Title Search Report (TSR) and legal verification" },
-            { label: "Mortgage", value: "Registered Mortgage (RM) or Equitable Mortgage (EM), as applicable" },
+            {
+              label: "Mortgage",
+              value: "Registered Mortgage (RM) or Equitable Mortgage (EM), as applicable",
+            },
           ],
         },
       ],
@@ -1020,7 +1054,7 @@ export const PRODUCTS: Product[] = [
     ],
     documents: [KYC, PROPERTY_DOCS],
     charges: CHARGES_LIMIT,
-    documentCategories: BUSINESS_DOC_CATEGORIES,
+    documentCategories: OVERDRAFT_DOC_CATEGORIES,
   },
 
   {
@@ -1118,11 +1152,14 @@ export const PRODUCTS: Product[] = [
     ],
     glance: [
       { label: "Purpose", value: "General or business use (not housing)" },
-      { label: "Who it is for", value: "Self-employed individuals, proprietorships, partnerships, LLPs and private limited companies" },
+      {
+        label: "Who it is for",
+        value:
+          "Self-employed individuals, proprietorships, partnerships, LLPs and private limited companies",
+      },
       { label: "Age", value: "25 to 65 years" },
-      { label: "Loan size", value: "₹1 L to ₹10 L" },
-      { label: "Tenor", value: "12 to 48 months" },
-      { label: "Rate of interest", value: "22% to 27% (reducing)" },
+      { label: "Property owner", value: "Not needed up to ₹2 Lakh; needed above that. No property is mortgaged" },
+      { label: "Co-applicant", value: "A woman co-applicant is usually needed where the applicant is a man" },
     ],
     about:
       "Get unsecured business funding for your day-to-day business needs, without providing property as collateral. Designed for eligible small business owners, shopkeepers, traders and self-employed customers who need funds to manage or grow their business.",
@@ -1139,10 +1176,7 @@ export const PRODUCTS: Product[] = [
       ],
     },
     features: [
-      "Loan amount up to ₹10 Lakh*",
-      "No property collateral required*",
-      "ITR may not be required under eligible programs*",
-      "GST may not be required under eligible programs*",
+      "ITR and GST may not be required under eligible programs*",
       "Assessment based on business profile, banking and lender criteria",
       "Simple documentation, subject to lender policy",
     ],
@@ -1161,7 +1195,8 @@ export const PRODUCTS: Product[] = [
       "Additional documents may be requested depending on your profile and lender policy",
     ],
     charges: {
-      intro: "Prepayment terms are set by the lender. Other charges depend on the lender and are confirmed before you proceed.",
+      intro:
+        "Prepayment terms are set by the lender. Other charges depend on the lender and are confirmed before you proceed.",
       rows: [
         { label: "Prepayment in the first 6 months", value: "Not allowed" },
         { label: "Prepayment after 6 months", value: "4% penalty plus applicable taxes" },
@@ -1266,19 +1301,6 @@ export const PRODUCTS: Product[] = [
         label: "Which machine / equipment do you want to purchase?",
         type: "text",
         placeholder: "Machine name and type",
-      },
-      {
-        key: "machineCondition",
-        label: "Machinery New or Used",
-        type: "select",
-        options: ["New", "Used"],
-      },
-      {
-        key: "machineAge",
-        label: "Machine Age / Year of Manufacture",
-        type: "text",
-        placeholder: "e.g. 2019, or 5 years old",
-        showWhen: { key: "machineCondition", values: ["Used"] },
       },
       {
         key: "machineCost",
@@ -1394,7 +1416,7 @@ export const PRODUCTS: Product[] = [
     ],
     documents: [KYC],
     charges: CHARGES_LIMIT,
-    documentCategories: BUSINESS_DOC_CATEGORIES,
+    documentCategories: OVERDRAFT_DOC_CATEGORIES,
   },
   {
     slug: "bank-guarantee",
@@ -1410,7 +1432,6 @@ export const PRODUCTS: Product[] = [
     about:
       "A bank guarantee is a written promise from the bank to the other party that you will pay or complete the work as agreed. It helps you bid for and sign contracts with more confidence.",
     features: [
-      "Financial and performance guarantees",
       "Bid bonds, EMDs, security deposits and advance-payment BGs",
       "Commission and margin requirement negotiated on your behalf",
       "Fast issuance and amendments when terms change",
@@ -1440,7 +1461,6 @@ export const PRODUCTS: Product[] = [
     about:
       "A letter of credit is a payment promise given by the bank to your supplier. It may help you get better credit terms without using your own working capital.",
     features: [
-      "Inland and import LCs",
       "Sight or usance structures",
       "Buyer's credit tie-ups arranged where available",
       "Support with documentation and resolving discrepancies",
@@ -1472,7 +1492,6 @@ export const PRODUCTS: Product[] = [
     features: [
       "Funds against genuine invoices raised on your customers",
       "Helps cover the gap between selling and getting paid",
-      "Repayment is linked to your customer's payment",
       "Can work alongside a cash credit or overdraft limit, as per lender policy",
       "Limits and charges depend on the lender and on your customers",
     ],
@@ -1480,7 +1499,6 @@ export const PRODUCTS: Product[] = [
       "A business that sells goods or services to other businesses on credit",
       "Genuine invoices from customers with a good payment record",
       "Business and banking records that show a steady turnover",
-      "Final eligibility depends on the lender's policy and credit assessment",
     ],
     documents: [KYC, BUSINESS_DOCS, "Invoices and customer ledger (debtor statement)"],
   },
@@ -1512,7 +1530,7 @@ export const PRODUCTS: Product[] = [
     ],
     documents: [KYC],
     charges: CHARGES_LIMIT,
-    documentCategories: BUSINESS_DOC_CATEGORIES,
+    documentCategories: OVERDRAFT_DOC_CATEGORIES,
   },
   {
     slug: "personal-loan",
@@ -1576,11 +1594,7 @@ export const PRODUCTS: Product[] = [
       "A co-applicant who is salaried or self-employed with a steady income",
       "A good credit record for the co-applicant helps",
     ],
-    documents: [
-      KYC,
-      "Admission letter and fee structure",
-      "Academic records",
-    ],
+    documents: [KYC, "Admission letter and fee structure", "Academic records"],
     checklistIntake: [
       {
         key: "loanAmount",
@@ -1618,7 +1632,6 @@ export const PRODUCTS: Product[] = [
     about:
       "Financing for the on-road price of a new car. We help with the dealer paperwork, such as the invoice, insurance and RTO, from quotation to delivery.",
     features: [
-      "Funding up to 100% of the on-road price for eligible profiles",
       "Dealer and insurance coordination handled on your behalf",
       "Pricing may be better for salaried applicants with a stable employer",
       "Fast sanction on light documentation",
@@ -1750,16 +1763,12 @@ export const PRODUCTS: Product[] = [
       "Financing for new and used commercial vehicles such as trucks, buses and light goods vehicles. It helps a business add or replace vehicles without putting a large amount of its own money upfront. We compare options from Banks and NBFCs that may suit your business.",
     features: [
       "Finance for new and used commercial vehicles",
-      "Funding of up to 100%* of the vehicle value for eligible profiles",
-      "Used commercial vehicles: up to 80% finance",
-      "Repayment of up to 7 years",
       "No penalty for early repayment on eligible loans, as per lender terms",
       "Simpler documents",
     ],
     eligibility: [
       "A business or person who will use the vehicle for commercial work",
       "Income or business proof to show that you can repay the loan",
-      "Final eligibility, amount and terms depend on the lender's policy and the vehicle",
       "Resident Indian: an individual transporter, proprietorship, firm or company",
       "At least 1 year of experience in transport or the business the vehicle is for",
       "A CIBIL score of around 700 or above may help you get better terms; lower scores are reviewed case by case",
@@ -1792,9 +1801,7 @@ export const PRODUCTS: Product[] = [
       "Rates are usually lower than personal loans",
       "No prepayment charges and no foreclosure charges, as per lender policy",
       "Interest is charged only on the amount you use, and only for the days you use it",
-      "Funding of up to 50% of the market value of your pledged assets, on the lender's approved list",
       "Promoter funding: a special type of LAS where promoters pledge company shares to raise funds, subject to the lender's approved company list",
-      "Up to ₹1 Cr: a fully digital process",
       "₹1 Cr to ₹3 Cr: a mix of digital and paper process, with no ITR required",
       "Above ₹3 Cr: a mix of digital and paper process, with 3 years of ITR required",
     ],
@@ -1805,7 +1812,11 @@ export const PRODUCTS: Product[] = [
       "For promoter funding, a company that is on the lender's approved list",
       "Resident Indian, 21 years or older",
     ],
-    documents: [KYC, "Demat holding statement, or mutual fund statement (CAS)", "Portfolio, folio or policy documents"],
+    documents: [
+      KYC,
+      "Demat holding statement, or mutual fund statement (CAS)",
+      "Portfolio, folio or policy documents",
+    ],
     charges: CHARGES_SECURITIES,
   },
   {
@@ -1886,6 +1897,42 @@ export const PRODUCTS: Product[] = [
     minimalDisclosure: true,
   },
 ];
+
+// For these loans we charge a service fee, and say so up front: what it covers and that the amount is confirmed in writing.
+const SERVICE_FEE_SLUGS = new Set([
+  "cgtmse",
+  "machine-loan",
+  "working-capital-term-loan",
+  "cash-credit",
+  "overdraft-limit",
+  "bank-guarantee",
+  "letter-of-credit",
+  "bill-discounting",
+  "micro-lap",
+  "micro-business-loan",
+]);
+const SERVICE_FEE_ROW = {
+  label: "Our service fee",
+  value:
+    "For this facility we charge a service fee for taking your file from lender shortlist to disbursal. It covers comparing lenders for you, preparing and checking your documents, answering the lender's queries and following up until the money reaches you. We tell you the amount in writing before you go ahead, so you know exactly what you are paying and nothing comes as a surprise.",
+};
+for (const p of PRODUCTS) {
+  if (!SERVICE_FEE_SLUGS.has(p.slug)) continue;
+  p.charges = p.charges
+    ? { ...p.charges, rows: [...p.charges.rows, SERVICE_FEE_ROW] }
+    : {
+        intro: CHARGES_INTRO,
+        rows: [
+          {
+            label: "Lender's processing and other fees",
+            value:
+              "The lender may charge a processing fee plus GST, and other charges on the limit. Each lender sets its own, and we confirm them before you proceed.",
+          },
+          SERVICE_FEE_ROW,
+        ],
+        note: CHARGES_NOTE,
+      };
+}
 
 /** Every product, including any staff have hidden. PRODUCTS itself holds only the visible ones. */
 const ALL_PRODUCTS: Product[] = [...PRODUCTS];

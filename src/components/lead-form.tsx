@@ -1,11 +1,12 @@
 import { useId, useState, type ReactNode } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
 import { APPLICANT_CATEGORY_LABELS, PRODUCTS } from "@/data/products";
 import { submitLead, submitLeadForFollowUp, type FollowUpPass } from "@/lib/leads";
 import { followUpFor } from "@/data/follow-up-forms";
 import { FollowUpFlow } from "@/components/follow-up-flow";
-import { isValidEmail } from "@/lib/validation";
+import { INDUSTRIES } from "@/data/industries";
+import { amountProblem, isValidEmail, loanAmountBounds } from "@/lib/validation";
 import { Toast } from "@/components/toast";
 import { FORM_LOAN_TYPES } from "@/data/page-lists";
 import { useApplicantOptions, useCities, useList } from "@/lib/page-lists";
@@ -14,7 +15,25 @@ import { useApplicantOptions, useCities, useList } from "@/lib/page-lists";
 // Dropdown choices that are the same loan as a product page under another name.
 const SLUG_ALIASES: Record<string, string> = { "overdraft-facility": "overdraft-limit" };
 
-const LOAN_TYPES_WITH_CATEGORY = new Set(["Home Loan", "Loan Against Property"]);
+// Loans whose short form asks "You Are". The overdrafts are taken by salaried people as well as business owners.
+const PERSON_ONLY_CATEGORIES = ["Salaried", "Self-Employed"];
+const CATEGORY_LOANS = new Set(["home-loan", "loan-against-property"]);
+const OVERDRAFT_CATEGORY_LOANS = new Set(["unsecured-dod", "dlod", "overdraft-limit"]);
+// Loans whose short form asks for the industry too.
+const INDUSTRY_LOANS = new Set(["business-loan", "private-funding"]);
+// Loans whose short form asks for the profession.
+const PROFESSION_LOANS = new Set(["professional-loan"]);
+// Loan pages whose short form is kept to five questions: no loan type (the page says it) and no email.
+const COMPACT_LOANS = new Set(["professional-loan"]);
+const PROFESSIONS = [
+  "Doctor or dentist",
+  "Chartered Accountant",
+  "Company Secretary",
+  "Architect",
+  "Engineer",
+  "Lawyer",
+  "Other",
+];
 
 type Fields = {
   name: string;
@@ -23,6 +42,12 @@ type Fields = {
   loanType: string;
   loanTypeOther: string;
   applicantCategory: string;
+  industry: string;
+  profession: string;
+  /** What was typed when "Other" was picked in the matching drop-down. */
+  categoryOther: string;
+  industryOther: string;
+  professionOther: string;
   city: string;
   cityOther: string;
   loanAmount: string;
@@ -35,6 +60,11 @@ const empty: Fields = {
   loanType: "",
   loanTypeOther: "",
   applicantCategory: "",
+  industry: "",
+  profession: "",
+  categoryOther: "",
+  industryOther: "",
+  professionOther: "",
   city: "",
   cityOther: "",
   loanAmount: "",
@@ -87,7 +117,7 @@ function Field({
 
 // Groups typed digits with Indian comma placement (e.g. 12,50,000) as the user types.
 function formatIndianAmount(raw: string) {
-  const digits = raw.replace(/\D/g, "");
+  const digits = raw.replace(/\D/g, "").slice(0, 11);
   return digits ? Number(digits).toLocaleString("en-IN") : "";
 }
 
@@ -111,6 +141,20 @@ export function LeadForm({
   const ownTitle = own?.title ?? product?.title;
   const cities = useCities();
   const applicants = useApplicantOptions();
+  // The page a chosen loan type belongs to, and the "You Are" and industry questions that go with it.
+  const slugFor = (title: string) => {
+    const hit = loanTypes.find((s) => s.title === title);
+    return hit ? (SLUG_ALIASES[hit.slug] ?? hit.slug) : undefined;
+  };
+  const categoryOptionsFor = (title: string): string[] | null => {
+    const slug = slugFor(title);
+    if (slug && CATEGORY_LOANS.has(slug)) return [...applicants, "Other"];
+    if (slug && OVERDRAFT_CATEGORY_LOANS.has(slug)) return [...PERSON_ONLY_CATEGORIES, "Other"];
+    return null;
+  };
+  const asksIndustry = (title: string) => INDUSTRY_LOANS.has(slugFor(title) ?? "");
+  const asksProfession = (title: string) => PROFESSION_LOANS.has(slugFor(title) ?? "");
+  const compact = !!product && COMPACT_LOANS.has(product.slug);
   const uid = useId();
   // Only pre-select a loan type the dropdown actually offers.
   const initial: Fields = {
@@ -138,7 +182,11 @@ export function LeadForm({
       ...v,
       loanType: e.target.value,
       loanTypeOther: "",
-      applicantCategory: LOAN_TYPES_WITH_CATEGORY.has(e.target.value) ? v.applicantCategory : "",
+      applicantCategory: categoryOptionsFor(e.target.value)?.includes(v.applicantCategory)
+        ? v.applicantCategory
+        : "",
+      industry: asksIndustry(e.target.value) ? v.industry : "",
+      profession: asksProfession(e.target.value) ? v.profession : "",
     }));
 
   const setCity = (e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -152,13 +200,35 @@ export function LeadForm({
     if (values.name.trim().length < 2) next.name = "Please enter your full name";
     if (!PHONE_RE.test(values.phone.replace(/[\s-]/g, "")))
       next.phone = "Please match the requested format — a 10-digit mobile number";
-    if (!isValidEmail(values.email.trim()))
+    if (!compact && !isValidEmail(values.email.trim()))
       next.email = "Please match the requested format — name@example.com";
     if (!values.loanType) next.loanType = "Select a loan type";
     else if (values.loanType === "Other" && !values.loanTypeOther.trim())
       next.loanType = "Please enter your loan type";
-    if (LOAN_TYPES_WITH_CATEGORY.has(values.loanType) && !values.applicantCategory)
+    if (categoryOptionsFor(values.loanType) && !values.applicantCategory)
       next.applicantCategory = "Select one";
+    if (values.applicantCategory === "Other" && !values.categoryOther.trim())
+      next.applicantCategory = "Please tell us";
+    if (asksIndustry(values.loanType)) {
+      if (!values.industry) next.industry = "Select your industry";
+      else if (values.industry === "Other" && !values.industryOther.trim())
+        next.industry = "Please tell us your industry";
+    }
+    if (asksProfession(values.loanType)) {
+      if (!values.profession) next.profession = "Select your profession";
+      else if (values.profession === "Other" && !values.professionOther.trim())
+        next.profession = "Please tell us your profession";
+    }
+    if (values.loanAmount) {
+      // The loan page decides the smallest amount that makes sense (a home loan is not ₹10,000).
+      const chosen = loanTypes.find((s) => s.title === values.loanType);
+      const slug = chosen ? (SLUG_ALIASES[chosen.slug] ?? chosen.slug) : undefined;
+      const msg = amountProblem(
+        Number(values.loanAmount.replace(/\D/g, "")),
+        loanAmountBounds(slug),
+      );
+      if (msg) next.loanAmount = msg;
+    }
     if (!values.city) next.city = "Select your city";
     else if (values.city === "Other" && !values.cityOther.trim())
       next.city = "Please enter your city";
@@ -180,7 +250,15 @@ export function LeadForm({
     const city = values.city === "Other" ? values.cityOther.trim() : values.city;
     const detail = [
       `Loan type: ${loanType}`,
-      values.applicantCategory ? `Applicant: ${values.applicantCategory}` : "",
+      values.applicantCategory
+        ? `Applicant: ${values.applicantCategory === "Other" ? `Other (${values.categoryOther.trim()})` : values.applicantCategory}`
+        : "",
+      values.industry
+        ? `Industry: ${values.industry === "Other" ? `Other (${values.industryOther.trim()})` : values.industry}`
+        : "",
+      values.profession
+        ? `Profession: ${values.profession === "Other" ? `Other (${values.professionOther.trim()})` : values.profession}`
+        : "",
     ]
       .filter(Boolean)
       .join(", ");
@@ -231,6 +309,7 @@ export function LeadForm({
           email: b.email.trim(),
           city: b.city,
           category: b.applicantCategory,
+          industry: b.industry,
           productSlug: b.slug,
           productTitle: b.title,
           source,
@@ -276,7 +355,12 @@ export function LeadForm({
               />
             </Field>
 
-            <Field id={`${uid}-phone`} label="Phone" error={errors.phone}>
+            <Field
+              id={`${uid}-phone`}
+              label="Phone"
+              error={errors.phone}
+              className={compact ? "sm:col-span-2" : ""}
+            >
               <input
                 id={`${uid}-phone`}
                 className={fieldClass}
@@ -288,46 +372,61 @@ export function LeadForm({
               />
             </Field>
 
-            <Field id={`${uid}-email`} label="Email" error={errors.email}>
-              <input
-                id={`${uid}-email`}
-                className={fieldClass}
-                value={values.email}
-                onChange={set("email")}
-                maxLength={255}
-                inputMode="email"
-                placeholder="you@example.com"
-              />
-            </Field>
-
-            <Field id={`${uid}-loan`} label="Loan Type" error={errors.loanType}>
-              <select
-                id={`${uid}-loan`}
-                className={selectClass}
-                value={values.loanType}
-                onChange={setLoanType}
-              >
-                <option value="">Select loan type</option>
-                {loanTypes.map((s) => (
-                  <option key={s.slug || s.title} value={s.title}>
-                    {s.title}
-                  </option>
-                ))}
-                <option value="Other">Other</option>
-              </select>
-              {values.loanType === "Other" ? (
+            {!compact ? (
+              <Field id={`${uid}-email`} label="Email" error={errors.email}>
                 <input
-                  className={`${fieldClass} mt-2`}
-                  value={values.loanTypeOther}
-                  onChange={set("loanTypeOther")}
-                  maxLength={100}
-                  placeholder="Enter your loan type"
-                  autoFocus
+                  id={`${uid}-email`}
+                  className={fieldClass}
+                  value={values.email}
+                  onChange={set("email")}
+                  maxLength={255}
+                  inputMode="email"
+                  placeholder="you@example.com"
                 />
-              ) : null}
-            </Field>
+              </Field>
+            ) : null}
 
-            {LOAN_TYPES_WITH_CATEGORY.has(values.loanType) ? (
+            {product && !compact ? (
+              // On a loan's own page the loan is already known, so it is shown, not asked.
+              <Field id={`${uid}-loan`} label="Loan Type" error={errors.loanType}>
+                <div
+                  id={`${uid}-loan`}
+                  className={`${fieldClass} flex items-center justify-between gap-2 bg-secondary/50 font-semibold dark:bg-card`}
+                >
+                  <span>{product.title}</span>
+                  <Check className="h-4 w-4 shrink-0 text-gold-dark" aria-hidden />
+                </div>
+              </Field>
+            ) : !compact ? (
+              <Field id={`${uid}-loan`} label="Loan Type" error={errors.loanType}>
+                <select
+                  id={`${uid}-loan`}
+                  className={selectClass}
+                  value={values.loanType}
+                  onChange={setLoanType}
+                >
+                  <option value="">Select loan type</option>
+                  {loanTypes.map((s) => (
+                    <option key={s.slug || s.title} value={s.title}>
+                      {s.title}
+                    </option>
+                  ))}
+                  <option value="Other">Other</option>
+                </select>
+                {values.loanType === "Other" ? (
+                  <input
+                    className={`${fieldClass} mt-2`}
+                    value={values.loanTypeOther}
+                    onChange={set("loanTypeOther")}
+                    maxLength={100}
+                    placeholder="Enter your loan type"
+                    autoFocus
+                  />
+                ) : null}
+              </Field>
+            ) : null}
+
+            {categoryOptionsFor(values.loanType) ? (
               <Field
                 id={`${uid}-applicant-category`}
                 label="You Are"
@@ -341,12 +440,88 @@ export function LeadForm({
                   onChange={set("applicantCategory")}
                 >
                   <option value="">Select one</option>
-                  {applicants.map((c) => (
+                  {(categoryOptionsFor(values.loanType) ?? []).map((c) => (
                     <option key={c} value={c}>
                       {c}
                     </option>
                   ))}
                 </select>
+                {values.applicantCategory === "Other" ? (
+                  <input
+                    className={`${fieldClass} mt-2`}
+                    value={values.categoryOther}
+                    onChange={set("categoryOther")}
+                    maxLength={100}
+                    placeholder="Please tell us what you are"
+                    autoFocus
+                  />
+                ) : null}
+              </Field>
+            ) : null}
+
+            {asksIndustry(values.loanType) ? (
+              <Field
+                id={`${uid}-industry`}
+                label="Industry"
+                error={errors.industry}
+                className="sm:col-span-2"
+              >
+                <select
+                  id={`${uid}-industry`}
+                  className={selectClass}
+                  value={values.industry}
+                  onChange={set("industry")}
+                >
+                  <option value="">Select your industry</option>
+                  {INDUSTRIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+                {values.industry === "Other" ? (
+                  <input
+                    className={`${fieldClass} mt-2`}
+                    value={values.industryOther}
+                    onChange={set("industryOther")}
+                    maxLength={100}
+                    placeholder="Enter your industry"
+                    autoFocus
+                  />
+                ) : null}
+              </Field>
+            ) : null}
+
+            {asksProfession(values.loanType) ? (
+              <Field
+                id={`${uid}-profession`}
+                label="Profession"
+                error={errors.profession}
+                className="sm:col-span-2"
+              >
+                <select
+                  id={`${uid}-profession`}
+                  className={selectClass}
+                  value={values.profession}
+                  onChange={set("profession")}
+                >
+                  <option value="">What is your profession?</option>
+                  {PROFESSIONS.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+                {values.profession === "Other" ? (
+                  <input
+                    className={`${fieldClass} mt-2`}
+                    value={values.professionOther}
+                    onChange={set("professionOther")}
+                    maxLength={100}
+                    placeholder="Enter your profession"
+                    autoFocus
+                  />
+                ) : null}
               </Field>
             ) : null}
 
@@ -380,6 +555,7 @@ export function LeadForm({
             <Field
               id={`${uid}-amount`}
               label="Loan Amount"
+              error={errors.loanAmount}
               required={false}
               className="sm:col-span-2"
             >

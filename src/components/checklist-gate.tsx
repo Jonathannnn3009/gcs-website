@@ -3,12 +3,13 @@ import { ArrowRight, Download } from "lucide-react";
 import { submitLead } from "@/lib/leads";
 import { resolveChecklistHref, useChecklistDocuments } from "@/lib/checklist-documents";
 import type { ChecklistIntakeField } from "@/data/products";
+import { amountProblem, fieldAmountBounds, loanAmountBounds } from "@/lib/validation";
 
 const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
 
 // Groups typed digits Indian-style as they type: 5000000 -> 50,00,000.
 function formatIndianAmount(raw: string) {
-  const digits = raw.replace(/\D/g, "");
+  const digits = raw.replace(/\D/g, "").slice(0, 11);
   return digits ? Number(digits).toLocaleString("en-IN") : "";
 }
 
@@ -23,7 +24,8 @@ const THEMES = {
     form: "mt-5 rounded-lg border border-white/15 bg-white/5 p-4",
     intro: "text-xs leading-relaxed text-white/60",
     label: "text-[10px] font-bold tracking-[0.16em] text-gold uppercase",
-    presetValue: "mt-1 rounded-lg border border-white/20 bg-white/10 px-3.5 py-2.5 text-sm font-bold text-white",
+    presetValue:
+      "mt-1 rounded-lg border border-white/20 bg-white/10 px-3.5 py-2.5 text-sm font-bold text-white",
     error: "mt-1 block text-xs text-red-300",
   },
   light: {
@@ -36,7 +38,8 @@ const THEMES = {
     form: "mt-5 rounded-lg border border-border bg-secondary/40 p-4",
     intro: "text-xs leading-relaxed text-muted-foreground",
     label: "text-[10px] font-bold tracking-[0.16em] text-gold-dark uppercase",
-    presetValue: "mt-1 rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm font-bold text-navy dark:bg-card dark:text-white",
+    presetValue:
+      "mt-1 rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm font-bold text-navy dark:bg-card dark:text-white",
     error: "mt-1 block text-xs text-destructive",
   },
 } as const;
@@ -77,6 +80,24 @@ export function ChecklistGate({
   const [category, setCategory] = useState("");
   const [intakeValues, setIntakeValues] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
+  // What was typed when "Other" was picked in a drop-down, by question ("category" for You Are).
+  const [otherText, setOtherText] = useState<Record<string, string>>({});
+  const setOther = (key: string, value: string) => setOtherText((o) => ({ ...o, [key]: value }));
+  // A drop-down of kinds ends in "Other"; a short either-or one does not need to.
+  const withOther = (options: string[]) =>
+    options.includes("Other") || options.length < 3 ? options : [...options, "Other"];
+  const said = (key: string, value: string | undefined) =>
+    value === "Other" ? `Other (${(otherText[key] ?? "").trim()})` : (value ?? "");
+  const otherBox = (key: string, label: string) => (
+    <input
+      value={otherText[key] ?? ""}
+      onChange={(e) => setOther(key, e.target.value)}
+      className={t.field}
+      placeholder={`Please tell us: ${label.toLowerCase()}`}
+      maxLength={100}
+      aria-label={`${label}: please tell us`}
+    />
+  );
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -103,20 +124,33 @@ export function ChecklistGate({
     e.preventDefault();
     const next: Record<string, string> = {};
     if (name.trim().length < 2) next["name"] = "Enter your name";
-    if (!PHONE_RE.test(phone.replace(/[\s-]/g, ""))) next["phone"] = "Enter a valid 10-digit mobile number";
+    if (!PHONE_RE.test(phone.replace(/[\s-]/g, "")))
+      next["phone"] = "Enter a valid 10-digit mobile number";
     if (categories && !category) next["category"] = "Select one";
+    else if (category === "Other" && !(otherText["category"] ?? "").trim())
+      next["category"] = "Please tell us";
     for (const f of visibleFields) {
-      if (!intakeValues[f.key]?.trim()) next[f.key] = "Required";
+      const typed = intakeValues[f.key]?.trim();
+      if (!typed) next[f.key] = "Required";
+      else if (f.type === "select" && typed === "Other" && !(otherText[f.key] ?? "").trim())
+        next[f.key] = "Please tell us";
+      else if (f.type === "text" && f.format === "amount") {
+        // The loan amount follows the loan page's minimum; any other figure follows its own range.
+        const bounds =
+          f.key === "loanAmount" ? loanAmountBounds(productSlug) : fieldAmountBounds(f.key);
+        const msg = amountProblem(Number(typed.replace(/\D/g, "")), bounds);
+        if (msg) next[f.key] = msg;
+      }
     }
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
     setSubmitting(true);
     const intakeDetail = visibleFields
-      .map((f) => `${f.label}: ${intakeValues[f.key]?.trim()}`)
+      .map((f) => `${f.label}: ${said(f.key, intakeValues[f.key]?.trim())}`)
       .join(", ");
     const detailParts = [
-      category ? `${productTitle} — ${category}` : productTitle,
+      category ? `${productTitle} — ${said("category", category)}` : productTitle,
       intakeDetail,
     ].filter(Boolean);
     await submitLead({
@@ -164,13 +198,14 @@ export function ChecklistGate({
               <option value="" className="text-ink dark:text-white">
                 Select one
               </option>
-              {categories.map((c) => (
+              {withOther(categories).map((c) => (
                 <option key={c} value={c} className="text-ink dark:text-white">
                   {c}
                 </option>
               ))}
             </select>
-            {errors['category'] && <span className={t.error}>{errors['category']}</span>}
+            {category === "Other" ? otherBox("category", "You are") : null}
+            {errors["category"] && <span className={t.error}>{errors["category"]}</span>}
           </div>
         ) : null}
         <div>
@@ -185,7 +220,7 @@ export function ChecklistGate({
             placeholder="Enter your name"
             maxLength={100}
           />
-          {errors['name'] && <span className={t.error}>{errors['name']}</span>}
+          {errors["name"] && <span className={t.error}>{errors["name"]}</span>}
         </div>
         <div>
           <label htmlFor={`${uid}-phone`} className={t.label}>
@@ -200,7 +235,7 @@ export function ChecklistGate({
             inputMode="tel"
             maxLength={15}
           />
-          {errors['phone'] && <span className={t.error}>{errors['phone']}</span>}
+          {errors["phone"] && <span className={t.error}>{errors["phone"]}</span>}
         </div>
         {visibleFields.map((f) => (
           <div key={f.key}>
@@ -208,21 +243,24 @@ export function ChecklistGate({
               {f.label}
             </label>
             {f.type === "select" ? (
-              <select
-                id={`${uid}-${f.key}`}
-                value={intakeValues[f.key] ?? ""}
-                onChange={(e) => setIntakeValue(f.key, e.target.value)}
-                className={`${t.field} appearance-none`}
-              >
-                <option value="" className="text-ink dark:text-white">
-                  Select one
-                </option>
-                {f.options.map((o) => (
-                  <option key={o} value={o} className="text-ink dark:text-white">
-                    {o}
+              <>
+                <select
+                  id={`${uid}-${f.key}`}
+                  value={intakeValues[f.key] ?? ""}
+                  onChange={(e) => setIntakeValue(f.key, e.target.value)}
+                  className={`${t.field} appearance-none`}
+                >
+                  <option value="" className="text-ink dark:text-white">
+                    Select one
                   </option>
-                ))}
-              </select>
+                  {withOther(f.options).map((o) => (
+                    <option key={o} value={o} className="text-ink dark:text-white">
+                      {o}
+                    </option>
+                  ))}
+                </select>
+                {intakeValues[f.key] === "Other" ? otherBox(f.key, f.label) : null}
+              </>
             ) : (
               <input
                 id={`${uid}-${f.key}`}

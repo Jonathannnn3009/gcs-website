@@ -667,6 +667,7 @@ const OVERDRAFT_CHOICE: QuestionField = {
   key: "structure",
   label: "Which kind of loan would suit you?",
   kind: "choice",
+  noOther: true,
   options: [
     "A term loan with fixed EMIs",
     "An overdraft limit I can draw and repay",
@@ -1246,6 +1247,7 @@ const PROJECT_FUNDING: FollowUpForm = {
           key: "stage",
           label: "Where is the project today?",
           kind: "choice",
+          noOther: true,
           options: [
             "Still to buy the land",
             "Land bought, approvals pending",
@@ -1253,37 +1255,6 @@ const PROJECT_FUNDING: FollowUpForm = {
             "Under construction",
             "Built, with units left to sell or let",
           ],
-        },
-        {
-          key: "approvals",
-          label: "How far are the main approvals and licences?",
-          kind: "choice",
-          options: ["All in place", "Some are pending", "Yet to apply"],
-          showWhen: {
-            key: "stage",
-            values: [
-              "Land bought, approvals pending",
-              "Approvals in place, yet to start",
-              "Under construction",
-            ],
-          },
-        },
-        {
-          key: "approvalsPending",
-          label: "Which ones are still pending?",
-          kind: "text",
-          placeholder: "e.g. RERA, environmental clearance, commencement certificate",
-          showWhen: { key: "approvals", values: ["Some are pending", "Yet to apply"] },
-        },
-        {
-          key: "rera",
-          label: "Is the project registered under RERA?",
-          kind: "choice",
-          options: ["Yes", "Applied", "No", "Not applicable"],
-          showWhen: {
-            key: "projectType",
-            values: ["Residential project or township", "Commercial project, mall or office"],
-          },
         },
         {
           key: "progress",
@@ -1300,20 +1271,6 @@ const PROJECT_FUNDING: FollowUpForm = {
           showWhen: {
             key: "stage",
             values: ["Under construction", "Built, with units left to sell or let"],
-          },
-        },
-        {
-          key: "dpr",
-          label: "Is the Detailed Project Report ready?",
-          kind: "choice",
-          options: ["Yes", "In process", "No"],
-          showWhen: {
-            key: "stage",
-            values: [
-              "Still to buy the land",
-              "Land bought, approvals pending",
-              "Approvals in place, yet to start",
-            ],
           },
         },
       ],
@@ -1423,6 +1380,27 @@ const PROJECT_FUNDING: FollowUpForm = {
           showWhen: { key: "venture", values: ["An existing business"] },
         },
         {
+          key: "turnover",
+          label: "Latest annual turnover of the business",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "venture", values: ["An existing business"] },
+        },
+        {
+          key: "profit",
+          label: "Net profit or cash accruals last year",
+          kind: "amount",
+          allowZero: true,
+          placeholder: "e.g. 40,00,000",
+          showWhen: { key: "venture", values: ["An existing business"] },
+        },
+      ],
+    },
+    {
+      title: "Experience and approvals",
+      help: "Lenders look at who is building and at how far the permissions are.",
+      fields: [
+        {
           key: "projectsDone",
           label: "How many similar projects have the promoters completed?",
           kind: "choice",
@@ -1437,19 +1415,49 @@ const PROJECT_FUNDING: FollowUpForm = {
           showWhen: { key: "projectsDone", values: ["None, this is the first"] },
         },
         {
-          key: "turnover",
-          label: "Latest annual turnover of the business",
-          kind: "amount",
-          placeholder: rupee,
-          showWhen: { key: "venture", values: ["An existing business"] },
+          key: "approvals",
+          label: "How far are the main approvals and licences?",
+          kind: "choice",
+          options: ["All in place", "Some are pending", "Yet to apply"],
+          showWhen: {
+            key: "stage",
+            values: [
+              "Land bought, approvals pending",
+              "Approvals in place, yet to start",
+              "Under construction",
+            ],
+          },
         },
         {
-          key: "profit",
-          label: "Net profit or cash accruals last year",
-          kind: "amount",
-          allowZero: true,
-          placeholder: "e.g. 40,00,000",
-          showWhen: { key: "venture", values: ["An existing business"] },
+          key: "approvalsPending",
+          label: "Which ones are still pending?",
+          kind: "text",
+          placeholder: "e.g. RERA, environmental clearance, commencement certificate",
+          showWhen: { key: "approvals", values: ["Some are pending", "Yet to apply"] },
+        },
+        {
+          key: "rera",
+          label: "Is the project registered under RERA?",
+          kind: "choice",
+          options: ["Yes", "Applied", "No", "Not applicable"],
+          showWhen: {
+            key: "projectType",
+            values: ["Residential project or township", "Commercial project, mall or office"],
+          },
+        },
+        {
+          key: "dpr",
+          label: "Is the Detailed Project Report ready?",
+          kind: "choice",
+          options: ["Yes", "In process", "No"],
+          showWhen: {
+            key: "stage",
+            values: [
+              "Still to buy the land",
+              "Land bought, approvals pending",
+              "Approvals in place, yet to start",
+            ],
+          },
         },
       ],
     },
@@ -1564,7 +1572,6 @@ const BUSINESS_LOAN: FollowUpForm = {
             "Self-employed professional",
           ],
         },
-        natureField(),
         {
           key: "vintage",
           label: "How long has the business been running?",
@@ -1737,14 +1744,21 @@ const UNSECURED_DOD: FollowUpForm = {
     "We ask these extra questions so our experts can read your business and your current account the way a lender does and shortlist the Banks & NBFCs that may suit you.",
   steps: [
     {
-      title: "About your business",
-      help: "An unsecured limit rests on a steady business and a healthy current account.",
+      title: "About you",
+      help: "An unsecured limit rests on steady income and a healthy account.",
       fields: [
+        {
+          key: "applicantType",
+          label: "Type of income (salaried or self-employed)",
+          kind: "choice",
+          required: true,
+          options: ["Salaried", "Self-Employed"],
+        },
         {
           key: "constitution",
           label: "How is your business or practice set up?",
           kind: "choice",
-          required: true,
+          showWhen: { key: "applicantType", values: ["Self-Employed"] },
           options: [
             "Professional (doctor, CA, architect, etc.)",
             "Proprietorship",
@@ -1753,18 +1767,19 @@ const UNSECURED_DOD: FollowUpForm = {
             "Limited company",
           ],
         },
-        natureField(),
+        { ...natureField(), showWhen: { key: "applicantType", values: ["Self-Employed"] } },
         {
           key: "vintage",
           label: "How long has it been running?",
           kind: "choice",
+          showWhen: { key: "applicantType", values: ["Self-Employed"] },
           options: ["Less than 3 years", "3 to 5 years", "5 to 10 years", "More than 10 years"],
         },
       ],
     },
     {
-      title: "Your current account",
-      help: "Lenders go by how your current account has run over the last year.",
+      title: "Your bank account",
+      help: "Lenders go by how your main account has run over the last year.",
       fields: [
         {
           key: "primaryBank",
@@ -1774,9 +1789,15 @@ const UNSECURED_DOD: FollowUpForm = {
         },
         {
           key: "avgBalance",
-          label: "Average balance you keep in the current account",
+          label: "Average balance you keep in the account",
           kind: "amount",
           placeholder: "e.g. 2,00,000",
+        },
+        {
+          key: "monthlyCredits",
+          label: "Average amount that comes into the account every month",
+          kind: "amount",
+          placeholder: "e.g. 5,00,000",
         },
         {
           key: "chequeReturns",
@@ -1799,12 +1820,17 @@ const UNSECURED_DOD: FollowUpForm = {
         },
       ],
     },
-    {
-      title: "Turnover and proof of income",
-      fields: moneyFields({ gst: true }),
-    },
+    (() => {
+      const step = workStep("applicantType");
+      return {
+        ...step,
+        fields: step.fields.filter(
+          (f) => f.key !== "applicantType" && !f.showWhen?.values.includes("NRI"),
+        ),
+      };
+    })(),
     limitStep(),
-    creditStep("unsecured drop-line overdraft", { business: true }),
+    creditStep("unsecured drop-line overdraft"),
   ],
 };
 
@@ -1818,21 +1844,6 @@ const PROFESSIONAL_LOAN: FollowUpForm = {
       title: "About your practice",
       help: "Professional loans are priced on your qualification, your registration and how long you have practised.",
       fields: [
-        {
-          key: "profession",
-          label: "What is your profession?",
-          kind: "choice",
-          required: true,
-          options: [
-            "Doctor or dentist",
-            "Chartered Accountant",
-            "Company Secretary",
-            "Architect",
-            "Engineer",
-            "Lawyer",
-            "Other",
-          ],
-        },
         {
           key: "registered",
           label: "Are you registered with your professional body or council?",
@@ -1933,7 +1944,6 @@ const PRIVATE_FUNDING: FollowUpForm = {
             "Other",
           ],
         },
-        natureField(),
         {
           key: "vintage",
           label: "How long has the business been running?",
@@ -1949,8 +1959,11 @@ const PRIVATE_FUNDING: FollowUpForm = {
           key: "annualTurnover",
           label: "Latest annual turnover",
           kind: "amount",
+          softMin: {
+            amount: 20 * 10_000_000,
+            note: "Private funding usually suits businesses with a turnover of ₹20 Cr or more (₹100 Cr or more outside the four big cities). You can still carry on, and our experts will tell you honestly what fits.",
+          },
           placeholder: "e.g. 25,00,00,000",
-          help: "Private funding usually suits a turnover of ₹20 Cr or more.",
         },
         {
           key: "annualProfit",
@@ -2260,6 +2273,7 @@ const CGTMSE: FollowUpForm = {
           key: "structure",
           label: "What kind of facility do you need?",
           kind: "choice",
+          noOther: true,
           options: ["A term loan", "A working capital limit", "Both", "Not sure, advise me"],
         },
         {
@@ -2327,10 +2341,30 @@ const MACHINE_LOAN: FollowUpForm = {
         },
         { key: "condition", label: "Is it new or used?", kind: "choice", options: ["New", "Used"] },
         {
+          key: "machineAge",
+          label: "How old is the machine?",
+          kind: "text",
+          placeholder: "e.g. 5 years old",
+          showWhen: { key: "condition", values: ["Used"] },
+        },
+        {
           key: "quotation",
           label: "Do you have a quotation or proforma invoice?",
           kind: "choice",
           options: ["Yes", "Not yet"],
+        },
+        {
+          key: "vendorStatus",
+          label: "Have you finalised the machine vendor?",
+          kind: "choice",
+          options: ["Yes, finalised", "Not finalised yet"],
+        },
+        {
+          key: "vendorName",
+          label: "Who is the vendor?",
+          kind: "text",
+          placeholder: "Name of the vendor or supplier",
+          showWhen: { key: "vendorStatus", values: ["Yes, finalised"] },
         },
         {
           key: "cost",
@@ -2613,6 +2647,7 @@ const OVERDRAFT_LIMIT: FollowUpForm = {
           key: "securityKind",
           label: "How would you like it secured?",
           kind: "choice",
+          noOther: true,
           options: [
             "Against a property",
             "Against fixed deposits or securities",
@@ -3046,6 +3081,7 @@ const EDUCATION_LOAN: FollowUpForm = {
           key: "admission",
           label: "Where is the admission?",
           kind: "choice",
+          noOther: true,
           options: ["Confirmed", "Waiting for the result", "Applied", "Not yet applied"],
         },
         {

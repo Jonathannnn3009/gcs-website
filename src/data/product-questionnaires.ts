@@ -7,10 +7,23 @@ export type ShowWhen = { key: string; values: string[] };
 type Base = { key: string; label: string; help?: string; required?: boolean; showWhen?: ShowWhen };
 
 export type QuestionField =
-  | (Base & { kind: "choice"; options: string[]; /** A dropdown instead of buttons, for a long list. */ dropdown?: boolean })
+  | (Base & {
+      kind: "choice";
+      options: string[];
+      /** A dropdown instead of buttons, for a long list. */ dropdown?: boolean;
+      /** Never offer an "Other" box on this question, though it looks like a category. */ noOther?: boolean;
+    })
   | (Base & { kind: "multi"; options: string[] })
   | (Base & { kind: "text"; placeholder?: string; long?: boolean })
-  | (Base & { kind: "amount"; placeholder?: string; /** 0 is a valid answer, e.g. "no EMIs". */ allowZero?: boolean })
+  | (Base & {
+      kind: "amount";
+      placeholder?: string;
+      /** 0 is a valid answer, e.g. "no EMIs". */ allowZero?: boolean;
+      /** Below this figure the visitor may still go on, but is told it is under what the product usually suits. */ softMin?: {
+        amount: number;
+        note: string;
+      };
+    })
   | (Base & { kind: "percent" });
 
 export type QuestionStep = { title: string; help?: string; fields: QuestionField[] };

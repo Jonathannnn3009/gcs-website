@@ -3,9 +3,9 @@ import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, FileText } from "lucide-react";
 import type { FollowUpForm } from "@/data/follow-up-forms";
 import type { QuestionField } from "@/data/product-questionnaires";
-import { QuestionFieldInput } from "@/components/question-field";
+import { fieldCls, QuestionFieldInput } from "@/components/question-field";
 import { addLeadDetails, submitLead, type FollowUpPass } from "@/lib/leads";
-import { amountTooLow, MIN_AMOUNT } from "@/lib/validation";
+import { amountProblem, fieldAmountBounds, ratePercentProblem } from "@/lib/validation";
 
 type Basics = {
   name: string;
@@ -14,6 +14,8 @@ type Basics = {
   city: string;
   /** Salaried, Self-Employed or NRI, from the first form. Decides which income questions appear. */
   category: string;
+  /** The industry picked on the short form, where it asks for one. */
+  industry?: string;
   productSlug: string;
   productTitle: string;
   source: string;
@@ -24,7 +26,6 @@ type Stage = "questions" | "cibil" | "done";
 
 const card =
   "relative overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-lift)] dark:bg-card";
-const inr = (n: number) => new Intl.NumberFormat("en-IN").format(n);
 const digits = (v: string | undefined) => Number((v ?? "").replace(/\D/g, ""));
 
 /**
@@ -45,8 +46,11 @@ export function FollowUpFlow({
 }) {
   const [stage, setStage] = useState<Stage>("questions");
   const [step, setStep] = useState(0);
+  // What the short form already told us is carried in, so it is not asked again.
   const [answers, setAnswers] = useState<Record<string, string>>({
     applicantCategory: basics.category,
+    ...(basics.category ? { applicantType: basics.category } : {}),
+    ...(basics.industry ? { nature: basics.industry } : {}),
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sending, setSending] = useState(false);
@@ -64,8 +68,44 @@ export function FollowUpFlow({
   // A choice counts as answered the moment it is picked; a typed answer waits for "Next question".
   const [done, setDone] = useState<Set<string>>(new Set());
   const markDone = (key: string) => setDone((d) => new Set(d).add(key));
+  // A drop-down of kinds (a profession, a purpose, a type of property) always ends in "Other", with a box to say what.
+  // Drop-downs of yes or no, of amounts of time, of how often, and short either-or choices are not kinds, so they do not.
+  const hasOwnOther = (f: QuestionField) =>
+    all.some(
+      (x) => x.kind === "text" && x.showWhen?.key === f.key && x.showWhen.values.includes("Other"),
+    );
+  const isScale = (f: QuestionField) =>
+    f.kind === "choice" &&
+    f.options.some(
+      (o) =>
+        /\d/.test(o) ||
+        /^(Yes|No)\b/i.test(o) ||
+        /^(Within|Later|Immediately|Just exploring)/i.test(o) ||
+        /^(Every|Always|Mostly|Never|A few|Nothing|None)\b/i.test(o),
+    );
+  const takesOther = (f: QuestionField) =>
+    f.kind === "choice" &&
+    !f.noOther &&
+    !hasOwnOther(f) &&
+    (f.options.includes("Other") || (!isScale(f) && f.options.length >= 4));
+  const shown = (f: QuestionField): QuestionField =>
+    f.kind === "choice"
+      ? {
+          ...f,
+          dropdown: true,
+          options:
+            takesOther(f) && !f.options.includes("Other") ? [...f.options, "Other"] : f.options,
+        }
+      : f;
+  const saidOther = (f: QuestionField) =>
+    takesOther(f) && answers[f.key] === "Other" ? (answers[`${f.key}__other`] ?? "").trim() : "";
+
   const set = (key: string, value: string) => {
     setAnswers((a) => ({ ...a, [key]: value }));
+    setErrors((e) => {
+      const { [key]: _gone, ...rest } = e;
+      return rest;
+    });
     const f = all.find((x) => x.key === key);
     if (f && f.kind === "choice" && value) markDone(key);
   };
@@ -95,23 +135,36 @@ export function FollowUpFlow({
   const first = screens[0] ?? 0;
   const isLast = position === screens.length - 1;
 
+  // Why a typed answer cannot be accepted (a figure that is not realistic, say), or null when it is fine.
+  const problem = (f: QuestionField): string | null => {
+    const typed = (answers[f.key] ?? "").trim();
+    if (f.required && !typed) return "Please answer this";
+    if (!typed) return null;
+    if (f.kind === "amount")
+      return amountProblem(digits(typed), fieldAmountBounds(f.key), { allowZero: f.allowZero });
+    if (f.kind === "percent") return ratePercentProblem(Number(typed));
+    if (takesOther(f) && typed === "Other" && !saidOther(f)) return "Please tell us what it is";
+    return null;
+  };
+
   const validate = () => {
     const missing: Record<string, string> = {};
     for (const f of revealed(step)) {
-      const typed = (answers[f.key] ?? "").trim();
-      if (f.required && !typed) missing[f.key] = "Please answer this";
-      else if (
-        f.kind === "amount" &&
-        typed &&
-        amountTooLow(digits(typed), { min: MIN_AMOUNT, allowZero: f.allowZero })
-      ) {
-        missing[f.key] = f.allowZero
-          ? `Enter 0 if none, or at least ₹${inr(MIN_AMOUNT)}`
-          : `Please enter at least ₹${inr(MIN_AMOUNT)}`;
-      }
+      const msg = problem(f);
+      if (msg) missing[f.key] = msg;
     }
     setErrors(missing);
     return Object.keys(missing).length === 0;
+  };
+
+  // A typed answer moves on to the next question only once it is realistic.
+  const confirm = (f: QuestionField) => {
+    const msg = problem(f);
+    setErrors((e) => {
+      const { [f.key]: _gone, ...rest } = e;
+      return msg ? { ...rest, [f.key]: msg } : rest;
+    });
+    if (!msg) markDone(f.key);
   };
 
   const send = async () => {
@@ -120,7 +173,7 @@ export function FollowUpFlow({
       .filter((f) => showing(f) && (answers[f.key] ?? "").trim() !== "")
       .map(
         (f) =>
-          `${f.label}: ${f.kind === "amount" ? "₹" : ""}${answers[f.key]}${f.kind === "percent" ? "%" : ""}`,
+          `${f.label}: ${f.kind === "amount" ? "₹" : ""}${saidOther(f) ? `Other (${saidOther(f)})` : answers[f.key]}${f.kind === "percent" ? "%" : ""}`,
       );
     const detail = ["Detailed assessment (optional second form)", ...lines].join("\n");
     const applicant = answers["applicantType"] || answers["applicantCategory"] || basics.category;
@@ -232,23 +285,42 @@ export function FollowUpFlow({
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && open && e.target instanceof HTMLInputElement) {
                       e.preventDefault();
-                      if (typed) markDone(f.key);
+                      if (typed) confirm(f);
                     }
                   }}
                 >
                   <QuestionFieldInput
                     // Single-answer questions are dropdowns; the pick-several ones stay as buttons
-                    f={f.kind === "choice" ? { ...f, dropdown: true } : f}
+                    f={shown(f)}
                     value={answers[f.key] ?? ""}
                     set={set}
                     error={errors[f.key]}
                   />
+                  {takesOther(f) && answers[f.key] === "Other" ? (
+                    <input
+                      value={answers[`${f.key}__other`] ?? ""}
+                      maxLength={120}
+                      onChange={(e) => set(`${f.key}__other`, e.target.value)}
+                      placeholder="Please tell us"
+                      className={fieldCls}
+                      aria-label={`${f.label}: please tell us`}
+                    />
+                  ) : null}
+                  {f.kind === "amount" &&
+                  f.softMin &&
+                  typed &&
+                  !errors[f.key] &&
+                  digits(answers[f.key]) < f.softMin.amount ? (
+                    <p className="mt-2 rounded-lg border border-gold/30 bg-gold-pale/30 px-3 py-2 text-xs leading-relaxed text-navy dark:bg-gold/10 dark:text-white">
+                      {f.softMin.note}
+                    </p>
+                  ) : null}
                   {open && (typed || !f.required) ? (
                     <div className="mt-2 flex items-center gap-4">
                       {typed && f.kind !== "choice" ? (
                         <button
                           type="button"
-                          onClick={() => markDone(f.key)}
+                          onClick={() => confirm(f)}
                           className="inline-flex items-center gap-1 text-xs font-bold text-navy hover:text-gold-dark dark:text-white"
                         >
                           Next question <ArrowRight className="h-3.5 w-3.5" />

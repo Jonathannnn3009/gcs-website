@@ -7,7 +7,8 @@ export const labelClass =
 
 // 5000000 -> 50,00,000 as they type
 export const indianAmount = (raw: string) => {
-  const digits = raw.replace(/\D/g, "");
+  // Eleven digits is already ₹1,000 crore; anything longer is a slip.
+  const digits = raw.replace(/\D/g, "").slice(0, 11);
   return digits ? Number(digits).toLocaleString("en-IN") : "";
 };
 

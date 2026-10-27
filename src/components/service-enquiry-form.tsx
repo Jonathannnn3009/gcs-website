@@ -1,13 +1,14 @@
 import { useId, useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { submitLead } from "@/lib/leads";
+import { amountProblem } from "@/lib/validation";
 
 const fieldClass =
   "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20 dark:bg-card dark:text-white";
 
 const selectClass = `${fieldClass} appearance-none cursor-pointer`;
 
-type IncomeType = "" | "Salaried" | "Self-Employed";
+type IncomeType = "" | "Salaried" | "Self-Employed" | "Other";
 type SalaryUnit = "Monthly" | "Annual (LPA)";
 
 type Fields = {
@@ -15,6 +16,7 @@ type Fields = {
   phone: string;
   message: string;
   incomeType: IncomeType;
+  incomeOther: string;
   salaryUnit: SalaryUnit;
   salaryAmount: string;
 };
@@ -23,6 +25,7 @@ const empty: Fields = {
   phone: "",
   message: "",
   incomeType: "",
+  incomeOther: "",
   salaryUnit: "Monthly",
   salaryAmount: "",
 };
@@ -30,7 +33,7 @@ const PHONE_RE = /^(?:\+?91[-\s]?|0)?[6-9]\d{9}$/;
 
 // Groups typed digits with Indian comma placement (e.g. 12,50,000) as the user types.
 function formatIndianAmount(raw: string) {
-  const digits = raw.replace(/\D/g, "");
+  const digits = raw.replace(/\D/g, "").slice(0, 11);
   return digits ? Number(digits).toLocaleString("en-IN") : "";
 }
 
@@ -70,11 +73,28 @@ export function ServiceEnquiryForm({
     if (values.name.trim().length < 2) next.name = "Please enter your name";
     if (!PHONE_RE.test(values.phone.replace(/[\s-]/g, "")))
       next.phone = "Enter a valid 10-digit mobile number";
+    if (values.incomeType === "Other" && !values.incomeOther.trim())
+      next.incomeOther = "Please tell us what you are";
+    if (values.incomeType && values.salaryAmount) {
+      const n = Number(values.salaryAmount.replace(/\D/g, ""));
+      // Monthly pay in rupees, or a yearly package in lakhs.
+      const bounds =
+        values.salaryUnit === "Monthly" ? { min: 5_000, max: 10_000_000 } : { min: 1, max: 500 };
+      const msg = amountProblem(n, bounds);
+      if (msg) {
+        next.salaryAmount =
+          values.salaryUnit === "Monthly"
+            ? msg
+            : n < 1
+              ? "Please enter at least 1 lakh a year"
+              : "That looks too high. Please check the figure (the most we can take is 500 lakh a year)";
+      }
+    }
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
     const incomeDetail = values.incomeType
-      ? ` — ${values.incomeType}${values.salaryAmount ? `, ₹${values.salaryAmount} (${values.salaryUnit})` : ""}`
+      ? ` — ${values.incomeType === "Other" ? `Other (${values.incomeOther.trim()})` : values.incomeType}${values.salaryAmount ? `, ₹${values.salaryAmount} (${values.salaryUnit})` : ""}`
       : "";
     await submitLead({
       name: values.name.trim(),
@@ -92,7 +112,9 @@ export function ServiceEnquiryForm({
         <span className="grid h-12 w-12 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
           <Check className="h-6 w-6" />
         </span>
-        <h3 className="mt-4 text-lg font-extrabold text-navy dark:text-white">Thanks — we'll be in touch.</h3>
+        <h3 className="mt-4 text-lg font-extrabold text-navy dark:text-white">
+          Thanks — we'll be in touch.
+        </h3>
         <p className="mt-2 text-sm text-muted-foreground">
           Our team will reach out to understand your requirement and the next steps.
         </p>
@@ -106,8 +128,12 @@ export function ServiceEnquiryForm({
       noValidate
       className={`rounded-2xl border border-border bg-white shadow-[var(--shadow-lift)] dark:bg-card ${roomy ? "flex h-full flex-col p-7 sm:p-10" : "p-6 sm:p-7"}`}
     >
-      <h3 className={`font-extrabold text-navy dark:text-white ${roomy ? "text-2xl" : "text-xl"}`}>{heading}</h3>
-      <p className={`mt-2 text-muted-foreground ${roomy ? "text-base" : "text-sm"}`}>{description}</p>
+      <h3 className={`font-extrabold text-navy dark:text-white ${roomy ? "text-2xl" : "text-xl"}`}>
+        {heading}
+      </h3>
+      <p className={`mt-2 text-muted-foreground ${roomy ? "text-base" : "text-sm"}`}>
+        {description}
+      </p>
       <div className={`${roomy ? "mt-7 flex flex-1 flex-col space-y-6" : "mt-5 space-y-4"}`}>
         <div>
           <label
@@ -124,7 +150,9 @@ export function ServiceEnquiryForm({
             placeholder="Enter your name"
             maxLength={100}
           />
-          {errors.name && <span className="mt-1 block text-xs text-destructive">{errors.name}</span>}
+          {errors.name && (
+            <span className="mt-1 block text-xs text-destructive">{errors.name}</span>
+          )}
         </div>
         <div>
           <label
@@ -142,7 +170,9 @@ export function ServiceEnquiryForm({
             inputMode="tel"
             maxLength={15}
           />
-          {errors.phone && <span className="mt-1 block text-xs text-destructive">{errors.phone}</span>}
+          {errors.phone && (
+            <span className="mt-1 block text-xs text-destructive">{errors.phone}</span>
+          )}
         </div>
         {showIncomeType ? (
           <>
@@ -162,7 +192,20 @@ export function ServiceEnquiryForm({
                 <option value="">Select one</option>
                 <option value="Salaried">Salaried</option>
                 <option value="Self-Employed">Self-Employed</option>
+                <option value="Other">Other</option>
               </select>
+              {values.incomeType === "Other" ? (
+                <input
+                  className={`${fieldClass} mt-2`}
+                  value={values.incomeOther}
+                  onChange={set("incomeOther")}
+                  maxLength={100}
+                  placeholder="Please tell us what you are"
+                />
+              ) : null}
+              {errors.incomeOther && (
+                <span className="mt-1 block text-xs text-destructive">{errors.incomeOther}</span>
+              )}
             </div>
             {values.incomeType ? (
               <div>
@@ -185,6 +228,11 @@ export function ServiceEnquiryForm({
                       inputMode="numeric"
                       placeholder={values.salaryUnit === "Monthly" ? "e.g. 40,000" : "e.g. 8"}
                     />
+                    {errors.salaryAmount && (
+                      <span className="mt-1 block text-xs text-destructive">
+                        {errors.salaryAmount}
+                      </span>
+                    )}
                   </div>
                   <select
                     className={`${selectClass} mt-0 !w-32 shrink-0 px-2 text-sm`}
