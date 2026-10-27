@@ -854,8 +854,8 @@ export const PRODUCTS: Product[] = [
     ],
     glance: [
       { label: "Purpose", value: "General or business use (not housing)" },
-      { label: "Loan size", value: "₹3 L to ₹15 L (kicker up to ₹5 L for top profiles)" },
-      { label: "Tenor", value: "5 to 12 years" },
+      { label: "Loan size", value: "₹3 L to ₹20 L (kicker up to ₹5 L for top profiles)" },
+      { label: "Tenor", value: "12 to 120 months" },
       { label: "LTV (with insurance)", value: "55% self-occupied residential; 50% others" },
       { label: "Property accepted", value: "Self-occupied residential or commercial, mixed use" },
       { label: "Distance limit", value: "35 km main branch / 25 km spoke" },
