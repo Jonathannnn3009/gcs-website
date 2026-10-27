@@ -30,10 +30,8 @@ export const Route = createFileRoute("/api/notify-lead")({
       POST: async ({ request }) => {
         const ok = () => new Response(JSON.stringify({ ok: true }), { headers: { "content-type": "application/json" } });
         try {
-          const mod = await import("@/lib/notify-email.server");
-          const { notifyConfigured, sendEnquiryMail } = mod;
-          if (!notifyConfigured())
-            return new Response(JSON.stringify({ ok: true, why: `not set on the server: ${mod.missingSettings().join(", ")}` }), { headers: { "content-type": "application/json" } });
+          const { notifyConfigured, sendEnquiryMail } = await import("@/lib/notify-email.server");
+          if (!notifyConfigured()) return ok();
 
           const ip = request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for") ?? "unknown";
           if (!allowed(ip)) return ok();
@@ -44,7 +42,7 @@ export const Route = createFileRoute("/api/notify-lead")({
           if (!body || name.length < 2 || !/^\d{10}$/.test(phone.replace(/\D/g, "").slice(-10))) return ok();
 
           const amount = typeof body["amount"] === "number" && body["amount"] > 0 ? body["amount"] : undefined;
-          const sentOk = await sendEnquiryMail({
+          await sendEnquiryMail({
             name,
             phone,
             source: text(body["source"], 60) || "website",
@@ -53,9 +51,6 @@ export const Route = createFileRoute("/api/notify-lead")({
             productSlug: text(body["productSlug"], 80) || undefined,
             amount,
             detail: text(body["detail"], 2000) || undefined,
-          });
-          return new Response(JSON.stringify({ ok: true, sent: sentOk, why: sentOk ? "" : mod.lastProblem }), {
-            headers: { "content-type": "application/json" },
           });
         } catch {
           // an alert failing must never affect the visitor

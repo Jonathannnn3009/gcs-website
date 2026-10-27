@@ -20,9 +20,6 @@ export type EnquiryMail = {
 
 let cached: { token: string; until: number } | null = null;
 
-/** TEMPORARY: why the last send failed, so the setup can be checked. Remove once email works. */
-export let lastProblem = "";
-
 const clean = (s: unknown, max: number) =>
   typeof s === "string" ? s.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").trim().slice(0, max) : "";
 
@@ -37,19 +34,9 @@ async function accessToken(region: string): Promise<string | null> {
   });
   const res = await fetch(`https://accounts.zoho.${region}/oauth/v2/token`, { method: "POST", body });
   const json = (await res.json().catch(() => null)) as { access_token?: string; expires_in?: number } | null;
-  if (!res.ok || !json?.access_token) {
-    lastProblem = `token refresh ${res.status}: ${JSON.stringify(json ?? {}).replace(/1000\.[\w.]+/g, "…").slice(0, 200)}`;
-    return null;
-  }
+  if (!res.ok || !json?.access_token) return null;
   cached = { token: json.access_token, until: Date.now() + Math.max(60, (json.expires_in ?? 3600) - 120) * 1000 };
   return json.access_token;
-}
-
-/** TEMPORARY: the names (never the values) of the settings the server cannot see. */
-export function missingSettings(): string[] {
-  return ["ZOHO_CLIENT_ID", "ZOHO_CLIENT_SECRET", "ZOHO_REFRESH_TOKEN", "ZOHO_ACCOUNT_ID", "ZOHO_FROM_ADDRESS", "LEAD_NOTIFY_TO"].filter(
-    (n) => !serverEnv(n),
-  );
 }
 
 export function notifyConfigured(): boolean {
@@ -120,8 +107,7 @@ export async function sendEnquiryMail(lead: EnquiryMail): Promise<boolean> {
       );
     }
     return sent;
-  } catch (error) {
-    lastProblem = `error: ${(error as Error).message}`;
+  } catch {
     return false;
   }
 }
@@ -147,6 +133,5 @@ async function deliver(region: string, token: string, to: string, subject: strin
     },
   );
   if (res.status === 401) cached = null; // token no longer good: ask for a fresh one next time
-  if (!res.ok) lastProblem = `send ${res.status}: ${(await res.text().catch(() => "")).replace(/1000\.[\w.]+/g, "…").slice(0, 300)}`;
   return res.ok;
 }
