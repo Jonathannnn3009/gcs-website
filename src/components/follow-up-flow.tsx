@@ -60,7 +60,15 @@ export function FollowUpFlow({
   }, [step]);
 
   const all = useMemo(() => form.steps.flatMap((s) => s.fields), [form]);
-  const set = (key: string, value: string) => setAnswers((a) => ({ ...a, [key]: value }));
+  // Questions appear one after another: the next shows once the one before is answered (or skipped).
+  // A choice counts as answered the moment it is picked; a typed answer waits for "Next question".
+  const [done, setDone] = useState<Set<string>>(new Set());
+  const markDone = (key: string) => setDone((d) => new Set(d).add(key));
+  const set = (key: string, value: string) => {
+    setAnswers((a) => ({ ...a, [key]: value }));
+    const f = all.find((x) => x.key === key);
+    if (f && f.kind === "choice" && value) markDone(key);
+  };
 
   // A question shows when it has no rule, or the answer it depends on is one of the listed values.
   // The applicant type comes from the short form, so it is read as an answer without being a field.
@@ -72,6 +80,16 @@ export function FollowUpFlow({
     return f.showWhen.values.includes(answers[f.showWhen.key] ?? "");
   };
   const stepFields = (i: number) => (form.steps[i]?.fields ?? []).filter((f) => showing(f));
+  // The questions of a step that are on screen: every answered one, and the first one still open.
+  const revealed = (i: number) => {
+    const out: QuestionField[] = [];
+    for (const f of stepFields(i)) {
+      out.push(f);
+      const answered = f.kind === "choice" && !!answers[f.key];
+      if (!(done.has(f.key) || answered)) break;
+    }
+    return out;
+  };
   const screens = [...form.steps.keys()].filter((i) => stepFields(i).length > 0);
   const position = Math.max(0, screens.indexOf(step));
   const first = screens[0] ?? 0;
@@ -79,7 +97,7 @@ export function FollowUpFlow({
 
   const validate = () => {
     const missing: Record<string, string> = {};
-    for (const f of stepFields(step)) {
+    for (const f of revealed(step)) {
       const typed = (answers[f.key] ?? "").trim();
       if (f.required && !typed) missing[f.key] = "Please answer this";
       else if (
@@ -105,12 +123,13 @@ export function FollowUpFlow({
           `${f.label}: ${f.kind === "amount" ? "₹" : ""}${answers[f.key]}${f.kind === "percent" ? "%" : ""}`,
       );
     const detail = ["Detailed assessment (optional second form)", ...lines].join("\n");
+    const applicant = answers["applicantType"] || basics.category;
     const income = digits(answers["netSalary"]);
     const extras = {
       detail,
-      ...(basics.category === "Salaried"
+      ...(applicant === "Salaried"
         ? { employmentType: "SALARIED" as const }
-        : basics.category === "Self-Employed"
+        : applicant === "Self-Employed"
           ? { employmentType: "SELF_EMPLOYED" as const }
           : {}),
       ...(income > 0 ? { monthlyIncome: income } : {}),
@@ -203,16 +222,52 @@ export function FollowUpFlow({
             {current?.help ? (
               <p className="-mt-3 text-xs leading-relaxed text-muted-foreground">{current.help}</p>
             ) : null}
-            {stepFields(step).map((f) => (
-              <QuestionFieldInput
-                key={f.key}
-                // Single-answer questions are dropdowns; the pick-several ones stay as buttons
-                f={f.kind === "choice" ? { ...f, dropdown: true } : f}
-                value={answers[f.key] ?? ""}
-                set={set}
-                error={errors[f.key]}
-              />
-            ))}
+            {revealed(step).map((f) => {
+              const typed = (answers[f.key] ?? "").trim() !== "";
+              const open = !done.has(f.key) && !(f.kind === "choice" && typed);
+              return (
+                <div
+                  key={f.key}
+                  className="animate-in fade-in slide-in-from-bottom-2 duration-300"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && open && e.target instanceof HTMLInputElement) {
+                      e.preventDefault();
+                      if (typed) markDone(f.key);
+                    }
+                  }}
+                >
+                  <QuestionFieldInput
+                    // Single-answer questions are dropdowns; the pick-several ones stay as buttons
+                    f={f.kind === "choice" ? { ...f, dropdown: true } : f}
+                    value={answers[f.key] ?? ""}
+                    set={set}
+                    error={errors[f.key]}
+                  />
+                  {open && (typed || !f.required) ? (
+                    <div className="mt-2 flex items-center gap-4">
+                      {typed && f.kind !== "choice" ? (
+                        <button
+                          type="button"
+                          onClick={() => markDone(f.key)}
+                          className="inline-flex items-center gap-1 text-xs font-bold text-navy hover:text-gold-dark dark:text-white"
+                        >
+                          Next question <ArrowRight className="h-3.5 w-3.5" />
+                        </button>
+                      ) : null}
+                      {!f.required ? (
+                        <button
+                          type="button"
+                          onClick={() => markDone(f.key)}
+                          className="text-xs font-semibold text-muted-foreground underline-offset-4 hover:text-navy hover:underline"
+                        >
+                          Skip this question
+                        </button>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
 
           <div className="mt-6 flex items-center justify-between gap-3">
