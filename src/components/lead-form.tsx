@@ -218,7 +218,7 @@ export function LeadForm({
             Takes less than a minute
           </span>
           <h3 className="mt-4 font-heading text-[1.6rem] leading-tight font-bold text-navy dark:text-white">
-            Tell Us About You. We’ll Find the Right Fit.
+            Tell Us About You. <span className="hero-stat-text">We’ll Find the Right Fit.</span>
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             Complete this quick form to help us understand your needs. Based on your details, we’ll explore suitable
