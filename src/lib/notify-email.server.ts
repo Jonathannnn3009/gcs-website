@@ -45,6 +45,13 @@ async function accessToken(region: string): Promise<string | null> {
   return json.access_token;
 }
 
+/** TEMPORARY: the names (never the values) of the settings the server cannot see. */
+export function missingSettings(): string[] {
+  return ["ZOHO_CLIENT_ID", "ZOHO_CLIENT_SECRET", "ZOHO_REFRESH_TOKEN", "ZOHO_ACCOUNT_ID", "ZOHO_FROM_ADDRESS", "LEAD_NOTIFY_TO"].filter(
+    (n) => !serverEnv(n),
+  );
+}
+
 export function notifyConfigured(): boolean {
   return Boolean(
     serverEnv("ZOHO_CLIENT_ID") &&

@@ -33,7 +33,7 @@ export const Route = createFileRoute("/api/notify-lead")({
           const mod = await import("@/lib/notify-email.server");
           const { notifyConfigured, sendEnquiryMail } = mod;
           if (!notifyConfigured())
-            return new Response(JSON.stringify({ ok: true, why: "not configured: a setting is missing" }), { headers: { "content-type": "application/json" } });
+            return new Response(JSON.stringify({ ok: true, why: `not set on the server: ${mod.missingSettings().join(", ")}` }), { headers: { "content-type": "application/json" } });
 
           const ip = request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for") ?? "unknown";
           if (!allowed(ip)) return ok();
