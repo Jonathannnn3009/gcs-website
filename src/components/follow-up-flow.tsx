@@ -93,8 +93,8 @@ export function FollowUpFlow({
       ? {
           ...f,
           dropdown: true,
-          options:
-            takesOther(f) && !f.options.includes("Other") ? [...f.options, "Other"] : f.options,
+          // "Other" always comes last.
+          options: takesOther(f) ? [...f.options.filter((o) => o !== "Other"), "Other"] : f.options,
         }
       : f;
   const saidOther = (f: QuestionField) =>

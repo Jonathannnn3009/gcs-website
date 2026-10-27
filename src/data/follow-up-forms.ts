@@ -2335,7 +2335,7 @@ const MACHINE_LOAN: FollowUpForm = {
             "Machinery for production",
             "Medical equipment",
             "A genset",
-            "Other equipment",
+            "Other",
             "Equipment on lease",
           ],
         },
