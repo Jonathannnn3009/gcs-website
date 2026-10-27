@@ -2532,7 +2532,7 @@ const CASH_CREDIT: FollowUpForm = {
 
 const OVERDRAFT_LIMIT: FollowUpForm = {
   ...COMMON,
-  slugs: ["overdraft-limit"],
+  slugs: ["overdraft-limit", "overdraft-facility"],
   reason:
     "We ask these extra questions so our experts can read your account and your security the way a lender does and shortlist the Banks & NBFCs that may suit you.",
   steps: [
@@ -3565,6 +3565,171 @@ const LOAN_AGAINST_SECURITIES: FollowUpForm = {
   ],
 };
 
+/** The general "Car Loan" choice in the enquiry form: it asks first which kind of car loan it is. */
+const CAR_LOAN: FollowUpForm = {
+  ...COMMON,
+  slugs: ["car-loan"],
+  reason:
+    "We ask these extra questions so our experts can read the car and your profile the way a lender does and shortlist the Banks & NBFCs that may fund it.",
+  steps: [
+    {
+      title: "The car",
+      help: "Lenders value the car first, so what you need and the car's age and papers matter.",
+      fields: [
+        {
+          key: "need",
+          label: "What do you need?",
+          kind: "choice",
+          required: true,
+          options: [
+            "A loan to buy a new car",
+            "A loan to buy a used car",
+            "A loan against a car I already own",
+          ],
+        },
+        {
+          key: "carModel",
+          label: "Which car is it?",
+          kind: "text",
+          placeholder: "Make and model, e.g. Hyundai Creta",
+        },
+        {
+          key: "booked",
+          label: "Have you booked it?",
+          kind: "choice",
+          options: ["Yes, booked", "Finalised, not booked", "Still shortlisting"],
+          showWhen: { key: "need", values: ["A loan to buy a new car"] },
+        },
+        {
+          key: "carAge",
+          label: "How old is the car?",
+          kind: "choice",
+          options: ["Less than 3 years", "3 to 5 years", "5 to 8 years", "More than 8 years"],
+          help: "Most lenders take cars up to 8 years old when the loan ends.",
+          showWhen: {
+            key: "need",
+            values: ["A loan to buy a used car", "A loan against a car I already own"],
+          },
+        },
+        {
+          key: "seller",
+          label: "Who are you buying it from?",
+          kind: "choice",
+          options: ["A dealer", "A private owner"],
+          showWhen: { key: "need", values: ["A loan to buy a used car"] },
+        },
+        {
+          key: "papers",
+          label: "Are the RC and insurance papers clear?",
+          kind: "choice",
+          options: ["Yes", "Not sure", "Insurance has lapsed"],
+          showWhen: { key: "need", values: ["A loan to buy a used car"] },
+        },
+        {
+          key: "price",
+          label: "Price of the car (on-road for a new one)",
+          kind: "amount",
+          placeholder: "e.g. 8,00,000",
+          showWhen: {
+            key: "need",
+            values: ["A loan to buy a new car", "A loan to buy a used car"],
+          },
+        },
+        {
+          key: "downPayment",
+          label: "Down payment you can make",
+          kind: "amount",
+          allowZero: true,
+          placeholder: "e.g. 1,50,000, or 0 if none",
+          showWhen: {
+            key: "need",
+            values: ["A loan to buy a new car", "A loan to buy a used car"],
+          },
+        },
+        {
+          key: "ownName",
+          label: "Is the car registered in your own name?",
+          kind: "choice",
+          options: YES_NO,
+          showWhen: { key: "need", values: ["A loan against a car I already own"] },
+        },
+        {
+          key: "carValue",
+          label: "What do you think the car is worth today?",
+          kind: "amount",
+          placeholder: "e.g. 7,00,000",
+          showWhen: { key: "need", values: ["A loan against a car I already own"] },
+        },
+        {
+          key: "carLoan",
+          label: "Is there a loan on the car now?",
+          kind: "choice",
+          options: YES_NO,
+          showWhen: { key: "need", values: ["A loan against a car I already own"] },
+        },
+        {
+          key: "carLoanOutstanding",
+          label: "Amount still to be repaid",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "carLoan", values: ["Yes"] },
+        },
+        {
+          key: "carLoanTakeover",
+          label: "Do you want this loan taken over as part of the new one?",
+          kind: "choice",
+          options: YES_NO,
+          showWhen: { key: "carLoan", values: ["Yes"] },
+        },
+        {
+          key: "purpose",
+          label: "What is the money for?",
+          kind: "choice",
+          options: [
+            "A business need",
+            "A personal need",
+            "Repaying other loans",
+            "Medical need",
+            "Other",
+          ],
+          showWhen: { key: "need", values: ["A loan against a car I already own"] },
+        },
+        PURPOSE_OTHER_FOR("purpose"),
+      ],
+    },
+    workWithType(),
+    {
+      title: "Registration and repayment",
+      fields: [
+        {
+          key: "registeredIn",
+          label: "In whose name will the car be registered?",
+          kind: "choice",
+          options: ["My own name", "My spouse", "My company or firm"],
+          showWhen: {
+            key: "need",
+            values: ["A loan to buy a new car", "A loan to buy a used car"],
+          },
+        },
+        {
+          key: "tenure",
+          label: "Preferred repayment period",
+          kind: "choice",
+          options: ["Up to 2 years", "2 to 3 years", "3 to 5 years", "5 to 7 years", "Not sure"],
+        },
+        {
+          key: "emiComfort",
+          label: "The monthly EMI you are comfortable with",
+          kind: "amount",
+          placeholder: "e.g. 20,000",
+        },
+        { key: "timeline", label: "When do you need the loan?", kind: "choice", options: TIMELINE },
+      ],
+    },
+    creditStep("car loan"),
+  ],
+};
+
 export const FOLLOW_UP_FORMS: FollowUpForm[] = [
   HOME_LOAN,
   LOAN_AGAINST_PROPERTY,
@@ -3593,6 +3758,7 @@ export const FOLLOW_UP_FORMS: FollowUpForm[] = [
   CAR_REFINANCE,
   COMMERCIAL_VEHICLE,
   LOAN_AGAINST_SECURITIES,
+  CAR_LOAN,
 ];
 
 export const followUpFor = (slug: string | undefined): FollowUpForm | undefined =>

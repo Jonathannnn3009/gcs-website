@@ -11,6 +11,9 @@ import { FORM_LOAN_TYPES } from "@/data/page-lists";
 import { useApplicantOptions, useCities, useList } from "@/lib/page-lists";
 
 // Paperwork genuinely differs by applicant type for these two — ask early.
+// Dropdown choices that are the same loan as a product page under another name.
+const SLUG_ALIASES: Record<string, string> = { "overdraft-facility": "overdraft-limit" };
+
 const LOAN_TYPES_WITH_CATEGORY = new Set(["Home Loan", "Loan Against Property"]);
 
 type Fields = {
@@ -168,8 +171,9 @@ export function LeadForm({
     // Hand the enquiry to the CRM. Loan types that match a product page carry its slug,
     // so the CRM files the lead under the right loan product.
     const service = loanTypes.find((s) => s.title === values.loanType);
+    const pageSlug = service ? (SLUG_ALIASES[service.slug] ?? service.slug) : undefined;
     const productSlug =
-      service && PRODUCTS.some((p) => p.slug === service.slug) ? service.slug : undefined;
+      pageSlug && PRODUCTS.some((p) => p.slug === pageSlug) ? pageSlug : undefined;
     const loanType = values.loanType === "Other" ? values.loanTypeOther.trim() : values.loanType;
     const city = values.city === "Other" ? values.cityOther.trim() : values.city;
     const detail = [
@@ -190,13 +194,15 @@ export function LeadForm({
       source,
       detail,
     };
-    const second = followUpFor(productSlug);
+    // A loan type with no page of its own (the general "Car Loan", say) can still have a detailed form.
+    const formSlug = productSlug ?? service?.slug;
+    const second = followUpFor(formSlug);
     if (second) {
       const pass = await submitLeadForFollowUp(lead);
       setSubmitting(false);
       setFollowUp({
         pass,
-        basics: { ...values, city, slug: productSlug!, title: values.loanType },
+        basics: { ...values, city, slug: formSlug!, title: values.loanType },
         detail,
       });
       return;
