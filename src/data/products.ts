@@ -1111,11 +1111,18 @@ export const PRODUCTS: Product[] = [
     tagline: "Small Business. Simple Funding. More Growth.",
     group: "Business Growth",
     facts: [
-      { label: "Loan amount", value: "Up to ₹10 Lakh*" },
+      { label: "Loan amount", value: "₹1 Lakh to ₹10 Lakh*" },
+      { label: "Tenure", value: "12 to 48 months*" },
+      { label: "Indicative rate", value: "22% to 27% p.a. reducing*" },
       { label: "Security", value: "No property collateral required*" },
-      { label: "ITR", value: "May not be required under eligible programs*" },
-      { label: "GST", value: "May not be required under eligible programs*" },
-      { label: "Documentation", value: "Simple, subject to lender policy" },
+    ],
+    glance: [
+      { label: "Purpose", value: "General or business use (not housing)" },
+      { label: "Who it is for", value: "Self-employed individuals, proprietorships, partnerships, LLPs and private limited companies" },
+      { label: "Age", value: "25 to 65 years" },
+      { label: "Loan size", value: "₹1 L to ₹10 L" },
+      { label: "Tenor", value: "12 to 48 months" },
+      { label: "Rate of interest", value: "22% to 27% (reducing)" },
     ],
     about:
       "Get unsecured business funding for your day-to-day business needs, without providing property as collateral. Designed for eligible small business owners, shopkeepers, traders and self-employed customers who need funds to manage or grow their business.",
@@ -1140,6 +1147,11 @@ export const PRODUCTS: Product[] = [
       "Simple documentation, subject to lender policy",
     ],
     eligibility: [
+      "Age: minimum 25 years and maximum 65 years",
+      "Self-employed individuals, sole proprietorships, partnerships, LLPs and private limited companies",
+      "A female co-applicant is required where the applicant is male (an exception may be allowed with a deviation)",
+      "Minimum average bank balance (ABB) of ₹2,000",
+      "Property owner on the deal: not mandatory for loans up to ₹2 Lakh (an owner declaration is kept on record in the lender's format), and mandatory for loans above ₹2 Lakh up to ₹10 Lakh",
       "Shopkeepers",
       "Traders",
       "Retailers",
@@ -1156,6 +1168,13 @@ export const PRODUCTS: Product[] = [
       "Business ownership / address proof: applicable business premises or ownership / address proof, such as an electricity bill or other acceptable document",
       "Additional documents may be requested depending on your profile and lender policy",
     ],
+    charges: {
+      intro: "Prepayment terms are set by the lender. Other charges depend on the lender and are confirmed before you proceed.",
+      rows: [
+        { label: "Prepayment in the first 6 months", value: "Not allowed" },
+        { label: "Prepayment after 6 months", value: "4% penalty plus applicable taxes" },
+      ],
+    },
     whyGcs:
       "Tell us about your business and funding requirement. Our team will review your profile and help you explore suitable Micro Business Loan options available through our network of Banks & NBFCs.",
     importantNote:
