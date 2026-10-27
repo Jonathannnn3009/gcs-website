@@ -143,6 +143,8 @@ export function LeadForm({
   const applicants = useApplicantOptions();
   // The page a chosen loan type belongs to, and the "You Are" and industry questions that go with it.
   const slugFor = (title: string) => {
+    // On a loan's own page the page decides the loan, whatever the drop-down list says.
+    if (product) return SLUG_ALIASES[product.slug] ?? product.slug;
     const hit = loanTypes.find((s) => s.title === title);
     return hit ? (SLUG_ALIASES[hit.slug] ?? hit.slug) : undefined;
   };
@@ -159,9 +161,11 @@ export function LeadForm({
   // Only pre-select a loan type the dropdown actually offers.
   const initial: Fields = {
     ...empty,
-    loanType: loanTypes.some((s) => s.title === (ownTitle ?? defaultLoanType))
-      ? (ownTitle ?? defaultLoanType)
-      : "",
+    loanType: product
+      ? product.title
+      : loanTypes.some((s) => s.title === (ownTitle ?? defaultLoanType))
+        ? (ownTitle ?? defaultLoanType)
+        : "",
   };
   const [values, setValues] = useState<Fields>(initial);
   const [errors, setErrors] = useState<Partial<Fields>>({});
@@ -221,8 +225,7 @@ export function LeadForm({
     }
     if (values.loanAmount) {
       // The loan page decides the smallest amount that makes sense (a home loan is not ₹10,000).
-      const chosen = loanTypes.find((s) => s.title === values.loanType);
-      const slug = chosen ? (SLUG_ALIASES[chosen.slug] ?? chosen.slug) : undefined;
+      const slug = slugFor(values.loanType);
       const msg = amountProblem(
         Number(values.loanAmount.replace(/\D/g, "")),
         loanAmountBounds(slug),
@@ -242,7 +245,9 @@ export function LeadForm({
 
     // Hand the enquiry to the CRM. Loan types that match a product page carry its slug,
     // so the CRM files the lead under the right loan product.
-    const service = loanTypes.find((s) => s.title === values.loanType);
+    const service = product
+      ? { title: product.title, slug: product.slug }
+      : loanTypes.find((s) => s.title === values.loanType);
     const pageSlug = service ? (SLUG_ALIASES[service.slug] ?? service.slug) : undefined;
     const productSlug =
       pageSlug && PRODUCTS.some((p) => p.slug === pageSlug) ? pageSlug : undefined;

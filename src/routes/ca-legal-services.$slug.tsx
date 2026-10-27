@@ -203,7 +203,13 @@ function DetailDossier({
   );
 }
 
+// Each page is keyed by its address, so nothing typed or opened on one loan (a form, an unlocked download) carries over to the next.
 function ProfessionalServiceDetailPage() {
+  const { slug } = Route.useParams();
+  return <ProfessionalServiceDetailContent key={slug} />;
+}
+
+function ProfessionalServiceDetailContent() {
   const { slug } = Route.useParams();
   const service = useProfessionalService(getProfessionalService(slug));
   if (!service) return <NotFoundBlock />;

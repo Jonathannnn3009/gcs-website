@@ -123,7 +123,13 @@ function productCode(title: string): string {
     .slice(0, 4);
 }
 
+// Each page is keyed by its address, so nothing typed or opened on one loan (a form, an unlocked download) carries over to the next.
 function ProductDetailPage() {
+  const { slug } = Route.useParams();
+  return <ProductDetailContent key={slug} />;
+}
+
+function ProductDetailContent() {
   const { slug } = Route.useParams();
   const product = useProduct(getProduct(slug));
   const intakeFields = withLoanAmount(useIntakeFields(slug, product?.checklistIntake));

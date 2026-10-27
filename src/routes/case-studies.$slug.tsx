@@ -129,7 +129,13 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
   );
 }
 
+// Each page is keyed by its address, so nothing typed or opened on one loan (a form, an unlocked download) carries over to the next.
 function CaseStudyDetailPage() {
+  const { slug } = Route.useParams();
+  return <CaseStudyDetailContent key={slug} />;
+}
+
+function CaseStudyDetailContent() {
   const { slug } = Route.useParams();
   const allStudies = useCaseStudies(CASE_STUDIES);
   const study = allStudies.find((c) => c.slug === slug);
