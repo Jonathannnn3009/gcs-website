@@ -1,0 +1,100 @@
+// Server only. Emails the team when someone sends an enquiry on the website, through Zoho Mail's API.
+// It works without the CRM being live. Everything is switched off until these are set on the server
+// (Cloudflare secrets, or process.env locally):
+//   ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, ZOHO_REFRESH_TOKEN, ZOHO_ACCOUNT_ID,
+//   ZOHO_FROM_ADDRESS (the mailbox the token belongs to) and LEAD_NOTIFY_TO (who gets the alert,
+//   comma separated). ZOHO_REGION is "in" (default) or "com", to match the Zoho account.
+
+import { serverEnv } from "@/lib/chat/env.server";
+
+export type EnquiryMail = {
+  name: string;
+  phone: string;
+  source: string;
+  email?: string | undefined;
+  city?: string | undefined;
+  productSlug?: string | undefined;
+  amount?: number | undefined;
+  detail?: string | undefined;
+};
+
+let cached: { token: string; until: number } | null = null;
+
+const clean = (s: unknown, max: number) =>
+  typeof s === "string" ? s.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").trim().slice(0, max) : "";
+
+/** Zoho hands out a one-hour access token in exchange for the long-lived refresh token. */
+async function accessToken(region: string): Promise<string | null> {
+  if (cached && cached.until > Date.now()) return cached.token;
+  const body = new URLSearchParams({
+    grant_type: "refresh_token",
+    client_id: serverEnv("ZOHO_CLIENT_ID"),
+    client_secret: serverEnv("ZOHO_CLIENT_SECRET"),
+    refresh_token: serverEnv("ZOHO_REFRESH_TOKEN"),
+  });
+  const res = await fetch(`https://accounts.zoho.${region}/oauth/v2/token`, { method: "POST", body });
+  const json = (await res.json().catch(() => null)) as { access_token?: string; expires_in?: number } | null;
+  if (!res.ok || !json?.access_token) return null;
+  cached = { token: json.access_token, until: Date.now() + Math.max(60, (json.expires_in ?? 3600) - 120) * 1000 };
+  return json.access_token;
+}
+
+export function notifyConfigured(): boolean {
+  return Boolean(
+    serverEnv("ZOHO_CLIENT_ID") &&
+      serverEnv("ZOHO_CLIENT_SECRET") &&
+      serverEnv("ZOHO_REFRESH_TOKEN") &&
+      serverEnv("ZOHO_ACCOUNT_ID") &&
+      serverEnv("ZOHO_FROM_ADDRESS") &&
+      serverEnv("LEAD_NOTIFY_TO"),
+  );
+}
+
+/** Sends the alert. Returns whether Zoho accepted it; never throws. */
+export async function sendEnquiryMail(lead: EnquiryMail): Promise<boolean> {
+  if (!notifyConfigured()) return false;
+  const region = serverEnv("ZOHO_REGION") === "com" ? "com" : "in";
+  try {
+    const token = await accessToken(region);
+    if (!token) return false;
+
+    const name = clean(lead.name, 120);
+    const lines = [
+      `New enquiry from the website`,
+      ``,
+      `Name: ${name}`,
+      `Phone: ${clean(lead.phone, 20)}`,
+      lead.email ? `Email: ${clean(lead.email, 160)}` : "",
+      lead.city ? `City: ${clean(lead.city, 80)}` : "",
+      lead.productSlug ? `Loan: ${clean(lead.productSlug, 80)}` : "",
+      lead.amount ? `Amount: Rs. ${new Intl.NumberFormat("en-IN").format(lead.amount)}` : "",
+      `Form: ${clean(lead.source, 60)}`,
+      lead.detail ? `\nDetails:\n${clean(lead.detail, 2000)}` : "",
+      ``,
+      `Received ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} (India time)`,
+    ].filter((l, i, a) => l !== "" || a[i - 1] !== "");
+
+    const res = await fetch(
+      `https://mail.zoho.${region}/api/accounts/${encodeURIComponent(serverEnv("ZOHO_ACCOUNT_ID"))}/messages`,
+      {
+        method: "POST",
+        headers: {
+          authorization: `Zoho-oauthtoken ${token}`,
+          "content-type": "application/json",
+          accept: "application/json",
+        },
+        body: JSON.stringify({
+          fromAddress: serverEnv("ZOHO_FROM_ADDRESS"),
+          toAddress: serverEnv("LEAD_NOTIFY_TO"),
+          subject: `New enquiry: ${name}${lead.productSlug ? ` (${clean(lead.productSlug, 40)})` : ""}`,
+          content: lines.join("\n"),
+          mailFormat: "plaintext",
+        }),
+      },
+    );
+    if (res.status === 401) cached = null; // token no longer good: ask for a fresh one next time
+    return res.ok;
+  } catch {
+    return false;
+  }
+}

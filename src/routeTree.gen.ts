@@ -28,6 +28,7 @@ import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TrackApplicationRouteImport } from './routes/track-application'
 import { Route as WhyUsRouteImport } from './routes/why-us'
 import { Route as ApiChatRouteImport } from './routes/api.chat'
+import { Route as ApiNotifyLeadRouteImport } from './routes/api.notify-lead'
 import { Route as CaLegalServicesIndexRouteImport } from './routes/ca-legal-services.index'
 import { Route as CaLegalServicesSlugRouteImport } from './routes/ca-legal-services.$slug'
 import { Route as CaseStudiesIndexRouteImport } from './routes/case-studies.index'
@@ -134,6 +135,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiNotifyLeadRoute = ApiNotifyLeadRouteImport.update({
+  id: '/api/notify-lead',
+  path: '/api/notify-lead',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CaLegalServicesIndexRoute = CaLegalServicesIndexRouteImport.update({
   id: '/ca-legal-services/',
   path: '/ca-legal-services/',
@@ -205,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/track-application': typeof TrackApplicationRoute
   '/why-us': typeof WhyUsRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/notify-lead': typeof ApiNotifyLeadRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/p/$slug': typeof PSlugRoute
@@ -234,6 +241,7 @@ export interface FileRoutesByTo {
   '/track-application': typeof TrackApplicationRoute
   '/why-us': typeof WhyUsRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/notify-lead': typeof ApiNotifyLeadRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/p/$slug': typeof PSlugRoute
@@ -266,6 +274,7 @@ export interface FileRoutesById {
   '/track-application': typeof TrackApplicationRoute
   '/why-us': typeof WhyUsRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/notify-lead': typeof ApiNotifyLeadRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/p/$slug': typeof PSlugRoute
@@ -299,6 +308,7 @@ export interface FileRouteTypes {
     | '/track-application'
     | '/why-us'
     | '/api/chat'
+    | '/api/notify-lead'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/p/$slug'
@@ -328,6 +338,7 @@ export interface FileRouteTypes {
     | '/track-application'
     | '/why-us'
     | '/api/chat'
+    | '/api/notify-lead'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/p/$slug'
@@ -359,6 +370,7 @@ export interface FileRouteTypes {
     | '/track-application'
     | '/why-us'
     | '/api/chat'
+    | '/api/notify-lead'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/p/$slug'
@@ -391,6 +403,7 @@ export interface RootRouteChildren {
   TrackApplicationRoute: typeof TrackApplicationRoute
   WhyUsRoute: typeof WhyUsRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiNotifyLeadRoute: typeof ApiNotifyLeadRoute
   CaLegalServicesSlugRoute: typeof CaLegalServicesSlugRoute
   PSlugRoute: typeof PSlugRoute
   PartnerBuilderRoute: typeof PartnerBuilderRoute
@@ -534,6 +547,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/notify-lead': {
+      id: '/api/notify-lead'
+      path: '/api/notify-lead'
+      fullPath: '/api/notify-lead'
+      preLoaderRoute: typeof ApiNotifyLeadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ca-legal-services/': {
       id: '/ca-legal-services/'
       path: '/ca-legal-services'
@@ -655,6 +675,7 @@ const rootRouteChildren: RootRouteChildren = {
   TrackApplicationRoute: TrackApplicationRoute,
   WhyUsRoute: WhyUsRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiNotifyLeadRoute: ApiNotifyLeadRoute,
   CaLegalServicesSlugRoute: CaLegalServicesSlugRoute,
   PSlugRoute: PSlugRoute,
   PartnerBuilderRoute: PartnerBuilderRoute,
