@@ -74,27 +74,64 @@ export async function sendEnquiryMail(lead: EnquiryMail): Promise<boolean> {
       `Received ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} (India time)`,
     ].filter((l, i, a) => l !== "" || a[i - 1] !== "");
 
-    const res = await fetch(
-      `https://mail.zoho.${region}/api/accounts/${encodeURIComponent(serverEnv("ZOHO_ACCOUNT_ID"))}/messages`,
-      {
-        method: "POST",
-        headers: {
-          authorization: `Zoho-oauthtoken ${token}`,
-          "content-type": "application/json",
-          accept: "application/json",
-        },
-        body: JSON.stringify({
-          fromAddress: serverEnv("ZOHO_FROM_ADDRESS"),
-          toAddress: serverEnv("LEAD_NOTIFY_TO"),
-          subject: `New enquiry: ${name}${lead.productSlug ? ` (${clean(lead.productSlug, 40)})` : ""}`,
-          content: lines.join("\n"),
-          mailFormat: "plaintext",
-        }),
-      },
+    const sent = await deliver(
+      region,
+      token,
+      serverEnv("LEAD_NOTIFY_TO"),
+      `New enquiry: ${name}${lead.productSlug ? ` (${clean(lead.productSlug, 40)})` : ""}`,
+      lines.join("\n"),
     );
-    if (res.status === 401) cached = null; // token no longer good: ask for a fresh one next time
-    return res.ok;
+
+    // a short thank-you to the customer, when they gave an email address
+    const to = clean(lead.email, 160);
+    if (to && /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(to)) {
+      const first = name.split(/\s+/)[0] ?? name;
+      await deliver(
+        region,
+        token,
+        to,
+        "We have received your enquiry | Growth Capital Services",
+        [
+          `Dear ${first},`,
+          ``,
+          `Thank you for contacting Growth Capital Services. We have received your enquiry, and one of our loan experts will get in touch with you on ${clean(lead.phone, 20)}.`,
+          ``,
+          `To help us understand your needs, it may help to keep your identity proof, address proof and recent bank statements handy. We will tell you exactly what applies to you.`,
+          ``,
+          `Please note this is an enquiry, not a loan approval. Loan terms and approval depend on the lender's own checks.`,
+          ``,
+          `Warm regards`,
+          `Growth Capital Services`,
+          `If you did not make this enquiry, you can ignore this email.`,
+        ].join("\n"),
+      );
+    }
+    return sent;
   } catch {
     return false;
   }
+}
+
+/** One message through Zoho Mail's API. */
+async function deliver(region: string, token: string, to: string, subject: string, content: string): Promise<boolean> {
+  const res = await fetch(
+    `https://mail.zoho.${region}/api/accounts/${encodeURIComponent(serverEnv("ZOHO_ACCOUNT_ID"))}/messages`,
+    {
+      method: "POST",
+      headers: {
+        authorization: `Zoho-oauthtoken ${token}`,
+        "content-type": "application/json",
+        accept: "application/json",
+      },
+      body: JSON.stringify({
+        fromAddress: serverEnv("ZOHO_FROM_ADDRESS"),
+        toAddress: to,
+        subject,
+        content,
+        mailFormat: "plaintext",
+      }),
+    },
+  );
+  if (res.status === 401) cached = null; // token no longer good: ask for a fresh one next time
+  return res.ok;
 }
