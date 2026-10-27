@@ -12,7 +12,7 @@ export const CONTACT = {
   phoneHref: "tel:+918828001700",
   whatsapp: WHATSAPP_NUMBER,
   whatsappLink: waLink(),
-  email: "growthcs17@gmail.com",
+  email: "connect.gcs@growthcapitalservices.in",
   address:
     "CCTV Towers, Andheri-Ghatkopar Rd, Bhatwadi, Kaju Pada, Barve Nagar, Ghatkopar West, Mumbai 400084",
   // Opens Google Maps (or the Maps app on a phone) searching for the office address.
