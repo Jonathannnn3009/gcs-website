@@ -843,7 +843,7 @@ export const PRODUCTS: Product[] = [
   {
     slug: "micro-lap",
     icon: Home,
-    title: "Micro Loan Against Property (Micro LAP)",
+    title: "Micro Loan Against Property",
     tagline: "Your Property Can Help Meet Your Funding Needs",
     group: "Property Finance",
     facts: [

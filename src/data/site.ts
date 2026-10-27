@@ -103,7 +103,7 @@ export const SERVICES: Service[] = [
   },
   {
     id: "micro-lap",
-    title: "Micro Loan Against Property (Micro LAP)",
+    title: "Micro Loan Against Property",
     tagline: "Your property can help meet your funding needs",
     description:
       "Smaller property-backed funding from ₹3 Lakh to ₹20 Lakh for eligible salaried and self-employed customers, with simple assessment.",

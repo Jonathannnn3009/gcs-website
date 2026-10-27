@@ -70,7 +70,10 @@ function Field({
 }) {
   return (
     <div className={className}>
-      <label htmlFor={id} className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white">
+      <label
+        htmlFor={id}
+        className="block text-[10px] font-bold tracking-[0.18em] text-navy uppercase dark:text-white"
+      >
         {label} {required ? <span className="text-gold">*</span> : null}
       </label>
       {children}
@@ -88,22 +91,39 @@ function formatIndianAmount(raw: string) {
 export function LeadForm({
   defaultLoanType = "",
   source = "website-enquiry",
-}: { defaultLoanType?: string; source?: string } = {}) {
-  const loanTypes = useList("form.loanTypes", FORM_LOAN_TYPES);
+  product,
+}: {
+  defaultLoanType?: string;
+  source?: string;
+  /** The loan page this form sits on, so its loan is offered even when the drop-down list leaves it out. */
+  product?: { slug: string; title: string };
+} = {}) {
+  const listed = useList("form.loanTypes", FORM_LOAN_TYPES);
+  // The list may name this loan differently (or leave it out), so find it by its page and add it if absent.
+  const own = product ? listed.find((s) => s.slug === product.slug) : undefined;
+  const loanTypes =
+    product && !own ? [...listed, { title: product.title, slug: product.slug }] : listed;
+  const ownTitle = own?.title ?? product?.title;
   const cities = useCities();
   const applicants = useApplicantOptions();
   const uid = useId();
   // Only pre-select a loan type the dropdown actually offers.
   const initial: Fields = {
     ...empty,
-    loanType: loanTypes.some((s) => s.title === defaultLoanType) ? defaultLoanType : "",
+    loanType: loanTypes.some((s) => s.title === (ownTitle ?? defaultLoanType))
+      ? (ownTitle ?? defaultLoanType)
+      : "",
   };
   const [values, setValues] = useState<Fields>(initial);
   const [errors, setErrors] = useState<Partial<Fields>>({});
   const [showToast, setShowToast] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   // After a loan with a detailed second form is submitted, that form replaces this one.
-  const [followUp, setFollowUp] = useState<{ pass: FollowUpPass | null; basics: Fields & { slug: string; title: string }; detail: string } | null>(null);
+  const [followUp, setFollowUp] = useState<{
+    pass: FollowUpPass | null;
+    basics: Fields & { slug: string; title: string };
+    detail: string;
+  } | null>(null);
 
   const set = (key: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setValues((v) => ({ ...v, [key]: e.target.value }));
@@ -174,7 +194,11 @@ export function LeadForm({
     if (second) {
       const pass = await submitLeadForFollowUp(lead);
       setSubmitting(false);
-      setFollowUp({ pass, basics: { ...values, city, slug: productSlug!, title: values.loanType }, detail });
+      setFollowUp({
+        pass,
+        basics: { ...values, city, slug: productSlug!, title: values.loanType },
+        detail,
+      });
       return;
     }
     await submitLead(lead);
@@ -221,14 +245,19 @@ export function LeadForm({
             Tell Us About You. <span className="hero-stat-text">We’ll Find the Right Fit.</span>
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Complete this quick form to help us understand your needs. Based on your details, we’ll explore suitable
-            Banks &amp; NBFCs and compare available loan terms for your profile.
+            Complete this quick form to help us understand your needs. Based on your details, we’ll
+            explore suitable Banks &amp; NBFCs and compare available loan terms for your profile.
           </p>
 
           <div className="my-5 border-t border-dashed border-border" />
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field id={`${uid}-name`} label="Full Name" error={errors.name} className="sm:col-span-2">
+            <Field
+              id={`${uid}-name`}
+              label="Full Name"
+              error={errors.name}
+              className="sm:col-span-2"
+            >
               <input
                 id={`${uid}-name`}
                 className={fieldClass}
