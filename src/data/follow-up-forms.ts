@@ -25,10 +25,21 @@ const rupee = "e.g. 50,00,000";
 const only = (...values: string[]) => values;
 
 /** The work-and-income questions. `cat` is the answer that says whether the applicant is salaried, self-employed or an NRI. */
-const workStep = (cat: string): QuestionStep => ({
+const workStep = (cat: string, askType = false): QuestionStep => ({
   title: "Your work and income",
   help: "Lenders judge income by how steady it is and how it can be shown on paper.",
   fields: [
+    // Already known from the short form, so it arrives answered; the visitor can correct it and the questions follow.
+    ...(askType
+      ? [
+          {
+            key: cat,
+            label: "Type of income (salaried, self-employed or NRI)",
+            kind: "choice" as const,
+            options: ["Salaried", "Self-Employed", "NRI"],
+          },
+        ]
+      : []),
     {
       key: "employerType",
       label: "Where do you work?",
@@ -238,6 +249,86 @@ const creditStep = (
   ],
 });
 
+/** Asked last on a form, so it does not interrupt the applicant's own answers: does anyone apply along with them, and who. */
+const coApplicantStep = (): QuestionStep => ({
+  title: "Anyone applying with you?",
+  help: "A co-applicant's income can raise the loan you are eligible for.",
+  fields: [
+    {
+      key: "coApplicant",
+      label: "Will someone apply with you (spouse, parent, sibling, partner)?",
+      kind: "choice",
+      options: YES_NO,
+    },
+    {
+      key: "coApplicantName",
+      label: "What is their name?",
+      kind: "text",
+      placeholder: "Full name",
+      showWhen: { key: "coApplicant", values: ["Yes"] },
+    },
+    {
+      key: "coApplicantRelation",
+      label: "How are they related to you?",
+      kind: "choice",
+      options: ["Spouse", "Parent", "Sibling", "Child", "Business partner", "Other"],
+      showWhen: { key: "coApplicant", values: ["Yes"] },
+    },
+    {
+      key: "coApplicantMobile",
+      label: "Their mobile number",
+      kind: "text",
+      placeholder: "10-digit mobile",
+      showWhen: { key: "coApplicant", values: ["Yes"] },
+    },
+    {
+      key: "coApplicantWork",
+      label: "What do they do?",
+      kind: "choice",
+      options: [
+        "Salaried",
+        "Runs a business",
+        "Practises a profession",
+        "Retired, with a pension",
+        "Not earning",
+      ],
+      showWhen: { key: "coApplicant", values: ["Yes"] },
+    },
+    {
+      key: "coApplicantIncome",
+      label: "Their monthly income",
+      kind: "amount",
+      allowZero: true,
+      placeholder: "e.g. 60,000",
+      showWhen: {
+        key: "coApplicantWork",
+        values: [
+          "Salaried",
+          "Runs a business",
+          "Practises a profession",
+          "Retired, with a pension",
+        ],
+      },
+    },
+    {
+      key: "coApplicantEmi",
+      label: "EMIs they already pay every month",
+      kind: "amount",
+      allowZero: true,
+      placeholder: "e.g. 10,000, or 0 if none",
+      showWhen: {
+        key: "coApplicantWork",
+        values: [
+          "Salaried",
+          "Runs a business",
+          "Practises a profession",
+          "Retired, with a pension",
+        ],
+      },
+    },
+  ],
+});
+
 const HOME_LOAN: FollowUpForm = {
   slugs: ["home-loan"],
   reason:
@@ -392,32 +483,11 @@ const HOME_LOAN: FollowUpForm = {
           kind: "choice",
           options: ["Immediately", "Within a month", "In 1 to 3 months", "Just exploring"],
         },
-        {
-          key: "coApplicant",
-          label: "Will someone apply with you (spouse, parent, sibling)?",
-          kind: "choice",
-          options: YES_NO,
-          help: "A co-applicant's income can raise the loan you are eligible for.",
-        },
-        {
-          key: "coApplicantRelation",
-          label: "Who would apply with you?",
-          kind: "choice",
-          options: ["Spouse", "Parent", "Sibling", "Child", "Other"],
-          showWhen: { key: "coApplicant", values: ["Yes"] },
-        },
-        {
-          key: "coApplicantIncome",
-          label: "Co-applicant's monthly income",
-          kind: "amount",
-          allowZero: true,
-          placeholder: "e.g. 60,000",
-          showWhen: { key: "coApplicant", values: ["Yes"] },
-        },
       ],
     },
-    workStep("applicantCategory"),
+    workStep("applicantCategory", true),
     creditStep("home loan"),
+    coApplicantStep(),
   ],
 };
 
@@ -440,32 +510,6 @@ const TENURE_5_20 = [
   "Not sure",
 ];
 const TIMELINE = ["Immediately", "Within a month", "In 1 to 3 months", "Just exploring"];
-
-/** The question that asks whether someone applies along with the applicant, and who and how much they earn. */
-const coApplicantFields = (): QuestionField[] => [
-  {
-    key: "coApplicant",
-    label: "Will someone apply with you (spouse, parent, sibling, partner)?",
-    kind: "choice",
-    options: YES_NO,
-    help: "A co-applicant's income can raise the loan you are eligible for.",
-  },
-  {
-    key: "coApplicantRelation",
-    label: "Who would apply with you?",
-    kind: "choice",
-    options: ["Spouse", "Parent", "Sibling", "Child", "Business partner", "Other"],
-    showWhen: { key: "coApplicant", values: ["Yes"] },
-  },
-  {
-    key: "coApplicantIncome",
-    label: "Co-applicant's monthly income",
-    kind: "amount",
-    allowZero: true,
-    placeholder: "e.g. 60,000",
-    showWhen: { key: "coApplicant", values: ["Yes"] },
-  },
-];
 
 const MORTGAGE_WISH: QuestionField = {
   key: "mortgageWish",
@@ -647,7 +691,6 @@ const repayStep = (tenure: string[], overdraft: boolean): QuestionStep => ({
       kind: "choice",
       options: TIMELINE,
     },
-    ...coApplicantFields(),
   ],
 });
 
@@ -659,8 +702,9 @@ const LOAN_AGAINST_PROPERTY: FollowUpForm = {
   steps: [
     securityStep("applicantCategory"),
     repayStep(TENURE_5_20, true),
-    workStep("applicantCategory"),
+    workStep("applicantCategory", true),
     creditStep("loan against property"),
+    coApplicantStep(),
   ],
 };
 
@@ -674,7 +718,7 @@ const MICRO_LAP: FollowUpForm = {
     securityStep("applicantType", [
       {
         key: "applicantType",
-        label: "Are you salaried or self-employed?",
+        label: "Type of income (salaried or self-employed)",
         kind: "choice",
         required: true,
         options: ["Salaried", "Self-Employed"],
@@ -689,6 +733,7 @@ const MICRO_LAP: FollowUpForm = {
       return { ...step, fields: step.fields.filter((f) => !f.showWhen?.values.includes("NRI")) };
     })(),
     creditStep("loan against property"),
+    coApplicantStep(),
   ],
 };
 
@@ -1022,7 +1067,7 @@ const BALANCE_TRANSFER: FollowUpForm = {
         fields: [
           {
             key: "applicantType",
-            label: "Are you salaried or self-employed?",
+            label: "Type of income (salaried or self-employed)",
             kind: "choice" as const,
             required: true,
             options: ["Salaried", "Self-Employed"],
@@ -1113,7 +1158,7 @@ const DROP_LINE_OVERDRAFT: FollowUpForm = {
       [
         {
           key: "applicantType",
-          label: "Are you salaried or self-employed?",
+          label: "Type of income (salaried or self-employed)",
           kind: "choice",
           required: true,
           options: ["Salaried", "Self-Employed"],
@@ -2049,7 +2094,7 @@ const workWithType = (): QuestionStep => {
     fields: [
       {
         key: "applicantType",
-        label: "Are you salaried or self-employed?",
+        label: "Type of income (salaried or self-employed)",
         kind: "choice" as const,
         required: true,
         options: ["Salaried", "Self-Employed"],
@@ -2541,7 +2586,7 @@ const OVERDRAFT_LIMIT: FollowUpForm = {
       fields: [
         {
           key: "applicantType",
-          label: "Are you salaried or self-employed?",
+          label: "Type of income (salaried or self-employed)",
           kind: "choice",
           required: true,
           options: ["Salaried", "Self-Employed"],
@@ -3549,7 +3594,7 @@ const LOAN_AGAINST_SECURITIES: FollowUpForm = {
       fields: [
         {
           key: "applicantType",
-          label: "Are you salaried or self-employed?",
+          label: "Type of income (salaried or self-employed)",
           kind: "choice",
           options: ["Salaried", "Self-Employed", "Retired or an investor"],
         },

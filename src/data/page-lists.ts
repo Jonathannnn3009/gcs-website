@@ -414,7 +414,19 @@ export const FOOTER_PRODUCTS = SERVICES.slice(0, 8).map((s) => ({
   to: `/services#${s.id}`,
 }));
 
-export const FORM_LOAN_TYPES = SERVICES.map((s) => ({ title: s.title, slug: s.id }));
+// The enquiry form's loan types: the headline services, then every other loan that has its own page,
+// so each of them can be picked. The micro loans are left out (they appear on their own pages only),
+// and the car loans are covered by the general "Car Loan" choice.
+const FORM_LOAN_SKIP = new Set(["overdraft-limit", "new-car-loan", "used-car-loan", "car-refinance"]);
+export const FORM_LOAN_TYPES = [
+  ...SERVICES.filter((s) => !s.id.startsWith("micro-")).map((s) => ({ title: s.title, slug: s.id })),
+  ...PRODUCTS.filter(
+    (p) =>
+      !p.slug.startsWith("micro-") &&
+      !FORM_LOAN_SKIP.has(p.slug) &&
+      !SERVICES.some((s) => s.id === p.slug),
+  ).map((p) => ({ title: p.title, slug: p.slug })),
+];
 
 export const FORM_CITIES = CONTACT.cities.map((city) => ({ city }));
 

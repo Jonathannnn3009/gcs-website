@@ -103,7 +103,9 @@ export function LeadForm({
 } = {}) {
   const listed = useList("form.loanTypes", FORM_LOAN_TYPES);
   // The list may name this loan differently (or leave it out), so find it by its page and add it if absent.
-  const own = product ? listed.find((s) => s.slug === product.slug) : undefined;
+  const own = product
+    ? listed.find((s) => s.slug === product.slug || SLUG_ALIASES[s.slug] === product.slug)
+    : undefined;
   const loanTypes =
     product && !own ? [...listed, { title: product.title, slug: product.slug }] : listed;
   const ownTitle = own?.title ?? product?.title;

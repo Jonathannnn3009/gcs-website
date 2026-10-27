@@ -123,7 +123,7 @@ export function FollowUpFlow({
           `${f.label}: ${f.kind === "amount" ? "₹" : ""}${answers[f.key]}${f.kind === "percent" ? "%" : ""}`,
       );
     const detail = ["Detailed assessment (optional second form)", ...lines].join("\n");
-    const applicant = answers["applicantType"] || basics.category;
+    const applicant = answers["applicantType"] || answers["applicantCategory"] || basics.category;
     const income = digits(answers["netSalary"]);
     const extras = {
       detail,
