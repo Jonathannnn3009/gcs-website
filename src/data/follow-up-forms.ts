@@ -175,37 +175,50 @@ const workStep = (cat: string): QuestionStep => ({
 });
 
 /** What the applicant already owes and how they have repaid it: asked the same way on every loan. */
-const creditStep = (loan: string, apart = false): QuestionStep => ({
+const creditStep = (
+  loan: string,
+  { apart = false, business = false }: { apart?: boolean; business?: boolean } = {},
+): QuestionStep => ({
   title: "Your existing loans and credit",
   help: "Lenders subtract what you already repay from what you can afford, so this matters.",
   fields: [
     {
       key: "hasLoans",
-      label: apart
-        ? "Do you have any other running loans or credit cards, apart from this one?"
-        : "Do you have any running loans or credit cards?",
+      label: business
+        ? `Does the business have any ${apart ? "other " : ""}running loans or credit limits?`
+        : apart
+          ? "Do you have any other running loans or credit cards, apart from this one?"
+          : "Do you have any running loans or credit cards?",
       kind: "choice",
       options: YES_NO,
     },
     {
       key: "existingEmi",
-      label: "Total EMIs you pay every month",
+      label: business
+        ? "Total repayments the business makes every month"
+        : "Total EMIs you pay every month",
       kind: "amount",
       allowZero: true,
       placeholder: "e.g. 25,000",
-      help: "Include car, personal and education loans, and credit-card minimums.",
+      help: business
+        ? "Include term loans, equipment finance and the interest on any overdraft or cash credit."
+        : "Include car, personal and education loans, and credit-card minimums.",
       showWhen: { key: "hasLoans", values: ["Yes"] },
     },
     {
       key: "latePayments",
-      label: "Any late or missed EMI or card payments in the last 12 months?",
+      label: business
+        ? "Any late or missed repayments or cheque returns in the last 12 months?"
+        : "Any late or missed EMI or card payments in the last 12 months?",
       kind: "choice",
       options: ["No", "Yes, once or twice", "Yes, more often", "Not sure"],
       showWhen: { key: "hasLoans", values: ["Yes"] },
     },
     {
       key: "cibilKnown",
-      label: "Roughly what is your CIBIL score?",
+      label: business
+        ? "Roughly what is the owner's or promoters' CIBIL score?"
+        : "Roughly what is your CIBIL score?",
       kind: "choice",
       options: ["750 or above", "700 to 749", "650 to 699", "Below 650", "I don't know"],
     },
@@ -1018,7 +1031,7 @@ const BALANCE_TRANSFER: FollowUpForm = {
         ],
       };
     })(),
-    creditStep("balance transfer", true),
+    creditStep("balance transfer", { apart: true }),
   ],
 };
 
@@ -1395,7 +1408,7 @@ const PROJECT_FUNDING: FollowUpForm = {
         },
       ],
     },
-    creditStep("project funding"),
+    creditStep("project funding", { business: true }),
   ],
 };
 
@@ -1558,7 +1571,7 @@ const BUSINESS_LOAN: FollowUpForm = {
         { key: "timeline", label: "When do you need the loan?", kind: "choice", options: TIMELINE },
       ],
     },
-    creditStep("business loan"),
+    creditStep("business loan", { business: true }),
   ],
 };
 
@@ -1668,7 +1681,7 @@ const MICRO_BUSINESS_LOAN: FollowUpForm = {
         { key: "timeline", label: "When do you need the loan?", kind: "choice", options: TIMELINE },
       ],
     },
-    creditStep("micro business loan"),
+    creditStep("micro business loan", { business: true }),
   ],
 };
 
@@ -1746,7 +1759,7 @@ const UNSECURED_DOD: FollowUpForm = {
       fields: moneyFields({ gst: true }),
     },
     limitStep(),
-    creditStep("unsecured drop-line overdraft"),
+    creditStep("unsecured drop-line overdraft", { business: true }),
   ],
 };
 
@@ -2020,6 +2033,1538 @@ const PRIVATE_FUNDING: FollowUpForm = {
   ],
 };
 
+/** "Please say what it is for", shown when the answer to `key` is Other. */
+const PURPOSE_OTHER_FOR = (key: string): QuestionField => ({
+  key: `${key}Other`,
+  label: "Please say what it is for",
+  kind: "text",
+  showWhen: { key, values: ["Other"] },
+});
+
+/** Asks whether the applicant is salaried or self-employed, then the work and income questions that follow from it. Resident applicants only. */
+const workWithType = (): QuestionStep => {
+  const step = workStep("applicantType");
+  return {
+    ...step,
+    fields: [
+      {
+        key: "applicantType",
+        label: "Are you salaried or self-employed?",
+        kind: "choice" as const,
+        required: true,
+        options: ["Salaried", "Self-Employed"],
+      },
+      ...step.fields.filter((f) => !f.showWhen?.values.includes("NRI")),
+    ],
+  };
+};
+
+/** How the main account has run: the last thing a limit-based lender looks at. */
+const bankingStep = (): QuestionStep => ({
+  title: "Your banking",
+  help: "Lenders go by how your main account has run over the last year.",
+  fields: [
+    { key: "primaryBank", label: "Your main bank", kind: "text", placeholder: "Name of the bank" },
+    {
+      key: "monthlyCredits",
+      label: "Average amount that comes into the account every month",
+      kind: "amount",
+      placeholder: "e.g. 5,00,000",
+    },
+    {
+      key: "chequeReturns",
+      label: "Any cheque returns or missed instalments in the last 6 months?",
+      kind: "choice",
+      options: ["No", "Yes, once or twice", "Yes, more often"],
+    },
+  ],
+});
+
+const businessStep = (constitution: string[], vintage: string[], help?: string): QuestionStep => ({
+  title: "About your business",
+  ...(help ? { help } : {}),
+  fields: [
+    {
+      key: "constitution",
+      label: "How is your business set up?",
+      kind: "choice",
+      required: true,
+      options: constitution,
+    },
+    natureField(),
+    {
+      key: "vintage",
+      label: "How long has the business been running?",
+      kind: "choice",
+      options: vintage,
+    },
+  ],
+});
+
+const ENTITIES = [
+  "Proprietorship",
+  "Partnership",
+  "LLP",
+  "Private limited company",
+  "Limited company",
+];
+const VINTAGE_2 = [
+  "Less than 2 years",
+  "2 to 3 years",
+  "3 to 5 years",
+  "5 to 10 years",
+  "More than 10 years",
+];
+
+/** Facts about a present limit or loan that the applicant may want moved. */
+const moveFields = (
+  options: [fresh: string, move: string, more: string],
+  noun: string,
+): QuestionField[] => [
+  {
+    key: "requirement",
+    label: `Is this a new ${noun} or a move from another lender?`,
+    kind: "choice",
+    options,
+  },
+  {
+    key: "presentLender",
+    label: "Which lender has it now?",
+    kind: "text",
+    placeholder: "Name of the bank or finance company",
+    showWhen: { key: "requirement", values: [options[1], options[2]] },
+  },
+  {
+    key: "presentLimit",
+    label: "Present limit or outstanding",
+    kind: "amount",
+    placeholder: rupee,
+    showWhen: { key: "requirement", values: [options[1], options[2]] },
+  },
+  {
+    key: "presentRate",
+    label: "Interest rate you pay now",
+    kind: "percent",
+    showWhen: { key: "requirement", values: [options[1], options[2]] },
+  },
+];
+
+// ───────────── Cash Flow & Trade ─────────────
+
+const CGTMSE: FollowUpForm = {
+  ...COMMON,
+  slugs: ["cgtmse"],
+  reason:
+    "We ask these extra questions so our experts can check whether your enterprise fits the government-guaranteed scheme and shortlist the lenders that offer it.",
+  steps: [
+    {
+      title: "About your enterprise",
+      help: "The scheme covers micro and small enterprises registered under Udyam.",
+      fields: [
+        {
+          key: "udyam",
+          label: "Is your enterprise registered under Udyam?",
+          kind: "choice",
+          required: true,
+          options: ["Yes", "Applied", "No"],
+        },
+        {
+          key: "udyamSize",
+          label: "Which category is your Udyam certificate in?",
+          kind: "choice",
+          options: ["Micro", "Small", "Not sure"],
+          showWhen: { key: "udyam", values: ["Yes"] },
+        },
+        {
+          key: "constitution",
+          label: "How is your enterprise set up?",
+          kind: "choice",
+          options: [
+            "Proprietorship",
+            "Partnership",
+            "LLP",
+            "Private limited company",
+            "Limited company",
+          ],
+        },
+        {
+          key: "activity",
+          label: "What does your enterprise do?",
+          kind: "choice",
+          options: ["Manufacturing", "Services", "Trading", "Retail trade"],
+          help: "Some activities, such as retail trade, may not be covered.",
+        },
+        {
+          key: "vintage",
+          label: "How long has it been running?",
+          kind: "choice",
+          options: [
+            "Less than 1 year",
+            "1 to 2 years",
+            "2 to 3 years",
+            "3 to 5 years",
+            "More than 5 years",
+          ],
+        },
+      ],
+    },
+    {
+      title: "The facility you need",
+      fields: [
+        {
+          key: "structure",
+          label: "What kind of facility do you need?",
+          kind: "choice",
+          options: ["A term loan", "A working capital limit", "Both", "Not sure, advise me"],
+        },
+        {
+          key: "termFor",
+          label: "What will the term loan be used for?",
+          kind: "choice",
+          options: [
+            "Machinery or equipment",
+            "Building or premises",
+            "Setting up a new unit",
+            "Expanding the unit",
+            "Other",
+          ],
+          showWhen: { key: "structure", values: ["A term loan", "Both"] },
+        },
+        {
+          key: "planReady",
+          label: "Is a business or project plan ready?",
+          kind: "choice",
+          options: ["Yes", "In process", "No"],
+          showWhen: { key: "termFor", values: ["Setting up a new unit", "Expanding the unit"] },
+        },
+        {
+          key: "tenure",
+          label: "Preferred repayment period",
+          kind: "choice",
+          options: [
+            "Up to 3 years",
+            "3 to 5 years",
+            "5 to 7 years",
+            "More than 7 years",
+            "Not sure",
+          ],
+        },
+        { key: "timeline", label: "When do you need it?", kind: "choice", options: TIMELINE },
+      ],
+    },
+    { title: "Turnover and proof of income", fields: moneyFields({ gst: true }) },
+    creditStep("CGTMSE loan", { business: true }),
+  ],
+};
+
+const MACHINE_LOAN: FollowUpForm = {
+  ...COMMON,
+  slugs: ["machine-loan"],
+  reason:
+    "We ask these extra questions so our experts can read your business and the equipment the way a lender does and shortlist the Banks & NBFCs that fund it.",
+  steps: [
+    {
+      title: "The equipment",
+      help: "The equipment itself is the security, so lenders look at what it is and what it costs.",
+      fields: [
+        {
+          key: "equipment",
+          label: "What do you want to finance?",
+          kind: "choice",
+          required: true,
+          options: [
+            "Machinery for production",
+            "Medical equipment",
+            "A genset",
+            "Other equipment",
+            "Equipment on lease",
+          ],
+        },
+        { key: "condition", label: "Is it new or used?", kind: "choice", options: ["New", "Used"] },
+        {
+          key: "quotation",
+          label: "Do you have a quotation or proforma invoice?",
+          kind: "choice",
+          options: ["Yes", "Not yet"],
+        },
+        {
+          key: "cost",
+          label: "Total cost of the equipment, including GST",
+          kind: "amount",
+          placeholder: rupee,
+        },
+        {
+          key: "ownContribution",
+          label: "Your own contribution",
+          kind: "amount",
+          allowZero: true,
+          placeholder: rupee,
+          help: "Many lenders fund most of the cost, but not always all of it.",
+        },
+        {
+          key: "leaseTerm",
+          label: "For how long would you like to lease it?",
+          kind: "choice",
+          options: ["1 year", "2 years", "3 years"],
+          showWhen: { key: "equipment", values: ["Equipment on lease"] },
+        },
+      ],
+    },
+    businessStep(ENTITIES, VINTAGE_2),
+    {
+      title: "Profit, turnover and banking",
+      fields: [
+        {
+          key: "profitable",
+          label: "Has the business made a profit in each of the last 2 years?",
+          kind: "choice",
+          options: ["Yes, both years", "One of the two", "No"],
+        },
+        ...moneyFields({ gst: true }),
+        {
+          key: "premisesOwned",
+          label: "Does the business or its owner own a factory or property?",
+          kind: "choice",
+          options: ["Yes", "No"],
+          help: "Lenders may take it into account.",
+        },
+      ],
+    },
+    {
+      title: "How you would like to repay",
+      fields: [
+        {
+          key: "tenure",
+          label: "Preferred repayment period",
+          kind: "choice",
+          options: ["Up to 2 years", "2 to 4 years", "4 to 6 years", "6 to 7 years", "Not sure"],
+        },
+        {
+          key: "timeline",
+          label: "When do you need the funds?",
+          kind: "choice",
+          options: TIMELINE,
+        },
+      ],
+    },
+    creditStep("machine loan", { business: true }),
+  ],
+};
+
+const WORKING_CAPITAL_TERM_LOAN: FollowUpForm = {
+  ...COMMON,
+  slugs: ["working-capital-term-loan"],
+  reason:
+    "We ask these extra questions so our experts can read your cash cycle the way a lender does and shortlist the Banks & NBFCs that may suit it.",
+  steps: [
+    businessStep(
+      [...ENTITIES, "Self-employed professional"],
+      VINTAGE_2,
+      "A working-capital term loan is judged on the cash gap it fills and on the accounts behind it.",
+    ),
+    {
+      title: "The cash gap",
+      fields: [
+        {
+          key: "gapCause",
+          label: "What do you need it for?",
+          kind: "choice",
+          required: true,
+          options: [
+            "A gap between paying suppliers and getting paid",
+            "To regularise a stretched cash credit or overdraft",
+            "To consolidate several short-term dues",
+            "A seasonal build-up of stock",
+            "Other",
+          ],
+        },
+        {
+          key: "stretchedBank",
+          label: "Which bank has the cash credit or overdraft?",
+          kind: "text",
+          placeholder: "Name of the bank",
+          showWhen: {
+            key: "gapCause",
+            values: ["To regularise a stretched cash credit or overdraft"],
+          },
+        },
+        {
+          key: "stretchedAmount",
+          label: "Amount outstanding on it",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: {
+            key: "gapCause",
+            values: ["To regularise a stretched cash credit or overdraft"],
+          },
+        },
+        {
+          key: "duesAmount",
+          label: "Total of the dues you want to consolidate",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "gapCause", values: ["To consolidate several short-term dues"] },
+        },
+        PURPOSE_OTHER_FOR("gapCause"),
+      ],
+    },
+    {
+      title: "Accounts and turnover",
+      fields: [
+        {
+          key: "audited",
+          label: "Do you have audited or CA-certified statements for the last 2 to 3 years?",
+          kind: "choice",
+          options: ["Yes, all years", "Some years", "No"],
+        },
+        ...moneyFields({ gst: true }),
+      ],
+    },
+    {
+      title: "How you would like to repay",
+      fields: [
+        {
+          key: "tenure",
+          label: "Preferred repayment period",
+          kind: "choice",
+          options: ["Up to 1 year", "1 to 2 years", "2 to 3 years", "3 to 5 years", "Not sure"],
+        },
+        {
+          key: "moratorium",
+          label: "Would a gap before the EMIs start help you?",
+          kind: "choice",
+          options: ["Yes", "No"],
+          help: "A few lenders allow a moratorium.",
+        },
+        { key: "timeline", label: "When do you need the loan?", kind: "choice", options: TIMELINE },
+      ],
+    },
+    creditStep("working capital term loan", { business: true }),
+  ],
+};
+
+const CASH_CREDIT: FollowUpForm = {
+  ...COMMON,
+  slugs: ["cash-credit"],
+  reason:
+    "We ask these extra questions so our experts can read your stock and customer cycle the way a lender does and size the limit the Banks & NBFCs may give.",
+  steps: [
+    businessStep(
+      ENTITIES,
+      VINTAGE_2,
+      "A cash credit limit is sized on your stock and money owed to you, so lenders ask about both.",
+    ),
+    {
+      title: "Stock and customers",
+      fields: [
+        {
+          key: "avgStock",
+          label: "Value of the stock you usually hold",
+          kind: "amount",
+          placeholder: rupee,
+        },
+        {
+          key: "avgDebtors",
+          label: "Money customers owe you at any time",
+          kind: "amount",
+          allowZero: true,
+          placeholder: rupee,
+        },
+        {
+          key: "creditPeriod",
+          label: "How long do customers take to pay you?",
+          kind: "choice",
+          options: [
+            "They pay in cash",
+            "Up to 30 days",
+            "30 to 60 days",
+            "60 to 90 days",
+            "More than 90 days",
+          ],
+        },
+        {
+          key: "stockStatements",
+          label: "Can you give the lender a stock statement every month?",
+          kind: "choice",
+          options: ["Yes", "Yes, with my accountant's help", "Not sure"],
+          help: "The limit you can draw is reassessed each month on the stock statement.",
+        },
+      ],
+    },
+    {
+      title: "The limit you would like",
+      fields: [
+        ...moveFields(
+          ["A new limit", "Move my present limit to another bank", "Raise my present limit"],
+          "limit",
+        ),
+        {
+          key: "security",
+          label: "What can you offer as security, besides stock and money owed to you?",
+          kind: "choice",
+          options: ["A property", "Fixed deposits or securities", "Nothing else"],
+        },
+        {
+          key: "securityValue",
+          label: "Approximate value of it",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "security", values: ["A property", "Fixed deposits or securities"] },
+        },
+        { key: "timeline", label: "When do you need it?", kind: "choice", options: TIMELINE },
+      ],
+    },
+    {
+      title: "Accounts and turnover",
+      fields: [
+        {
+          key: "audited",
+          label: "Are your accounts audited?",
+          kind: "choice",
+          options: ["Yes", "Not yet", "No"],
+        },
+        ...moneyFields({ gst: true }),
+      ],
+    },
+    creditStep("cash credit", { business: true }),
+  ],
+};
+
+const OVERDRAFT_LIMIT: FollowUpForm = {
+  ...COMMON,
+  slugs: ["overdraft-limit"],
+  reason:
+    "We ask these extra questions so our experts can read your account and your security the way a lender does and shortlist the Banks & NBFCs that may suit you.",
+  steps: [
+    {
+      title: "About you",
+      fields: [
+        {
+          key: "applicantType",
+          label: "Are you salaried or self-employed?",
+          kind: "choice",
+          required: true,
+          options: ["Salaried", "Self-Employed"],
+        },
+        {
+          key: "constitution",
+          label: "How is your business or practice set up?",
+          kind: "choice",
+          options: [
+            "Professional (doctor, CA, architect, etc.)",
+            "Proprietorship",
+            "Partnership or LLP",
+            "Private limited company",
+            "Limited company",
+          ],
+          showWhen: { key: "applicantType", values: ["Self-Employed"] },
+        },
+      ],
+    },
+    {
+      title: "The overdraft you would like",
+      fields: [
+        {
+          key: "securityKind",
+          label: "How would you like it secured?",
+          kind: "choice",
+          options: [
+            "Against a property",
+            "Against fixed deposits or securities",
+            "Without security",
+            "Not sure, advise me",
+          ],
+        },
+        {
+          key: "propertyKind",
+          label: "What kind of property?",
+          kind: "choice",
+          options: ["Residential", "Commercial", "Industrial", "Other"],
+          showWhen: { key: "securityKind", values: ["Against a property"] },
+        },
+        {
+          key: "propertyValue",
+          label: "Approximate market value of the property",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "securityKind", values: ["Against a property"] },
+        },
+        {
+          key: "ownership",
+          label: "Whose name is the property in?",
+          kind: "choice",
+          options: [
+            "My own name",
+            "Jointly with spouse or family",
+            "A parent or family member",
+            "My company or firm",
+          ],
+          showWhen: { key: "securityKind", values: ["Against a property"] },
+        },
+        {
+          key: "depositValue",
+          label: "Approximate value of the deposits or securities",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "securityKind", values: ["Against fixed deposits or securities"] },
+        },
+        ...moveFields(
+          [
+            "A fresh overdraft",
+            "Move my present overdraft or loan",
+            "Move it and add more funding",
+          ],
+          "overdraft",
+        ),
+        { key: "timeline", label: "When do you need it?", kind: "choice", options: TIMELINE },
+      ],
+    },
+    bankingStep(),
+    (() => {
+      const step = workStep("applicantType");
+      return { ...step, fields: step.fields.filter((f) => !f.showWhen?.values.includes("NRI")) };
+    })(),
+    creditStep("overdraft"),
+  ],
+};
+
+const BANK_GUARANTEE: FollowUpForm = {
+  ...COMMON,
+  slugs: ["bank-guarantee"],
+  reason:
+    "We ask these extra questions so our experts can see what the guarantee is for and shortlist the banks that will issue it on the best terms.",
+  steps: [
+    {
+      title: "The guarantee",
+      help: "A bank issues a guarantee against a contract or tender, so it starts with what yours is for.",
+      fields: [
+        {
+          key: "bgType",
+          label: "What kind of guarantee do you need?",
+          kind: "choice",
+          required: true,
+          options: [
+            "Performance guarantee",
+            "Financial guarantee",
+            "Bid bond or EMD",
+            "Advance-payment guarantee",
+            "Security deposit",
+            "Other",
+          ],
+        },
+        {
+          key: "beneficiary",
+          label: "Who is it for?",
+          kind: "choice",
+          options: ["A government department or PSU", "A private company", "Other"],
+        },
+        {
+          key: "contractDoc",
+          label: "Do you have the tender or contract document?",
+          kind: "choice",
+          options: ["Yes", "Not yet"],
+        },
+        {
+          key: "validity",
+          label: "For how long does it have to run?",
+          kind: "choice",
+          options: ["Up to 6 months", "6 to 12 months", "1 to 2 years", "More than 2 years"],
+        },
+        {
+          key: "timeline",
+          label: "By when do you need it?",
+          kind: "choice",
+          options: ["Within a week", "Within a month", "Later"],
+        },
+      ],
+    },
+    {
+      title: "Margin and security",
+      help: "Banks usually ask for part of the amount as cash margin.",
+      fields: [
+        {
+          key: "margin",
+          label: "How much cash margin can you keep with the bank?",
+          kind: "choice",
+          options: ["10%", "10% to 25%", "More than 25%", "I cannot give cash margin"],
+        },
+        {
+          key: "collateral",
+          label: "What collateral can you offer instead?",
+          kind: "choice",
+          options: ["A property", "Fixed deposits or securities", "Nothing"],
+          showWhen: { key: "margin", values: ["I cannot give cash margin"] },
+        },
+        {
+          key: "bank",
+          label: "Which bank do you bank with?",
+          kind: "text",
+          placeholder: "Name of the bank",
+        },
+        {
+          key: "existingLimit",
+          label: "Do you already have a bank guarantee or working-capital limit?",
+          kind: "choice",
+          options: YES_NO,
+        },
+        {
+          key: "existingLimitAmount",
+          label: "Amount of that limit",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "existingLimit", values: ["Yes"] },
+        },
+      ],
+    },
+    businessStep(ENTITIES, VINTAGE_2),
+    { title: "Turnover and proof of income", fields: moneyFields({ gst: true }) },
+    creditStep("bank guarantee", { business: true }),
+  ],
+};
+
+const LETTER_OF_CREDIT: FollowUpForm = {
+  ...COMMON,
+  slugs: ["letter-of-credit"],
+  reason:
+    "We ask these extra questions so our experts can see what you are buying and from whom, and shortlist the banks that will open the letter of credit.",
+  steps: [
+    {
+      title: "The letter of credit",
+      help: "A bank opens a letter of credit against a purchase, so it starts with the deal.",
+      fields: [
+        {
+          key: "lcType",
+          label: "What kind of letter of credit do you need?",
+          kind: "choice",
+          required: true,
+          options: ["Inland (within India)", "Import"],
+        },
+        {
+          key: "country",
+          label: "Which country are you buying from?",
+          kind: "text",
+          placeholder: "e.g. China, UAE, Germany",
+          showWhen: { key: "lcType", values: ["Import"] },
+        },
+        {
+          key: "goods",
+          label: "What are you buying?",
+          kind: "text",
+          placeholder: "e.g. Raw material, machinery, finished goods",
+        },
+        {
+          key: "usance",
+          label: "When will you pay the supplier?",
+          kind: "choice",
+          options: [
+            "At sight, when the documents arrive",
+            "Within 90 days",
+            "Within 90 to 180 days",
+          ],
+        },
+        {
+          key: "supplierDoc",
+          label: "Do you have a supplier contract or proforma invoice?",
+          kind: "choice",
+          options: ["Yes", "Not yet"],
+        },
+      ],
+    },
+    {
+      title: "Your limit and margin",
+      fields: [
+        {
+          key: "hasLcLimit",
+          label: "Do you already have a letter of credit limit?",
+          kind: "choice",
+          options: YES_NO,
+        },
+        {
+          key: "lcLimitBank",
+          label: "Which bank has it?",
+          kind: "text",
+          placeholder: "Name of the bank",
+          showWhen: { key: "hasLcLimit", values: ["Yes"] },
+        },
+        {
+          key: "lcLimitAmount",
+          label: "Amount of the limit",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "hasLcLimit", values: ["Yes"] },
+        },
+        {
+          key: "cashMargin",
+          label: "Can you pay the full amount as cash margin?",
+          kind: "choice",
+          options: ["Yes", "Part of it", "No"],
+          help: "Without a limit, the bank asks for a full cash margin.",
+          showWhen: { key: "hasLcLimit", values: ["No"] },
+        },
+        {
+          key: "timeline",
+          label: "By when do you need it?",
+          kind: "choice",
+          options: ["Within a week", "Within a month", "Later"],
+        },
+      ],
+    },
+    businessStep(ENTITIES, VINTAGE_2),
+    { title: "Turnover and proof of income", fields: moneyFields({ gst: true }) },
+    creditStep("letter of credit", { business: true }),
+  ],
+};
+
+const BILL_DISCOUNTING: FollowUpForm = {
+  ...COMMON,
+  slugs: ["bill-discounting"],
+  reason:
+    "We ask these extra questions so our experts can read your invoices and customers the way a lender does and shortlist the Banks & NBFCs that discount them.",
+  steps: [
+    businessStep(ENTITIES, VINTAGE_2, "Here lenders look as much at your customers as at you."),
+    {
+      title: "Your invoices and customers",
+      fields: [
+        {
+          key: "invoiceVolume",
+          label: "Value of invoices you raise every month",
+          kind: "amount",
+          placeholder: "e.g. 50,00,000",
+        },
+        {
+          key: "creditPeriod",
+          label: "How long do customers take to pay?",
+          kind: "choice",
+          options: ["Up to 30 days", "30 to 60 days", "60 to 90 days", "More than 90 days"],
+        },
+        {
+          key: "buyers",
+          label: "How many customers make up most of your sales?",
+          kind: "choice",
+          options: ["1 or 2", "3 to 5", "6 to 10", "More than 10"],
+        },
+        {
+          key: "buyerQuality",
+          label: "Are your main customers large, well-known companies?",
+          kind: "choice",
+          options: ["Yes", "A mix", "Mostly small businesses"],
+        },
+        {
+          key: "overdueInvoices",
+          label: "Are any invoices overdue by more than 90 days?",
+          kind: "choice",
+          options: YES_NO,
+        },
+        {
+          key: "alreadyDiscounting",
+          label: "Do you already discount bills or have a cash credit or overdraft?",
+          kind: "choice",
+          options: YES_NO,
+        },
+        {
+          key: "presentLender",
+          label: "Which lender, and what is the limit?",
+          kind: "text",
+          placeholder: "e.g. ABC Bank, ₹50 Lakh",
+          showWhen: { key: "alreadyDiscounting", values: ["Yes"] },
+        },
+        { key: "timeline", label: "When do you need it?", kind: "choice", options: TIMELINE },
+      ],
+    },
+    { title: "Turnover and proof of income", fields: moneyFields({ gst: true }) },
+    creditStep("bill discounting", { business: true }),
+  ],
+};
+
+// ───────────── Personal, Education, Vehicle & Other Loans ─────────────
+
+const AGE_BANDS = ["Below 21", "21 to 35", "36 to 50", "51 to 60", "Above 60"];
+
+const PERSONAL_LOAN: FollowUpForm = {
+  ...COMMON,
+  slugs: ["personal-loan"],
+  reason:
+    "We ask these extra questions so our experts can read your profile the way a lender does and shortlist the Banks & NBFCs that may offer you the best rate.",
+  steps: [
+    {
+      title: "About you",
+      fields: [
+        {
+          key: "age",
+          label: "Your age",
+          kind: "choice",
+          options: AGE_BANDS,
+          help: "Lenders for this loan usually take applicants between about 21 and 60.",
+        },
+        {
+          key: "residence",
+          label: "Where do you live?",
+          kind: "choice",
+          options: [
+            "In my own house",
+            "In a rented house",
+            "With my parents",
+            "In company accommodation",
+          ],
+        },
+      ],
+    },
+    workWithType(),
+    {
+      title: "What you need the loan for",
+      fields: [
+        {
+          key: "purpose",
+          label: "What is the loan for?",
+          kind: "choice",
+          options: [
+            "Medical need",
+            "Wedding",
+            "Travel",
+            "Home renovation",
+            "Repaying other loans",
+            "A business need",
+            "Education",
+            "Other",
+          ],
+        },
+        PURPOSE_OTHER,
+        {
+          key: "repayAmount",
+          label: "Amount of the loans you want to repay",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "purpose", values: ["Repaying other loans"] },
+        },
+        {
+          key: "tenure",
+          label: "Preferred repayment period",
+          kind: "choice",
+          options: ["Up to 1 year", "1 to 2 years", "2 to 3 years", "3 to 5 years", "Not sure"],
+        },
+        {
+          key: "timeline",
+          label: "When do you need the money?",
+          kind: "choice",
+          options: TIMELINE,
+        },
+      ],
+    },
+    creditStep("personal loan"),
+  ],
+};
+
+const EDUCATION_LOAN: FollowUpForm = {
+  ...COMMON,
+  slugs: ["education-loan"],
+  reason:
+    "We ask these extra questions so our experts can read the course and the co-applicant the way a lender does and shortlist the Banks & NBFCs that fund it.",
+  steps: [
+    {
+      title: "The course",
+      help: "An education loan is judged on the course, the institution and the co-applicant's income.",
+      fields: [
+        {
+          key: "destination",
+          label: "Where will the student study?",
+          kind: "choice",
+          required: true,
+          options: ["In India", "Abroad"],
+        },
+        {
+          key: "country",
+          label: "Which country?",
+          kind: "text",
+          placeholder: "e.g. USA, UK, Canada, Australia",
+          showWhen: { key: "destination", values: ["Abroad"] },
+        },
+        {
+          key: "level",
+          label: "What level is the course?",
+          kind: "choice",
+          options: [
+            "Undergraduate",
+            "Postgraduate",
+            "Doctorate",
+            "Diploma or certificate",
+            "Other",
+          ],
+        },
+        {
+          key: "courseName",
+          label: "Name of the course",
+          kind: "text",
+          placeholder: "e.g. MBA, MS in Computer Science",
+        },
+        { key: "institution", label: "College or university", kind: "text" },
+        {
+          key: "admission",
+          label: "Where is the admission?",
+          kind: "choice",
+          options: ["Confirmed", "Waiting for the result", "Applied", "Not yet applied"],
+        },
+        {
+          key: "startsIn",
+          label: "When does the course start?",
+          kind: "choice",
+          options: ["Within 3 months", "In 3 to 6 months", "In 6 to 12 months", "Later"],
+        },
+        {
+          key: "duration",
+          label: "How long is the course?",
+          kind: "choice",
+          options: ["Up to 1 year", "2 years", "3 years", "4 years or more"],
+        },
+        {
+          key: "test",
+          label: "Have you taken the entrance or language test (GRE, GMAT, IELTS or similar)?",
+          kind: "choice",
+          options: ["Yes", "Preparing for it", "Not needed"],
+          showWhen: { key: "destination", values: ["Abroad"] },
+        },
+      ],
+    },
+    {
+      title: "Cost and own funds",
+      fields: [
+        {
+          key: "totalCost",
+          label: "Total cost of the course and living",
+          kind: "amount",
+          placeholder: "e.g. 40,00,000",
+        },
+        {
+          key: "ownFunds",
+          label: "Money the family can put in",
+          kind: "amount",
+          allowZero: true,
+          placeholder: "e.g. 5,00,000, or 0 if none",
+        },
+        {
+          key: "scholarship",
+          label: "Has a scholarship been awarded?",
+          kind: "choice",
+          options: YES_NO,
+        },
+        {
+          key: "scholarshipAmount",
+          label: "Amount of the scholarship",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "scholarship", values: ["Yes"] },
+        },
+        {
+          key: "marks",
+          label: "Marks in the last exam",
+          kind: "choice",
+          options: ["Above 75%", "60% to 75%", "50% to 60%", "Below 50%"],
+        },
+      ],
+    },
+    {
+      title: "The co-applicant",
+      help: "A resident Indian co-applicant with a steady income, usually a parent or guardian, stands with the student.",
+      fields: [
+        {
+          key: "coRelation",
+          label: "Who will be the co-applicant?",
+          kind: "choice",
+          required: true,
+          options: ["Father", "Mother", "Spouse", "Guardian", "Other"],
+        },
+        {
+          key: "coWork",
+          label: "What does the co-applicant do?",
+          kind: "choice",
+          options: [
+            "Salaried",
+            "Runs a business",
+            "Practises a profession",
+            "Retired, with a pension",
+            "Not earning",
+          ],
+        },
+        {
+          key: "coIncome",
+          label: "Co-applicant's monthly income",
+          kind: "amount",
+          placeholder: "e.g. 1,00,000",
+          showWhen: {
+            key: "coWork",
+            values: [
+              "Salaried",
+              "Runs a business",
+              "Practises a profession",
+              "Retired, with a pension",
+            ],
+          },
+        },
+        {
+          key: "coEmi",
+          label: "EMIs the co-applicant already pays every month",
+          kind: "amount",
+          allowZero: true,
+          placeholder: "e.g. 20,000, or 0 if none",
+        },
+        {
+          key: "collateral",
+          label: "Can the family offer a property or deposit as security?",
+          kind: "choice",
+          options: ["Yes, a property", "Yes, a fixed deposit", "No"],
+          help: "Larger loans, especially for study abroad, usually need security.",
+        },
+        {
+          key: "collateralValue",
+          label: "Approximate value of it",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "collateral", values: ["Yes, a property", "Yes, a fixed deposit"] },
+        },
+      ],
+    },
+  ],
+};
+
+const carWork = (): QuestionStep[] => [
+  workWithType(),
+  {
+    title: "Registration and repayment",
+    fields: [
+      {
+        key: "registeredIn",
+        label: "In whose name will the car be registered?",
+        kind: "choice",
+        options: ["My own name", "My spouse", "My company or firm"],
+      },
+      {
+        key: "tenure",
+        label: "Preferred repayment period",
+        kind: "choice",
+        options: ["Up to 2 years", "2 to 3 years", "3 to 5 years", "5 to 7 years", "Not sure"],
+      },
+      {
+        key: "emiComfort",
+        label: "The monthly EMI you are comfortable with",
+        kind: "amount",
+        placeholder: "e.g. 20,000",
+      },
+      { key: "timeline", label: "When do you need the loan?", kind: "choice", options: TIMELINE },
+    ],
+  },
+];
+
+const NEW_CAR_LOAN: FollowUpForm = {
+  ...COMMON,
+  slugs: ["new-car-loan"],
+  reason:
+    "We ask these extra questions so our experts can read your profile the way a lender does and shortlist the Banks & NBFCs that may fund the car on the best terms.",
+  steps: [
+    {
+      title: "The car",
+      fields: [
+        {
+          key: "carModel",
+          label: "Which car are you buying?",
+          kind: "text",
+          required: true,
+          placeholder: "Make and model, e.g. Hyundai Creta",
+        },
+        {
+          key: "booked",
+          label: "Have you booked it?",
+          kind: "choice",
+          options: ["Yes, booked", "Finalised, not booked", "Still shortlisting"],
+        },
+        {
+          key: "onRoad",
+          label: "On-road price",
+          kind: "amount",
+          placeholder: "e.g. 12,00,000",
+        },
+        {
+          key: "downPayment",
+          label: "Down payment you can make",
+          kind: "amount",
+          allowZero: true,
+          placeholder: "e.g. 2,00,000, or 0 if none",
+          help: "Some lenders fund up to the full on-road price.",
+        },
+        {
+          key: "usage",
+          label: "Is the car for personal or business use?",
+          kind: "choice",
+          options: ["Personal use", "Business use"],
+        },
+      ],
+    },
+    ...carWork(),
+    creditStep("car loan"),
+  ],
+};
+
+const USED_CAR_LOAN: FollowUpForm = {
+  ...COMMON,
+  slugs: ["used-car-loan"],
+  reason:
+    "We ask these extra questions so our experts can read the car and your profile the way a lender does and shortlist the Banks & NBFCs that may fund it.",
+  steps: [
+    {
+      title: "The car",
+      help: "Lenders value the car first, so its age and papers matter.",
+      fields: [
+        {
+          key: "carModel",
+          label: "Which car are you buying?",
+          kind: "text",
+          required: true,
+          placeholder: "Make and model, e.g. Maruti Swift",
+        },
+        {
+          key: "carAge",
+          label: "How old is the car?",
+          kind: "choice",
+          options: ["Less than 3 years", "3 to 5 years", "5 to 8 years", "More than 8 years"],
+          help: "Most lenders take cars up to 8 years old when the loan ends.",
+        },
+        {
+          key: "seller",
+          label: "Who are you buying it from?",
+          kind: "choice",
+          options: ["A dealer", "A private owner"],
+        },
+        {
+          key: "price",
+          label: "Price agreed for the car",
+          kind: "amount",
+          placeholder: "e.g. 6,00,000",
+        },
+        {
+          key: "downPayment",
+          label: "Down payment you can make",
+          kind: "amount",
+          allowZero: true,
+          placeholder: "e.g. 1,50,000, or 0 if none",
+        },
+        {
+          key: "papers",
+          label: "Are the RC and insurance papers clear?",
+          kind: "choice",
+          options: ["Yes", "Not sure", "Insurance has lapsed"],
+        },
+      ],
+    },
+    ...carWork(),
+    creditStep("car loan"),
+  ],
+};
+
+const CAR_REFINANCE: FollowUpForm = {
+  ...COMMON,
+  slugs: ["car-refinance"],
+  reason:
+    "We ask these extra questions so our experts can read your car and your profile the way a lender does and shortlist the Banks & NBFCs that may lend against it.",
+  steps: [
+    {
+      title: "Your car",
+      help: "Refinance is a loan against a car you already own, so lenders start with the car.",
+      fields: [
+        {
+          key: "carModel",
+          label: "Which car do you own?",
+          kind: "text",
+          required: true,
+          placeholder: "Make and model, e.g. Honda City",
+        },
+        {
+          key: "carAge",
+          label: "How old is it?",
+          kind: "choice",
+          options: ["Less than 3 years", "3 to 5 years", "5 to 8 years", "More than 8 years"],
+        },
+        {
+          key: "ownName",
+          label: "Is the car registered in your own name?",
+          kind: "choice",
+          options: YES_NO,
+        },
+        {
+          key: "carValue",
+          label: "What do you think the car is worth today?",
+          kind: "amount",
+          placeholder: "e.g. 7,00,000",
+        },
+        {
+          key: "carLoan",
+          label: "Is there a loan on the car now?",
+          kind: "choice",
+          options: YES_NO,
+        },
+        {
+          key: "carLoanLender",
+          label: "Which lender?",
+          kind: "text",
+          placeholder: "Name of the bank or finance company",
+          showWhen: { key: "carLoan", values: ["Yes"] },
+        },
+        {
+          key: "carLoanOutstanding",
+          label: "Amount still to be repaid",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "carLoan", values: ["Yes"] },
+        },
+        {
+          key: "carLoanTakeover",
+          label: "Do you want this loan taken over as part of the new one?",
+          kind: "choice",
+          options: YES_NO,
+          showWhen: { key: "carLoan", values: ["Yes"] },
+        },
+      ],
+    },
+    {
+      title: "What you need the money for",
+      fields: [
+        {
+          key: "purpose",
+          label: "What is the money for?",
+          kind: "choice",
+          options: [
+            "A business need",
+            "A personal need",
+            "Repaying other loans",
+            "Medical need",
+            "Other",
+          ],
+        },
+        PURPOSE_OTHER,
+        {
+          key: "tenure",
+          label: "Preferred repayment period",
+          kind: "choice",
+          options: ["Up to 1 year", "1 to 2 years", "2 to 3 years", "3 to 5 years", "Not sure"],
+        },
+        {
+          key: "timeline",
+          label: "When do you need the money?",
+          kind: "choice",
+          options: TIMELINE,
+        },
+      ],
+    },
+    workWithType(),
+    creditStep("car refinance"),
+  ],
+};
+
+const COMMERCIAL_VEHICLE: FollowUpForm = {
+  ...COMMON,
+  slugs: ["commercial-vehicle"],
+  reason:
+    "We ask these extra questions so our experts can read the vehicle and your transport business the way a lender does and shortlist the Banks & NBFCs that may fund it.",
+  steps: [
+    {
+      title: "The vehicle",
+      help: "Lenders fund a commercial vehicle on its value and on how it will earn.",
+      fields: [
+        {
+          key: "vehicleType",
+          label: "What kind of vehicle?",
+          kind: "choice",
+          required: true,
+          options: [
+            "Truck",
+            "Tipper",
+            "Bus or passenger vehicle",
+            "Small commercial vehicle or tempo",
+            "Trailer or tractor-trailer",
+            "Other",
+          ],
+        },
+        { key: "condition", label: "Is it new or used?", kind: "choice", options: ["New", "Used"] },
+        {
+          key: "vehicleAge",
+          label: "How old is it?",
+          kind: "choice",
+          options: ["Less than 3 years", "3 to 5 years", "5 to 8 years", "More than 8 years"],
+          showWhen: { key: "condition", values: ["Used"] },
+        },
+        {
+          key: "price",
+          label: "Price of the vehicle",
+          kind: "amount",
+          placeholder: "e.g. 25,00,000",
+        },
+        {
+          key: "downPayment",
+          label: "Down payment you can make",
+          kind: "amount",
+          allowZero: true,
+          placeholder: "e.g. 5,00,000, or 0 if none",
+        },
+        {
+          key: "usage",
+          label: "How will it earn?",
+          kind: "choice",
+          options: [
+            "Carrying my own goods",
+            "Hired out as a transport service",
+            "Under a contract with a company",
+            "Carrying passengers",
+          ],
+        },
+        {
+          key: "permit",
+          label: "Do you have the permit or route papers?",
+          kind: "choice",
+          options: ["Yes", "Applying for them", "Not needed"],
+        },
+      ],
+    },
+    {
+      title: "About you and your business",
+      fields: [
+        {
+          key: "constitution",
+          label: "How are you set up?",
+          kind: "choice",
+          required: true,
+          options: ["An individual transporter", "Proprietorship", "Partnership", "Company"],
+        },
+        {
+          key: "experience",
+          label: "Years of experience in transport or this business",
+          kind: "choice",
+          options: ["Less than 1 year", "1 to 3 years", "3 to 5 years", "More than 5 years"],
+        },
+        {
+          key: "ownedVehicles",
+          label: "How many vehicles do you already own?",
+          kind: "choice",
+          options: ["None", "1 or 2", "3 to 5", "More than 5"],
+        },
+        {
+          key: "ownedLoans",
+          label: "Are those vehicles under loan?",
+          kind: "choice",
+          options: ["Yes, some", "No, they are fully paid for"],
+          showWhen: { key: "ownedVehicles", values: ["1 or 2", "3 to 5", "More than 5"] },
+        },
+      ],
+    },
+    { title: "Income and banking", fields: moneyFields({ gst: true }) },
+    {
+      title: "How you would like to repay",
+      fields: [
+        {
+          key: "tenure",
+          label: "Preferred repayment period",
+          kind: "choice",
+          options: ["Up to 2 years", "2 to 4 years", "4 to 5 years", "5 to 7 years", "Not sure"],
+        },
+        {
+          key: "timeline",
+          label: "When do you need the vehicle?",
+          kind: "choice",
+          options: TIMELINE,
+        },
+      ],
+    },
+    creditStep("commercial vehicle loan", { business: true }),
+  ],
+};
+
+const LOAN_AGAINST_SECURITIES: FollowUpForm = {
+  ...COMMON,
+  slugs: ["loan-against-securities"],
+  reason:
+    "We ask these extra questions so our experts can see what you hold and shortlist the lenders that accept it, at the funding they allow.",
+  steps: [
+    {
+      title: "What you would pledge",
+      help: "The lender lends against the market value of approved holdings, so it starts with what you hold.",
+      fields: [
+        {
+          key: "holding",
+          label: "What would you like to pledge?",
+          kind: "multi",
+          required: true,
+          options: ["Shares", "ETFs", "Mutual funds", "Bonds", "A promoter's shares in a company"],
+        },
+        {
+          key: "holdingValue",
+          label: "Approximate market value of everything you would pledge",
+          kind: "amount",
+          placeholder: "e.g. 50,00,000",
+        },
+        {
+          key: "ownName",
+          label: "Are they all held in your own name?",
+          kind: "choice",
+          options: ["Yes", "Some are held jointly", "No"],
+        },
+        {
+          key: "pledged",
+          label: "Is any of it already pledged for another loan?",
+          kind: "choice",
+          options: YES_NO,
+        },
+        {
+          key: "approvedList",
+          label: "Have you checked that your holdings are on a lender's approved list?",
+          kind: "choice",
+          options: ["Yes", "No, please check for me"],
+          help: "Lenders accept only the securities on their approved list.",
+        },
+      ],
+    },
+    {
+      title: "The facility you would like",
+      fields: [
+        {
+          key: "purpose",
+          label: "What will you use the money for?",
+          kind: "choice",
+          options: [
+            "A personal need",
+            "A business need",
+            "Investing",
+            "Short-term cash flow",
+            "Other",
+          ],
+        },
+        PURPOSE_OTHER,
+        {
+          key: "usage",
+          label: "How will you use the limit?",
+          kind: "choice",
+          options: ["Draw and repay as needed", "Draw once and repay later", "Not sure"],
+          help: "You pay interest only on what you use, for the days you use it.",
+        },
+        { key: "timeline", label: "When do you need it?", kind: "choice", options: TIMELINE },
+      ],
+    },
+    {
+      title: "About you",
+      fields: [
+        {
+          key: "applicantType",
+          label: "Are you salaried or self-employed?",
+          kind: "choice",
+          options: ["Salaried", "Self-Employed", "Retired or an investor"],
+        },
+        {
+          key: "monthlyIncome",
+          label: "Your monthly income, from all sources",
+          kind: "amount",
+          placeholder: "e.g. 1,50,000",
+        },
+      ],
+    },
+    creditStep("loan against securities"),
+  ],
+};
+
 export const FOLLOW_UP_FORMS: FollowUpForm[] = [
   HOME_LOAN,
   LOAN_AGAINST_PROPERTY,
@@ -2033,6 +3578,21 @@ export const FOLLOW_UP_FORMS: FollowUpForm[] = [
   UNSECURED_DOD,
   PROFESSIONAL_LOAN,
   PRIVATE_FUNDING,
+  CGTMSE,
+  MACHINE_LOAN,
+  WORKING_CAPITAL_TERM_LOAN,
+  CASH_CREDIT,
+  OVERDRAFT_LIMIT,
+  BANK_GUARANTEE,
+  LETTER_OF_CREDIT,
+  BILL_DISCOUNTING,
+  PERSONAL_LOAN,
+  EDUCATION_LOAN,
+  NEW_CAR_LOAN,
+  USED_CAR_LOAN,
+  CAR_REFINANCE,
+  COMMERCIAL_VEHICLE,
+  LOAN_AGAINST_SECURITIES,
 ];
 
 export const followUpFor = (slug: string | undefined): FollowUpForm | undefined =>
