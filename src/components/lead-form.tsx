@@ -218,10 +218,11 @@ export function LeadForm({
             Takes less than a minute
           </span>
           <h3 className="mt-4 font-heading text-[1.6rem] leading-tight font-bold text-navy dark:text-white">
-            Request a Free Consultation
+            Tell Us About You. We’ll Find the Right Fit.
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Share a few details and an expert will call you back with matched lender options.
+            Complete this quick form to help us understand your needs. Based on your details, we’ll explore suitable
+            Banks &amp; NBFCs and compare available loan terms for your profile.
           </p>
 
           <div className="my-5 border-t border-dashed border-border" />
