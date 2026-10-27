@@ -386,7 +386,18 @@ function ProductDetailPage() {
                 <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
                   At A Glance
                 </p>
-                {product.minimalDisclosure && product.eligibility.length > 0 ? (
+                {product.glance ? (
+                  <ul className="space-y-3">
+                    {product.glance.map((g) => (
+                      <li key={g.label} className="flex items-start gap-2.5">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
+                        <span className="text-sm leading-snug text-foreground">
+                          <span className="font-bold text-navy dark:text-white">{g.label}:</span> {g.value}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : product.minimalDisclosure && product.eligibility.length > 0 ? (
                   // The terms are already in the strip on the left, so here show who the product is for.
                   <ul className="space-y-4">
                     {product.eligibility.slice(0, 5).map((item) => (

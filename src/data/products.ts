@@ -81,6 +81,8 @@ export type Product = {
   minimalDisclosure?: boolean;
   /** A short line shown as a pill under the title, for who the product is (or is not) for. */
   heroNote?: string;
+  /** Replaces the list in the "At a glance" box with these label and value lines. */
+  glance?: { label: string; value: string }[];
   /** What the money can be used for, as its own list under "What's included". */
   uses?: { heading: string; items: string[] };
   /** Several programmes of one product side by side (for example loan-amount bands), each with its own terms. */
@@ -849,6 +851,15 @@ export const PRODUCTS: Product[] = [
       { label: "Tenure", value: "12 to 120 months*" },
       { label: "Indicative rate", value: "19% to 24% p.a. reducing*" },
       { label: "For", value: "Salaried and self-employed" },
+    ],
+    glance: [
+      { label: "Purpose", value: "General or business use (not housing)" },
+      { label: "Loan size", value: "₹3 L to ₹15 L (kicker up to ₹5 L for top profiles)" },
+      { label: "Tenor", value: "5 to 12 years" },
+      { label: "LTV (with insurance)", value: "55% self-occupied residential; 50% others" },
+      { label: "Property accepted", value: "Self-occupied residential or commercial, mixed use" },
+      { label: "Distance limit", value: "35 km main branch / 25 km spoke" },
+      { label: "Base FOIR", value: "Same slabs; hard cap of 65%" },
     ],
     about:
       "Get funds against your eligible property for business or personal financial needs, while continuing to own and use your property. Micro Loan Against Property (Micro LAP) is designed for eligible salaried and self-employed customers looking for relatively smaller property-backed funding with simple assessment and documentation. Explore property-backed funding options generally ranging from ₹3 Lakh to ₹20 Lakh*. The applicable loan amount depends on the selected program, property value, income / repayment capacity, credit profile and lender policy.",
