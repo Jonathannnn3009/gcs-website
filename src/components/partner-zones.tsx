@@ -15,6 +15,7 @@ import { Section, SectionHeading } from "@/components/section";
 import { ASSISTANT_NAME } from "@/lib/chat/config";
 import { isValidEmail } from "@/lib/validation";
 import { submitLead } from "@/lib/leads";
+import { ThankYouCard } from "@/components/thank-you-card";
 
 // Pieces shared by the three partner pages (Agent, Builder, Freelancer).
 
@@ -335,17 +336,7 @@ export function ZoneForm({
   };
 
   if (submitted) {
-    return (
-      <div className="flex h-full min-h-[420px] flex-col items-center justify-center rounded-2xl border border-gold/20 bg-white p-8 text-center dark:bg-card">
-        <span className="grid h-12 w-12 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
-          <Check className="h-6 w-6" />
-        </span>
-        <h3 className="mt-4 text-lg font-extrabold text-navy dark:text-white">
-          Thanks — we'll be in touch.
-        </h3>
-        <p className="mt-2 text-sm text-muted-foreground">{thanks}</p>
-      </div>
-    );
+    return <ThankYouCard tall heading="Thank you. We will be in touch." message={thanks} showSteps={false} />;
   }
 
   const err = (k: keyof Values) =>

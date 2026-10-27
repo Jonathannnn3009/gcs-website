@@ -6,6 +6,7 @@
 //   comma separated). ZOHO_REGION is "in" (default) or "com", to match the Zoho account.
 
 import { serverEnv } from "@/lib/chat/env.server";
+import { customerThankYou, teamAlert } from "@/lib/email-templates.server";
 
 export type EnquiryMail = {
   name: string;
@@ -21,7 +22,12 @@ export type EnquiryMail = {
 let cached: { token: string; until: number } | null = null;
 
 const clean = (s: unknown, max: number) =>
-  typeof s === "string" ? s.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").trim().slice(0, max) : "";
+  typeof s === "string"
+    ? s
+        .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "")
+        .trim()
+        .slice(0, max)
+    : "";
 
 /** Zoho hands out a one-hour access token in exchange for the long-lived refresh token. */
 async function accessToken(region: string): Promise<string | null> {
@@ -32,26 +38,35 @@ async function accessToken(region: string): Promise<string | null> {
     client_secret: serverEnv("ZOHO_CLIENT_SECRET"),
     refresh_token: serverEnv("ZOHO_REFRESH_TOKEN"),
   });
-  const res = await fetch(`https://accounts.zoho.${region}/oauth/v2/token`, { method: "POST", body });
-  const json = (await res.json().catch(() => null)) as { access_token?: string; expires_in?: number } | null;
+  const res = await fetch(`https://accounts.zoho.${region}/oauth/v2/token`, {
+    method: "POST",
+    body,
+  });
+  const json = (await res.json().catch(() => null)) as {
+    access_token?: string;
+    expires_in?: number;
+  } | null;
   if (!res.ok || !json?.access_token) return null;
-  cached = { token: json.access_token, until: Date.now() + Math.max(60, (json.expires_in ?? 3600) - 120) * 1000 };
+  cached = {
+    token: json.access_token,
+    until: Date.now() + Math.max(60, (json.expires_in ?? 3600) - 120) * 1000,
+  };
   return json.access_token;
 }
 
 export function notifyConfigured(): boolean {
   return Boolean(
     serverEnv("ZOHO_CLIENT_ID") &&
-      serverEnv("ZOHO_CLIENT_SECRET") &&
-      serverEnv("ZOHO_REFRESH_TOKEN") &&
-      serverEnv("ZOHO_ACCOUNT_ID") &&
-      serverEnv("ZOHO_FROM_ADDRESS") &&
-      serverEnv("LEAD_NOTIFY_TO"),
+    serverEnv("ZOHO_CLIENT_SECRET") &&
+    serverEnv("ZOHO_REFRESH_TOKEN") &&
+    serverEnv("ZOHO_ACCOUNT_ID") &&
+    serverEnv("ZOHO_FROM_ADDRESS") &&
+    serverEnv("LEAD_NOTIFY_TO"),
   );
 }
 
 /** Sends the alert. Returns whether Zoho accepted it; never throws. */
-export async function sendEnquiryMail(lead: EnquiryMail): Promise<boolean> {
+export async function sendEnquiryMail(lead: EnquiryMail, origin: string): Promise<boolean> {
   if (!notifyConfigured()) return false;
   const region = serverEnv("ZOHO_REGION") === "com" ? "com" : "in";
   try {
@@ -59,51 +74,43 @@ export async function sendEnquiryMail(lead: EnquiryMail): Promise<boolean> {
     if (!token) return false;
 
     const name = clean(lead.name, 120);
-    const lines = [
-      `New enquiry from the website`,
-      ``,
-      `Name: ${name}`,
-      `Phone: ${clean(lead.phone, 20)}`,
-      lead.email ? `Email: ${clean(lead.email, 160)}` : "",
-      lead.city ? `City: ${clean(lead.city, 80)}` : "",
-      lead.productSlug ? `Loan: ${clean(lead.productSlug, 80)}` : "",
-      lead.amount ? `Amount: Rs. ${new Intl.NumberFormat("en-IN").format(lead.amount)}` : "",
-      `Form: ${clean(lead.source, 60)}`,
-      lead.detail ? `\nDetails:\n${clean(lead.detail, 2000)}` : "",
-      ``,
-      `Received ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} (India time)`,
-    ].filter((l, i, a) => l !== "" || a[i - 1] !== "");
+    const phone = clean(lead.phone, 20);
+    const rows: [string, string][] = [
+      ["Name", name],
+      ["Phone", phone],
+      ["Email", clean(lead.email, 160)],
+      ["City", clean(lead.city, 80)],
+      ["Loan", clean(lead.productSlug, 80)],
+      ["Amount", lead.amount ? `Rs. ${new Intl.NumberFormat("en-IN").format(lead.amount)}` : ""],
+      ["Form", clean(lead.source, 60)],
+      [
+        "Received",
+        `${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} (India time)`,
+      ],
+    ];
 
     const sent = await deliver(
       region,
       token,
       serverEnv("LEAD_NOTIFY_TO"),
       `New enquiry: ${name}${lead.productSlug ? ` (${clean(lead.productSlug, 40)})` : ""}`,
-      lines.join("\n"),
+      teamAlert(
+        origin,
+        rows,
+        clean(lead.detail, 2000),
+        `tel:+91${phone.replace(/\D/g, "").slice(-10)}`,
+      ),
     );
 
-    // a short thank-you to the customer, when they gave an email address
+    // a thank-you to the customer, when they gave an email address
     const to = clean(lead.email, 160);
     if (to && /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(to)) {
-      const first = name.split(/\s+/)[0] ?? name;
       await deliver(
         region,
         token,
         to,
         "We have received your enquiry | Growth Capital Services",
-        [
-          `Dear ${first},`,
-          ``,
-          `Thank you for contacting Growth Capital Services. We have received your enquiry, and one of our loan experts will get in touch with you on ${clean(lead.phone, 20)}.`,
-          ``,
-          `To help us understand your needs, it may help to keep your identity proof, address proof and recent bank statements handy. We will tell you exactly what applies to you.`,
-          ``,
-          `Please note this is an enquiry, not a loan approval. Loan terms and approval depend on the lender's own checks.`,
-          ``,
-          `Warm regards`,
-          `Growth Capital Services`,
-          `If you did not make this enquiry, you can ignore this email.`,
-        ].join("\n"),
+        customerThankYou(origin, name.split(/\s+/)[0] ?? name, phone),
       );
     }
     return sent;
@@ -113,7 +120,13 @@ export async function sendEnquiryMail(lead: EnquiryMail): Promise<boolean> {
 }
 
 /** One message through Zoho Mail's API. */
-async function deliver(region: string, token: string, to: string, subject: string, content: string): Promise<boolean> {
+async function deliver(
+  region: string,
+  token: string,
+  to: string,
+  subject: string,
+  content: string,
+): Promise<boolean> {
   const res = await fetch(
     `https://mail.zoho.${region}/api/accounts/${encodeURIComponent(serverEnv("ZOHO_ACCOUNT_ID"))}/messages`,
     {
@@ -128,7 +141,7 @@ async function deliver(region: string, token: string, to: string, subject: strin
         toAddress: to,
         subject,
         content,
-        mailFormat: "plaintext",
+        mailFormat: "html",
       }),
     },
   );

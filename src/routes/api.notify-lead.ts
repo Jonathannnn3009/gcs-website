@@ -28,30 +28,42 @@ export const Route = createFileRoute("/api/notify-lead")({
     handlers: {
       GET: () => new Response("Use POST", { status: 405, headers: { allow: "POST" } }),
       POST: async ({ request }) => {
-        const ok = () => new Response(JSON.stringify({ ok: true }), { headers: { "content-type": "application/json" } });
+        const ok = () =>
+          new Response(JSON.stringify({ ok: true }), {
+            headers: { "content-type": "application/json" },
+          });
         try {
           const { notifyConfigured, sendEnquiryMail } = await import("@/lib/notify-email.server");
           if (!notifyConfigured()) return ok();
 
-          const ip = request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for") ?? "unknown";
+          const ip =
+            request.headers.get("cf-connecting-ip") ??
+            request.headers.get("x-forwarded-for") ??
+            "unknown";
           if (!allowed(ip)) return ok();
 
           const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
           const name = text(body?.["name"], 120);
           const phone = text(body?.["phone"], 20);
-          if (!body || name.length < 2 || !/^\d{10}$/.test(phone.replace(/\D/g, "").slice(-10))) return ok();
+          if (!body || name.length < 2 || !/^\d{10}$/.test(phone.replace(/\D/g, "").slice(-10)))
+            return ok();
 
-          const amount = typeof body["amount"] === "number" && body["amount"] > 0 ? body["amount"] : undefined;
-          await sendEnquiryMail({
-            name,
-            phone,
-            source: text(body["source"], 60) || "website",
-            email: text(body["email"], 160) || undefined,
-            city: text(body["city"], 80) || undefined,
-            productSlug: text(body["productSlug"], 80) || undefined,
-            amount,
-            detail: text(body["detail"], 2000) || undefined,
-          });
+          const amount =
+            typeof body["amount"] === "number" && body["amount"] > 0 ? body["amount"] : undefined;
+          const origin = new URL(request.url).origin;
+          await sendEnquiryMail(
+            {
+              name,
+              phone,
+              source: text(body["source"], 60) || "website",
+              email: text(body["email"], 160) || undefined,
+              city: text(body["city"], 80) || undefined,
+              productSlug: text(body["productSlug"], 80) || undefined,
+              amount,
+              detail: text(body["detail"], 2000) || undefined,
+            },
+            origin,
+          );
         } catch {
           // an alert failing must never affect the visitor
         }

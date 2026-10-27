@@ -6,6 +6,7 @@ import { normalizePhone } from "@/lib/lead-dedupe";
 import { amountTooLow, isValidEmail, MIN_AMOUNT, MIN_LOAN_AMOUNT } from "@/lib/validation";
 import { submitLead } from "@/lib/leads";
 import { QuestionFieldInput } from "@/components/question-field";
+import { ThankYouCard } from "@/components/thank-you-card";
 
 type Answers = Record<string, string>;
 
@@ -115,20 +116,7 @@ export function ProductQuestionnaire({
   };
 
   if (done) {
-    return (
-      <div id="apply" className="scroll-mt-28 rounded-2xl border border-gold/30 bg-white p-7 text-center shadow-[var(--shadow-card)] dark:bg-card">
-        <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
-          <Check className="h-6 w-6" />
-        </span>
-        <h3 className="mt-4 text-lg font-bold text-navy dark:text-white" style={{ letterSpacing: "0" }}>
-          Thank you. We have your details.
-        </h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          A GCS loan expert will go through your answers and contact you. This is an enquiry, not a loan approval. A
-          lender decides after its own checks.
-        </p>
-      </div>
-    );
+    return <ThankYouCard id="apply" />;
   }
 
   const onContact = step === lastStep;

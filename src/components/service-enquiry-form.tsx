@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { submitLead } from "@/lib/leads";
 import { amountProblem } from "@/lib/validation";
+import { ThankYouCard } from "@/components/thank-you-card";
 
 const fieldClass =
   "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20 dark:bg-card dark:text-white";
@@ -108,17 +109,7 @@ export function ServiceEnquiryForm({
 
   if (submitted) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-gold/20 bg-white p-8 text-center dark:bg-card">
-        <span className="grid h-12 w-12 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
-          <Check className="h-6 w-6" />
-        </span>
-        <h3 className="mt-4 text-lg font-extrabold text-navy dark:text-white">
-          Thanks — we'll be in touch.
-        </h3>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Our team will reach out to understand your requirement and the next steps.
-        </p>
-      </div>
+      <ThankYouCard message="Our team will reach out to understand your requirement and the next steps." />
     );
   }
 

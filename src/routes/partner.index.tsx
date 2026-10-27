@@ -54,6 +54,7 @@ import {
   PARTNER_STEPS,
 } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
+import { ThankYouCard } from "@/components/thank-you-card";
 
 export const Route = createFileRoute("/partner/")({
   head: () => ({
@@ -209,17 +210,12 @@ function PartnerForm() {
 
   if (submitted) {
     return (
-      <div className="flex h-full min-h-[420px] flex-col items-center justify-center rounded-2xl border border-gold/20 bg-white p-8 text-center dark:bg-card">
-        <span className="grid h-12 w-12 place-items-center rounded-full bg-gold-pale/70 text-gold-dark dark:bg-gold/15">
-          <Check className="h-6 w-6" />
-        </span>
-        <h3 className="mt-4 text-lg font-extrabold text-navy dark:text-white">
-          Thanks — we'll be in touch.
-        </h3>
-        <p className="mt-2 text-sm text-muted-foreground">
-          A member of our team will reach out to set up your referral partnership.
-        </p>
-      </div>
+      <ThankYouCard
+        tall
+        heading="Thank you. We will be in touch."
+        message="A member of our team will reach out to set up your referral partnership."
+        showSteps={false}
+      />
     );
   }
 
