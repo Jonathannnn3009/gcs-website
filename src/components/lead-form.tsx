@@ -196,6 +196,75 @@ const PROPERTY_LOANS: Record<string, PropertyLoan> = {
     properties: [],
     applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
   },
+  "working-capital-term-loan": {
+    kinds: [
+      "Working Capital Term Loan",
+      "Cash Credit / Overdraft Regularisation",
+      "Debt Consolidation Loan",
+      "Seasonal Working Capital",
+      "Working Capital Top-Up",
+    ],
+    properties: [],
+    applicants: [
+      "Proprietorship",
+      "Partnership",
+      "LLP",
+      "Pvt Ltd Co",
+      "Public Ltd Co",
+      "Self-employed professional",
+    ],
+  },
+  "cash-credit": {
+    kinds: [
+      "Cash Credit against Stock and Debtors",
+      "Cash Credit against Receivables",
+      "Secured Cash Credit",
+      "Cash Credit Limit Enhancement",
+      "Cash Credit Takeover",
+    ],
+    properties: [],
+    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
+  },
+  "overdraft-limit": {
+    kinds: [
+      "Overdraft against Property",
+      "Overdraft against Fixed Deposits",
+      "Overdraft against Securities",
+      "Unsecured Overdraft",
+      "Drop-Line Overdraft",
+      "Overdraft Balance Transfer",
+    ],
+    properties: [],
+    applicants: ["Salaried", "Self-Employed", "Proprietorship", "Partnership / LLP", "Pvt Ltd Co"],
+  },
+  "bank-guarantee": {
+    kinds: [
+      "Performance Guarantee",
+      "Financial Guarantee",
+      "Bid Bond / Tender Guarantee (EMD)",
+      "Advance Payment Guarantee",
+      "Retention Money Guarantee",
+      "Shipping Guarantee",
+      "Customs and Excise Guarantee",
+      "Warranty Guarantee",
+    ],
+    properties: [],
+    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
+  },
+  "letter-of-credit": {
+    kinds: [
+      "Inland Letter of Credit",
+      "Import Letter of Credit",
+      "Sight Letter of Credit",
+      "Usance Letter of Credit",
+      "Standby Letter of Credit",
+      "Revolving Letter of Credit",
+      "Back-to-Back Letter of Credit",
+      "Red Clause / Green Clause Credit",
+    ],
+    properties: [],
+    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
+  },
   "lease-rental-discounting": {
     kinds: ["Lease Rental Discounting (LRD)", "LRD Balance Transfer", "LRD Top-Up"],
     properties: [
@@ -220,6 +289,10 @@ const forSecondForm = (category: string, slug: string) =>
     "private-funding",
     "cgtmse",
     "machine-loan",
+    "working-capital-term-loan",
+    "cash-credit",
+    "bank-guarantee",
+    "letter-of-credit",
   ].includes(slug)
     ? ""
     : [
@@ -326,6 +399,35 @@ const machineKnown = (loanKind: string): Record<string, string> =>
           : loanKind === "Equipment Leasing"
             ? { equipment: "Equipment on lease" }
             : {};
+const wctlKnown = (loanKind: string): Record<string, string> =>
+  loanKind === "Cash Credit / Overdraft Regularisation"
+    ? { gapCause: "To regularise a stretched cash credit or overdraft" }
+    : loanKind === "Debt Consolidation Loan"
+      ? { gapCause: "To consolidate several short-term dues" }
+      : loanKind === "Seasonal Working Capital"
+        ? { gapCause: "A seasonal build-up of stock" }
+        : {};
+const overdraftKnown = (loanKind: string): Record<string, string> =>
+  loanKind === "Overdraft against Property"
+    ? { securityKind: "Against a property" }
+    : /Fixed Deposits|Securities/.test(loanKind)
+      ? { securityKind: "Against fixed deposits or securities" }
+      : loanKind === "Unsecured Overdraft"
+        ? { securityKind: "Without security" }
+        : {};
+const BG_TYPES: Record<string, string> = {
+  "Performance Guarantee": "Performance guarantee",
+  "Financial Guarantee": "Financial guarantee",
+  "Bid Bond / Tender Guarantee (EMD)": "Bid bond or EMD",
+  "Advance Payment Guarantee": "Advance-payment guarantee",
+};
+const lcKnown = (loanKind: string): Record<string, string> => ({
+  ...(loanKind === "Inland Letter of Credit" ? { lcType: "Inland (within India)" } : {}),
+  ...(loanKind === "Import Letter of Credit" ? { lcType: "Import" } : {}),
+  ...(loanKind === "Sight Letter of Credit"
+    ? { usance: "At sight, when the documents arrive" }
+    : {}),
+});
 const knownFromShortForm = (
   slug: string,
   loanKind: string,
@@ -350,9 +452,20 @@ const knownFromShortForm = (
               : {}),
           }
         : {
-            ...(slug === "unsecured-dod" || slug === "dlod" ? overdraftRequirement(loanKind) : {}),
+            ...(["unsecured-dod", "dlod", "overdraft-limit", "overdraft-facility"].includes(slug)
+              ? overdraftRequirement(loanKind)
+              : {}),
+            ...(slug === "overdraft-limit" || slug === "overdraft-facility"
+              ? overdraftKnown(loanKind)
+              : {}),
+            ...(slug === "working-capital-term-loan" ? wctlKnown(loanKind) : {}),
+            ...(slug === "bank-guarantee" && BG_TYPES[loanKind]
+              ? { bgType: BG_TYPES[loanKind] }
+              : {}),
+            ...(slug === "letter-of-credit" ? lcKnown(loanKind) : {}),
             ...(slug === "professional-loan" ? professionalPurpose(loanKind) : {}),
-            ...((slug === "dlod" || slug === "unsecured-dod") && SECOND_FORM_SETUP[applicant]
+            ...(["dlod", "unsecured-dod", "overdraft-limit", "overdraft-facility"].includes(slug) &&
+            SECOND_FORM_SETUP[applicant]
               ? { constitution: SECOND_FORM_SETUP[applicant] }
               : {}),
             ...(SECOND_FORM_PROPERTY[propertyKind]
