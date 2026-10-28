@@ -979,6 +979,20 @@ const LEASE_RENTAL: FollowUpForm = {
   ],
 };
 
+/** The loans that move a running loan to a lender that charges less, or add money to it. */
+const BT_TYPES = [
+  "Home Loan Balance Transfer",
+  "Home Loan Balance Transfer + Top-Up",
+  "Home Loan Top-Up",
+  "LAP Balance Transfer",
+  "LAP Balance Transfer + Top-Up",
+  "LAP Top-Up Loan",
+  "Drop-Line Overdraft Balance Transfer",
+];
+const BT_TOP_UP = BT_TYPES.filter((t) => t.includes("Top-Up"));
+// Home loans are asked no property type; the others are secured on a property.
+const BT_PROPERTY = BT_TYPES.filter((t) => !t.startsWith("Home Loan"));
+
 /** Moving a running loan to a lender that charges less, with or without more money on top. */
 const BALANCE_TRANSFER: FollowUpForm = {
   ...COMMON,
@@ -991,17 +1005,20 @@ const BALANCE_TRANSFER: FollowUpForm = {
       help: "A lender taking over a loan looks first at how it has been repaid and how much is left.",
       fields: [
         {
-          key: "facility",
-          label: "Which loan do you want to move?",
+          key: "loanType",
+          label: "Type of loan",
           kind: "choice",
           required: true,
-          options: ["Home Loan", "Loan Against Property", "Drop-Line Overdraft", "Other"],
+          noOther: true,
+          options: BT_TYPES,
         },
         {
-          key: "requirement",
-          label: "What do you want?",
+          key: "applicantType",
+          label: "You are",
           kind: "choice",
-          options: ["Only move the loan to a cheaper lender", "Move it and also take a top-up"],
+          required: true,
+          noOther: true,
+          options: ["Salaried", "Self-Employed", "Partnership", "Pvt Ltd Co"],
         },
         {
           key: "bank",
@@ -1079,7 +1096,7 @@ const BALANCE_TRANSFER: FollowUpForm = {
           label: "Top-up amount you need",
           kind: "amount",
           placeholder: rupee,
-          showWhen: { key: "requirement", values: ["Move it and also take a top-up"] },
+          showWhen: { key: "loanType", values: BT_TOP_UP },
         },
         {
           key: "topUpPurpose",
@@ -1094,7 +1111,7 @@ const BALANCE_TRANSFER: FollowUpForm = {
             "Medical or personal need",
             "Other",
           ],
-          showWhen: { key: "requirement", values: ["Move it and also take a top-up"] },
+          showWhen: { key: "loanType", values: BT_TOP_UP },
         },
       ],
     },
@@ -1106,10 +1123,7 @@ const BALANCE_TRANSFER: FollowUpForm = {
           label: "Type of property",
           kind: "choice",
           options: ["Residential", "Commercial", "Industrial", "Other"],
-          showWhen: {
-            key: "facility",
-            values: ["Loan Against Property", "Drop-Line Overdraft", "Other"],
-          },
+          showWhen: { key: "loanType", values: BT_PROPERTY },
         },
         {
           key: "propertyArea",
@@ -1137,19 +1151,17 @@ const BALANCE_TRANSFER: FollowUpForm = {
       ],
     },
     (() => {
+      // A partnership or private limited company is asked the business questions, like a self-employed person.
       const step = workStep("applicantType");
       return {
         ...step,
-        fields: [
-          {
-            key: "applicantType",
-            label: "Type of income (salaried or self-employed)",
-            kind: "choice" as const,
-            required: true,
-            options: ["Salaried", "Self-Employed"],
-          },
-          ...step.fields.filter((f) => !f.showWhen?.values.includes("NRI")),
-        ],
+        fields: step.fields
+          .filter((f) => !f.showWhen?.values.includes("NRI"))
+          .map((f) =>
+            f.showWhen?.key === "applicantType" && f.showWhen.values.includes("Self-Employed")
+              ? { ...f, showWhen: { ...f.showWhen, values: ["Self-Employed", "Partnership", "Pvt Ltd Co"] } }
+              : f,
+          ),
       };
     })(),
     creditStep("balance transfer", { apart: true }),
