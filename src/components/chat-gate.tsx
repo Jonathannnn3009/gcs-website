@@ -24,9 +24,9 @@ import { submitLead } from "@/lib/leads";
 // code by email, and they type it in. Only then does the chat open. The website sends and checks the code.
 
 const inputClass =
-  "h-11 w-full rounded-xl border border-border bg-white pr-3 pl-10 text-[14px] text-ink outline-none transition-all placeholder:text-muted-foreground/60 focus:border-gold focus:ring-2 focus:ring-gold/25";
+  "h-10 w-full rounded-xl border border-border bg-white pr-3 pl-10 text-[13.5px] text-ink outline-none transition-all placeholder:text-muted-foreground/60 focus:border-gold focus:ring-2 focus:ring-gold/25";
 
-const labelClass = "mb-1 block text-[10px] font-bold tracking-[0.16em] text-navy uppercase";
+const labelClass = "mb-0.5 block text-[9.5px] font-bold tracking-[0.16em] text-navy uppercase";
 
 /** A label, with an icon sitting inside the left edge of the box. */
 function IconField({ label, icon, children }: { label: string; icon: ReactNode; children: ReactNode }) {
@@ -186,22 +186,22 @@ export function ChatGate({
   ) : null;
 
   return (
-    <div className="flex-1 overflow-y-auto overscroll-contain bg-bg-light px-4 py-5">
+    <div className="flex flex-1 flex-col justify-center overflow-y-auto overscroll-contain bg-bg-light px-4 py-3">
       <div className="text-center">
-        <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-white shadow-sm ring-2 ring-gold/60">
-          <img src="/brand/gcs-mark.png" alt="" className="h-8 w-auto" />
+        <span className="mx-auto grid h-11 w-11 place-items-center rounded-full bg-white shadow-sm ring-2 ring-gold/60">
+          <img src="/brand/gcs-mark.png" alt="" className="h-6 w-auto" />
         </span>
-        <h3 className="mt-3 font-heading text-[1.35rem] leading-tight font-bold text-navy">
+        <h3 className="mt-2 font-heading text-[1.2rem] leading-tight font-bold text-navy">
           Hi, I&rsquo;m {ASSISTANT_NAME}
         </h3>
-        <p className="mx-auto mt-1 max-w-[290px] text-[13px] leading-snug text-muted-foreground">
+        <p className="mx-auto mt-0.5 max-w-[300px] text-[12.5px] leading-snug text-muted-foreground">
           {step === "details"
             ? "GCS's AI assistant. Confirm your email so I know who I'm talking to, and I'll answer your loan questions."
             : "Nearly there. Type the 6-digit code we emailed you."}
         </p>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-2.5">
         <Steps step={step} />
       </div>
 
@@ -218,9 +218,9 @@ export function ChatGate({
             e.preventDefault();
             void sendCode();
           }}
-          className="mt-4 rounded-2xl border border-gold/30 bg-white p-4 shadow-sm"
+          className="mt-3 rounded-2xl border border-gold/30 bg-white p-3.5 shadow-sm"
         >
-          <div className="space-y-3">
+          <div className="space-y-2">
             <IconField label="Your name" icon={<User className="h-4 w-4" />}>
               <input
                 aria-label="Your name"
@@ -264,13 +264,13 @@ export function ChatGate({
           <button
             type="submit"
             disabled={busy}
-            className="gold-btn mt-4 h-11 w-full justify-center text-[14px] disabled:opacity-60"
+            className="gold-btn mt-3 h-10 w-full justify-center text-[13.5px] disabled:opacity-60"
           >
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
             {busy ? "Sending your code…" : "Email me the code"}
             {!busy && <ArrowRight className="h-4 w-4" />}
           </button>
-          <p className="mt-3 flex items-start gap-1.5 text-[11px] leading-snug text-muted-foreground">
+          <p className="mt-2 flex items-start gap-1.5 text-[10.5px] leading-snug text-muted-foreground">
             <Lock className="mt-0.5 h-3 w-3 shrink-0 text-gold-dark" />
             <span>
               We email you a 6-digit code. By continuing you agree that Growth Capital Services may contact you on
@@ -285,7 +285,7 @@ export function ChatGate({
             e.preventDefault();
             void check(code);
           }}
-          className="mt-4 rounded-2xl border border-gold/30 bg-white p-4 shadow-sm"
+          className="mt-3 rounded-2xl border border-gold/30 bg-white p-3.5 shadow-sm"
         >
           <div className="flex flex-wrap justify-center gap-2 text-[12px] font-semibold text-navy">
             {sentTo.sms && (
@@ -302,7 +302,7 @@ export function ChatGate({
           </div>
           <p className="mt-2 text-center text-[11.5px] text-muted-foreground">It works for 10 minutes.</p>
 
-          <div className="mt-4 flex justify-center">
+          <div className="mt-3 flex justify-center">
             <InputOTP
               maxLength={6}
               value={code}
@@ -321,7 +321,7 @@ export function ChatGate({
                   <InputOTPSlot
                     key={i}
                     index={i}
-                    className="h-12 w-10 rounded-xl border border-border bg-white font-heading text-lg font-bold text-navy shadow-none first:rounded-xl first:border last:rounded-xl data-[active=true]:border-gold"
+                    className="h-11 w-10 rounded-xl border border-border bg-white font-heading text-lg font-bold text-navy shadow-none first:rounded-xl first:border last:rounded-xl data-[active=true]:border-gold"
                   />
                 ))}
               </InputOTPGroup>
@@ -331,7 +331,7 @@ export function ChatGate({
           <button
             type="submit"
             disabled={busy || code.length !== 6}
-            className="gold-btn mt-4 h-11 w-full justify-center text-[14px] disabled:opacity-60"
+            className="gold-btn mt-3 h-10 w-full justify-center text-[13.5px] disabled:opacity-60"
           >
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
             {busy ? "Checking…" : "Verify and start chatting"}
@@ -360,7 +360,7 @@ export function ChatGate({
         </form>
       )}
 
-      <p className="mt-4 px-1 text-center text-[11px] leading-snug text-muted-foreground">
+      <p className="mt-2.5 px-1 text-center text-[10.5px] leading-snug text-muted-foreground">
         No code? Check your email and spam folder, or{" "}
         <a href={CONTACT.phoneHref} className="font-semibold text-navy underline">
           call us
