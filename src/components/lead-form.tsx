@@ -95,6 +95,41 @@ const PROPERTY_LOANS: Record<string, PropertyLoan> = {
       "Trust / Society",
     ],
   },
+  "business-loan": {
+    kinds: [
+      "Unsecured Business Loan",
+      "Secured Business Loan",
+      "Business Term Loan",
+      "Working Capital Loan",
+      "Business Loan Balance Transfer",
+      "Business Loan Top-Up",
+    ],
+    properties: [],
+    applicants: [
+      "Proprietorship",
+      "Partnership",
+      "LLP",
+      "Pvt Ltd Co",
+      "Public Ltd Co",
+      "Self-employed professional",
+    ],
+  },
+  "micro-business-loan": {
+    kinds: [
+      "Micro Business Loan",
+      "Micro Business Loan Balance Transfer",
+      "Micro Business Loan Top-Up",
+      "Micro Business Loan Top-Up + Balance Transfer",
+    ],
+    properties: [],
+    applicants: [
+      "Self-employed individual",
+      "Sole proprietorship",
+      "Partnership firm",
+      "LLP",
+      "Private limited company",
+    ],
+  },
   "lease-rental-discounting": {
     kinds: ["Lease Rental Discounting (LRD)", "LRD Balance Transfer", "LRD Top-Up"],
     properties: [
@@ -111,7 +146,9 @@ const PROPERTY_LOANS: Record<string, PropertyLoan> = {
 // The second form only tells salaried, self-employed and NRI apart: a firm or company counts as self-employed there.
 // The lease rental form asks who owns the property instead, so it takes no applicant type.
 const forSecondForm = (category: string, slug: string) =>
-  slug === "lease-rental-discounting" || slug === "project-funding"
+  ["lease-rental-discounting", "project-funding", "business-loan", "micro-business-loan"].includes(
+    slug,
+  )
     ? ""
     : [
           "Partnership",
@@ -165,35 +202,45 @@ const SECOND_FORM_STAGE: Record<string, string> = {
   "Inventory Funding": "Built, with units left to sell or let",
   "Lease Rental Discounting": "Built, with units left to sell or let",
 };
+// The business loan forms ask how the business is set up, in the same words as "You Are".
+const SECOND_FORM_BUSINESS: Record<string, string> = {
+  "Pvt Ltd Co": "Private limited company",
+  "Public Ltd Co": "Limited company",
+};
 const knownFromShortForm = (
   slug: string,
   loanKind: string,
   propertyKind: string,
   applicant: string,
 ): Record<string, string> =>
-  slug === "project-funding"
+  slug === "business-loan" || slug === "micro-business-loan"
     ? {
-        projectType: propertyKind,
-        ...(SECOND_FORM_STAGE[loanKind] ? { stage: SECOND_FORM_STAGE[loanKind] } : {}),
-        ...(SECOND_FORM_PROMOTER[applicant]
-          ? { constitution: SECOND_FORM_PROMOTER[applicant] }
-          : {}),
+        constitution: SECOND_FORM_BUSINESS[applicant] ?? applicant,
+        ...(loanKind === "Working Capital Loan" ? { purpose: "Working capital" } : {}),
       }
-    : {
-        ...(slug === "dlod" && SECOND_FORM_SETUP[applicant]
-          ? { constitution: SECOND_FORM_SETUP[applicant] }
-          : {}),
-        ...(SECOND_FORM_PROPERTY[propertyKind]
-          ? { propertyKind: SECOND_FORM_PROPERTY[propertyKind] }
-          : {}),
-        ...(propertyKind === "Self-occupied residential property"
-          ? { propertyUse: "Self-occupied or self-used" }
-          : {}),
-        ...(slug === "lease-rental-discounting" && SECOND_FORM_OWNER[applicant]
-          ? { ownerType: SECOND_FORM_OWNER[applicant] }
-          : {}),
-        ...(/Balance Transfer|Top-Up/.test(loanKind) ? { existingMortgage: "Yes" } : {}),
-      };
+    : slug === "project-funding"
+      ? {
+          projectType: propertyKind,
+          ...(SECOND_FORM_STAGE[loanKind] ? { stage: SECOND_FORM_STAGE[loanKind] } : {}),
+          ...(SECOND_FORM_PROMOTER[applicant]
+            ? { constitution: SECOND_FORM_PROMOTER[applicant] }
+            : {}),
+        }
+      : {
+          ...(slug === "dlod" && SECOND_FORM_SETUP[applicant]
+            ? { constitution: SECOND_FORM_SETUP[applicant] }
+            : {}),
+          ...(SECOND_FORM_PROPERTY[propertyKind]
+            ? { propertyKind: SECOND_FORM_PROPERTY[propertyKind] }
+            : {}),
+          ...(propertyKind === "Self-occupied residential property"
+            ? { propertyUse: "Self-occupied or self-used" }
+            : {}),
+          ...(slug === "lease-rental-discounting" && SECOND_FORM_OWNER[applicant]
+            ? { ownerType: SECOND_FORM_OWNER[applicant] }
+            : {}),
+          ...(/Balance Transfer|Top-Up/.test(loanKind) ? { existingMortgage: "Yes" } : {}),
+        };
 const OVERDRAFT_CATEGORY_LOANS = new Set(["unsecured-dod", "dlod", "overdraft-limit"]);
 // Loans whose short form asks for the industry too.
 const INDUSTRY_LOANS = new Set(["business-loan", "private-funding"]);
@@ -402,7 +449,8 @@ export function LeadForm({
       next.loanType = "Please enter your loan type";
     if (asksLapKinds(values.loanType)) {
       if (!values.loanKind) next.loanKind = "Select one";
-      if (!values.propertyKind) next.propertyKind = "Select one";
+      if (propertyLoanFor(values.loanType)?.properties.length && !values.propertyKind)
+        next.propertyKind = "Select one";
     }
     if (categoryOptionsFor(values.loanType) && !values.applicantCategory)
       next.applicantCategory = "Select one";
@@ -654,26 +702,28 @@ export function LeadForm({
                     ))}
                   </select>
                 </Field>
-                <Field
-                  id={`${uid}-property-kind`}
-                  label={propertyLoanFor(values.loanType)?.propertyLabel ?? "Type of Property"}
-                  error={errors.propertyKind}
-                  className="sm:col-span-2"
-                >
-                  <select
+                {propertyLoanFor(values.loanType)?.properties.length ? (
+                  <Field
                     id={`${uid}-property-kind`}
-                    className={selectClass}
-                    value={values.propertyKind}
-                    onChange={set("propertyKind")}
+                    label={propertyLoanFor(values.loanType)?.propertyLabel ?? "Type of Property"}
+                    error={errors.propertyKind}
+                    className="sm:col-span-2"
                   >
-                    <option value="">Select one</option>
-                    {(propertyLoanFor(values.loanType)?.properties ?? []).map((k) => (
-                      <option key={k} value={k}>
-                        {k}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
+                    <select
+                      id={`${uid}-property-kind`}
+                      className={selectClass}
+                      value={values.propertyKind}
+                      onChange={set("propertyKind")}
+                    >
+                      <option value="">Select one</option>
+                      {(propertyLoanFor(values.loanType)?.properties ?? []).map((k) => (
+                        <option key={k} value={k}>
+                          {k}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                ) : null}
               </>
             ) : null}
 
