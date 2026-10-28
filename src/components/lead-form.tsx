@@ -130,6 +130,37 @@ const PROPERTY_LOANS: Record<string, PropertyLoan> = {
       "Private limited company",
     ],
   },
+  "unsecured-dod": {
+    kinds: [
+      "Unsecured Drop-Line Overdraft",
+      "Unsecured Overdraft",
+      "Unsecured Overdraft Balance Transfer",
+      "Unsecured Overdraft Top-Up",
+      "Unsecured Overdraft Balance Transfer + Top-Up",
+    ],
+    properties: [],
+    applicants: [
+      "Salaried",
+      "Self-employed professional",
+      "Proprietorship",
+      "Partnership / LLP",
+      "Pvt Ltd Co",
+      "Public Ltd Co",
+    ],
+  },
+  "professional-loan": {
+    kinds: [
+      "Professional Loan",
+      "Doctor Loan",
+      "CA / CS Loan",
+      "Architect and Engineer Loan",
+      "Practice Setup Loan",
+      "Equipment Purchase Loan",
+      "Professional Overdraft",
+    ],
+    properties: [],
+    applicants: [],
+  },
   "lease-rental-discounting": {
     kinds: ["Lease Rental Discounting (LRD)", "LRD Balance Transfer", "LRD Top-Up"],
     properties: [
@@ -159,6 +190,7 @@ const forSecondForm = (category: string, slug: string) =>
           "Partner / Director",
           "Self-employed professional",
           "Partnership / LLP",
+          "Public Ltd Co",
         ].includes(category)
       ? "Self-Employed"
       : category;
@@ -188,6 +220,7 @@ const SECOND_FORM_SETUP: Record<string, string> = {
   Proprietorship: "Proprietorship",
   "Partnership / LLP": "Partnership or LLP",
   "Pvt Ltd Co": "Private limited company",
+  "Public Ltd Co": "Limited company",
 };
 const SECOND_FORM_PROMOTER: Record<string, string> = {
   Partnership: "Partnership or LLP",
@@ -207,6 +240,19 @@ const SECOND_FORM_BUSINESS: Record<string, string> = {
   "Pvt Ltd Co": "Private limited company",
   "Public Ltd Co": "Limited company",
 };
+// The overdraft forms ask whether the limit is new or moved from another lender.
+const overdraftRequirement = (loanKind: string): Record<string, string> =>
+  /Balance Transfer \+ Top-Up/.test(loanKind)
+    ? { requirement: "Move it and add more funding" }
+    : /Balance Transfer/.test(loanKind)
+      ? { requirement: "Move my present overdraft or loan" }
+      : {};
+const professionalPurpose = (loanKind: string): Record<string, string> =>
+  loanKind === "Practice Setup Loan"
+    ? { purpose: "Setting up or moving a practice" }
+    : loanKind === "Equipment Purchase Loan"
+      ? { purpose: "Buying equipment" }
+      : {};
 const knownFromShortForm = (
   slug: string,
   loanKind: string,
@@ -227,7 +273,9 @@ const knownFromShortForm = (
             : {}),
         }
       : {
-          ...(slug === "dlod" && SECOND_FORM_SETUP[applicant]
+          ...(slug === "unsecured-dod" || slug === "dlod" ? overdraftRequirement(loanKind) : {}),
+          ...(slug === "professional-loan" ? professionalPurpose(loanKind) : {}),
+          ...((slug === "dlod" || slug === "unsecured-dod") && SECOND_FORM_SETUP[applicant]
             ? { constitution: SECOND_FORM_SETUP[applicant] }
             : {}),
           ...(SECOND_FORM_PROPERTY[propertyKind]
@@ -380,7 +428,8 @@ export function LeadForm({
   const categoryOptionsFor = (title: string): string[] | null => {
     if (!product) return null;
     const slug = slugFor(title);
-    if (slug && PROPERTY_LOANS[slug]) return [...PROPERTY_LOANS[slug].applicants, "Other"];
+    if (slug && PROPERTY_LOANS[slug]?.applicants.length)
+      return [...PROPERTY_LOANS[slug].applicants, "Other"];
     if (slug && CATEGORY_LOANS.has(slug)) return [...applicants, "Other"];
     if (slug && OVERDRAFT_CATEGORY_LOANS.has(slug)) return [...PERSON_ONLY_CATEGORIES, "Other"];
     return null;
