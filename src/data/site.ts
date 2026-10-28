@@ -14,12 +14,12 @@ export const CONTACT = {
   whatsappLink: waLink(),
   email: "connect.gcs@growthcapitalservices.in",
   address:
-    "CCTV Towers, Andheri-Ghatkopar Rd, Bhatwadi, Kaju Pada, Barve Nagar, Ghatkopar West, Mumbai 400084",
+    "Avadhoot Chhaya CHS Ltd., 3rd Floor, R. B. Marg, Bhatwadi, Near Jagruti Nagar Metro Station, Ghatkopar West, Mumbai 400084",
   // Opens Google Maps (or the Maps app on a phone) searching for the office address.
   mapsLink:
     "https://www.google.com/maps/search/?api=1&query=" +
     encodeURIComponent(
-      "CCTV Towers, Andheri-Ghatkopar Rd, Bhatwadi, Kaju Pada, Barve Nagar, Ghatkopar West, Mumbai 400084",
+      "Avadhoot Chhaya CHS Ltd., 3rd Floor, R. B. Marg, Bhatwadi, Near Jagruti Nagar Metro Station, Ghatkopar West, Mumbai 400084",
     ),
   hours: "Monday to Saturday · 10:00 AM – 6:00 PM",
   cities: ["Mumbai", "Thane", "Navi Mumbai", "Pune"],

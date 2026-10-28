@@ -17,14 +17,14 @@ export const LOCATIONS: LocationContent[] = [
     metaDescription:
       "Growth Capital Services is based in Ghatkopar West, Mumbai — home loans, business loans, loan against property and more, arranged across 75+ Banks and NBFCs.",
     intro:
-      "Our advisory office sits on the Andheri-Ghatkopar Road in Ghatkopar West, in the middle of Mumbai's western suburbs. If you're anywhere from Andheri to Mulund, Bandra to Chembur, a senior expert is a short trip away — or a phone call, if that's easier.",
+      "Our advisory office sits on R. B. Marg in Ghatkopar West, near Jagruti Nagar Metro Station, in the middle of Mumbai's western suburbs. If you're anywhere from Andheri to Mulund, Bandra to Chembur, a senior expert is a short trip away — or a phone call, if that's easier.",
     hasOffice: true,
     serviceNote:
       "Walk in by appointment for a face-to-face file review, or handle the entire process over phone, WhatsApp and email — most Mumbai clients do a mix of both.",
     faqs: [
       {
         q: "Where exactly is your Mumbai office?",
-        a: "CCTV Towers, Andheri-Ghatkopar Road, Ghatkopar West, Mumbai 400084 — a short walk from Ghatkopar station on both the suburban line and Metro Line 1.",
+        a: "Avadhoot Chhaya CHS Ltd., 3rd Floor, R. B. Marg, Bhatwadi, near Jagruti Nagar Metro Station, Ghatkopar West, Mumbai 400084.",
       },
       {
         q: "Can I meet an expert in person?",

@@ -264,13 +264,6 @@ const coApplicantStep = (): QuestionStep => ({
       options: YES_NO,
     },
     {
-      key: "coApplicantName",
-      label: "What is their name?",
-      kind: "text",
-      placeholder: "Full name",
-      showWhen: { key: "coApplicant", values: ["Yes"] },
-    },
-    {
       key: "coApplicantRelation",
       label: "How are they related to you?",
       kind: "choice",
@@ -3943,37 +3936,44 @@ export const FOLLOW_UP_FORMS: FollowUpForm[] = [
   CAR_LOAN,
 ];
 
-/** Loans that offer a choice of loan types ask for it first in the second form. */
+/** Where the customer is, in their own words: asked right after the type of loan, in every second form. */
+const LOCATION: QuestionField = {
+  key: "location",
+  label: "Location",
+  kind: "text",
+  required: true,
+  placeholder: "e.g. Ghatkopar West, Dadar E, Panvel",
+  help: "The area or locality you live or work in.",
+};
+
+/** Loans that offer a choice of loan types ask for it first in the second form; every form then asks the location. */
 const withKind = (form: FollowUpForm): FollowUpForm => {
-  const slug = form.slugs.find((s) => LOAN_KINDS[s]);
   const first = form.steps[0];
-  if (!slug || !first) return form;
-  const kinds = LOAN_KINDS[slug] ?? [];
+  if (!first) return form;
+  const slug = form.slugs.find((s) => LOAN_KINDS[s]);
+  const lead: QuestionField[] = slug
+    ? [
+        {
+          key: "loanKind",
+          label: "Type of loan",
+          kind: "choice",
+          required: true,
+          noOther: true,
+          options: LOAN_KINDS[slug] ?? [],
+        },
+        ...(LOAN_EXTRAS[slug] ?? []).map((e) => ({
+          ...e,
+          kind: "choice" as const,
+          required: true,
+        })),
+      ]
+    : // the home loan and balance transfer forms already open with their own type question
+      first.fields.slice(0, 1);
+  const rest = slug ? first.fields : first.fields.slice(1);
   return {
     ...form,
-    kindSeeds: (kind) => seedsForKind(slug, kind),
-    steps: [
-      {
-        ...first,
-        fields: [
-          {
-            key: "loanKind",
-            label: "Type of loan",
-            kind: "choice",
-            required: true,
-            noOther: true,
-            options: kinds,
-          },
-          ...(LOAN_EXTRAS[slug] ?? []).map((e) => ({
-            ...e,
-            kind: "choice" as const,
-            required: true,
-          })),
-          ...first.fields,
-        ],
-      },
-      ...form.steps.slice(1),
-    ],
+    ...(slug ? { kindSeeds: (kind: string) => seedsForKind(slug, kind) } : {}),
+    steps: [{ ...first, fields: [...lead, LOCATION, ...rest] }, ...form.steps.slice(1)],
   };
 };
 const FORMS = FOLLOW_UP_FORMS.map(withKind);

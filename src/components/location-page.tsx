@@ -153,7 +153,7 @@ export function LocationPage({ location: builtInLocation }: { location: Location
             <div className="overflow-hidden rounded-2xl border border-border">
               <iframe
                 title={`Growth Capital Services — serving ${location.city}`}
-                src="https://www.google.com/maps?q=CCTV+Towers+Andheri+Ghatkopar+Road+Ghatkopar+West+Mumbai&output=embed"
+                src="https://www.google.com/maps?q=Avadhoot+Chhaya+CHS+R+B+Marg+Bhatwadi+Ghatkopar+West+Mumbai&output=embed"
                 width="100%"
                 height="360"
                 style={{ border: 0 }}

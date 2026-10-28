@@ -163,7 +163,7 @@ function ContactPage() {
               Our Office in <span className="gold-text-static italic">Ghatkopar West.</span>
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Our advisory team is based at CCTV Towers on the Andheri-Ghatkopar Road, accessible to
+              Our advisory team is based at Avadhoot Chhaya CHS on R. B. Marg, near Jagruti Nagar Metro Station, accessible to
               clients across the western suburbs. Visit by appointment for a structured file review.
             </p>
 
@@ -204,7 +204,7 @@ function ContactPage() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <a
-                href="https://maps.google.com/?q=CCTV+Towers+Andheri+Ghatkopar+Road+Ghatkopar+West+Mumbai"
+                href="https://maps.google.com/?q=Avadhoot+Chhaya+CHS+R+B+Marg+Bhatwadi+Ghatkopar+West+Mumbai"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-md bg-navy px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-navy-soft"
@@ -226,7 +226,7 @@ function ContactPage() {
             <div className="overflow-hidden rounded-2xl border border-border">
               <iframe
                 title="Growth Capital Services Office Location"
-                src="https://www.google.com/maps?q=CCTV+Towers+Andheri+Ghatkopar+Road+Ghatkopar+West+Mumbai&output=embed"
+                src="https://www.google.com/maps?q=Avadhoot+Chhaya+CHS+R+B+Marg+Bhatwadi+Ghatkopar+West+Mumbai&output=embed"
                 width="100%"
                 height="360"
                 style={{ border: 0 }}

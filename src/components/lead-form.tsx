@@ -579,7 +579,7 @@ export function LeadForm({
 
             {product && !compact ? (
               // On a loan's own page the loan is already known, so it is shown, not asked.
-              <Field id={`${uid}-loan`} label="Loan Type" error={errors.loanType}>
+              <Field id={`${uid}-loan`} label="Loan" error={errors.loanType}>
                 <div
                   id={`${uid}-loan`}
                   className={`${fieldClass} flex items-center justify-between gap-2 bg-secondary/50 font-semibold dark:bg-card`}

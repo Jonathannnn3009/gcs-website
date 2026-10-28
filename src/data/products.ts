@@ -727,7 +727,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         key: "propertyType",
-        label: "Property Type",
+        label: "Type of Property Purchase",
         type: "select",
         options: ["Builder Purchase", "Resale", "Self-Owned"],
       },
@@ -830,7 +830,7 @@ export const PRODUCTS: Product[] = [
     checklistIntake: [
       {
         key: "propertyType",
-        label: "Property Type",
+        label: "Type of Property Purchase",
         type: "select",
         options: ["Builder Purchase", "Resale", "Self-Owned"],
       },

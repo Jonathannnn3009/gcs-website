@@ -34,7 +34,7 @@ export function SiteFooter() {
             />
             <p className="mt-4 text-sm leading-relaxed text-white/70">
               Established in 2017. Tailored loan solutions from leading Banks and NBFCs across
-              Mumbai, Thane, Navi Mumbai and Pune. Your dreams, our funding expertise.
+              Mumbai, Thane, Navi Mumbai and Pune. Your Growth, Our Financial Expertise.
             </p>
             <div className="mt-5 flex gap-3">
               <a
