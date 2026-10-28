@@ -166,16 +166,18 @@ export function LeadForm({
     const hit = loanTypes.find((s) => s.title === title);
     return hit ? (SLUG_ALIASES[hit.slug] ?? hit.slug) : undefined;
   };
+  // Only a loan's own page asks these. On the home and other general pages the short form stays short.
   const categoryOptionsFor = (title: string): string[] | null => {
+    if (!product) return null;
     const slug = slugFor(title);
     if (slug === LAP_SLUG) return [...LAP_APPLICANTS, "Other"];
     if (slug && CATEGORY_LOANS.has(slug)) return [...applicants, "Other"];
     if (slug && OVERDRAFT_CATEGORY_LOANS.has(slug)) return [...PERSON_ONLY_CATEGORIES, "Other"];
     return null;
   };
-  const asksLapKinds = (title: string) => slugFor(title) === LAP_SLUG;
-  const asksIndustry = (title: string) => INDUSTRY_LOANS.has(slugFor(title) ?? "");
-  const asksProfession = (title: string) => PROFESSION_LOANS.has(slugFor(title) ?? "");
+  const asksLapKinds = (title: string) => !!product && slugFor(title) === LAP_SLUG;
+  const asksIndustry = (title: string) => !!product && INDUSTRY_LOANS.has(slugFor(title) ?? "");
+  const asksProfession = (title: string) => !!product && PROFESSION_LOANS.has(slugFor(title) ?? "");
   const compact = !!product && COMPACT_LOANS.has(product.slug);
   const uid = useId();
   // Only pre-select a loan type the dropdown actually offers.

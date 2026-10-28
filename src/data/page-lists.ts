@@ -448,14 +448,9 @@ export const FOOTER_PRODUCTS = SERVICES.slice(0, 8).map((s) => ({
 }));
 
 // The enquiry form's loan types on the home, contact and other general pages: the headline services, then every other
-// loan that has its own page, so each of them can be picked. The car loans are covered by the general "Car Loan" choice,
-// and the overdraft page by "Overdraft Facility". (On a loan's own page the loan is fixed, not chosen.)
-const FORM_LOAN_SKIP = new Set([
-  "overdraft-limit",
-  "new-car-loan",
-  "used-car-loan",
-  "car-refinance",
-]);
+// loan that has its own page, so each of them can be picked. Only the overdraft page is left out, because
+// "Overdraft Facility" already is that loan. (On a loan's own page the loan is fixed, not chosen.)
+const FORM_LOAN_SKIP = new Set(["overdraft-limit"]);
 export const FORM_LOAN_TYPES = [
   ...SERVICES.map((s) => ({ title: s.title, slug: s.id })),
   ...PRODUCTS.filter(
