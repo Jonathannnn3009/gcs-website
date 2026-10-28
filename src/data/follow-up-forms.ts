@@ -329,6 +329,19 @@ const coApplicantStep = (): QuestionStep => ({
   ],
 });
 
+/** Home loan types that buy a property, and those that move or top up a loan already running. */
+const HL_BUY = ["Home Loan", "NRI Home Loan", "Resale Property Home Loan"];
+const HL_MOVE = [
+  "Home Loan Balance Transfer",
+  "Home Loan Balance Transfer + Top-Up",
+  "Home Loan Top-Up",
+];
+const HL_PLOT_OWNED = [
+  "Yes, it is in my name",
+  "Yes, jointly or in the family",
+  "No, I am yet to buy it",
+];
+
 const HOME_LOAN: FollowUpForm = {
   slugs: ["home-loan"],
   reason:
@@ -359,40 +372,38 @@ const HOME_LOAN: FollowUpForm = {
             "Home Loan Balance Transfer + Top-Up",
             "Home Loan Top-Up",
             "NRI Home Loan",
-            "Plot Loan",
-            "Plot + Construction Loan",
             "Home Renovation Loan",
             "Home Extension Loan",
             "Resale Property Home Loan",
           ],
         },
+        // The property being bought: asked only for the loans that buy one.
         {
           key: "purpose",
-          label: "What is the loan for?",
+          label: "Type of property",
           kind: "choice",
           required: true,
+          noOther: true,
           options: [
-            "Buying a ready flat / house",
-            "Buying an under-construction property",
-            "Resale purchase",
-            "Buying a plot and constructing",
+            "Ready-to-move flat or house",
+            "Under-construction property (builder purchase)",
+            "Resale property",
+            "Plot / land",
             "Self-construction",
-            "Renovation / extension",
-            "Other",
           ],
+          showWhen: { key: "homeLoanType", values: HL_BUY },
         },
         {
           key: "propertyKind",
-          label: "Type of property",
+          label: "Is it a flat or a house?",
           kind: "choice",
           options: ["Flat / apartment", "Independent house / villa", "Row house", "Other"],
           showWhen: {
             key: "purpose",
             values: only(
-              "Buying a ready flat / house",
-              "Buying an under-construction property",
-              "Resale purchase",
-              "Other",
+              "Ready-to-move flat or house",
+              "Under-construction property (builder purchase)",
+              "Resale property",
             ),
           },
         },
@@ -404,10 +415,10 @@ const HOME_LOAN: FollowUpForm = {
           showWhen: {
             key: "purpose",
             values: only(
-              "Buying a ready flat / house",
-              "Buying an under-construction property",
-              "Resale purchase",
-              "Buying a plot and constructing",
+              "Ready-to-move flat or house",
+              "Under-construction property (builder purchase)",
+              "Resale property",
+              "Plot / land",
             ),
           },
         },
@@ -422,15 +433,15 @@ const HOME_LOAN: FollowUpForm = {
           key: "plotOwned",
           label: "Do you already own the plot?",
           kind: "choice",
-          options: [
-            "Yes, it is in my name",
-            "Yes, jointly or in the family",
-            "No, I am yet to buy it",
-          ],
-          showWhen: {
-            key: "purpose",
-            values: only("Self-construction", "Buying a plot and constructing"),
-          },
+          options: HL_PLOT_OWNED,
+          showWhen: { key: "purpose", values: ["Self-construction"] },
+        },
+        {
+          key: "constructionPlotOwned",
+          label: "Do you already own the plot?",
+          kind: "choice",
+          options: HL_PLOT_OWNED,
+          showWhen: { key: "homeLoanType", values: ["Home Construction Loan"] },
         },
         {
           key: "propertyArea",
@@ -444,7 +455,7 @@ const HOME_LOAN: FollowUpForm = {
           label: "Builder / project name",
           kind: "text",
           placeholder: "If you have one in mind",
-          showWhen: { key: "purpose", values: ["Buying an under-construction property"] },
+          showWhen: { key: "purpose", values: ["Under-construction property (builder purchase)"] },
         },
         {
           key: "agreementValue",
@@ -455,11 +466,10 @@ const HOME_LOAN: FollowUpForm = {
           showWhen: {
             key: "purpose",
             values: only(
-              "Buying a ready flat / house",
-              "Buying an under-construction property",
-              "Resale purchase",
-              "Buying a plot and constructing",
-              "Other",
+              "Ready-to-move flat or house",
+              "Under-construction property (builder purchase)",
+              "Resale property",
+              "Plot / land",
             ),
           },
         },
@@ -469,7 +479,43 @@ const HOME_LOAN: FollowUpForm = {
           kind: "amount",
           placeholder: rupee,
           help: "A rough figure is fine.",
-          showWhen: { key: "purpose", values: only("Self-construction", "Renovation / extension") },
+          showWhen: {
+            key: "homeLoanType",
+            values: ["Home Construction Loan", "Home Renovation Loan", "Home Extension Loan"],
+          },
+        },
+        {
+          key: "selfBuildCost",
+          label: "Estimated cost of the construction",
+          kind: "amount",
+          placeholder: rupee,
+          help: "A rough figure is fine.",
+          showWhen: { key: "purpose", values: ["Self-construction"] },
+        },
+        // Moving or topping up a running home loan.
+        {
+          key: "bank",
+          label: "Which bank or finance company has the loan now?",
+          kind: "text",
+          placeholder: "Name of the lender",
+          showWhen: { key: "homeLoanType", values: HL_MOVE },
+        },
+        {
+          key: "outstanding",
+          label: "Amount still to be repaid on it",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: { key: "homeLoanType", values: HL_MOVE },
+        },
+        {
+          key: "topUp",
+          label: "Top-up amount you need",
+          kind: "amount",
+          placeholder: rupee,
+          showWhen: {
+            key: "homeLoanType",
+            values: ["Home Loan Balance Transfer + Top-Up", "Home Loan Top-Up"],
+          },
         },
         {
           key: "ownContribution",
@@ -478,6 +524,15 @@ const HOME_LOAN: FollowUpForm = {
           allowZero: true,
           placeholder: rupee,
           help: "Lenders fund only a part of the cost, so the rest has to come from you.",
+          showWhen: {
+            key: "homeLoanType",
+            values: [
+              ...HL_BUY,
+              "Home Construction Loan",
+              "Home Renovation Loan",
+              "Home Extension Loan",
+            ],
+          },
         },
       ],
     },

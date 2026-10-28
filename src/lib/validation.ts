@@ -106,7 +106,7 @@ const FIELD_RULES: [RegExp, AmountBounds][] = [
   [/^projectCost$/, { min: 10 * LAKH, max: MAX_AMOUNT }],
   [/^securityValue$/, { min: 50_000, max: MAX_AMOUNT }],
   [/^(depositValue|holdingValue)$/, { min: 25_000, max: MAX_AMOUNT }],
-  [/^(workCost|collateralValue)$/, { min: 25_000, max: MAX_AMOUNT }],
+  [/^(workCost|selfBuildCost|collateralValue)$/, { min: 25_000, max: MAX_AMOUNT }],
   [/^onRoad$/, { min: 2 * LAKH, max: 20 * CRORE }],
   [/^(price|carValue)$/, { min: 25_000, max: 50 * CRORE }],
   [/^cost$/, { min: 10_000, max: MAX_AMOUNT }],
