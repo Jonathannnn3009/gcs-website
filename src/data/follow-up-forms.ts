@@ -4,6 +4,7 @@
 // applicant type, loan amount) is never asked again.
 
 import type { QuestionField, QuestionStep } from "@/data/product-questionnaires";
+import { LOAN_EXTRAS, LOAN_KINDS, seedsForKind } from "@/data/loan-kinds";
 
 export type FollowUpForm = {
   /** Loan pages this applies to. */
@@ -18,6 +19,8 @@ export type FollowUpForm = {
   steps: QuestionStep[];
   submit: string;
   disclaimer: string;
+  /** What a chosen type of loan already answers in the form. */
+  kindSeeds?: (kind: string) => Record<string, string>;
 };
 
 const YES_NO = ["Yes", "No"];
@@ -650,6 +653,7 @@ const securityStep = (
         "Residential (flat / house)",
         "Commercial (shop / office)",
         "Industrial (factory / warehouse)",
+        "Mixed-use or specialised property",
         "Plot / land",
       ],
     },
@@ -833,6 +837,8 @@ const LEASE_RENTAL: FollowUpForm = {
             "Shop / retail space",
             "Warehouse",
             "Mall or multi-tenant building",
+            "Educational institute",
+            "Hotel or service apartments",
             "Other",
           ],
         },
@@ -1159,7 +1165,13 @@ const BALANCE_TRANSFER: FollowUpForm = {
           .filter((f) => !f.showWhen?.values.includes("NRI"))
           .map((f) =>
             f.showWhen?.key === "applicantType" && f.showWhen.values.includes("Self-Employed")
-              ? { ...f, showWhen: { ...f.showWhen, values: ["Self-Employed", "Partnership", "Pvt Ltd Co"] } }
+              ? {
+                  ...f,
+                  showWhen: {
+                    ...f.showWhen,
+                    values: ["Self-Employed", "Partnership", "Pvt Ltd Co"],
+                  },
+                }
               : f,
           ),
       };
@@ -3545,6 +3557,8 @@ const COMMERCIAL_VEHICLE: FollowUpForm = {
             "Tipper",
             "Bus or passenger vehicle",
             "Small commercial vehicle or tempo",
+            "Tanker",
+            "Transit mixer",
             "Trailer or tractor-trailer",
             "Other",
           ],
@@ -3929,5 +3943,40 @@ export const FOLLOW_UP_FORMS: FollowUpForm[] = [
   CAR_LOAN,
 ];
 
+/** Loans that offer a choice of loan types ask for it first in the second form. */
+const withKind = (form: FollowUpForm): FollowUpForm => {
+  const slug = form.slugs.find((s) => LOAN_KINDS[s]);
+  const first = form.steps[0];
+  if (!slug || !first) return form;
+  const kinds = LOAN_KINDS[slug] ?? [];
+  return {
+    ...form,
+    kindSeeds: (kind) => seedsForKind(slug, kind),
+    steps: [
+      {
+        ...first,
+        fields: [
+          {
+            key: "loanKind",
+            label: "Type of loan",
+            kind: "choice",
+            required: true,
+            noOther: true,
+            options: kinds,
+          },
+          ...(LOAN_EXTRAS[slug] ?? []).map((e) => ({
+            ...e,
+            kind: "choice" as const,
+            required: true,
+          })),
+          ...first.fields,
+        ],
+      },
+      ...form.steps.slice(1),
+    ],
+  };
+};
+const FORMS = FOLLOW_UP_FORMS.map(withKind);
+
 export const followUpFor = (slug: string | undefined): FollowUpForm | undefined =>
-  slug ? FOLLOW_UP_FORMS.find((f) => f.slugs.includes(slug)) : undefined;
+  slug ? FORMS.find((f) => f.slugs.includes(slug)) : undefined;

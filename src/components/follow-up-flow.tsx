@@ -106,7 +106,11 @@ export function FollowUpFlow({
     takesOther(f) && answers[f.key] === "Other" ? (answers[`${f.key}__other`] ?? "").trim() : "";
 
   const set = (key: string, value: string) => {
-    setAnswers((a) => ({ ...a, [key]: value }));
+    setAnswers((a) => ({
+      ...a,
+      [key]: value,
+      ...(key === "loanKind" ? form.kindSeeds?.(value) : {}),
+    }));
     setErrors((e) => {
       const { [key]: _gone, ...rest } = e;
       return rest;
@@ -248,8 +252,9 @@ export function FollowUpFlow({
                 Tell Us About You. <span className="hero-stat-text">We’ll Find the Right Fit.</span>
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Complete this quick form to help us understand your needs. Based on your details, we’ll explore
-                suitable Banks &amp; NBFCs and compare available loan terms for your profile.
+                Complete this quick form to help us understand your needs. Based on your details,
+                we’ll explore suitable Banks &amp; NBFCs and compare available loan terms for your
+                profile.
               </p>
               <p className="mt-2 text-sm font-semibold text-navy dark:text-white">{form.choice}</p>
               <div className="mt-4 flex flex-col gap-3 rounded-xl border border-gold/30 bg-gold-pale/30 p-4 dark:bg-gold/10">
