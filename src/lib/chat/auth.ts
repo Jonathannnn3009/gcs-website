@@ -76,6 +76,13 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   } catch {
     // no body
   }
+  // 404 or a bad gateway means the server behind the chat is not there (yet): say so plainly.
+  if (res.status === 404 || res.status === 502 || res.status === 504) {
+    throw new ChatAuthError(
+      "Our chat sign-in isn't available just now. Please call or WhatsApp us and we'll help right away.",
+      res.status,
+    );
+  }
   if (!res.ok) {
     const m = (json as { message?: unknown } | null)?.message;
     const text = Array.isArray(m) ? m[0] : m;
