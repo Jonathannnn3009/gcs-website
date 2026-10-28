@@ -20,17 +20,30 @@ const PERSON_ONLY_CATEGORIES = ["Salaried", "Self-Employed"];
 const CATEGORY_LOANS = new Set(["home-loan"]);
 // Loan against property: who is applying (a firm or company can borrow too), and the kind of loan and property.
 const LAP_SLUG = "loan-against-property";
-const LAP_APPLICANTS = ["Salaried", "Self-Employed", "Partnership", "Pvt Ltd Co", "NRI"];
+const LAP_APPLICANTS = ["Salaried", "Self-Employed", "Partnership", "Pvt Ltd Co", "LLP", "Proprietorship"];
 const LAP_KINDS = [
   "Loan Against Property (LAP)",
   "LAP Balance Transfer",
   "LAP Balance Transfer + Top-Up",
   "LAP Top-Up Loan",
+  "Commercial Purchase Loan",
+  "LAP Overdraft",
+  "Lease Rental Discounting",
 ];
 const PROPERTY_KINDS = ["Residential Property", "Commercial Property", "Industrial Property", "Specialised Property"];
 // The second form only tells salaried, self-employed and NRI apart: a firm or company counts as self-employed there.
 const forSecondForm = (category: string) =>
-  category === "Partnership" || category === "Pvt Ltd Co" ? "Self-Employed" : category;
+  ["Partnership", "Pvt Ltd Co", "LLP", "Proprietorship"].includes(category) ? "Self-Employed" : category;
+// What the loan type and property type picked on the short form already answer in the second form.
+const SECOND_FORM_PROPERTY: Record<string, string> = {
+  "Residential Property": "Residential (flat / house)",
+  "Commercial Property": "Commercial (shop / office)",
+  "Industrial Property": "Industrial (factory / warehouse)",
+};
+const knownFromShortForm = (loanKind: string, propertyKind: string): Record<string, string> => ({
+  ...(SECOND_FORM_PROPERTY[propertyKind] ? { propertyKind: SECOND_FORM_PROPERTY[propertyKind] } : {}),
+  ...(/Balance Transfer|Top-Up/.test(loanKind) ? { existingMortgage: "Yes" } : {}),
+});
 const OVERDRAFT_CATEGORY_LOANS = new Set(["unsecured-dod", "dlod", "overdraft-limit"]);
 // Loans whose short form asks for the industry too.
 const INDUSTRY_LOANS = new Set(["business-loan", "private-funding"]);
@@ -346,6 +359,7 @@ export function LeadForm({
           email: b.email.trim(),
           city: b.city,
           category: forSecondForm(b.applicantCategory),
+          known: knownFromShortForm(b.loanKind, b.propertyKind),
           industry: b.industry,
           productSlug: b.slug,
           productTitle: b.title,

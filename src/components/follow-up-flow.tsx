@@ -16,6 +16,8 @@ type Basics = {
   category: string;
   /** The industry picked on the short form, where it asks for one. */
   industry?: string;
+  /** Answers the short form already gave, carried in so they are not asked again (the visitor can still change them). */
+  known?: Record<string, string>;
   productSlug: string;
   productTitle: string;
   source: string;
@@ -53,6 +55,7 @@ export function FollowUpFlow({
     applicantCategory: basics.category,
     ...(basics.category ? { applicantType: basics.category } : {}),
     ...(basics.industry ? { nature: basics.industry } : {}),
+    ...basics.known,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sending, setSending] = useState(false);
