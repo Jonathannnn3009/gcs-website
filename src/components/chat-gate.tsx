@@ -18,9 +18,10 @@ import { isValidEmail } from "@/lib/validation";
 import { ASSISTANT_NAME } from "@/lib/chat/config";
 import { ChatAuthError, confirmCode, requestCode, type ChatPass } from "@/lib/chat/auth";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { submitLead } from "@/lib/leads";
 
 // The step before the chat: the visitor gives a name, a mobile number and an email address, we send them a
-// code by SMS and email, and they type it in. Only then does the chat open. The CRM sends and checks the code.
+// code by email, and they type it in. Only then does the chat open. The website sends and checks the code.
 
 const inputClass =
   "h-11 w-full rounded-xl border border-border bg-white pr-3 pl-10 text-[14px] text-ink outline-none transition-all placeholder:text-muted-foreground/60 focus:border-gold focus:ring-2 focus:ring-gold/25";
@@ -86,7 +87,9 @@ export function ChatGate({
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   /** Where the code actually went, as the server reported it. */
-  const [sentTo, setSentTo] = useState<{ sms: boolean; email: boolean }>({ sms: true, email: true });
+  const [sentTo, setSentTo] = useState<{ sms: boolean; email: boolean }>({ sms: false, email: true });
+  /** The signed note the server gave with the code; it goes back with what the visitor types. */
+  const [challenge, setChallenge] = useState("");
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   /** The server could not be reached at all: offer a call or WhatsApp instead of "try again". */
@@ -120,7 +123,8 @@ export function ChatGate({
     try {
       const res = await requestCode({ name, phone, email });
       setWait(res.resendAfterSeconds);
-      setSentTo({ sms: res.viaSms !== false, email: res.viaEmail !== false });
+      setSentTo({ sms: res.viaSms === true, email: res.viaEmail !== false });
+      setChallenge(res.challenge);
       setCode("");
       setStep("code");
     } catch (e) {
@@ -136,7 +140,16 @@ export function ChatGate({
     setOffline(false);
     setBusy(true);
     try {
-      onSignedIn(await confirmCode({ phone, code: value }));
+      const pass = await confirmCode({ phone, code: value, challenge });
+      // the person is a lead now: the team is told, and the CRM gets them once it is reachable
+      void submitLead({
+        name: pass.name,
+        phone,
+        email: email.trim(),
+        source: "website-chat",
+        detail: "Confirmed their email with a code to use the website chat.",
+      });
+      onSignedIn(pass);
     } catch (e) {
       fail(e, "Something went wrong. Please try again.");
       setCode("");
@@ -183,8 +196,8 @@ export function ChatGate({
         </h3>
         <p className="mx-auto mt-1 max-w-[290px] text-[13px] leading-snug text-muted-foreground">
           {step === "details"
-            ? "GCS's AI assistant. Confirm your details so I know who I'm talking to, and I'll answer your loan questions."
-            : "Nearly there. Type the 6-digit code we sent you."}
+            ? "GCS's AI assistant. Confirm your email so I know who I'm talking to, and I'll answer your loan questions."
+            : "Nearly there. Type the 6-digit code we emailed you."}
         </p>
       </div>
 
@@ -254,14 +267,14 @@ export function ChatGate({
             className="gold-btn mt-4 h-11 w-full justify-center text-[14px] disabled:opacity-60"
           >
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            {busy ? "Sending your code…" : "Send my code"}
+            {busy ? "Sending your code…" : "Email me the code"}
             {!busy && <ArrowRight className="h-4 w-4" />}
           </button>
           <p className="mt-3 flex items-start gap-1.5 text-[11px] leading-snug text-muted-foreground">
             <Lock className="mt-0.5 h-3 w-3 shrink-0 text-gold-dark" />
             <span>
-              We send a 6-digit code to your phone and email. By continuing you agree that Growth Capital Services
-              may contact you about your enquiry. Message and data rates may apply.
+              We email you a 6-digit code. By continuing you agree that Growth Capital Services may contact you on
+              this number and email about your enquiry.
             </span>
           </p>
         </form>
@@ -348,7 +361,7 @@ export function ChatGate({
       )}
 
       <p className="mt-4 px-1 text-center text-[11px] leading-snug text-muted-foreground">
-        No code? Check your number, email and spam folder, or{" "}
+        No code? Check your email and spam folder, or{" "}
         <a href={CONTACT.phoneHref} className="font-semibold text-navy underline">
           call us
         </a>

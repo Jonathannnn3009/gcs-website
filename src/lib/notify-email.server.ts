@@ -119,6 +119,30 @@ export async function sendEnquiryMail(lead: EnquiryMail, origin: string): Promis
   }
 }
 
+/** Can the website send mail at all (everything but the alert address)? */
+export function mailConfigured(): boolean {
+  return Boolean(
+    serverEnv("ZOHO_CLIENT_ID") &&
+      serverEnv("ZOHO_CLIENT_SECRET") &&
+      serverEnv("ZOHO_REFRESH_TOKEN") &&
+      serverEnv("ZOHO_ACCOUNT_ID") &&
+      serverEnv("ZOHO_FROM_ADDRESS"),
+  );
+}
+
+/** Sends one HTML message to one address. Returns whether Zoho accepted it; never throws. */
+export async function sendSimpleMail(to: string, subject: string, html: string): Promise<boolean> {
+  if (!mailConfigured()) return false;
+  try {
+    const region = serverEnv("ZOHO_REGION") === "com" ? "com" : "in";
+    const token = await accessToken(region);
+    if (!token) return false;
+    return await deliver(region, token, to, subject, html);
+  } catch {
+    return false;
+  }
+}
+
 /** One message through Zoho Mail's API. */
 async function deliver(
   region: string,

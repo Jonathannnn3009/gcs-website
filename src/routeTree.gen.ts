@@ -39,6 +39,8 @@ import { Route as PartnerBuilderRouteImport } from './routes/partner.builder'
 import { Route as PartnerFreelancerRouteImport } from './routes/partner.freelancer'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
+import { Route as ApiChatAuthSendRouteImport } from './routes/api.chat-auth.send'
+import { Route as ApiChatAuthVerifyRouteImport } from './routes/api.chat-auth.verify'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -190,6 +192,16 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ServicesRoute,
 } as any)
+const ApiChatAuthSendRoute = ApiChatAuthSendRouteImport.update({
+  id: '/api/chat-auth/send',
+  path: '/api/chat-auth/send',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatAuthVerifyRoute = ApiChatAuthVerifyRouteImport.update({
+  id: '/api/chat-auth/verify',
+  path: '/api/chat-auth/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -222,6 +234,8 @@ export interface FileRoutesByFullPath {
   '/case-studies/': typeof CaseStudiesIndexRoute
   '/partner/': typeof PartnerIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/api/chat-auth/send': typeof ApiChatAuthSendRoute
+  '/api/chat-auth/verify': typeof ApiChatAuthVerifyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -252,6 +266,8 @@ export interface FileRoutesByTo {
   '/case-studies': typeof CaseStudiesIndexRoute
   '/partner': typeof PartnerIndexRoute
   '/services': typeof ServicesIndexRoute
+  '/api/chat-auth/send': typeof ApiChatAuthSendRoute
+  '/api/chat-auth/verify': typeof ApiChatAuthVerifyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -285,6 +301,8 @@ export interface FileRoutesById {
   '/case-studies/': typeof CaseStudiesIndexRoute
   '/partner/': typeof PartnerIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/api/chat-auth/send': typeof ApiChatAuthSendRoute
+  '/api/chat-auth/verify': typeof ApiChatAuthVerifyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -319,6 +337,8 @@ export interface FileRouteTypes {
     | '/case-studies/'
     | '/partner/'
     | '/services/'
+    | '/api/chat-auth/send'
+    | '/api/chat-auth/verify'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -349,6 +369,8 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/partner'
     | '/services'
+    | '/api/chat-auth/send'
+    | '/api/chat-auth/verify'
   id:
     | '__root__'
     | '/'
@@ -381,6 +403,8 @@ export interface FileRouteTypes {
     | '/case-studies/'
     | '/partner/'
     | '/services/'
+    | '/api/chat-auth/send'
+    | '/api/chat-auth/verify'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -410,6 +434,8 @@ export interface RootRouteChildren {
   PartnerFreelancerRoute: typeof PartnerFreelancerRoute
   CaLegalServicesIndexRoute: typeof CaLegalServicesIndexRoute
   PartnerIndexRoute: typeof PartnerIndexRoute
+  ApiChatAuthSendRoute: typeof ApiChatAuthSendRoute
+  ApiChatAuthVerifyRoute: typeof ApiChatAuthVerifyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -624,6 +650,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesSlugRouteImport
       parentRoute: typeof ServicesRoute
     }
+    '/api/chat-auth/send': {
+      id: '/api/chat-auth/send'
+      path: '/api/chat-auth/send'
+      fullPath: '/api/chat-auth/send'
+      preLoaderRoute: typeof ApiChatAuthSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat-auth/verify': {
+      id: '/api/chat-auth/verify'
+      path: '/api/chat-auth/verify'
+      fullPath: '/api/chat-auth/verify'
+      preLoaderRoute: typeof ApiChatAuthVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -682,6 +722,8 @@ const rootRouteChildren: RootRouteChildren = {
   PartnerFreelancerRoute: PartnerFreelancerRoute,
   CaLegalServicesIndexRoute: CaLegalServicesIndexRoute,
   PartnerIndexRoute: PartnerIndexRoute,
+  ApiChatAuthSendRoute: ApiChatAuthSendRoute,
+  ApiChatAuthVerifyRoute: ApiChatAuthVerifyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

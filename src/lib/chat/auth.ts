@@ -56,10 +56,10 @@ export function clearPass() {
   }
 }
 
-async function post<T>(path: string, body: unknown): Promise<T> {
+async function post<T>(path: string, body: unknown, base = `${CRM_API}/public/chat-auth/`): Promise<T> {
   let res: Response;
   try {
-    res = await fetch(`${CRM_API}/public/chat-auth/${path}`, {
+    res = await fetch(`${base}${path}`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(body),
@@ -96,7 +96,10 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return json as T;
 }
 
-/** Texts a six-digit code to the number and emails it to the address. */
+// The website signs people in itself: it emails the code and checks it (src/lib/chat/web-auth.server.ts).
+const WEB = "/api/chat-auth/";
+
+/** Emails a six-digit code. The reply carries the signed challenge to send back with the code. */
 export async function requestCode(input: { name: string; phone: string; email: string }) {
   const phone = normalizePhone(input.phone);
   if (!phone) throw new ChatAuthError("Enter a valid 10-digit mobile number.", 400);
@@ -107,22 +110,28 @@ export async function requestCode(input: { name: string; phone: string; email: s
     validMinutes: number;
     viaSms?: boolean;
     viaEmail?: boolean;
-  }>("send", {
-    name: input.name.trim(),
-    phone,
-    email: input.email.trim(),
-    ...(captchaToken ? { captchaToken } : {}),
-  });
+    challenge: string;
+  }>(
+    "send",
+    {
+      name: input.name.trim(),
+      phone,
+      email: input.email.trim(),
+      ...(captchaToken ? { captchaToken } : {}),
+    },
+    WEB,
+  );
 }
 
 /** Checks the code. On success the pass is kept in this browser. */
-export async function confirmCode(input: { phone: string; code: string }): Promise<ChatPass> {
+export async function confirmCode(input: { phone: string; code: string; challenge: string }): Promise<ChatPass> {
   const phone = normalizePhone(input.phone);
   if (!phone) throw new ChatAuthError("Enter a valid 10-digit mobile number.", 400);
-  const res = await post<{ token: string; expiresAt: string; name: string }>("verify", {
-    phone,
-    code: input.code,
-  });
+  const res = await post<{ token: string; expiresAt: string; name: string }>(
+    "verify",
+    { challenge: input.challenge, code: input.code },
+    WEB,
+  );
   const pass: ChatPass = { token: res.token, name: res.name, phone, expiresAt: res.expiresAt };
   savePass(pass);
   return pass;
@@ -131,5 +140,6 @@ export async function confirmCode(input: { phone: string; code: string }): Promi
 /** Signs out: forgets the pass here and tells the CRM to stop honouring it. */
 export function endPass(pass: ChatPass) {
   clearPass();
-  void post("end", { token: pass.token }).catch(() => undefined);
+  // a pass made by the website has nothing to end on the CRM
+  if (!pass.token.startsWith("gw1_")) void post("end", { token: pass.token }).catch(() => undefined);
 }

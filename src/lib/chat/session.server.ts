@@ -4,6 +4,7 @@
 
 import { OFF_TOPIC } from "./config";
 import { crmBase } from "./site-data.server";
+import { readWebPass, WEB_PASS_PREFIX } from "./web-auth.server";
 
 export type PassCheck =
   /** `pausedUntil` is a time in ms, or null when the chat is open. */
@@ -34,6 +35,13 @@ function remember(token: string, pausedUntil: number | null) {
 }
 
 export async function checkPass(token: string, origin: string): Promise<PassCheck> {
+  // A pass made by this website (sign-in by emailed code) needs no CRM: its signature is the proof.
+  if (token.startsWith(WEB_PASS_PREFIX)) {
+    const web = await readWebPass(token);
+    if (!web) return { status: "invalid" };
+    const row = localStrikes.get(`ws:${web.phone}`);
+    return { status: "valid", pausedUntil: row?.pausedUntil && row.pausedUntil > Date.now() ? row.pausedUntil : null };
+  }
   if (!/^[\w-]{20,200}$/.test(token)) return { status: "invalid" };
 
   const seen = approved.get(token);
@@ -88,6 +96,10 @@ function strikeLocally(token: string): StrikeResult {
 
 /** Counts one off-topic message against the visitor's number (kept by the CRM between visits). */
 export async function recordStrike(token: string, origin: string): Promise<StrikeResult> {
+  if (token.startsWith(WEB_PASS_PREFIX)) {
+    const web = await readWebPass(token);
+    return strikeLocally(`ws:${web?.phone ?? token.slice(0, 40)}`);
+  }
   try {
     const res = await fetch(`${crmBase(origin)}/public/chat-auth/strike`, {
       method: "POST",
