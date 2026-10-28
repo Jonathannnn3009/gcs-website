@@ -25,6 +25,11 @@ type PropertyLoan = {
   properties: string[];
   applicants: string[];
   propertyLabel?: string;
+  /** How the detail line names the property question (default "Property"). */
+  propertyWord?: string;
+  /** Education only: where the student will study, and who the co-applicant is. */
+  study?: string[];
+  coApplicants?: string[];
 };
 const PROPERTY_LOANS: Record<string, PropertyLoan> = {
   [LAP_SLUG]: {
@@ -265,6 +270,111 @@ const PROPERTY_LOANS: Record<string, PropertyLoan> = {
     properties: [],
     applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
   },
+  "bill-discounting": {
+    kinds: [
+      "Sales Bill Discounting",
+      "Supplier Bill Discounting",
+      "LC Bill Discounting",
+      "Invoice Discounting",
+      "Factoring",
+      "Vendor / Dealer Finance",
+      "TReDS Invoice Financing",
+    ],
+    properties: [],
+    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
+  },
+  "personal-loan": {
+    kinds: [
+      "Personal Loan",
+      "Wedding Loan",
+      "Travel Loan",
+      "Medical Loan",
+      "Home Renovation Loan",
+      "Debt Consolidation Loan",
+      "Personal Loan Balance Transfer",
+    ],
+    properties: [],
+    applicants: ["Salaried", "Self-employed professional", "Self-employed business owner"],
+  },
+  "education-loan": {
+    kinds: [
+      "Education Loan",
+      "Secured Education Loan",
+      "Unsecured Education Loan",
+      "Diploma and Skill Course Loan",
+      "Undergraduate, Postgraduate and Doctorate Loan",
+    ],
+    properties: [],
+    applicants: ["Student", "Co-applicant: Salaried", "Co-applicant: Self-Employed"],
+    study: ["In India", "Abroad"],
+    coApplicants: ["Father", "Mother", "Spouse", "Guardian", "Other"],
+  },
+  "new-car-loan": {
+    kinds: [
+      "New Car Loan",
+      "Electric Vehicle Loan",
+      "Luxury Car Loan",
+      "Car Loan for Business Use",
+    ],
+    properties: [],
+    applicants: ["Salaried", "Self-Employed", "Proprietorship", "Partnership", "Pvt Ltd Co"],
+  },
+  "used-car-loan": {
+    kinds: [
+      "Used Car Loan from a Dealer",
+      "Used Car Loan from a Private Owner",
+      "Used Car Loan Balance Transfer",
+      "Used Car Loan Top-Up",
+      "Used Car Loan Top-Up + Balance Transfer",
+    ],
+    properties: [],
+    applicants: ["Salaried", "Self-Employed", "Proprietorship", "Partnership", "Pvt Ltd Co"],
+  },
+  "car-refinance": {
+    kinds: [
+      "Loan Against Car",
+      "Car Loan Balance Transfer",
+      "Car Loan Top-Up",
+      "Car Loan Balance Transfer + Top-Up",
+    ],
+    properties: [],
+    applicants: ["Salaried", "Self-Employed", "Proprietorship", "Partnership", "Pvt Ltd Co"],
+  },
+  "loan-against-securities": {
+    kinds: [
+      "Loan Against Shares",
+      "Loan Against Mutual Funds",
+      "Loan Against ETFs",
+      "Loan Against Bonds and Government Securities",
+    ],
+    properties: [],
+    applicants: [
+      "Salaried",
+      "Self-Employed",
+      "Retired or an investor",
+      "Promoter of a listed company",
+    ],
+  },
+  "commercial-vehicle": {
+    kinds: [
+      "New Commercial Vehicle Loan",
+      "Used Commercial Vehicle Loan",
+      "Commercial Vehicle Balance Transfer",
+      "Commercial Vehicle Top-Up",
+    ],
+    propertyLabel: "Type of Vehicle",
+    propertyWord: "Vehicle",
+    properties: [
+      "Truck (medium and heavy)",
+      "Light commercial vehicle / tempo",
+      "Tipper",
+      "Tanker",
+      "Bus or passenger vehicle",
+      "Transit mixer",
+      "Trailer or tractor-trailer",
+    ],
+    applicants: ["Individual transporter", "Proprietorship", "Partnership", "Company"],
+  },
   "lease-rental-discounting": {
     kinds: ["Lease Rental Discounting (LRD)", "LRD Balance Transfer", "LRD Top-Up"],
     properties: [
@@ -293,6 +403,9 @@ const forSecondForm = (category: string, slug: string) =>
     "cash-credit",
     "bank-guarantee",
     "letter-of-credit",
+    "bill-discounting",
+    "education-loan",
+    "commercial-vehicle",
   ].includes(slug)
     ? ""
     : [
@@ -305,6 +418,8 @@ const forSecondForm = (category: string, slug: string) =>
           "Self-employed professional",
           "Partnership / LLP",
           "Public Ltd Co",
+          "Self-employed business owner",
+          "Promoter of a listed company",
         ].includes(category)
       ? "Self-Employed"
       : category;
@@ -428,7 +543,95 @@ const lcKnown = (loanKind: string): Record<string, string> => ({
     ? { usance: "At sight, when the documents arrive" }
     : {}),
 });
+const personalKnown = (loanKind: string): Record<string, string> =>
+  ({
+    "Wedding Loan": { purpose: "Wedding" },
+    "Travel Loan": { purpose: "Travel" },
+    "Medical Loan": { purpose: "Medical need" },
+    "Home Renovation Loan": { purpose: "Home renovation" },
+    "Debt Consolidation Loan": { purpose: "Repaying other loans" },
+  })[loanKind] ?? {};
+const educationKnown = (
+  loanKind: string,
+  study: string,
+  coKind: string,
+  applicant: string,
+): Record<string, string> => ({
+  ...(study ? { destination: study } : {}),
+  ...(coKind ? { coRelation: coKind } : {}),
+  ...(loanKind === "Diploma and Skill Course Loan" ? { level: "Diploma or certificate" } : {}),
+  ...(applicant === "Co-applicant: Salaried" ? { coWork: "Salaried" } : {}),
+  ...(applicant === "Co-applicant: Self-Employed" ? { coWork: "Runs a business" } : {}),
+});
+const carKnown = (slug: string, loanKind: string): Record<string, string> => ({
+  ...(slug === "new-car-loan" && loanKind === "Car Loan for Business Use"
+    ? { usage: "Business use" }
+    : {}),
+  ...(slug === "used-car-loan" && /Dealer/.test(loanKind) ? { seller: "A dealer" } : {}),
+  ...(slug === "used-car-loan" && /Private Owner/.test(loanKind)
+    ? { seller: "A private owner" }
+    : {}),
+  ...(slug === "car-refinance" && loanKind === "Loan Against Car" ? { carLoan: "No" } : {}),
+  ...(slug === "car-refinance" && /Balance Transfer|Top-Up/.test(loanKind)
+    ? { carLoan: "Yes" }
+    : {}),
+  ...(slug === "car-refinance" && /Balance Transfer/.test(loanKind)
+    ? { carLoanTakeover: "Yes" }
+    : {}),
+});
+const VEHICLE_TYPES: Record<string, string> = {
+  "Truck (medium and heavy)": "Truck",
+  "Light commercial vehicle / tempo": "Small commercial vehicle or tempo",
+  Tipper: "Tipper",
+  "Bus or passenger vehicle": "Bus or passenger vehicle",
+  "Trailer or tractor-trailer": "Trailer or tractor-trailer",
+};
+const vehicleKnown = (
+  loanKind: string,
+  vehicle: string,
+  applicant: string,
+): Record<string, string> => ({
+  ...(VEHICLE_TYPES[vehicle] ? { vehicleType: VEHICLE_TYPES[vehicle] } : {}),
+  ...(loanKind.startsWith("New") ? { condition: "New" } : {}),
+  ...(loanKind.startsWith("Used") ? { condition: "Used" } : {}),
+  ...(applicant === "Individual transporter" ? { constitution: "An individual transporter" } : {}),
+  ...(["Proprietorship", "Partnership", "Company"].includes(applicant)
+    ? { constitution: applicant }
+    : {}),
+});
+const SECURITIES_HOLDING: Record<string, string> = {
+  "Loan Against Shares": "Shares",
+  "Loan Against Mutual Funds": "Mutual funds",
+  "Loan Against ETFs": "ETFs",
+  "Loan Against Bonds and Government Securities": "Bonds",
+};
 const knownFromShortForm = (
+  slug: string,
+  loanKind: string,
+  propertyKind: string,
+  applicant: string,
+  study = "",
+  coKind = "",
+): Record<string, string> =>
+  slug === "personal-loan"
+    ? personalKnown(loanKind)
+    : slug === "education-loan"
+      ? educationKnown(loanKind, study, coKind, applicant)
+      : ["new-car-loan", "used-car-loan", "car-refinance"].includes(slug)
+        ? carKnown(slug, loanKind)
+        : slug === "commercial-vehicle"
+          ? vehicleKnown(loanKind, propertyKind, applicant)
+          : slug === "loan-against-securities"
+            ? {
+                ...(SECURITIES_HOLDING[loanKind] ? { holding: SECURITIES_HOLDING[loanKind] } : {}),
+                ...(applicant === "Promoter of a listed company"
+                  ? { holding: "A promoter's shares in a company" }
+                  : {}),
+              }
+            : slug === "bill-discounting"
+              ? {}
+              : knownByLoan(slug, loanKind, propertyKind, applicant);
+const knownByLoan = (
   slug: string,
   loanKind: string,
   propertyKind: string,
@@ -529,6 +732,9 @@ type Fields = {
   /** For a loan against property: the kind of loan, and the kind of property. */
   loanKind: string;
   propertyKind: string;
+  /** For an education loan: where the student will study, and who the co-applicant is. */
+  studyPlace: string;
+  coApplicantKind: string;
   /** What was typed when "Other" was picked in the matching drop-down. */
   categoryOther: string;
   industryOther: string;
@@ -549,6 +755,8 @@ const empty: Fields = {
   profession: "",
   loanKind: "",
   propertyKind: "",
+  studyPlace: "",
+  coApplicantKind: "",
   categoryOther: "",
   industryOther: "",
   professionOther: "",
@@ -690,6 +898,8 @@ export function LeadForm({
       profession: asksProfession(e.target.value) ? v.profession : "",
       loanKind: asksLapKinds(e.target.value) ? v.loanKind : "",
       propertyKind: asksLapKinds(e.target.value) ? v.propertyKind : "",
+      studyPlace: asksLapKinds(e.target.value) ? v.studyPlace : "",
+      coApplicantKind: asksLapKinds(e.target.value) ? v.coApplicantKind : "",
     }));
 
   const setCity = (e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -712,6 +922,10 @@ export function LeadForm({
       if (!values.loanKind) next.loanKind = "Select one";
       if (propertyLoanFor(values.loanType)?.properties.length && !values.propertyKind)
         next.propertyKind = "Select one";
+      if (propertyLoanFor(values.loanType)?.study && !values.studyPlace)
+        next.studyPlace = "Select one";
+      if (propertyLoanFor(values.loanType)?.coApplicants && !values.coApplicantKind)
+        next.coApplicantKind = "Select one";
     }
     if (categoryOptionsFor(values.loanType) && !values.applicantCategory)
       next.applicantCategory = "Select one";
@@ -761,8 +975,10 @@ export function LeadForm({
       `Loan type: ${loanType}`,
       values.loanKind ? `Type of loan: ${values.loanKind}` : "",
       values.propertyKind
-        ? `${propertyLoanFor(values.loanType)?.propertyLabel ? "Project" : "Property"}: ${values.propertyKind}`
+        ? `${propertyLoanFor(values.loanType)?.propertyWord ?? (propertyLoanFor(values.loanType)?.propertyLabel ? "Project" : "Property")}: ${values.propertyKind}`
         : "",
+      values.studyPlace ? `Study: ${values.studyPlace}` : "",
+      values.coApplicantKind ? `Co-applicant: ${values.coApplicantKind}` : "",
       values.applicantCategory
         ? `Applicant: ${values.applicantCategory === "Other" ? `Other (${values.categoryOther.trim()})` : values.applicantCategory}`
         : "",
@@ -824,7 +1040,14 @@ export function LeadForm({
           email: b.email.trim(),
           city: b.city,
           category: forSecondForm(b.applicantCategory, b.slug),
-          known: knownFromShortForm(b.slug, b.loanKind, b.propertyKind, b.applicantCategory),
+          known: knownFromShortForm(
+            b.slug,
+            b.loanKind,
+            b.propertyKind,
+            b.applicantCategory,
+            b.studyPlace,
+            b.coApplicantKind,
+          ),
           industry: b.industry,
           productSlug: b.slug,
           productTitle: b.title,
@@ -978,6 +1201,50 @@ export function LeadForm({
                     >
                       <option value="">Select one</option>
                       {(propertyLoanFor(values.loanType)?.properties ?? []).map((k) => (
+                        <option key={k} value={k}>
+                          {k}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                ) : null}
+                {propertyLoanFor(values.loanType)?.study ? (
+                  <Field
+                    id={`${uid}-study`}
+                    label="Study"
+                    error={errors.studyPlace}
+                    className="sm:col-span-2"
+                  >
+                    <select
+                      id={`${uid}-study`}
+                      className={selectClass}
+                      value={values.studyPlace}
+                      onChange={set("studyPlace")}
+                    >
+                      <option value="">Select one</option>
+                      {(propertyLoanFor(values.loanType)?.study ?? []).map((k) => (
+                        <option key={k} value={k}>
+                          {k}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                ) : null}
+                {propertyLoanFor(values.loanType)?.coApplicants ? (
+                  <Field
+                    id={`${uid}-co-applicant`}
+                    label="Co-applicant"
+                    error={errors.coApplicantKind}
+                    className="sm:col-span-2"
+                  >
+                    <select
+                      id={`${uid}-co-applicant`}
+                      className={selectClass}
+                      value={values.coApplicantKind}
+                      onChange={set("coApplicantKind")}
+                    >
+                      <option value="">Select one</option>
+                      {(propertyLoanFor(values.loanType)?.coApplicants ?? []).map((k) => (
                         <option key={k} value={k}>
                           {k}
                         </option>
