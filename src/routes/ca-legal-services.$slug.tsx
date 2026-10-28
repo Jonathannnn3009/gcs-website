@@ -352,8 +352,6 @@ function ProfessionalServiceDetailContent() {
           <Reveal delay={100} className="scroll-mt-28 lg:sticky lg:top-28">
             <div id="enquire" className="scroll-mt-28" />
             <ServiceEnquiryForm
-              heading={`Need Help With ${service.title}?`}
-              description="Share your requirement and our team will connect you with the right professional."
               serviceTitle={service.title}
               showIncomeType={service.division === "CA Services"}
             />

@@ -216,8 +216,6 @@ function CaLegalServicesPage() {
           <Reveal delay={100} className="h-full">
             <ServiceEnquiryForm
               roomy
-              heading="Get Professional Assistance"
-              description="Share your requirement and our team will guide you on the next steps."
             />
           </Reveal>
         </div>

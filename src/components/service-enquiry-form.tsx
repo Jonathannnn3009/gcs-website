@@ -39,8 +39,6 @@ function formatIndianAmount(raw: string) {
 }
 
 type Props = {
-  heading?: string;
-  description?: string;
   serviceTitle?: string;
   /** CA Services filings vary by income type — ask upfront there; skip for legal work. */
   showIncomeType?: boolean;
@@ -49,8 +47,6 @@ type Props = {
 };
 
 export function ServiceEnquiryForm({
-  heading = "Need Help With This?",
-  description = "Tell us your requirement and our team will guide you on the process, documents and next steps.",
   serviceTitle,
   showIncomeType = false,
   roomy = false,
@@ -117,14 +113,21 @@ export function ServiceEnquiryForm({
     <form
       onSubmit={onSubmit}
       noValidate
-      className={`rounded-2xl border border-border bg-white shadow-[var(--shadow-lift)] dark:bg-card ${roomy ? "flex h-full flex-col p-7 sm:p-10" : "p-6 sm:p-7"}`}
+      className={`relative overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-lift)] dark:bg-card ${roomy ? "flex h-full flex-col" : ""}`}
     >
-      <h3 className={`font-extrabold text-navy dark:text-white ${roomy ? "text-2xl" : "text-xl"}`}>
-        {heading}
+      <div className="h-1 bg-gradient-to-r from-navy via-navy-soft to-gold" />
+      <div className={`p-6 sm:p-7 ${roomy ? "flex flex-1 flex-col sm:p-10" : ""}`}>
+      <span className="inline-flex items-center gap-2 rounded-full bg-gold-pale/60 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase dark:bg-gold/15">
+        <span className="h-1.5 w-1.5 rounded-full bg-gold"></span>
+        Takes less than a minute
+      </span>
+      <h3 className="mt-4 font-heading text-[1.6rem] leading-tight font-bold text-navy dark:text-white">
+        Request a <span className="hero-stat-text">Free Consultation</span>
       </h3>
-      <p className={`mt-2 text-muted-foreground ${roomy ? "text-base" : "text-sm"}`}>
-        {description}
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        Share a few details and an expert will call you back.
       </p>
+      <div className="my-5 border-t border-dashed border-border" />
       <div className={`${roomy ? "mt-7 flex flex-1 flex-col space-y-6" : "mt-5 space-y-4"}`}>
         <div>
           <label
@@ -260,11 +263,15 @@ export function ServiceEnquiryForm({
         type="submit"
         className={`group flex w-full items-center justify-center gap-3 rounded-lg bg-navy font-bold text-white ${roomy ? "mt-8 py-4 text-base" : "mt-6 py-3.5 text-sm"} shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-soft`}
       >
-        Send Enquiry
+        Submit
         <span className="grid h-7 w-7 place-items-center rounded-full bg-gold text-navy transition-transform duration-300 group-hover:translate-x-0.5">
           <ArrowRight className="h-3.5 w-3.5" />
         </span>
       </button>
+      <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground italic">
+        Kept confidential. Called back within a day. Free to you.
+      </p>
+      </div>
     </form>
   );
 }

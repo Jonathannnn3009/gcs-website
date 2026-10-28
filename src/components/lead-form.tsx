@@ -665,7 +665,7 @@ export function LeadForm({
           <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground italic">
             {product && SERVICE_FEE_SLUGS.has(product.slug)
               ? "Kept confidential and called back within a day. The consultation is free, and any service fee is shared in writing before you go ahead."
-              : "Kept confidential, called back within a day — and it never costs you a rupee."}
+              : "Kept confidential. Called back within a day. Free to you."}
           </p>
         </div>
       </form>
