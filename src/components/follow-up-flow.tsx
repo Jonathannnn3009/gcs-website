@@ -218,16 +218,28 @@ export function FollowUpFlow({
       <div className={card}>
         <div className="h-1 bg-gradient-to-r from-navy via-navy-soft to-gold" />
         <div ref={scroller} className="p-6 sm:p-7">
-          <p className="flex items-center gap-2 text-sm font-semibold text-navy dark:text-white">
-            <Check className="h-4 w-4 text-gold-dark" /> Thank you, {basics.name.split(" ")[0]}. We
-            have your enquiry.
-          </p>
-          <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground italic">
-            {form.reason}
-          </p>
+          <div
+            role="status"
+            className="flex items-center gap-3.5 rounded-xl border border-gold/30 bg-gold-pale/30 px-4 py-3.5 dark:bg-gold/10"
+          >
+            <span className="thank-ring grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-gold-dark shadow-sm dark:bg-card">
+              <Check className="thank-tick h-6 w-6" strokeWidth={3} />
+            </span>
+            <div>
+              <p
+                className="text-[15px] leading-tight font-extrabold text-navy dark:text-white"
+                style={{ letterSpacing: "0" }}
+              >
+                Thank you, {basics.name.split(" ")[0]}.
+              </p>
+              <p className="mt-0.5 text-[13px] leading-snug text-muted-foreground">
+                We have your enquiry. A few more details will help us serve you better.
+              </p>
+            </div>
+          </div>
           {position === 0 ? (
             <>
-              <h3 className="mt-4 font-heading text-[1.3rem] leading-tight font-bold text-navy dark:text-white">
+              <h3 className="mt-6 font-heading text-[1.3rem] leading-tight font-bold text-navy dark:text-white">
                 Tell Us About You. <span className="hero-stat-text">We’ll Find the Right Fit.</span>
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
