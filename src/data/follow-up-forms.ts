@@ -347,6 +347,26 @@ const HOME_LOAN: FollowUpForm = {
       help: "Lenders value the property as much as the borrower, so this shapes which of them are a fit.",
       fields: [
         {
+          key: "homeLoanType",
+          label: "Type of home loan",
+          kind: "choice",
+          required: true,
+          noOther: true,
+          options: [
+            "Home Loan",
+            "Home Construction Loan",
+            "Home Loan Balance Transfer",
+            "Home Loan Balance Transfer + Top-Up",
+            "Home Loan Top-Up",
+            "NRI Home Loan",
+            "Plot Loan",
+            "Plot + Construction Loan",
+            "Home Renovation Loan",
+            "Home Extension Loan",
+            "Resale Property Home Loan",
+          ],
+        },
+        {
           key: "purpose",
           label: "What is the loan for?",
           kind: "choice",
