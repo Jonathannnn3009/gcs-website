@@ -17,7 +17,20 @@ const SLUG_ALIASES: Record<string, string> = { "overdraft-facility": "overdraft-
 
 // Loans whose short form asks "You Are". The overdrafts are taken by salaried people as well as business owners.
 const PERSON_ONLY_CATEGORIES = ["Salaried", "Self-Employed"];
-const CATEGORY_LOANS = new Set(["home-loan", "loan-against-property"]);
+const CATEGORY_LOANS = new Set(["home-loan"]);
+// Loan against property: who is applying (a firm or company can borrow too), and the kind of loan and property.
+const LAP_SLUG = "loan-against-property";
+const LAP_APPLICANTS = ["Salaried", "Self-Employed", "Partnership", "Pvt Ltd Co", "NRI"];
+const LAP_KINDS = [
+  "Loan Against Property (LAP)",
+  "LAP Balance Transfer",
+  "LAP Balance Transfer + Top-Up",
+  "LAP Top-Up Loan",
+];
+const PROPERTY_KINDS = ["Residential Property", "Commercial Property", "Industrial Property", "Specialised Property"];
+// The second form only tells salaried, self-employed and NRI apart: a firm or company counts as self-employed there.
+const forSecondForm = (category: string) =>
+  category === "Partnership" || category === "Pvt Ltd Co" ? "Self-Employed" : category;
 const OVERDRAFT_CATEGORY_LOANS = new Set(["unsecured-dod", "dlod", "overdraft-limit"]);
 // Loans whose short form asks for the industry too.
 const INDUSTRY_LOANS = new Set(["business-loan", "private-funding"]);
@@ -44,6 +57,9 @@ type Fields = {
   applicantCategory: string;
   industry: string;
   profession: string;
+  /** For a loan against property: the kind of loan, and the kind of property. */
+  loanKind: string;
+  propertyKind: string;
   /** What was typed when "Other" was picked in the matching drop-down. */
   categoryOther: string;
   industryOther: string;
@@ -62,6 +78,8 @@ const empty: Fields = {
   applicantCategory: "",
   industry: "",
   profession: "",
+  loanKind: "",
+  propertyKind: "",
   categoryOther: "",
   industryOther: "",
   professionOther: "",
@@ -150,10 +168,12 @@ export function LeadForm({
   };
   const categoryOptionsFor = (title: string): string[] | null => {
     const slug = slugFor(title);
+    if (slug === LAP_SLUG) return [...LAP_APPLICANTS, "Other"];
     if (slug && CATEGORY_LOANS.has(slug)) return [...applicants, "Other"];
     if (slug && OVERDRAFT_CATEGORY_LOANS.has(slug)) return [...PERSON_ONLY_CATEGORIES, "Other"];
     return null;
   };
+  const asksLapKinds = (title: string) => slugFor(title) === LAP_SLUG;
   const asksIndustry = (title: string) => INDUSTRY_LOANS.has(slugFor(title) ?? "");
   const asksProfession = (title: string) => PROFESSION_LOANS.has(slugFor(title) ?? "");
   const compact = !!product && COMPACT_LOANS.has(product.slug);
@@ -191,6 +211,8 @@ export function LeadForm({
         : "",
       industry: asksIndustry(e.target.value) ? v.industry : "",
       profession: asksProfession(e.target.value) ? v.profession : "",
+      loanKind: asksLapKinds(e.target.value) ? v.loanKind : "",
+      propertyKind: asksLapKinds(e.target.value) ? v.propertyKind : "",
     }));
 
   const setCity = (e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -209,6 +231,10 @@ export function LeadForm({
     if (!values.loanType) next.loanType = "Select a loan type";
     else if (values.loanType === "Other" && !values.loanTypeOther.trim())
       next.loanType = "Please enter your loan type";
+    if (asksLapKinds(values.loanType)) {
+      if (!values.loanKind) next.loanKind = "Select one";
+      if (!values.propertyKind) next.propertyKind = "Select one";
+    }
     if (categoryOptionsFor(values.loanType) && !values.applicantCategory)
       next.applicantCategory = "Select one";
     if (values.applicantCategory === "Other" && !values.categoryOther.trim())
@@ -255,6 +281,8 @@ export function LeadForm({
     const city = values.city === "Other" ? values.cityOther.trim() : values.city;
     const detail = [
       `Loan type: ${loanType}`,
+      values.loanKind ? `Type of loan: ${values.loanKind}` : "",
+      values.propertyKind ? `Property: ${values.propertyKind}` : "",
       values.applicantCategory
         ? `Applicant: ${values.applicantCategory === "Other" ? `Other (${values.categoryOther.trim()})` : values.applicantCategory}`
         : "",
@@ -313,7 +341,7 @@ export function LeadForm({
           phone: b.phone.trim(),
           email: b.email.trim(),
           city: b.city,
-          category: b.applicantCategory,
+          category: forSecondForm(b.applicantCategory),
           industry: b.industry,
           productSlug: b.slug,
           productTitle: b.title,
@@ -428,6 +456,46 @@ export function LeadForm({
                   />
                 ) : null}
               </Field>
+            ) : null}
+
+            {asksLapKinds(values.loanType) ? (
+              <>
+                <Field id={`${uid}-lap-kind`} label="Type of Loan" error={errors.loanKind} className="sm:col-span-2">
+                  <select
+                    id={`${uid}-lap-kind`}
+                    className={selectClass}
+                    value={values.loanKind}
+                    onChange={set("loanKind")}
+                  >
+                    <option value="">Select one</option>
+                    {LAP_KINDS.map((k) => (
+                      <option key={k} value={k}>
+                        {k}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+                <Field
+                  id={`${uid}-property-kind`}
+                  label="Type of Property"
+                  error={errors.propertyKind}
+                  className="sm:col-span-2"
+                >
+                  <select
+                    id={`${uid}-property-kind`}
+                    className={selectClass}
+                    value={values.propertyKind}
+                    onChange={set("propertyKind")}
+                  >
+                    <option value="">Select one</option>
+                    {PROPERTY_KINDS.map((k) => (
+                      <option key={k} value={k}>
+                        {k}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+              </>
             ) : null}
 
             {categoryOptionsFor(values.loanType) ? (
