@@ -20,7 +20,12 @@ const PERSON_ONLY_CATEGORIES = ["Salaried", "Self-Employed"];
 const CATEGORY_LOANS = new Set(["home-loan"]);
 // Property loans: the kind of loan, the kind of property and who is applying, each from the lists for that loan.
 const LAP_SLUG = "loan-against-property";
-type PropertyLoan = { kinds: string[]; properties: string[]; applicants: string[] };
+type PropertyLoan = {
+  kinds: string[];
+  properties: string[];
+  applicants: string[];
+  propertyLabel?: string;
+};
 const PROPERTY_LOANS: Record<string, PropertyLoan> = {
   [LAP_SLUG]: {
     kinds: [
@@ -32,13 +37,63 @@ const PROPERTY_LOANS: Record<string, PropertyLoan> = {
       "LAP Overdraft",
       "Lease Rental Discounting",
     ],
-    properties: ["Residential Property", "Commercial Property", "Industrial Property", "Specialised Property"],
+    properties: [
+      "Residential Property",
+      "Commercial Property",
+      "Industrial Property",
+      "Specialised Property",
+    ],
     applicants: ["Salaried", "Self-Employed", "Partnership", "Pvt Ltd Co", "LLP", "Proprietorship"],
   },
   "micro-lap": {
-    kinds: ["Micro LAP", "Micro LAP Top-Up", "Micro LAP Balance Transfer", "Micro LAP Top-Up + Balance Transfer"],
+    kinds: [
+      "Micro LAP",
+      "Micro LAP Top-Up",
+      "Micro LAP Balance Transfer",
+      "Micro LAP Top-Up + Balance Transfer",
+    ],
     properties: ["Self-occupied residential property", "Commercial property", "Mixed-use property"],
     applicants: ["Salaried", "Self-Employed", "Proprietor", "Partner / Director"],
+  },
+  dlod: {
+    kinds: [
+      "Drop-Line Overdraft (DOD)",
+      "Drop-Line Overdraft Balance Transfer",
+      "Drop-Line Overdraft Top-Up",
+    ],
+    properties: ["Residential Property", "Commercial Property", "Industrial Property"],
+    applicants: [
+      "Self-employed professional",
+      "Proprietorship",
+      "Partnership / LLP",
+      "Pvt Ltd Co",
+      "Salaried",
+    ],
+  },
+  "project-funding": {
+    propertyLabel: "Type of Project",
+    kinds: [
+      "Land Purchase Loan",
+      "Construction Finance",
+      "Project Term Loan",
+      "Inventory Funding",
+      "Lease Rental Discounting",
+      "Structured / Mezzanine Funding",
+    ],
+    properties: [
+      "Residential project or township",
+      "Commercial project, mall or office",
+      "Infrastructure",
+      "Industrial or manufacturing unit",
+    ],
+    applicants: [
+      "Builder / Developer",
+      "Partnership",
+      "LLP",
+      "Pvt Ltd Co",
+      "Public Ltd Co",
+      "Trust / Society",
+    ],
   },
   "lease-rental-discounting": {
     kinds: ["Lease Rental Discounting (LRD)", "LRD Balance Transfer", "LRD Top-Up"],
@@ -56,9 +111,18 @@ const PROPERTY_LOANS: Record<string, PropertyLoan> = {
 // The second form only tells salaried, self-employed and NRI apart: a firm or company counts as self-employed there.
 // The lease rental form asks who owns the property instead, so it takes no applicant type.
 const forSecondForm = (category: string, slug: string) =>
-  slug === "lease-rental-discounting"
+  slug === "lease-rental-discounting" || slug === "project-funding"
     ? ""
-    : ["Partnership", "Pvt Ltd Co", "LLP", "Proprietorship", "Proprietor", "Partner / Director"].includes(category)
+    : [
+          "Partnership",
+          "Pvt Ltd Co",
+          "LLP",
+          "Proprietorship",
+          "Proprietor",
+          "Partner / Director",
+          "Self-employed professional",
+          "Partnership / LLP",
+        ].includes(category)
       ? "Self-Employed"
       : category;
 // What the short form's answers already say in the second form.
@@ -81,19 +145,55 @@ const SECOND_FORM_OWNER: Record<string, string> = {
   Partnership: "A partnership firm or LLP",
   LLP: "A partnership firm or LLP",
 };
+// The drop-line overdraft form asks how the business is set up; the project form asks how the promoter is set up.
+const SECOND_FORM_SETUP: Record<string, string> = {
+  "Self-employed professional": "Professional (doctor, CA, architect, etc.)",
+  Proprietorship: "Proprietorship",
+  "Partnership / LLP": "Partnership or LLP",
+  "Pvt Ltd Co": "Private limited company",
+};
+const SECOND_FORM_PROMOTER: Record<string, string> = {
+  Partnership: "Partnership or LLP",
+  LLP: "Partnership or LLP",
+  "Pvt Ltd Co": "Private limited company",
+  "Public Ltd Co": "Limited company",
+  "Trust / Society": "Trust or society",
+};
+const SECOND_FORM_STAGE: Record<string, string> = {
+  "Land Purchase Loan": "Still to buy the land",
+  "Construction Finance": "Under construction",
+  "Inventory Funding": "Built, with units left to sell or let",
+  "Lease Rental Discounting": "Built, with units left to sell or let",
+};
 const knownFromShortForm = (
   slug: string,
   loanKind: string,
   propertyKind: string,
   applicant: string,
-): Record<string, string> => ({
-  ...(SECOND_FORM_PROPERTY[propertyKind] ? { propertyKind: SECOND_FORM_PROPERTY[propertyKind] } : {}),
-  ...(propertyKind === "Self-occupied residential property" ? { propertyUse: "Self-occupied or self-used" } : {}),
-  ...(slug === "lease-rental-discounting" && SECOND_FORM_OWNER[applicant]
-    ? { ownerType: SECOND_FORM_OWNER[applicant] }
-    : {}),
-  ...(/Balance Transfer|Top-Up/.test(loanKind) ? { existingMortgage: "Yes" } : {}),
-});
+): Record<string, string> =>
+  slug === "project-funding"
+    ? {
+        projectType: propertyKind,
+        ...(SECOND_FORM_STAGE[loanKind] ? { stage: SECOND_FORM_STAGE[loanKind] } : {}),
+        ...(SECOND_FORM_PROMOTER[applicant]
+          ? { constitution: SECOND_FORM_PROMOTER[applicant] }
+          : {}),
+      }
+    : {
+        ...(slug === "dlod" && SECOND_FORM_SETUP[applicant]
+          ? { constitution: SECOND_FORM_SETUP[applicant] }
+          : {}),
+        ...(SECOND_FORM_PROPERTY[propertyKind]
+          ? { propertyKind: SECOND_FORM_PROPERTY[propertyKind] }
+          : {}),
+        ...(propertyKind === "Self-occupied residential property"
+          ? { propertyUse: "Self-occupied or self-used" }
+          : {}),
+        ...(slug === "lease-rental-discounting" && SECOND_FORM_OWNER[applicant]
+          ? { ownerType: SECOND_FORM_OWNER[applicant] }
+          : {}),
+        ...(/Balance Transfer|Top-Up/.test(loanKind) ? { existingMortgage: "Yes" } : {}),
+      };
 const OVERDRAFT_CATEGORY_LOANS = new Set(["unsecured-dod", "dlod", "overdraft-limit"]);
 // Loans whose short form asks for the industry too.
 const INDUSTRY_LOANS = new Set(["business-loan", "private-funding"]);
@@ -351,7 +451,9 @@ export function LeadForm({
     const detail = [
       `Loan type: ${loanType}`,
       values.loanKind ? `Type of loan: ${values.loanKind}` : "",
-      values.propertyKind ? `Property: ${values.propertyKind}` : "",
+      values.propertyKind
+        ? `${propertyLoanFor(values.loanType)?.propertyLabel ? "Project" : "Property"}: ${values.propertyKind}`
+        : "",
       values.applicantCategory
         ? `Applicant: ${values.applicantCategory === "Other" ? `Other (${values.categoryOther.trim()})` : values.applicantCategory}`
         : "",
@@ -532,7 +634,12 @@ export function LeadForm({
 
             {asksLapKinds(values.loanType) ? (
               <>
-                <Field id={`${uid}-lap-kind`} label="Type of Loan" error={errors.loanKind} className="sm:col-span-2">
+                <Field
+                  id={`${uid}-lap-kind`}
+                  label="Type of Loan"
+                  error={errors.loanKind}
+                  className="sm:col-span-2"
+                >
                   <select
                     id={`${uid}-lap-kind`}
                     className={selectClass}
@@ -549,7 +656,7 @@ export function LeadForm({
                 </Field>
                 <Field
                   id={`${uid}-property-kind`}
-                  label="Type of Property"
+                  label={propertyLoanFor(values.loanType)?.propertyLabel ?? "Type of Property"}
                   error={errors.propertyKind}
                   className="sm:col-span-2"
                 >
