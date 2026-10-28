@@ -18,30 +18,80 @@ const SLUG_ALIASES: Record<string, string> = { "overdraft-facility": "overdraft-
 // Loans whose short form asks "You Are". The overdrafts are taken by salaried people as well as business owners.
 const PERSON_ONLY_CATEGORIES = ["Salaried", "Self-Employed"];
 const CATEGORY_LOANS = new Set(["home-loan"]);
-// Loan against property: who is applying (a firm or company can borrow too), and the kind of loan and property.
+// Property loans: the kind of loan, the kind of property and who is applying, each from the lists for that loan.
 const LAP_SLUG = "loan-against-property";
-const LAP_APPLICANTS = ["Salaried", "Self-Employed", "Partnership", "Pvt Ltd Co", "LLP", "Proprietorship"];
-const LAP_KINDS = [
-  "Loan Against Property (LAP)",
-  "LAP Balance Transfer",
-  "LAP Balance Transfer + Top-Up",
-  "LAP Top-Up Loan",
-  "Commercial Purchase Loan",
-  "LAP Overdraft",
-  "Lease Rental Discounting",
-];
-const PROPERTY_KINDS = ["Residential Property", "Commercial Property", "Industrial Property", "Specialised Property"];
+type PropertyLoan = { kinds: string[]; properties: string[]; applicants: string[] };
+const PROPERTY_LOANS: Record<string, PropertyLoan> = {
+  [LAP_SLUG]: {
+    kinds: [
+      "Loan Against Property (LAP)",
+      "LAP Balance Transfer",
+      "LAP Balance Transfer + Top-Up",
+      "LAP Top-Up Loan",
+      "Commercial Purchase Loan",
+      "LAP Overdraft",
+      "Lease Rental Discounting",
+    ],
+    properties: ["Residential Property", "Commercial Property", "Industrial Property", "Specialised Property"],
+    applicants: ["Salaried", "Self-Employed", "Partnership", "Pvt Ltd Co", "LLP", "Proprietorship"],
+  },
+  "micro-lap": {
+    kinds: ["Micro LAP", "Micro LAP Top-Up", "Micro LAP Balance Transfer", "Micro LAP Top-Up + Balance Transfer"],
+    properties: ["Self-occupied residential property", "Commercial property", "Mixed-use property"],
+    applicants: ["Salaried", "Self-Employed", "Proprietor", "Partner / Director"],
+  },
+  "lease-rental-discounting": {
+    kinds: ["Lease Rental Discounting (LRD)", "LRD Balance Transfer", "LRD Top-Up"],
+    properties: [
+      "Office",
+      "Shop / retail space",
+      "Mall or multi-tenant building",
+      "Warehouse",
+      "Educational institute",
+      "Hotel or service apartments",
+    ],
+    applicants: ["Individual owner", "Company / Firm", "Partnership", "LLP"],
+  },
+};
 // The second form only tells salaried, self-employed and NRI apart: a firm or company counts as self-employed there.
-const forSecondForm = (category: string) =>
-  ["Partnership", "Pvt Ltd Co", "LLP", "Proprietorship"].includes(category) ? "Self-Employed" : category;
-// What the loan type and property type picked on the short form already answer in the second form.
+// The lease rental form asks who owns the property instead, so it takes no applicant type.
+const forSecondForm = (category: string, slug: string) =>
+  slug === "lease-rental-discounting"
+    ? ""
+    : ["Partnership", "Pvt Ltd Co", "LLP", "Proprietorship", "Proprietor", "Partner / Director"].includes(category)
+      ? "Self-Employed"
+      : category;
+// What the short form's answers already say in the second form.
 const SECOND_FORM_PROPERTY: Record<string, string> = {
   "Residential Property": "Residential (flat / house)",
   "Commercial Property": "Commercial (shop / office)",
   "Industrial Property": "Industrial (factory / warehouse)",
+  "Self-occupied residential property": "Residential (flat / house)",
+  "Commercial property": "Commercial (shop / office)",
+  Office: "Office",
+  "Shop / retail space": "Shop / retail space",
+  "Mall or multi-tenant building": "Mall or multi-tenant building",
+  Warehouse: "Warehouse",
+  "Educational institute": "Other",
+  "Hotel or service apartments": "Other",
 };
-const knownFromShortForm = (loanKind: string, propertyKind: string): Record<string, string> => ({
+const SECOND_FORM_OWNER: Record<string, string> = {
+  "Individual owner": "An individual (or jointly with family)",
+  "Company / Firm": "A company",
+  Partnership: "A partnership firm or LLP",
+  LLP: "A partnership firm or LLP",
+};
+const knownFromShortForm = (
+  slug: string,
+  loanKind: string,
+  propertyKind: string,
+  applicant: string,
+): Record<string, string> => ({
   ...(SECOND_FORM_PROPERTY[propertyKind] ? { propertyKind: SECOND_FORM_PROPERTY[propertyKind] } : {}),
+  ...(propertyKind === "Self-occupied residential property" ? { propertyUse: "Self-occupied or self-used" } : {}),
+  ...(slug === "lease-rental-discounting" && SECOND_FORM_OWNER[applicant]
+    ? { ownerType: SECOND_FORM_OWNER[applicant] }
+    : {}),
   ...(/Balance Transfer|Top-Up/.test(loanKind) ? { existingMortgage: "Yes" } : {}),
 });
 const OVERDRAFT_CATEGORY_LOANS = new Set(["unsecured-dod", "dlod", "overdraft-limit"]);
@@ -183,12 +233,16 @@ export function LeadForm({
   const categoryOptionsFor = (title: string): string[] | null => {
     if (!product) return null;
     const slug = slugFor(title);
-    if (slug === LAP_SLUG) return [...LAP_APPLICANTS, "Other"];
+    if (slug && PROPERTY_LOANS[slug]) return [...PROPERTY_LOANS[slug].applicants, "Other"];
     if (slug && CATEGORY_LOANS.has(slug)) return [...applicants, "Other"];
     if (slug && OVERDRAFT_CATEGORY_LOANS.has(slug)) return [...PERSON_ONLY_CATEGORIES, "Other"];
     return null;
   };
-  const asksLapKinds = (title: string) => !!product && slugFor(title) === LAP_SLUG;
+  const propertyLoanFor = (title: string) => {
+    const slug = product ? slugFor(title) : undefined;
+    return slug ? PROPERTY_LOANS[slug] : undefined;
+  };
+  const asksLapKinds = (title: string) => !!propertyLoanFor(title);
   const asksIndustry = (title: string) => !!product && INDUSTRY_LOANS.has(slugFor(title) ?? "");
   const asksProfession = (title: string) => !!product && PROFESSION_LOANS.has(slugFor(title) ?? "");
   const compact = !!product && COMPACT_LOANS.has(product.slug);
@@ -358,8 +412,8 @@ export function LeadForm({
           phone: b.phone.trim(),
           email: b.email.trim(),
           city: b.city,
-          category: forSecondForm(b.applicantCategory),
-          known: knownFromShortForm(b.loanKind, b.propertyKind),
+          category: forSecondForm(b.applicantCategory, b.slug),
+          known: knownFromShortForm(b.slug, b.loanKind, b.propertyKind, b.applicantCategory),
           industry: b.industry,
           productSlug: b.slug,
           productTitle: b.title,
@@ -486,7 +540,7 @@ export function LeadForm({
                     onChange={set("loanKind")}
                   >
                     <option value="">Select one</option>
-                    {LAP_KINDS.map((k) => (
+                    {(propertyLoanFor(values.loanType)?.kinds ?? []).map((k) => (
                       <option key={k} value={k}>
                         {k}
                       </option>
@@ -506,7 +560,7 @@ export function LeadForm({
                     onChange={set("propertyKind")}
                   >
                     <option value="">Select one</option>
-                    {PROPERTY_KINDS.map((k) => (
+                    {(propertyLoanFor(values.loanType)?.properties ?? []).map((k) => (
                       <option key={k} value={k}>
                         {k}
                       </option>
