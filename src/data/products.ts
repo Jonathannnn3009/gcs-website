@@ -137,10 +137,7 @@ const NRI_DOCS = [
   "Employment contract or appointment letter, and your last 3 to 6 months' salary slips from abroad",
   "Last 6 months' overseas salary-account statements, and last 12 months' NRE/NRO account statements",
   "Self-employed NRIs: business registration or licence, last 2 years' tax returns and financial statements",
-  "Last filed income tax return of your country of residence (for example W-2, P60), and Indian ITRs if you file them",
   "Overseas address proof and your permanent address proof in India",
-  "Details of existing loans, in India or abroad",
-  "A resident Indian co-applicant's KYC (PAN and address proof), if the lender asks for one",
   "Power of Attorney (POA) in favour of a resident Indian, if you cannot be in India to sign",
 ];
 export const APPLICANT_CATEGORY_LABELS = ["Salaried", "Self-Employed", "NRI"];
