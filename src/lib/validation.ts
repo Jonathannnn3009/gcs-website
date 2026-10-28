@@ -70,6 +70,9 @@ export const LOAN_MINIMUMS: Record<string, number> = {
   "loan-against-securities": 1 * LAKH,
 };
 
+/** The smallest loan amount for a loan page. */
+export const loanMinimum = (slug: string): number => LOAN_MINIMUMS[slug] ?? MIN_LOAN_AMOUNT;
+
 export type AmountBounds = { min: number; max: number };
 
 /** The range a loan amount has to fall in on the given loan page. */

@@ -31,7 +31,7 @@ export const Route = createFileRoute("/contact")({
 const BENEFITS = [
   "Callback from a senior expert within one business day",
   "Indicative offer & lender shortlist within 48 hours",
-  "Zero upfront fees — we're paid only on disbursal",
+  "No hidden charges — every fee is shared in writing before you go ahead",
   "Full confidentiality on profile, file and amount",
 ];
 

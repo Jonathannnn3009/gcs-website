@@ -9,7 +9,7 @@ export const CONTACT_FAQS: Faq[] = [
   },
   {
     q: "Are there any upfront charges?",
-    a: "No advisory fee for customers — we're paid by the lender only on successful disbursal.",
+    a: "No advisory fee on most loans. For cash-flow and trade facilities and the two micro loans there is a service fee for managing your file, shown on that loan's page. In every case we tell you the amount in writing before you go ahead, so there are no surprises.",
   },
   {
     q: "Can you help if my application was rejected elsewhere?",

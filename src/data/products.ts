@@ -1899,7 +1899,7 @@ export const PRODUCTS: Product[] = [
 ];
 
 // For these loans we charge a service fee, and say so up front: what it covers and that the amount is confirmed in writing.
-const SERVICE_FEE_SLUGS = new Set([
+export const SERVICE_FEE_SLUGS = new Set([
   "cgtmse",
   "machine-loan",
   "working-capital-term-loan",

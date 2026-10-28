@@ -360,22 +360,17 @@ function ProductDetailContent() {
                 <FactsStrip facts={product.facts} />
 
                 <div className="relative mt-8 flex flex-wrap items-center gap-5">
-                  {questionnaire ? (
-                    <a
-                      href="#apply"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        document.getElementById("apply")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                      }}
-                      className="gold-btn py-3.5 text-base"
-                    >
-                      Apply for {code} <ArrowRight className="h-4 w-4" />
-                    </a>
-                  ) : (
-                    <Link to="/contact" className="gold-btn py-3.5 text-base">
-                      Apply for {code} <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  )}
+                  {/* The button takes the visitor to this loan's own form on the same page */}
+                  <a
+                    href="#apply"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById("apply")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                    className="gold-btn py-3.5 text-base"
+                  >
+                    Apply for {code} <ArrowRight className="h-4 w-4" />
+                  </a>
                   <a
                     href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
                     target="_blank"
@@ -610,7 +605,7 @@ function ProductDetailContent() {
               <ProductQuestionnaire config={questionnaire} productSlug={product.slug} productTitle={product.title} />
             ) : (
               // On a short screen the form scrolls inside itself, with a scrollbar you can see, instead of running below the page
-              <div className="gcs-scroll rounded-2xl pr-1 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain">
+              <div id="apply" className="gcs-scroll scroll-mt-28 rounded-2xl pr-1 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain">
                 <LeadForm
                   defaultLoanType={product.title}
                   product={{ slug: product.slug, title: product.title }}

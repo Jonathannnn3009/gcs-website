@@ -2,7 +2,7 @@
 // GCS intake question tree (one question at a time, only what a first look needs). It is a fixed,
 // guided flow, not a free-text bot: nothing here decides anything about a loan, it only organises
 // the enquiry so a GCS expert can pick it up without asking the same things again.
-import { MIN_LOAN_AMOUNT, MIN_MONTHLY_INCOME } from "@/lib/validation";
+import { loanMinimum, MIN_LOAN_AMOUNT, MIN_MONTHLY_INCOME } from "@/lib/validation";
 
 export type StepKind = "choice" | "text" | "amount" | "number" | "city";
 
@@ -71,12 +71,13 @@ const city: Step = {
   placeholder: "Type your city",
   minLength: 2,
 };
-const amount = (question = "How much loan do you need?"): Step => ({
+// The smallest amount follows the kind of loan, the same as on the loan pages.
+const amount = (question = "How much loan do you need?", min = MIN_LOAN_AMOUNT): Step => ({
   key: "requested_amount",
   label: "Amount needed",
   question,
   kind: "amount",
-  min: MIN_LOAN_AMOUNT,
+  min,
   hint: "An approximate figure in rupees is fine.",
 });
 const emi: Step = {
@@ -121,7 +122,7 @@ export const FLOWS: Flow[] = [
         min: MIN_MONTHLY_INCOME,
       },
       emi,
-      amount(),
+      amount(undefined, loanMinimum("home-loan")),
       {
         key: "property_value",
         label: "Property value",
@@ -167,7 +168,7 @@ export const FLOWS: Flow[] = [
         kind: "choice",
         options: ["Business", "Education", "Medical", "Home / personal", "Other"],
       },
-      amount("What amount do you need?"),
+      amount("What amount do you need?", loanMinimum("loan-against-property")),
       { key: "employment_type", label: "Income type", question: "Are you salaried or self-employed?", kind: "choice", options: EMPLOYMENT },
       {
         key: "income_monthly",
@@ -235,7 +236,7 @@ export const FLOWS: Flow[] = [
         kind: "amount",
         allowZero: true,
       },
-      amount("How much funding do you need?"),
+      amount("How much funding do you need?", loanMinimum("business-loan")),
       {
         key: "funding_purpose",
         label: "Purpose",
@@ -285,7 +286,7 @@ export const FLOWS: Flow[] = [
         kind: "choice",
         options: YES_NO,
       },
-      amount("What limit do you need?"),
+      amount("What limit do you need?", loanMinimum("working-capital-term-loan")),
       { key: "business_constitution", label: "Business type", question: "What is your business constitution?", kind: "choice", options: CONSTITUTIONS },
       { key: "business_vintage", label: "Years in business", question: "How long has the business been operating?", kind: "choice", options: VINTAGE },
       { key: "docs_availability", label: "Financials ready", question: "Are audited financials, GST returns and bank statements available?", kind: "choice", options: YES_NO_SURE },
@@ -307,7 +308,7 @@ export const FLOWS: Flow[] = [
         options: ["Under 1 year", "1–3 years", "3–5 years", "More than 5 years"],
       },
       emi,
-      amount("How much do you need?"),
+      amount("How much do you need?", loanMinimum("personal-loan")),
       {
         key: "funding_purpose",
         label: "Purpose",
@@ -341,8 +342,8 @@ export const FLOWS: Flow[] = [
         kind: "choice",
         options: ["Yes", "Applied, waiting", "Not yet"],
       },
-      { key: "course_cost", label: "Total cost", question: "What is the total estimated cost of the course?", kind: "amount", min: MIN_LOAN_AMOUNT },
-      amount("How much funding do you need?"),
+      { key: "course_cost", label: "Total cost", question: "What is the total estimated cost of the course?", kind: "amount", min: loanMinimum("education-loan") },
+      amount("How much funding do you need?", loanMinimum("education-loan")),
       {
         key: "coapplicant_income_type",
         label: "Co-applicant",
@@ -366,7 +367,7 @@ export const FLOWS: Flow[] = [
       { key: "employment_type", label: "Employment", question: "Are you salaried or self-employed?", kind: "choice", options: EMPLOYMENT },
       { key: "income_monthly", label: "Monthly income", question: "What is your approximate monthly net income?", kind: "amount", min: MIN_MONTHLY_INCOME },
       emi,
-      amount("What loan amount are you considering?"),
+      amount("What loan amount are you considering?", loanMinimum("used-car-loan")),
       {
         key: "desired_tenure",
         label: "Tenure",
@@ -384,7 +385,7 @@ export const FLOWS: Flow[] = [
     steps: [
       { key: "asset_type", label: "Machinery", question: "What machinery or equipment do you need?", kind: "text", placeholder: "e.g. CNC machine" },
       { key: "asset_condition", label: "Condition", question: "Is it new or used?", kind: "choice", options: ["New", "Used"] },
-      { key: "asset_value", label: "Quotation value", question: "What is the supplier quotation value?", kind: "amount", min: MIN_LOAN_AMOUNT },
+      { key: "asset_value", label: "Quotation value", question: "What is the supplier quotation value?", kind: "amount", min: loanMinimum("machine-loan") },
       { key: "own_contribution", label: "Your contribution", question: "How much margin can the business contribute?", kind: "amount" },
       { key: "business_constitution", label: "Business type", question: "What is your business constitution?", kind: "choice", options: CONSTITUTIONS },
       { key: "business_vintage", label: "Years in business", question: "How long has the business been operating?", kind: "choice", options: VINTAGE },
@@ -412,7 +413,7 @@ export const FLOWS: Flow[] = [
         kind: "choice",
         options: ["Letter of credit", "Bid / tender guarantee", "Performance guarantee", "Financial guarantee", "Not sure"],
       },
-      { key: "requested_amount", label: "Amount", question: "What is the amount of the instrument?", kind: "amount", min: MIN_LOAN_AMOUNT },
+      { key: "requested_amount", label: "Amount", question: "What is the amount of the instrument?", kind: "amount", min: loanMinimum("bank-guarantee") },
       {
         key: "validity",
         label: "Validity",

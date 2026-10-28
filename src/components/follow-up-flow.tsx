@@ -38,13 +38,15 @@ export function FollowUpFlow({
   pass,
   basics,
   firstDetail,
+  skipQuestions = false,
 }: {
+  skipQuestions?: boolean;
   form: FollowUpForm;
   pass: FollowUpPass | null;
   basics: Basics;
   firstDetail: string;
 }) {
-  const [stage, setStage] = useState<Stage>("questions");
+  const [stage, setStage] = useState<Stage>(skipQuestions ? "cibil" : "questions");
   const [step, setStep] = useState(0);
   // What the short form already told us is carried in, so it is not asked again.
   const [answers, setAnswers] = useState<Record<string, string>>({

@@ -1,7 +1,7 @@
 import { useId, useState, type ReactNode } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
-import { APPLICANT_CATEGORY_LABELS, PRODUCTS } from "@/data/products";
+import { APPLICANT_CATEGORY_LABELS, PRODUCTS, SERVICE_FEE_SLUGS } from "@/data/products";
 import { submitLead, submitLeadForFollowUp, type FollowUpPass } from "@/lib/leads";
 import { followUpFor } from "@/data/follow-up-forms";
 import { FollowUpFlow } from "@/components/follow-up-flow";
@@ -336,6 +336,8 @@ export function LeadForm({
         form={secondForm}
         pass={followUp.pass}
         firstDetail={followUp.detail}
+        // The home page's form is the short one only: after it, just the CIBIL reminder.
+        skipQuestions={source === "home-enquiry"}
         basics={{
           name: b.name.trim(),
           phone: b.phone.trim(),
@@ -659,7 +661,9 @@ export function LeadForm({
           </button>
 
           <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground italic">
-            Kept confidential, called back within a day — and it never costs you a rupee.
+            {product && SERVICE_FEE_SLUGS.has(product.slug)
+              ? "Kept confidential and called back within a day. The consultation is free, and any service fee is shared in writing before you go ahead."
+              : "Kept confidential, called back within a day — and it never costs you a rupee."}
           </p>
         </div>
       </form>

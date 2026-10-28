@@ -83,7 +83,7 @@ Whether a loan is approved, and its amount, rate and terms, is decided by the le
 
 ## Our fees
 
-We do not charge customers an advisory fee for arranging a loan unless we tell you otherwise in writing before you proceed. We are paid by the lender on successful disbursal. Lenders may charge their own processing and other fees, which will be stated in their sanction documents.
+We do not charge customers an advisory fee for arranging most loans. For some facilities, such as cash-flow and trade facilities and the two micro loans, we charge a service fee, which is shown on that loan's page. We always tell you any fee in writing before you proceed. Lenders may charge their own processing and other fees, which will be stated in their sanction documents.
 
 ## Your responsibilities
 

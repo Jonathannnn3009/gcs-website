@@ -77,7 +77,7 @@ export const HOME_TRUST = [
   { icon: Timer, label: "Speed to Sanction" },
   { icon: TrendingUp, label: "Large-Ticket Specialists" },
   { icon: Sparkles, label: "Custom-built Loans" },
-  { icon: BadgeCheck, label: "Zero Advisory Fee" },
+  { icon: BadgeCheck, label: "No Hidden Charges" },
   { icon: Globe, label: "PAN India Service" },
   { icon: LayoutDashboard, label: "In-House CRM Tracking" },
 ];
@@ -96,7 +96,7 @@ export const HOME_COMPARE_US = [
   { text: "A loan shaped around your income and goals" },
   { text: "One dedicated manager from login to disbursal" },
   { text: "Every charge shared in writing before you sign" },
-  { text: "Zero advisory fee, independent advice" },
+  { text: "No hidden charges, independent advice" },
 ];
 
 export const HOME_PERSONAS = [
@@ -220,7 +220,7 @@ export const WHYUS_PILLARS = [
 
 export const WHYUS_ADVANTAGES = [
   { text: "We compare live policies across 75+ lenders" },
-  { text: "Zero advisory fee — we're paid by the lender" },
+  { text: "No hidden charges: every fee shared in writing first" },
   { text: "Daily file tracking from login to disbursal" },
   { text: "Complex profiles handled that banks return" },
   { text: "Written savings comparison before you commit" },
@@ -371,25 +371,58 @@ export const NAV_HEADER = [
 
 export const NAV_PARTNER = [
   { icon: Handshake, label: "Agent", desc: "CAs, brokers, consultants and DSAs", to: "/partner" },
-  { icon: Building2, label: "Builder", desc: "Buyer financing and project approvals", to: "/partner/builder" },
-  { icon: Users, label: "Freelancer", desc: "Earn on your own time, no investment", to: "/partner/freelancer" },
+  {
+    icon: Building2,
+    label: "Builder",
+    desc: "Buyer financing and project approvals",
+    to: "/partner/builder",
+  },
+  {
+    icon: Users,
+    label: "Freelancer",
+    desc: "Earn on your own time, no investment",
+    to: "/partner/freelancer",
+  },
 ];
 
 export const NAV_CIBIL = [
-  { icon: FileText, label: "Credit Report", desc: "Request your CIBIL or other bureau report", to: "/cibil" },
-  { icon: Gauge, label: "Credit Score Estimator", desc: "An indicative range, not a bureau pull", to: "/credit-score-estimator" },
-  { icon: Compass, label: "CIBIL Advisory Services", desc: "Understand your report and plan the next steps", to: "/cibil-advisory" },
+  {
+    icon: FileText,
+    label: "Credit Report",
+    desc: "Request your CIBIL or other bureau report",
+    to: "/cibil",
+  },
+  {
+    icon: Gauge,
+    label: "Credit Score Estimator",
+    desc: "An indicative range, not a bureau pull",
+    to: "/credit-score-estimator",
+  },
+  {
+    icon: Compass,
+    label: "CIBIL Advisory Services",
+    desc: "Understand your report and plan the next steps",
+    to: "/cibil-advisory",
+  },
 ];
 
 export const NAV_TOOLS = [
   { label: "EMI Calculator", desc: "Monthly payment", hash: "emi" },
   { label: "Loan Eligibility", desc: "Maximum loan amount", hash: "eligibility" },
-  { label: "Loan Balance Transfer", desc: "Is switching lenders worth it", hash: "balance-transfer" },
+  {
+    label: "Loan Balance Transfer",
+    desc: "Is switching lenders worth it",
+    hash: "balance-transfer",
+  },
   { label: "Loan Comparison", desc: "Compare offers side by side", hash: "loan-comparison" },
   { label: "Loan Prepayment", desc: "Interest savings", hash: "prepayment" },
   { label: "Money Saver", desc: "Interest saved on spare cash", hash: "money-saver" },
   { label: "Loan Against Property – LTV", desc: "What your property can unlock", hash: "lap-ltv" },
-  { label: "Working Capital Estimator", desc: "MSME limit, GCS exclusive", hash: "working-capital" },
+  {
+    label: "Working Capital Estimator",
+    desc: "MSME limit, GCS exclusive",
+    hash: "working-capital",
+  },
   { label: "CGTMSE Guarantee Fee", desc: "Fee on a collateral-free loan", hash: "cgtmse" },
   { label: "Stamp Duty", desc: "Property registration", hash: "stamp-duty" },
 ];
@@ -414,17 +447,19 @@ export const FOOTER_PRODUCTS = SERVICES.slice(0, 8).map((s) => ({
   to: `/services#${s.id}`,
 }));
 
-// The enquiry form's loan types: the headline services, then every other loan that has its own page,
-// so each of them can be picked. The micro loans are left out (they appear on their own pages only),
-// and the car loans are covered by the general "Car Loan" choice.
-const FORM_LOAN_SKIP = new Set(["overdraft-limit", "new-car-loan", "used-car-loan", "car-refinance"]);
+// The enquiry form's loan types on the home, contact and other general pages: the headline services, then every other
+// loan that has its own page, so each of them can be picked. The car loans are covered by the general "Car Loan" choice,
+// and the overdraft page by "Overdraft Facility". (On a loan's own page the loan is fixed, not chosen.)
+const FORM_LOAN_SKIP = new Set([
+  "overdraft-limit",
+  "new-car-loan",
+  "used-car-loan",
+  "car-refinance",
+]);
 export const FORM_LOAN_TYPES = [
-  ...SERVICES.filter((s) => !s.id.startsWith("micro-")).map((s) => ({ title: s.title, slug: s.id })),
+  ...SERVICES.map((s) => ({ title: s.title, slug: s.id })),
   ...PRODUCTS.filter(
-    (p) =>
-      !p.slug.startsWith("micro-") &&
-      !FORM_LOAN_SKIP.has(p.slug) &&
-      !SERVICES.some((s) => s.id === p.slug),
+    (p) => !FORM_LOAN_SKIP.has(p.slug) && !SERVICES.some((s) => s.id === p.slug),
   ).map((p) => ({ title: p.title, slug: p.slug })),
 ];
 
@@ -789,7 +824,12 @@ export const LIST_SPECS: ListSpec[] = [
     page: "Menu & footer",
     label: "Become Partner drop-down",
     hint: "The partner types listed under Become Partner. Page address is e.g. /partner/builder.",
-    fields: [I("icon", "Icon"), T("label", "Name"), T("desc", "Short line"), T("to", "Page address")],
+    fields: [
+      I("icon", "Icon"),
+      T("label", "Name"),
+      T("desc", "Short line"),
+      T("to", "Page address"),
+    ],
     items: NAV_PARTNER,
   },
   {
@@ -797,7 +837,12 @@ export const LIST_SPECS: ListSpec[] = [
     page: "Menu & footer",
     label: "CIBIL drop-down",
     hint: "The pages listed under CIBIL in the top menu.",
-    fields: [I("icon", "Icon"), T("label", "Name"), T("desc", "Short line"), T("to", "Page address")],
+    fields: [
+      I("icon", "Icon"),
+      T("label", "Name"),
+      T("desc", "Short line"),
+      T("to", "Page address"),
+    ],
     items: NAV_CIBIL,
   },
   {
