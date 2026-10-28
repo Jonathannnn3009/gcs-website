@@ -161,6 +161,41 @@ const PROPERTY_LOANS: Record<string, PropertyLoan> = {
     properties: [],
     applicants: [],
   },
+  "private-funding": {
+    kinds: [
+      "Private Business Funding",
+      "Short-Term Working Capital Funding",
+      "Business Opportunity Funding",
+      "Obligation Funding",
+      "Top-Up for Repeat Customers",
+    ],
+    properties: [],
+    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
+  },
+  cgtmse: {
+    kinds: [
+      "CGTMSE Term Loan",
+      "CGTMSE Working Capital",
+      "CGTMSE Composite Loan",
+      "CGTMSE for Services",
+      "CGTMSE for Trading",
+      "Non-Fund Based Facilities",
+    ],
+    properties: [],
+    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
+  },
+  "machine-loan": {
+    kinds: [
+      "New Machinery Loan",
+      "Used Machinery Loan",
+      "Medical Equipment Loan",
+      "Genset Loan",
+      "Equipment Leasing",
+      "Loan Against Machinery",
+    ],
+    properties: [],
+    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
+  },
   "lease-rental-discounting": {
     kinds: ["Lease Rental Discounting (LRD)", "LRD Balance Transfer", "LRD Top-Up"],
     properties: [
@@ -177,9 +212,15 @@ const PROPERTY_LOANS: Record<string, PropertyLoan> = {
 // The second form only tells salaried, self-employed and NRI apart: a firm or company counts as self-employed there.
 // The lease rental form asks who owns the property instead, so it takes no applicant type.
 const forSecondForm = (category: string, slug: string) =>
-  ["lease-rental-discounting", "project-funding", "business-loan", "micro-business-loan"].includes(
-    slug,
-  )
+  [
+    "lease-rental-discounting",
+    "project-funding",
+    "business-loan",
+    "micro-business-loan",
+    "private-funding",
+    "cgtmse",
+    "machine-loan",
+  ].includes(slug)
     ? ""
     : [
           "Partnership",
@@ -253,45 +294,102 @@ const professionalPurpose = (loanKind: string): Record<string, string> =>
     : loanKind === "Equipment Purchase Loan"
       ? { purpose: "Buying equipment" }
       : {};
+const privatePurpose = (loanKind: string): Record<string, string> =>
+  loanKind === "Short-Term Working Capital Funding"
+    ? { purpose: "Short-term cash flow" }
+    : loanKind === "Business Opportunity Funding"
+      ? { purpose: "A business opportunity" }
+      : loanKind === "Obligation Funding"
+        ? { purpose: "An existing business obligation" }
+        : {};
+const cgtmseKnown = (loanKind: string): Record<string, string> =>
+  loanKind === "CGTMSE Term Loan"
+    ? { structure: "A term loan" }
+    : loanKind === "CGTMSE Working Capital"
+      ? { structure: "A working capital limit" }
+      : loanKind === "CGTMSE Composite Loan"
+        ? { structure: "Both" }
+        : loanKind === "CGTMSE for Services"
+          ? { activity: "Services" }
+          : loanKind === "CGTMSE for Trading"
+            ? { activity: "Trading" }
+            : {};
+const machineKnown = (loanKind: string): Record<string, string> =>
+  loanKind === "New Machinery Loan"
+    ? { equipment: "Machinery for production", condition: "New" }
+    : loanKind === "Used Machinery Loan"
+      ? { equipment: "Machinery for production", condition: "Used" }
+      : loanKind === "Medical Equipment Loan"
+        ? { equipment: "Medical equipment" }
+        : loanKind === "Genset Loan"
+          ? { equipment: "A genset" }
+          : loanKind === "Equipment Leasing"
+            ? { equipment: "Equipment on lease" }
+            : {};
 const knownFromShortForm = (
   slug: string,
   loanKind: string,
   propertyKind: string,
   applicant: string,
 ): Record<string, string> =>
-  slug === "business-loan" || slug === "micro-business-loan"
+  ["business-loan", "micro-business-loan", "private-funding", "cgtmse"].includes(slug)
     ? {
         constitution: SECOND_FORM_BUSINESS[applicant] ?? applicant,
         ...(loanKind === "Working Capital Loan" ? { purpose: "Working capital" } : {}),
+        ...(slug === "private-funding" ? privatePurpose(loanKind) : {}),
+        ...(slug === "cgtmse" ? cgtmseKnown(loanKind) : {}),
       }
-    : slug === "project-funding"
-      ? {
-          projectType: propertyKind,
-          ...(SECOND_FORM_STAGE[loanKind] ? { stage: SECOND_FORM_STAGE[loanKind] } : {}),
-          ...(SECOND_FORM_PROMOTER[applicant]
-            ? { constitution: SECOND_FORM_PROMOTER[applicant] }
-            : {}),
-        }
-      : {
-          ...(slug === "unsecured-dod" || slug === "dlod" ? overdraftRequirement(loanKind) : {}),
-          ...(slug === "professional-loan" ? professionalPurpose(loanKind) : {}),
-          ...((slug === "dlod" || slug === "unsecured-dod") && SECOND_FORM_SETUP[applicant]
-            ? { constitution: SECOND_FORM_SETUP[applicant] }
-            : {}),
-          ...(SECOND_FORM_PROPERTY[propertyKind]
-            ? { propertyKind: SECOND_FORM_PROPERTY[propertyKind] }
-            : {}),
-          ...(propertyKind === "Self-occupied residential property"
-            ? { propertyUse: "Self-occupied or self-used" }
-            : {}),
-          ...(slug === "lease-rental-discounting" && SECOND_FORM_OWNER[applicant]
-            ? { ownerType: SECOND_FORM_OWNER[applicant] }
-            : {}),
-          ...(/Balance Transfer|Top-Up/.test(loanKind) ? { existingMortgage: "Yes" } : {}),
-        };
+    : slug === "machine-loan"
+      ? machineKnown(loanKind)
+      : slug === "project-funding"
+        ? {
+            projectType: propertyKind,
+            ...(SECOND_FORM_STAGE[loanKind] ? { stage: SECOND_FORM_STAGE[loanKind] } : {}),
+            ...(SECOND_FORM_PROMOTER[applicant]
+              ? { constitution: SECOND_FORM_PROMOTER[applicant] }
+              : {}),
+          }
+        : {
+            ...(slug === "unsecured-dod" || slug === "dlod" ? overdraftRequirement(loanKind) : {}),
+            ...(slug === "professional-loan" ? professionalPurpose(loanKind) : {}),
+            ...((slug === "dlod" || slug === "unsecured-dod") && SECOND_FORM_SETUP[applicant]
+              ? { constitution: SECOND_FORM_SETUP[applicant] }
+              : {}),
+            ...(SECOND_FORM_PROPERTY[propertyKind]
+              ? { propertyKind: SECOND_FORM_PROPERTY[propertyKind] }
+              : {}),
+            ...(propertyKind === "Self-occupied residential property"
+              ? { propertyUse: "Self-occupied or self-used" }
+              : {}),
+            ...(slug === "lease-rental-discounting" && SECOND_FORM_OWNER[applicant]
+              ? { ownerType: SECOND_FORM_OWNER[applicant] }
+              : {}),
+            ...(/Balance Transfer|Top-Up/.test(loanKind) ? { existingMortgage: "Yes" } : {}),
+          };
 const OVERDRAFT_CATEGORY_LOANS = new Set(["unsecured-dod", "dlod", "overdraft-limit"]);
 // Loans whose short form asks for the industry too.
-const INDUSTRY_LOANS = new Set(["business-loan", "private-funding"]);
+const INDUSTRY_LOANS = new Set(["business-loan", "private-funding", "machine-loan"]);
+// A loan with its own list of industries.
+const MACHINE_INDUSTRIES = [
+  "Engineering & Manufacturing",
+  "Automobile",
+  "Textile",
+  "Food Processing",
+  "Pharma / Healthcare",
+  "Plastic",
+  "Printing & Packaging",
+  "Metal Fabrication",
+  "Chemicals",
+  "Electrical / Electronics",
+  "Construction Materials",
+  "Agro Processing",
+  "Jewellery",
+  "Medical / Diagnostic",
+  "Wood, Furniture & Plywood",
+  "Rubber Products",
+  "Cold Storage & Refrigeration",
+  "Other",
+];
 // Loans whose short form asks for the profession.
 const PROFESSION_LOANS = new Set(["professional-loan"]);
 // Loan pages whose short form is kept to five questions: no loan type (the page says it) and no email.
@@ -439,6 +537,7 @@ export function LeadForm({
     return slug ? PROPERTY_LOANS[slug] : undefined;
   };
   const asksLapKinds = (title: string) => !!propertyLoanFor(title);
+  const isMachine = !!product && product.slug === "machine-loan";
   const asksIndustry = (title: string) => !!product && INDUSTRY_LOANS.has(slugFor(title) ?? "");
   const asksProfession = (title: string) => !!product && PROFESSION_LOANS.has(slugFor(title) ?? "");
   const compact = !!product && COMPACT_LOANS.has(product.slug);
@@ -812,7 +911,7 @@ export function LeadForm({
             {asksIndustry(values.loanType) ? (
               <Field
                 id={`${uid}-industry`}
-                label="Industry"
+                label={isMachine ? "Type of Industry" : "Industry"}
                 error={errors.industry}
                 className="sm:col-span-2"
               >
@@ -823,7 +922,7 @@ export function LeadForm({
                   onChange={set("industry")}
                 >
                   <option value="">Select your industry</option>
-                  {INDUSTRIES.map((c) => (
+                  {(isMachine ? MACHINE_INDUSTRIES : INDUSTRIES).map((c) => (
                     <option key={c} value={c}>
                       {c}
                     </option>
