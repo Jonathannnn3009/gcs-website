@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Loader2, Pencil } from "lucide-react";
 import { CONTACT } from "@/data/site";
 import { normalizePhone } from "@/lib/lead-dedupe";
+import { isValidEmail } from "@/lib/validation";
 import { ASSISTANT_NAME } from "@/lib/chat/config";
 import { ChatAuthError, confirmCode, requestCode, type ChatPass } from "@/lib/chat/auth";
 
-// The step before the chat: the visitor gives a name and a mobile number, we text them a code, and
-// they type it in. Only then does the chat open. The CRM sends and checks the code.
+// The step before the chat: the visitor gives a name, a mobile number and an email address, we send them a
+// code by SMS and email, and they type it in. Only then does the chat open. The CRM sends and checks the code.
 
 const fieldClass =
   "w-full rounded-lg border border-border bg-white px-3 py-2.5 text-[13.5px] text-ink outline-none transition-all placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20";
@@ -25,6 +26,9 @@ export function ChatGate({
   const [step, setStep] = useState<"details" | "code">("details");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  /** Where the code actually went, as the server reported it. */
+  const [sentTo, setSentTo] = useState<{ sms: boolean; email: boolean }>({ sms: true, email: true });
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -49,10 +53,12 @@ export function ChatGate({
     if (busy) return;
     if (name.trim().length < 2) return setError("Please enter your name.");
     if (!digits) return setError("Enter a valid 10-digit mobile number.");
+    if (!isValidEmail(email.trim())) return setError("Enter a valid email address, like name@example.com.");
     setError("");
     setBusy(true);
     try {
-      const res = await requestCode({ name, phone });
+      const res = await requestCode({ name, phone, email });
+      setSentTo({ sms: res.viaSms !== false, email: res.viaEmail !== false });
       setWait(res.resendAfterSeconds);
       setCode("");
       setStep("code");
@@ -87,8 +93,8 @@ export function ChatGate({
         </p>
         <p className="mt-2">
           {step === "details"
-            ? "Before we start, please confirm your mobile number. I'll text you a 6-digit code."
-            : `I've texted a 6-digit code to ${shown}. It works for 10 minutes.`}
+            ? "Before we start, please confirm your mobile number and email. I'll send you a 6-digit code on both."
+            : `I've sent a 6-digit code to ${[sentTo.sms ? shown : "", sentTo.email ? email.trim() : ""].filter(Boolean).join(" and ")}. It works for 10 minutes.`}
         </p>
       </div>
 
@@ -132,6 +138,16 @@ export function ChatGate({
                 maxLength={15}
               />
             </div>
+            <input
+              aria-label="Email address"
+              className={fieldClass}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your email address"
+              inputMode="email"
+              autoComplete="email"
+              maxLength={160}
+            />
           </div>
           {error && (
             <p role="alert" className="mt-2 text-xs text-destructive">
@@ -148,8 +164,8 @@ export function ChatGate({
             {!busy && <ArrowRight className="h-3.5 w-3.5" />}
           </button>
           <p className="mt-2.5 text-[11px] leading-snug text-muted-foreground">
-            By continuing you agree that Growth Capital Services may contact you on this number
-            about your enquiry. Message and data rates may apply.
+            By continuing you agree that Growth Capital Services may contact you on this number and
+            email about your enquiry. Message and data rates may apply.
           </p>
         </form>
       ) : (
@@ -198,7 +214,7 @@ export function ChatGate({
               }}
               className="inline-flex items-center gap-1 font-semibold text-navy hover:text-gold-dark"
             >
-              <Pencil className="h-3 w-3" /> Change number
+              <Pencil className="h-3 w-3" /> Change details
             </button>
             <button
               type="button"
@@ -213,7 +229,7 @@ export function ChatGate({
       )}
 
       <p className="px-1 text-center text-[11px] leading-snug text-muted-foreground">
-        No code? Check the number, or{" "}
+        No code? Check the number and your email (and spam folder), or{" "}
         <a href={CONTACT.phoneHref} className="font-semibold text-navy underline">
           call us
         </a>

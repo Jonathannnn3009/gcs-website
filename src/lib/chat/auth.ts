@@ -89,14 +89,21 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return json as T;
 }
 
-/** Texts a six-digit code to the number. */
-export async function requestCode(input: { name: string; phone: string }) {
+/** Texts a six-digit code to the number and emails it to the address. */
+export async function requestCode(input: { name: string; phone: string; email: string }) {
   const phone = normalizePhone(input.phone);
   if (!phone) throw new ChatAuthError("Enter a valid 10-digit mobile number.", 400);
   const captchaToken = await getCaptchaToken();
-  return post<{ sent: true; resendAfterSeconds: number; validMinutes: number }>("send", {
+  return post<{
+    sent: true;
+    resendAfterSeconds: number;
+    validMinutes: number;
+    viaSms?: boolean;
+    viaEmail?: boolean;
+  }>("send", {
     name: input.name.trim(),
     phone,
+    email: input.email.trim(),
     ...(captchaToken ? { captchaToken } : {}),
   });
 }
