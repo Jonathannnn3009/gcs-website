@@ -228,9 +228,12 @@ export function FollowUpFlow({
           {position === 0 ? (
             <>
               <h3 className="mt-4 font-heading text-[1.3rem] leading-tight font-bold text-navy dark:text-white">
-                {form.title}
+                Tell Us About You. <span className="hero-stat-text">We’ll Find the Right Fit.</span>
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{form.intro}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Complete this quick form to help us understand your needs. Based on your details, we’ll explore
+                suitable Banks &amp; NBFCs and compare available loan terms for your profile.
+              </p>
               <p className="mt-2 text-sm font-semibold text-navy dark:text-white">{form.choice}</p>
               <div className="mt-4 flex flex-col gap-3 rounded-xl border border-gold/30 bg-gold-pale/30 p-4 dark:bg-gold/10">
                 <p className="flex items-start gap-2 text-[13px] leading-relaxed text-navy dark:text-white">
