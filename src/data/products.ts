@@ -121,20 +121,20 @@ const PHOTOS = "Passport-size photographs of applicant and co-applicant";
 const SALARIED_DOCS = [
   "Last 3 months' salary slips",
   "Last 6 months' bank statement showing salary credits",
-  "Latest Form 16, or last 2 years' Form 16",
+  "Latest Form 16 (or last 2 years'), and ITR with Form 26AS if your income is taxable",
   "Details of existing loans, with EMIs and statements",
 ];
 const SELF_EMPLOYED_DOCS = [
-  "Last 3 years' ITR with computation of income",
-  "Last 3 years' audited financials — P&L and balance sheet, where applicable",
+  "Last 3 years' ITR with computation of income, and audited financials where applicable",
   "Last 12 months' bank statements (savings and current account)",
   "Business proof — GST registration, shop licence, partnership deed or MOA/AOA as applicable",
+  "GST returns for the last 12 months, where registered",
 ];
 const NRI_DOCS = [
-  "Valid passport, and your visa, work permit or residence permit (OCI or PIO card, if you hold one)",
-  "Employment contract or appointment letter, and your last 3 to 6 months' salary slips from abroad",
+  "Valid passport, and your visa, work permit or residence permit (OCI or PIO card, if you hold one), with overseas and Indian address proof",
+  "Employment contract or appointment letter and last 3 to 6 months' salary slips from abroad (self-employed NRIs: business registration and last 2 years' tax returns)",
   "Last 6 months' overseas salary-account statements, and last 12 months' NRE/NRO account statements",
-  "Overseas address proof and your permanent address proof in India",
+  "Power of Attorney (POA) in favour of a resident Indian, if you cannot be in India to sign",
 ];
 export const APPLICANT_CATEGORY_LABELS = ["Salaried", "Self-Employed", "NRI"];
 
