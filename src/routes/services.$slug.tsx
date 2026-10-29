@@ -244,7 +244,7 @@ function ProductDetailContent() {
                         </>
                       ) : (
                         <ul className="mt-4 space-y-3.5">
-                          {product.documents.map((item) => (
+                          {product.documents.slice(0, 3).map((item) => (
                             <li
                               key={item}
                               className="flex items-start gap-3 text-[15px] leading-relaxed text-white/75"
@@ -264,7 +264,7 @@ function ProductDetailContent() {
                             For Every Applicant
                           </p>
                           <ul className="mt-3 space-y-3">
-                            {product.documents.map((item) => (
+                            {product.documents.slice(0, 3).map((item) => (
                               <li
                                 key={item}
                                 className="flex items-start gap-3 text-[14px] leading-relaxed text-white/75"
