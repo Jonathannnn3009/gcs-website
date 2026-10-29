@@ -694,6 +694,21 @@ export const PRODUCTS: Product[] = [
       { label: "Tenure", value: "Up to 30 years" },
       { label: "Minimum ticket size", value: "₹20 Lakh" },
     ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "Buy a ready flat, an under-construction flat or a plot, or build your own house",
+      },
+      { label: "Loan size", value: "Up to ₹10 Cr" },
+      { label: "Tenor", value: "Up to 30 years" },
+      { label: "Interest rate", value: "From 7.10%* p.a." },
+      { label: "Minimum ticket size", value: "₹20 Lakh" },
+      {
+        label: "Who can apply",
+        value:
+          "Resident Indians, generally 21–65 (up to around 70 if self-employed); NRIs can apply too",
+      },
+    ],
     about:
       "A home loan helps you buy a ready flat, a flat in an under-construction project, or a plot, or build your own house. We look at your income and documents, then compare options from different Banks and NBFCs that may suit your profile. If one lender delays or does not approve your file, we can explore other lenders that may be a better fit.",
     features: [
@@ -764,6 +779,16 @@ export const PRODUCTS: Product[] = [
       { label: "Benefit", value: "Lower rate + top-up" },
       { label: "Savings", value: "Shown in writing first" },
     ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "Move your current loan to a lender with better terms, with or without a top-up",
+      },
+      { label: "Works on", value: "Home, LAP and business loans" },
+      { label: "Benefit", value: "Lower rate + top-up" },
+      { label: "Savings", value: "Shown in writing first" },
+      { label: "Who can apply", value: "A record of on-time EMIs for at least the last 12 months" },
+    ],
     about:
       "A balance transfer means moving your current loan to another lender that may offer better terms. We put your existing loan next to offers from other lenders, in writing, so you can compare before you decide. If you choose to switch, we guide you through the whole process. A top-up may also be possible if your profile qualifies.",
     features: [
@@ -802,6 +827,22 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 7.50%* p.a." },
       { label: "Tenure", value: "Up to 20 years" },
       { label: "Minimum ticket size", value: "₹20 Lakh" },
+    ],
+    glance: [
+      {
+        label: "Purpose",
+        value:
+          "Business growth, combining loans, a medical bill or other needs (lender rules apply)",
+      },
+      { label: "Loan size", value: "Up to 100% of property value" },
+      { label: "Tenor", value: "Up to 20 years" },
+      { label: "Interest rate", value: "From 7.50%* p.a." },
+      { label: "Minimum ticket size", value: "₹20 Lakh" },
+      { label: "Property accepted", value: "Residential, commercial and industrial" },
+      {
+        label: "Who can apply",
+        value: "Property owner, generally 21–70 at maturity; salaried or self-employed",
+      },
     ],
     about:
       "A loan against property lets you borrow money using a residential, commercial or industrial property that you already own. You can use it to grow your business, combine other loans, pay a medical bill or meet other needs. Lenders may have rules on how the money can be used. You keep ownership of the property and can continue to use it while you repay.",
@@ -868,9 +909,18 @@ export const PRODUCTS: Product[] = [
     ],
     glance: [
       { label: "Purpose", value: "Business or personal use, not for buying a home" },
-      { label: "Property accepted", value: "Self-occupied residential, commercial or mixed-use property" },
-      { label: "Share of property value", value: "Up to 55% for a self-occupied home and 50% for other property, with insurance" },
-      { label: "Property location", value: "Within about 35 km of the lender's main branch, or 25 km of a smaller branch" },
+      {
+        label: "Property accepted",
+        value: "Self-occupied residential, commercial or mixed-use property",
+      },
+      {
+        label: "Share of property value",
+        value: "Up to 55% for a self-occupied home and 50% for other property, with insurance",
+      },
+      {
+        label: "Property location",
+        value: "Within about 35 km of the lender's main branch, or 25 km of a smaller branch",
+      },
       { label: "Your EMIs", value: "All your EMIs together can take up to 65% of your income" },
     ],
     about:
@@ -1002,6 +1052,17 @@ export const PRODUCTS: Product[] = [
       { label: "Loan amount", value: "Up to 90% of future rentals" },
       { label: "Tenure", value: "Aligned to the lease, typically up to 15 years" },
     ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "A lump sum against the rent from a registered lease on commercial or retail space",
+      },
+      { label: "Loan size", value: "Up to 90% of future rentals" },
+      { label: "Tenor", value: "Aligned to the lease, typically up to 15 years" },
+      { label: "Interest rate", value: "From 7.50%* p.a." },
+      { label: "Security", value: "A registered lease and a dependable tenant" },
+      { label: "Property title", value: "Held in the borrower's own name" },
+    ],
     about:
       "Lease rental discounting gives you a lump sum today against the rent you will receive from a registered lease on commercial or retail space. The tenant's rent is used to pay the EMI, so your own cash flow is not needed for it.",
     features: [
@@ -1032,6 +1093,20 @@ export const PRODUCTS: Product[] = [
       { label: "Structure", value: "Secured drop-line overdraft" },
       { label: "LTV", value: "Up to 80% of property value" },
       { label: "Interest rate", value: "From 9.75%* p.a. on the drawn balance" },
+    ],
+    glance: [
+      {
+        label: "Purpose",
+        value:
+          "A limit against your property that reduces step by step; interest only on what you use",
+      },
+      { label: "Share of property value", value: "Up to 80%" },
+      { label: "Interest rate", value: "From 9.75%* p.a. on the drawn balance" },
+      { label: "Property accepted", value: "Residential or commercial" },
+      {
+        label: "Who can apply",
+        value: "Clear title and at least two years of business or professional income",
+      },
     ],
     about:
       "This is a limit against your property that reduces step by step over the loan period. You pay interest only on the amount you actually use. It can suit you if your need for cash goes up and down during the year.",
@@ -1065,6 +1140,13 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 12%* p.a." },
       { label: "Use", value: "Construction & development" },
       { label: "Release", value: "Stage by stage" },
+    ],
+    glance: [
+      { label: "Purpose", value: "Construction and development projects, released stage by stage" },
+      { label: "Funding", value: "Up to 75% of project cost" },
+      { label: "Interest rate", value: "From 12%* p.a." },
+      { label: "Projects", value: "Residential, commercial and industrial developments" },
+      { label: "Who can apply", value: "Builders with 8 to 10 or more completed projects" },
     ],
     about:
       "Funding for construction and development projects. The amount depends on your approvals, project cost and expected sales. The money is released in stages as the work moves ahead, not all at once.",
@@ -1115,6 +1197,18 @@ export const PRODUCTS: Product[] = [
       { label: "Collateral", value: "Not required" },
       { label: "Minimum ticket size", value: "₹2 Lakh" },
     ],
+    glance: [
+      { label: "Purpose", value: "Expansion, stock, hiring or new equipment, without collateral" },
+      { label: "Loan size", value: "Up to ₹5 Cr" },
+      { label: "Tenor", value: "12 — 60 months" },
+      { label: "Interest rate", value: "From 14%* p.a." },
+      { label: "Security", value: "Not required" },
+      { label: "Minimum ticket size", value: "₹2 Lakh" },
+      {
+        label: "Who can apply",
+        value: "At least 2 years in business, with turnover of roughly ₹40 lakh or above",
+      },
+    ],
     about:
       "A business loan without collateral for needs such as expansion, stock, hiring or new equipment. Lenders mainly look at your GST returns and bank statements, so you may not need a full set of audited financials. This can make the process quicker.",
     features: [
@@ -1155,8 +1249,14 @@ export const PRODUCTS: Product[] = [
           "Self-employed individuals, proprietorships, partnerships, LLPs and private limited companies",
       },
       { label: "Age", value: "25 to 65 years" },
-      { label: "Property owner", value: "Not needed up to ₹2 Lakh; needed above that. No property is mortgaged" },
-      { label: "Co-applicant", value: "A woman co-applicant is usually needed where the applicant is a man" },
+      {
+        label: "Property owner",
+        value: "Not needed up to ₹2 Lakh; needed above that. No property is mortgaged",
+      },
+      {
+        label: "Co-applicant",
+        value: "A woman co-applicant is usually needed where the applicant is a man",
+      },
     ],
     about:
       "Get unsecured business funding for your day-to-day business needs, without providing property as collateral. Designed for eligible small business owners, shopkeepers, traders and self-employed customers who need funds to manage or grow their business.",
@@ -1215,6 +1315,19 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 9%* p.a." },
       { label: "Security", value: "Government guarantee cover" },
     ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "Loans covered by the CGTMSE guarantee, without property or a guarantor",
+      },
+      { label: "Loan size", value: "Up to ₹10 Cr" },
+      { label: "Interest rate", value: "From 9%* p.a." },
+      { label: "Structure", value: "A term loan, a working capital limit, or both" },
+      {
+        label: "Who can apply",
+        value: "Udyam-registered micro or small enterprise with at least 1 year of operations",
+      },
+    ],
     about:
       "These are loans covered by the CGTMSE guarantee scheme. The scheme helps young MSMEs borrow without giving property as security or arranging a guarantor. The amount you can borrow depends on the lender and the scheme rules.",
     features: [
@@ -1245,6 +1358,21 @@ export const PRODUCTS: Product[] = [
       { label: "Loan amount", value: "Up to ₹10 Cr" },
       { label: "Tenure", value: "Up to 84 months" },
       { label: "Also available", value: "Medical equipment, genset and leasing" },
+    ],
+    glance: [
+      {
+        label: "Purpose",
+        value:
+          "New machinery, medical equipment, gensets, leasing, or money against machinery you own",
+      },
+      { label: "Funding", value: "Up to 100%*" },
+      { label: "Loan size", value: "Up to ₹10 Cr" },
+      { label: "Tenor", value: "Up to 84 months" },
+      {
+        label: "Who can apply",
+        value:
+          "An established business, usually 2 years or more, with profitable accounts for the last 2 years",
+      },
     ],
     about:
       "A machine loan helps you buy new machinery or equipment, or raise money against machinery you already own. Medical equipment, gensets and equipment leasing are covered too. It can help a business set up, expand or upgrade its production. We compare options from Banks and NBFCs that may suit your business and guide you through the paperwork.",
@@ -1329,6 +1457,21 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 11.50%* p.a." },
       { label: "Tenure", value: "12 — 60 months" },
     ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "Fund a working-capital gap, or regularise a stretched cash credit or overdraft",
+      },
+      { label: "Structure", value: "Term loan with fixed EMIs" },
+      { label: "Loan size", value: "Up to ₹5 Cr" },
+      { label: "Interest rate", value: "From 11.50%* p.a." },
+      { label: "Tenor", value: "12 — 60 months" },
+      {
+        label: "Who can apply",
+        value:
+          "A viable business with a working-capital gap and audited or CA-certified statements",
+      },
+    ],
     about:
       "A working capital term loan gives your business a term loan with a fixed repayment plan and a fixed EMI. It can turn an overdrawn or irregular working-capital account into a loan your cash flow can handle, or fund your day-to-day needs. It can be offered without collateral to businesses with clean, audited financials. The lender decides the amount based on your bank turnover and filings, not only a quick GST check.",
     features: [
@@ -1366,6 +1509,19 @@ export const PRODUCTS: Product[] = [
       { label: "Limit", value: "Linked to stock & debtors" },
       { label: "Security", value: "Hypothecation of current assets" },
     ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "A reusable limit backed by your stock and the money customers owe you",
+      },
+      { label: "Limit", value: "Linked to stock & debtors" },
+      { label: "Security", value: "Hypothecation of current assets" },
+      { label: "Interest", value: "Charged only on the part you use" },
+      {
+        label: "Who can apply",
+        value: "A trading or manufacturing business with a regular stock cycle",
+      },
+    ],
     about:
       "A limit that you can use again and again, backed by your stock and the payments due from your customers. Draw money when you need it, repay it as sales come in, and draw again as your business cycle repeats.",
     features: [
@@ -1395,6 +1551,17 @@ export const PRODUCTS: Product[] = [
       { label: "Facility", value: "Account overdraft" },
       { label: "Interest", value: "Charged on usage only" },
       { label: "Security", value: "Secured or unsecured" },
+    ],
+    glance: [
+      {
+        label: "Purpose",
+        value:
+          "A ready limit on your current account to cover gaps between paying suppliers and getting paid",
+      },
+      { label: "Interest", value: "Charged on usage only" },
+      { label: "Security", value: "Secured (property, FDs, securities) or unsecured" },
+      { label: "Repayment", value: "No EMI, just interest on the running balance" },
+      { label: "Who can apply", value: "An active current account with regular credits" },
     ],
     about:
       "An overdraft is a ready limit on your current account. It helps cover the short gap between paying your suppliers and receiving payment from your customers.",
@@ -1426,6 +1593,21 @@ export const PRODUCTS: Product[] = [
       { label: "Use", value: "Tenders, contracts, deposits" },
       { label: "Margin", value: "10% – 25% cash margin" },
     ],
+    glance: [
+      {
+        label: "Purpose",
+        value:
+          "A bank's written promise to the other party that you will pay or complete the work as agreed",
+      },
+      { label: "Type", value: "Financial / Performance" },
+      { label: "Use", value: "Tenders, contracts, deposits" },
+      { label: "Margin", value: "10% – 25% cash margin" },
+      {
+        label: "Who can apply",
+        value:
+          "A banking relationship, margin money or collateral, and tender or contract documents",
+      },
+    ],
     about:
       "A bank guarantee is a written promise from the bank to the other party that you will pay or complete the work as agreed. It helps you bid for and sign contracts with more confidence.",
     features: [
@@ -1454,6 +1636,13 @@ export const PRODUCTS: Product[] = [
       { label: "Type", value: "Inland / Import LC" },
       { label: "Use", value: "Supplier & trade payments" },
       { label: "Usance", value: "Sight or up to 180 days" },
+    ],
+    glance: [
+      { label: "Purpose", value: "A bank's payment promise to your supplier" },
+      { label: "Type", value: "Inland / Import LC" },
+      { label: "Use", value: "Supplier & trade payments" },
+      { label: "Usance", value: "Sight or up to 180 days" },
+      { label: "Who can apply", value: "An established trading or manufacturing business" },
     ],
     about:
       "A letter of credit is a payment promise given by the bank to your supplier. It may help you get better credit terms without using your own working capital.",
@@ -1484,6 +1673,19 @@ export const PRODUCTS: Product[] = [
       { label: "Repayment", value: "When your customer pays" },
       { label: "Best for", value: "Businesses that sell on credit" },
     ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "Get money against unpaid invoices instead of waiting for your customer to pay",
+      },
+      { label: "Facility", value: "Funds against your invoices" },
+      { label: "Repayment", value: "When your customer pays" },
+      { label: "Best for", value: "Businesses that sell on credit" },
+      {
+        label: "Who can apply",
+        value: "Businesses selling goods or services to other businesses on credit",
+      },
+    ],
     about:
       "Bill discounting helps a business get money against its unpaid invoices, instead of waiting for the customer to pay. The lender gives you a part of the invoice value now, and you repay when your customer pays. It can help you keep cash flowing between selling and getting paid. Lenders set their own limits and charges.",
     features: [
@@ -1509,6 +1711,16 @@ export const PRODUCTS: Product[] = [
       { label: "Structure", value: "Unsecured drop-line overdraft" },
       { label: "Limit", value: "Up to ₹2 Cr" },
       { label: "Interest rate", value: "From 13.50%* p.a. on the drawn balance" },
+    ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "An overdraft without collateral; the limit reduces over the loan period",
+      },
+      { label: "Limit", value: "Up to ₹2 Cr" },
+      { label: "Interest rate", value: "From 13.50%* p.a. on the drawn balance" },
+      { label: "Security", value: "None" },
+      { label: "Who can apply", value: "At least 3 years of business operations" },
     ],
     about:
       "An overdraft without collateral where the limit reduces over the loan period. Use the money when your business needs it and repay when you can. You pay interest only on the amount you have used.",
@@ -1542,6 +1754,18 @@ export const PRODUCTS: Product[] = [
       { label: "Disbursal", value: "As fast as 48 hours" },
       { label: "Minimum ticket size", value: "₹2 Lakh" },
     ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "A wedding, a medical bill, travel or clearing a costlier debt, with no collateral",
+      },
+      { label: "Loan size", value: "Up to ₹1 Cr" },
+      { label: "Tenor", value: "12 — 60 months" },
+      { label: "Interest rate", value: "From 10.49%* p.a." },
+      { label: "Disbursal", value: "As fast as 48 hours" },
+      { label: "Minimum ticket size", value: "₹2 Lakh" },
+      { label: "Who can apply", value: "Roughly 21 to 60 years; salaried or self-employed" },
+    ],
     about:
       "A personal loan needs no collateral. You can use it for a wedding, a medical bill, travel, or to clear a more costly debt. We help you choose an amount and EMI that fit your monthly budget, not just the maximum you are eligible for.",
     features: [
@@ -1574,6 +1798,21 @@ export const PRODUCTS: Product[] = [
       { label: "Tenure", value: "Up to 15 years" },
       { label: "Benefit", value: "Section 80E deduction" },
       { label: "Minimum ticket size", value: "₹8 Lakh" },
+    ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "Studies in India or abroad: tuition, living costs, travel and equipment",
+      },
+      { label: "Loan size", value: "Up to ₹1.5 Cr" },
+      { label: "Tenor", value: "Up to 15 years" },
+      { label: "Interest rate", value: "From 8.15%* p.a." },
+      { label: "Benefit", value: "Section 80E deduction" },
+      { label: "Minimum ticket size", value: "₹8 Lakh" },
+      {
+        label: "Who can apply",
+        value: "Confirmed admission and an earning co-applicant based in India",
+      },
     ],
     about:
       "Funding for studies in India or abroad, covering tuition, living costs, travel and equipment. Loans with collateral usually have lower interest rates. Loans without collateral for studying abroad usually cost more but can be quicker to process.",
@@ -1626,6 +1865,16 @@ export const PRODUCTS: Product[] = [
       { label: "Tenure", value: "12 — 84 months" },
       { label: "Interest rate", value: "From 8.75%* p.a." },
     ],
+    glance: [
+      { label: "Purpose", value: "The on-road price of a new car" },
+      { label: "Funding", value: "Up to 100% on-road" },
+      { label: "Tenor", value: "12 — 84 months" },
+      { label: "Interest rate", value: "From 8.75%* p.a." },
+      {
+        label: "Who can apply",
+        value: "Typically 21–65 years old, with regular, documented income",
+      },
+    ],
     about:
       "Financing for the on-road price of a new car. We help with the dealer paperwork, such as the invoice, insurance and RTO, from quotation to delivery.",
     features: [
@@ -1669,6 +1918,17 @@ export const PRODUCTS: Product[] = [
       { label: "Vehicle age", value: "Up to 8 years at loan end" },
       { label: "Interest rate", value: "From 10.25%* p.a." },
       { label: "Tenure", value: "12 — 60 months" },
+    ],
+    glance: [
+      { label: "Purpose", value: "A second-hand car from a dealer or a private seller" },
+      { label: "Funding", value: "Up to 90% of valuation" },
+      { label: "Vehicle age", value: "Up to 8 years at loan end" },
+      { label: "Tenor", value: "12 — 60 months" },
+      { label: "Interest rate", value: "From 10.25%* p.a." },
+      {
+        label: "Who can apply",
+        value: "Around 21–65 years old, with income that can be documented",
+      },
     ],
     about:
       "Financing for a second-hand car from a dealer or a private seller. We arrange an independent valuation so both sides can check that the price is fair.",
@@ -1717,6 +1977,16 @@ export const PRODUCTS: Product[] = [
       { label: "Use", value: "Any personal or business need" },
       { label: "Tenure", value: "12 — 60 months" },
     ],
+    glance: [
+      { label: "Purpose", value: "Raise money against a car you already own and have paid for" },
+      { label: "Funding", value: "Up to 150% of valuation for strong profiles" },
+      { label: "Tenor", value: "12 — 60 months" },
+      { label: "Interest rate", value: "From 12.50%* p.a." },
+      {
+        label: "Who can apply",
+        value: "Car in your own name, with no loan on it or one that can be taken over",
+      },
+    ],
     about:
       "Raise money against a car you already own and have fully paid for. In some cases, strong income profiles may be able to borrow more than the car's current value. You keep driving the car while you repay.",
     features: [
@@ -1756,6 +2026,16 @@ export const PRODUCTS: Product[] = [
       { label: "Repayment", value: "Up to 7 years" },
       { label: "Used vehicles", value: "Up to 80% finance" },
     ],
+    glance: [
+      { label: "Purpose", value: "New and used trucks, buses and light goods vehicles" },
+      { label: "Funding", value: "Up to 100%* LTV" },
+      { label: "Repayment", value: "Up to 7 years" },
+      { label: "Used vehicles", value: "Up to 80% finance" },
+      {
+        label: "Who can apply",
+        value: "An individual transporter, proprietorship, firm or company",
+      },
+    ],
     about:
       "Financing for new and used commercial vehicles such as trucks, buses and light goods vehicles. It helps a business add or replace vehicles without putting a large amount of its own money upfront. We compare options from Banks and NBFCs that may suit your business.",
     features: [
@@ -1789,6 +2069,19 @@ export const PRODUCTS: Product[] = [
       { label: "Funding", value: "Up to 50% of market value (approved list applies)" },
       { label: "Facility", value: "Overdraft, interest only on what you use" },
       { label: "Up to ₹1 Cr", value: "Fully digital process" },
+    ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "Borrow by pledging stocks, mutual funds or bonds, without selling them",
+      },
+      { label: "Pledge", value: "Stocks, ETFs and mutual funds" },
+      { label: "Funding", value: "Up to 50% of market value (approved list applies)" },
+      { label: "Facility", value: "Overdraft, interest only on what you use" },
+      {
+        label: "Who can apply",
+        value: "Securities held in your own name and on the lender's approved list",
+      },
     ],
     about:
       "Loan Against Securities (LAS) is an overdraft facility that lets you borrow money by pledging financial assets like stocks, mutual funds or bonds, without selling them. For mutual funds, the lender marks a lien on your units through the registrar (CAMS or KFintech). Your investments stay in place, and the limit is there when you need it. Lenders accept only certain securities and set their own limits.",
@@ -1827,6 +2120,20 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From 10.99%* p.a." },
       { label: "Tenure", value: "12 — 84 months" },
       { label: "Collateral", value: "Usually unsecured" },
+    ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "Start or grow a practice, buy equipment or meet working capital needs",
+      },
+      { label: "Loan size", value: "Up to ₹75 lakh" },
+      { label: "Tenor", value: "12 — 84 months" },
+      { label: "Interest rate", value: "From 10.99%* p.a." },
+      { label: "Security", value: "Usually unsecured" },
+      {
+        label: "Who can apply",
+        value: "Registered professionals: doctors, CAs, CSs, architects, engineers",
+      },
     ],
     about:
       "A loan without collateral for doctors, CAs, architects and other registered professionals. You can use it to start or grow a practice, buy equipment or meet working capital needs. Depending on the lender's policy, the terms may be better than a regular personal loan because of your professional qualification.",

@@ -388,16 +388,17 @@ function ProductDetailContent() {
                   At A Glance
                 </p>
                 {product.glance ? (
-                  <ul className="space-y-3">
-                    {product.glance.map((g) => (
-                      <li key={g.label} className="flex items-start gap-2.5">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-dark" />
-                        <span className="text-sm leading-snug text-foreground">
-                          <span className="font-bold text-navy dark:text-white">{g.label}:</span> {g.value}
-                        </span>
-                      </li>
+                  <dl className="overflow-hidden rounded-xl border border-gold/25 text-sm">
+                    {product.glance.map((g, i) => (
+                      <div
+                        key={g.label}
+                        className={`grid grid-cols-[34%_1fr] gap-3 px-3.5 py-2.5 ${i % 2 === 0 ? "bg-white dark:bg-card" : "bg-gold-pale/60 dark:bg-white/5"}`}
+                      >
+                        <dt className="font-bold text-navy dark:text-white">{g.label}</dt>
+                        <dd className="leading-snug text-foreground">{g.value}</dd>
+                      </div>
                     ))}
-                  </ul>
+                  </dl>
                 ) : product.minimalDisclosure && product.eligibility.length > 0 ? (
                   // The terms are already in the strip on the left, so here show who the product is for.
                   <ul className="space-y-4">
