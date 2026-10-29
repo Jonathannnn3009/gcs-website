@@ -7,6 +7,7 @@ import { followUpFor } from "@/data/follow-up-forms";
 import { FollowUpFlow } from "@/components/follow-up-flow";
 import { amountProblem, isValidEmail, loanAmountBounds } from "@/lib/validation";
 import { Toast } from "@/components/toast";
+import { YOU_ARE } from "@/data/you-are";
 import { FORM_LOAN_TYPES } from "@/data/page-lists";
 import { useCities, useList } from "@/lib/page-lists";
 
@@ -14,8 +15,6 @@ import { useCities, useList } from "@/lib/page-lists";
 // Dropdown choices that are the same loan as a product page under another name.
 const SLUG_ALIASES: Record<string, string> = { "overdraft-facility": "overdraft-limit" };
 
-// The "You Are" list, the same on every loan page that asks it.
-const YOU_ARE = ["Salaried", "Proprietor", "Partner", "Director", "NRI"];
 // Loans whose short form asks "You Are". Balance transfer and the short professional form do not.
 const YOU_ARE_LOANS = new Set([
   "home-loan",
@@ -46,18 +45,23 @@ const YOU_ARE_LOANS = new Set([
 ]);
 // The second form tells salaried, self-employed and NRI apart: a proprietor, partner or director counts as self-employed there.
 const forSecondForm = (category: string) =>
-  ["Proprietor", "Partner", "Director"].includes(category) ? "Self-Employed" : category;
+  ["Proprietor", "Partner", "Director", "Professional"].includes(category) ? "Self-Employed" : category;
 
 // How a proprietor or partner answers "how is the business set up?", in each form's own words.
+const OVERDRAFT_SETUP = {
+  Proprietor: "Proprietorship",
+  Partner: "Partnership or LLP",
+  Professional: "Professional (doctor, CA, architect, etc.)",
+};
 const BUSINESS_SETUP: Record<string, Record<string, string>> = {
-  "micro-business-loan": { Proprietor: "Sole proprietorship", Partner: "Partnership firm" },
-  "business-loan": { Proprietor: "Proprietorship", Partner: "Partnership" },
+  "micro-business-loan": { Proprietor: "Sole proprietorship", Partner: "Partnership firm", Professional: "Self-employed individual" },
+  "business-loan": { Proprietor: "Proprietorship", Partner: "Partnership", Professional: "Self-employed professional" },
   "private-funding": { Proprietor: "Proprietorship", Partner: "Partnership" },
   cgtmse: { Proprietor: "Proprietorship", Partner: "Partnership" },
-  dlod: { Proprietor: "Proprietorship", Partner: "Partnership or LLP" },
-  "unsecured-dod": { Proprietor: "Proprietorship", Partner: "Partnership or LLP" },
-  "overdraft-limit": { Proprietor: "Proprietorship", Partner: "Partnership or LLP" },
-  "overdraft-facility": { Proprietor: "Proprietorship", Partner: "Partnership or LLP" },
+  dlod: OVERDRAFT_SETUP,
+  "unsecured-dod": OVERDRAFT_SETUP,
+  "overdraft-limit": OVERDRAFT_SETUP,
+  "overdraft-facility": OVERDRAFT_SETUP,
   "project-funding": { Partner: "Partnership or LLP" },
   "commercial-vehicle": { Proprietor: "Proprietorship", Partner: "Partnership", Director: "Company" },
 };

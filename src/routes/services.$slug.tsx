@@ -23,6 +23,7 @@ import { ExpertNote } from "@/components/expert-note";
 import { useProduct } from "@/lib/site-content";
 import { FactsStrip } from "@/components/facts-strip";
 import { GlanceTable } from "@/components/glance-table";
+import { docOptionsFor } from "@/lib/doc-options";
 import { CheckBadge, TopicHeader } from "@/components/topic-header";
 import { ChargesBlock, NriBlock } from "@/components/product-extras";
 import { useIntakeFields, withLoanAmount } from "@/lib/page-lists";
@@ -135,7 +136,12 @@ function ProductDetailContent() {
   const product = useProduct(getProduct(slug));
   const intakeFields = withLoanAmount(useIntakeFields(slug, product?.checklistIntake));
   const [presetCategory, setPresetCategory] = useState<string | null>(null);
-  useEffect(() => setPresetCategory(null), [slug]);
+  // the option picked in the paperwork dropdown (the "You Are" names)
+  const [docChoice, setDocChoice] = useState<string | null>(null);
+  useEffect(() => {
+    setPresetCategory(null);
+    setDocChoice(null);
+  }, [slug]);
   if (MERGED_INTO[slug]) return <Navigate to="/services/$slug" params={{ slug: MERGED_INTO[slug]! }} replace />;
   if (!product) return <NotFoundBlock />;
   const related = PRODUCTS.filter((p) => p.group === product.group && p.slug !== product.slug);
@@ -147,6 +153,12 @@ function ProductDetailContent() {
   const activeCategory =
     product.documentCategories?.find((c) => c.label === presetCategory) ??
     product.documentCategories?.[0];
+
+  const docOptions = docOptionsFor(product.documentCategories);
+  const docSelected =
+    docOptions.find((o) => o.label === docChoice && o.category === activeCategory)?.label ??
+    docOptions.find((o) => o.category === activeCategory)?.label ??
+    "";
 
   // "Do you qualify?" and the paperwork checklist download, shared by the full layout and by the
   // short layout of products that carry eligibility details.
@@ -201,32 +213,29 @@ function ProductDetailContent() {
                     <div>
                       {product.documentCategories ? (
                         <>
-                          <div
-                            className="mt-4 flex flex-wrap gap-1.5"
-                            role="tablist"
-                            aria-label="Applicant type"
-                          >
-                            {product.documentCategories.map((cat) => (
-                              <button
-                                key={cat.label}
-                                type="button"
-                                role="tab"
-                                aria-selected={activeCategory?.label === cat.label}
-                                onClick={() => setPresetCategory(cat.label)}
-                                className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
-                                  activeCategory?.label === cat.label
-                                    ? "border-gold bg-gold text-navy"
-                                    : "border-white/20 text-white/60 hover:border-gold/40 hover:text-white"
-                                }`}
-                              >
-                                {cat.label}
-                              </button>
-                            ))}
-                          </div>
+                          <label className="mt-4 block">
+                            <span className="sr-only">You are</span>
+                            <select
+                              value={docSelected}
+                              onChange={(e) => {
+                                const pick = docOptions.find((o) => o.label === e.target.value);
+                                if (!pick) return;
+                                setDocChoice(pick.label);
+                                setPresetCategory(pick.category.label);
+                              }}
+                              className="w-full max-w-xs cursor-pointer rounded-lg border border-white/25 bg-white/10 px-3.5 py-2.5 text-sm font-bold text-white outline-none focus:border-gold [&>option]:text-navy"
+                            >
+                              {docOptions.map((o) => (
+                                <option key={o.label} value={o.label}>
+                                  {o.label}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
                           {activeCategory ? (
                             <>
                               <p className="mt-5 text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
-                                For {activeCategory.label}
+                                For {docSelected || activeCategory.label}
                               </p>
                               <ul className="mt-3 space-y-3">
                                 {activeCategory.items.map((item) => (
