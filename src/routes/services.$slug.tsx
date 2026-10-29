@@ -383,7 +383,7 @@ function ProductDetailContent() {
                   At A Glance
                 </p>
                 {product.glance ? (
-                  <GlanceTable rows={product.glance} note={product.glanceNote} />
+                  <GlanceTable rows={product.glance} facts={product.facts} note={product.glanceNote} />
                 ) : product.minimalDisclosure && product.eligibility.length > 0 ? (
                   // The terms are already in the strip on the left, so here show who the product is for.
                   <ul className="space-y-4">

@@ -4,14 +4,41 @@ import { ChevronDown } from "lucide-react";
 /** How many rows show before "See all": enough to fill the hero panel the same way on every loan page. */
 const SHOWN = 5;
 
+type Row = { label: string; value: string };
+
+// Labels that mean the same figure, so "Tenor" is not shown again when the strip above says "Tenure".
+const SAME_FIGURE = [
+  ["loan size", "loan amount", "limit"],
+  ["tenor", "tenure"],
+  ["interest rate", "interest", "indicative rate"],
+];
+const plain = (t: string) => t.toLowerCase().replace(/[*\s]+/g, " ").trim();
+const figureOf = (label: string) => SAME_FIGURE.findIndex((g) => g.includes(plain(label)));
+
+/** The strip above already shows these facts; the table keeps only what it does not. */
+function withoutRepeats(rows: Row[], facts: Row[]): Row[] {
+  return rows.filter(
+    (r) =>
+      !facts.some(
+        (f) =>
+          plain(f.label) === plain(r.label) ||
+          plain(f.value) === plain(r.value) ||
+          (figureOf(r.label) >= 0 && figureOf(r.label) === figureOf(f.label)),
+      ),
+  );
+}
+
 /** The "At a glance" table: the first few rows, with the rest and the note behind "See all". */
 export function GlanceTable({
-  rows,
+  rows: allRows,
+  facts = [],
   note,
 }: {
-  rows: { label: string; value: string }[];
+  rows: Row[];
+  facts?: Row[];
   note?: string | undefined;
 }) {
+  const rows = withoutRepeats(allRows, facts);
   const [open, setOpen] = useState(false);
   const shown = open ? rows : rows.slice(0, SHOWN);
   return (

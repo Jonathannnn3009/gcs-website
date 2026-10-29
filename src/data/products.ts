@@ -822,9 +822,9 @@ export const PRODUCTS: Product[] = [
     tagline: "Your property's value, working for you.",
     group: "Property Finance",
     facts: [
-      { label: "Loan amount", value: "Up to 100% of property value" },
+      { label: "Loan amount", value: "₹20 Lakh to ₹35 Crore*" },
       { label: "Interest rate", value: "From 7.50%* p.a." },
-      { label: "Tenure", value: "Up to 20 years" },
+      { label: "Tenure", value: "2 to 20 years*" },
       { label: "Minimum ticket size", value: "₹20 Lakh" },
     ],
     glance: [

@@ -8,238 +8,64 @@ import { FollowUpFlow } from "@/components/follow-up-flow";
 import { amountProblem, isValidEmail, loanAmountBounds } from "@/lib/validation";
 import { Toast } from "@/components/toast";
 import { FORM_LOAN_TYPES } from "@/data/page-lists";
-import { useApplicantOptions, useCities, useList } from "@/lib/page-lists";
+import { useCities, useList } from "@/lib/page-lists";
 
 // Paperwork genuinely differs by applicant type for these two — ask early.
 // Dropdown choices that are the same loan as a product page under another name.
 const SLUG_ALIASES: Record<string, string> = { "overdraft-facility": "overdraft-limit" };
 
-// Loans whose short form asks "You Are". The overdrafts are taken by salaried people as well as business owners.
-const PERSON_ONLY_CATEGORIES = ["Salaried", "Self-Employed"];
-const CATEGORY_LOANS = new Set(["home-loan"]);
-// Who is applying, for the loans that ask it on the short form. The type of loan, property and industry are asked in the second form.
-const LAP_SLUG = "loan-against-property";
-type PropertyLoan = { applicants: string[] };
-const PROPERTY_LOANS: Record<string, PropertyLoan> = {
-  [LAP_SLUG]: {
-    applicants: ["Salaried", "Self-Employed", "Partnership", "Pvt Ltd Co", "LLP", "Proprietorship"],
-  },
-  "micro-lap": {
-    applicants: ["Salaried", "Self-Employed", "Proprietor", "Partner / Director"],
-  },
-  dlod: {
-    applicants: [
-      "Self-employed professional",
-      "Proprietorship",
-      "Partnership / LLP",
-      "Pvt Ltd Co",
-      "Salaried",
-    ],
-  },
-  "project-funding": {
-    applicants: [
-      "Builder / Developer",
-      "Partnership",
-      "LLP",
-      "Pvt Ltd Co",
-      "Public Ltd Co",
-      "Trust / Society",
-    ],
-  },
-  "business-loan": {
-    applicants: [
-      "Proprietorship",
-      "Partnership",
-      "LLP",
-      "Pvt Ltd Co",
-      "Public Ltd Co",
-      "Self-employed professional",
-    ],
-  },
-  "micro-business-loan": {
-    applicants: [
-      "Self-employed individual",
-      "Sole proprietorship",
-      "Partnership firm",
-      "LLP",
-      "Private limited company",
-    ],
-  },
-  "unsecured-dod": {
-    applicants: [
-      "Salaried",
-      "Self-employed professional",
-      "Proprietorship",
-      "Partnership / LLP",
-      "Pvt Ltd Co",
-      "Public Ltd Co",
-    ],
-  },
-  "professional-loan": {
-    applicants: [],
-  },
-  "private-funding": {
-    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
-  },
-  cgtmse: {
-    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
-  },
-  "machine-loan": {
-    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
-  },
-  "working-capital-term-loan": {
-    applicants: [
-      "Proprietorship",
-      "Partnership",
-      "LLP",
-      "Pvt Ltd Co",
-      "Public Ltd Co",
-      "Self-employed professional",
-    ],
-  },
-  "cash-credit": {
-    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
-  },
-  "overdraft-limit": {
-    applicants: ["Salaried", "Self-Employed", "Proprietorship", "Partnership / LLP", "Pvt Ltd Co"],
-  },
-  "bank-guarantee": {
-    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
-  },
-  "letter-of-credit": {
-    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
-  },
-  "bill-discounting": {
-    applicants: ["Proprietorship", "Partnership", "LLP", "Pvt Ltd Co", "Public Ltd Co"],
-  },
-  "personal-loan": {
-    applicants: ["Salaried", "Self-employed professional", "Self-employed business owner"],
-  },
-  "education-loan": {
-    applicants: ["Student", "Co-applicant: Salaried", "Co-applicant: Self-Employed"],
-  },
-  "new-car-loan": {
-    applicants: ["Salaried", "Self-Employed", "Proprietorship", "Partnership", "Pvt Ltd Co"],
-  },
-  "used-car-loan": {
-    applicants: ["Salaried", "Self-Employed", "Proprietorship", "Partnership", "Pvt Ltd Co"],
-  },
-  "car-refinance": {
-    applicants: ["Salaried", "Self-Employed", "Proprietorship", "Partnership", "Pvt Ltd Co"],
-  },
-  "loan-against-securities": {
-    applicants: [
-      "Salaried",
-      "Self-Employed",
-      "Retired or an investor",
-      "Promoter of a listed company",
-    ],
-  },
-  "commercial-vehicle": {
-    applicants: ["Individual transporter", "Proprietorship", "Partnership", "Company"],
-  },
-  "lease-rental-discounting": {
-    applicants: ["Individual owner", "Company / Firm", "Partnership", "LLP"],
-  },
+// The "You Are" list, the same on every loan page that asks it.
+const YOU_ARE = ["Salaried", "Proprietor", "Partner", "Director", "NRI"];
+// Loans whose short form asks "You Are". Balance transfer and the short professional form do not.
+const YOU_ARE_LOANS = new Set([
+  "home-loan",
+  "loan-against-property",
+  "micro-lap",
+  "lease-rental-discounting",
+  "dlod",
+  "project-funding",
+  "business-loan",
+  "micro-business-loan",
+  "unsecured-dod",
+  "private-funding",
+  "cgtmse",
+  "machine-loan",
+  "working-capital-term-loan",
+  "cash-credit",
+  "overdraft-limit",
+  "bank-guarantee",
+  "letter-of-credit",
+  "bill-discounting",
+  "personal-loan",
+  "education-loan",
+  "new-car-loan",
+  "used-car-loan",
+  "car-refinance",
+  "commercial-vehicle",
+  "loan-against-securities",
+]);
+// The second form tells salaried, self-employed and NRI apart: a proprietor, partner or director counts as self-employed there.
+const forSecondForm = (category: string) =>
+  ["Proprietor", "Partner", "Director"].includes(category) ? "Self-Employed" : category;
+
+// How a proprietor or partner answers "how is the business set up?", in each form's own words.
+const BUSINESS_SETUP: Record<string, Record<string, string>> = {
+  "micro-business-loan": { Proprietor: "Sole proprietorship", Partner: "Partnership firm" },
+  "business-loan": { Proprietor: "Proprietorship", Partner: "Partnership" },
+  "private-funding": { Proprietor: "Proprietorship", Partner: "Partnership" },
+  cgtmse: { Proprietor: "Proprietorship", Partner: "Partnership" },
+  dlod: { Proprietor: "Proprietorship", Partner: "Partnership or LLP" },
+  "unsecured-dod": { Proprietor: "Proprietorship", Partner: "Partnership or LLP" },
+  "overdraft-limit": { Proprietor: "Proprietorship", Partner: "Partnership or LLP" },
+  "overdraft-facility": { Proprietor: "Proprietorship", Partner: "Partnership or LLP" },
+  "project-funding": { Partner: "Partnership or LLP" },
+  "commercial-vehicle": { Proprietor: "Proprietorship", Partner: "Partnership", Director: "Company" },
 };
-// The second form only tells salaried, self-employed and NRI apart: a firm or company counts as self-employed there.
-// The lease rental form asks who owns the property instead, so it takes no applicant type.
-const forSecondForm = (category: string, slug: string) =>
-  [
-    "lease-rental-discounting",
-    "project-funding",
-    "business-loan",
-    "micro-business-loan",
-    "private-funding",
-    "cgtmse",
-    "machine-loan",
-    "working-capital-term-loan",
-    "cash-credit",
-    "bank-guarantee",
-    "letter-of-credit",
-    "bill-discounting",
-    "education-loan",
-    "commercial-vehicle",
-  ].includes(slug)
-    ? ""
-    : [
-          "Partnership",
-          "Pvt Ltd Co",
-          "LLP",
-          "Proprietorship",
-          "Proprietor",
-          "Partner / Director",
-          "Self-employed professional",
-          "Partnership / LLP",
-          "Public Ltd Co",
-          "Self-employed business owner",
-          "Promoter of a listed company",
-        ].includes(category)
-      ? "Self-Employed"
-      : category;
-// What the short form's answers already say in the second form.
-const SECOND_FORM_OWNER: Record<string, string> = {
-  "Individual owner": "An individual (or jointly with family)",
-  "Company / Firm": "A company",
-  Partnership: "A partnership firm or LLP",
-  LLP: "A partnership firm or LLP",
-};
-// The drop-line overdraft form asks how the business is set up; the project form asks how the promoter is set up.
-const SECOND_FORM_SETUP: Record<string, string> = {
-  "Self-employed professional": "Professional (doctor, CA, architect, etc.)",
-  Proprietorship: "Proprietorship",
-  "Partnership / LLP": "Partnership or LLP",
-  "Pvt Ltd Co": "Private limited company",
-  "Public Ltd Co": "Limited company",
-};
-const SECOND_FORM_PROMOTER: Record<string, string> = {
-  Partnership: "Partnership or LLP",
-  LLP: "Partnership or LLP",
-  "Pvt Ltd Co": "Private limited company",
-  "Public Ltd Co": "Limited company",
-  "Trust / Society": "Trust or society",
-};
-// The business loan forms ask how the business is set up, in the same words as "You Are".
-const SECOND_FORM_BUSINESS: Record<string, string> = {
-  "Pvt Ltd Co": "Private limited company",
-  "Public Ltd Co": "Limited company",
-};
-const BUSINESS_SLUGS = ["business-loan", "micro-business-loan", "private-funding", "cgtmse"];
-const SETUP_SLUGS = ["dlod", "unsecured-dod", "overdraft-limit", "overdraft-facility"];
-// What the short form's answers already say in the second form. (The type of loan is asked in the second form.)
+// What the short form's answer already says in the second form. (The type of loan is asked in the second form.)
 const knownFromShortForm = (slug: string, applicant: string): Record<string, string> => {
-  if (slug === "education-loan")
-    return {
-      ...(applicant === "Co-applicant: Salaried" ? { coWork: "Salaried" } : {}),
-      ...(applicant === "Co-applicant: Self-Employed" ? { coWork: "Runs a business" } : {}),
-    };
-  if (slug === "commercial-vehicle")
-    return {
-      ...(applicant === "Individual transporter"
-        ? { constitution: "An individual transporter" }
-        : {}),
-      ...(["Proprietorship", "Partnership", "Company"].includes(applicant)
-        ? { constitution: applicant }
-        : {}),
-    };
-  if (slug === "loan-against-securities")
-    return applicant === "Promoter of a listed company"
-      ? { holding: "A promoter's shares in a company" }
-      : {};
-  if (BUSINESS_SLUGS.includes(slug))
-    return { constitution: SECOND_FORM_BUSINESS[applicant] ?? applicant };
-  if (slug === "project-funding")
-    return SECOND_FORM_PROMOTER[applicant] ? { constitution: SECOND_FORM_PROMOTER[applicant] } : {};
-  return {
-    ...(SETUP_SLUGS.includes(slug) && SECOND_FORM_SETUP[applicant]
-      ? { constitution: SECOND_FORM_SETUP[applicant] }
-      : {}),
-    ...(slug === "lease-rental-discounting" && SECOND_FORM_OWNER[applicant]
-      ? { ownerType: SECOND_FORM_OWNER[applicant] }
-      : {}),
-  };
+  const setup = BUSINESS_SETUP[slug]?.[applicant];
+  return setup ? { constitution: setup } : {};
 };
-const OVERDRAFT_CATEGORY_LOANS = new Set(["unsecured-dod", "dlod", "overdraft-limit"]);
 // Loan pages whose short form is kept to five questions: no loan type (the page says it) and no email.
 const COMPACT_LOANS = new Set(["professional-loan"]);
 
@@ -341,7 +167,6 @@ export function LeadForm({
     product && !own ? [...listed, { title: product.title, slug: product.slug }] : listed;
   const ownTitle = own?.title ?? product?.title;
   const cities = useCities();
-  const applicants = useApplicantOptions();
   // The page a chosen loan type belongs to, and the "You Are" and industry questions that go with it.
   const slugFor = (title: string) => {
     // On a loan's own page the page decides the loan, whatever the drop-down list says.
@@ -353,11 +178,7 @@ export function LeadForm({
   const categoryOptionsFor = (title: string): string[] | null => {
     if (!product) return null;
     const slug = slugFor(title);
-    if (slug && PROPERTY_LOANS[slug]?.applicants.length)
-      return [...PROPERTY_LOANS[slug].applicants, "Other"];
-    if (slug && CATEGORY_LOANS.has(slug)) return [...applicants, "Other"];
-    if (slug && OVERDRAFT_CATEGORY_LOANS.has(slug)) return [...PERSON_ONLY_CATEGORIES, "Other"];
-    return null;
+    return slug && YOU_ARE_LOANS.has(slug) ? YOU_ARE : null;
   };
   const compact = !!product && COMPACT_LOANS.has(product.slug);
   const uid = useId();
@@ -500,7 +321,7 @@ export function LeadForm({
           phone: b.phone.trim(),
           email: b.email.trim(),
           city: b.city,
-          category: forSecondForm(b.applicantCategory, b.slug),
+          category: forSecondForm(b.applicantCategory),
           known: knownFromShortForm(b.slug, b.applicantCategory),
           productSlug: b.slug,
           productTitle: b.title,
