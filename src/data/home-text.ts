@@ -91,6 +91,31 @@ export const HOME_TEXT_SECTIONS: HomeTextSection[] = [
     ],
   },
   {
+    id: "lenders",
+    label: "Which kind of lender",
+    hint: "The table comparing public banks, private banks and NBFCs. The rows are under Blocks.",
+    fields: [
+      { id: "lenders.eyebrow", label: "Small line", text: "Know Your Options" },
+      { id: "lenders.title", label: "Heading", text: "Which kind of lender may suit you?" },
+      {
+        id: "lenders.body",
+        label: "Text",
+        text: "Banks and NBFCs do not all work the same way. Here is a simple, general guide to how the main types usually differ.",
+        long: true,
+      },
+      { id: "lenders.col1", label: "First column", text: "Public Sector Banks" },
+      { id: "lenders.col2", label: "Second column", text: "Private Banks" },
+      { id: "lenders.col3", label: "Third column", text: "NBFCs & Housing Finance Cos." },
+      {
+        id: "lenders.note",
+        label: "Note under the table",
+        text: "This is a general guide only. Interest rate, loan amount, tenure, charges, eligibility, approval and disbursement depend on each Bank or NBFC's policy, your profile and its credit assessment.",
+        long: true,
+      },
+      { id: "lenders.button", label: "Button", text: "Compare Loan Options" },
+    ],
+  },
+  {
     id: "how",
     label: "How it works",
     hint: "The heading above the steps.",
@@ -117,10 +142,15 @@ export const HOME_TEXT_SECTIONS: HomeTextSection[] = [
   {
     id: "cta",
     label: "Closing banner",
-    hint: "The call to action near the bottom. The phone number and hours under it come from Contact & CIBIL.",
+    hint: "The call to action near the bottom.",
     fields: [
       { id: "cta.title", label: "Heading", text: "Ready to move your loan" },
       { id: "cta.gold", label: "Last word of the heading (gold)", text: "forward?" },
+      {
+        id: "cta.call",
+        label: "Line under the heading ({phone} and {hours} come from Contact & CIBIL)",
+        text: "Call {phone} · {hours}",
+      },
       { id: "cta.primary", label: "Main button", text: "Apply Now" },
       { id: "cta.secondary", label: "WhatsApp button", text: "WhatsApp Us" },
     ],

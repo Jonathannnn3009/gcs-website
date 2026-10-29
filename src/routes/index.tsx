@@ -644,7 +644,7 @@ function HomePage() {
                   {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
                 </h3>
                 <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-                  Call {CONTACT.phone} · {CONTACT.hours}
+                  {t("cta.call").replace("{phone}", CONTACT.phone).replace("{hours}", CONTACT.hours)}
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">

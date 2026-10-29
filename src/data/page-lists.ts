@@ -623,6 +623,33 @@ export type FieldSpec = {
   label: string;
   kind: "text" | "textarea" | "icon" | "image" | "readonly" | "yesno";
 };
+/** The "Which kind of lender may suit you?" table: one row per factor, three lender kinds across. */
+export const HOME_LENDERS = [
+  {
+    icon: Percent,
+    label: "How the interest rate is set",
+    v1: "Often follows a published benchmark",
+    v2: "Can respond more to the market",
+    v3: "Often based on your profile",
+  },
+  {
+    icon: FileText,
+    label: "Documents and checks",
+    v1: "Usually step by step, with set checks",
+    v2: "Often led by the relationship",
+    v3: "Often more flexible on proofs",
+  },
+  {
+    icon: Briefcase,
+    label: "Support for self-employed applicants",
+    v1: "Usually more selective",
+    v2: "Moderate",
+    v3: "Often stronger",
+  },
+  { icon: Clock, label: "Time to process", v1: "Can take longer", v2: "Often quicker", v3: "Can be quick" },
+  { icon: Handshake, label: "Room to negotiate", v1: "Usually limited", v2: "Sometimes possible", v3: "Case by case" },
+];
+
 export type ListItem = Record<string, string | LucideIcon>;
 export type ListSpec = {
   key: string;
@@ -693,6 +720,20 @@ export const LIST_SPECS: ListSpec[] = [
       A("whyBody", "Reason text"),
     ],
     items: HOME_PERSONAS,
+  },
+  {
+    key: "home.lenders",
+    page: "Home",
+    label: "Which kind of lender: table rows",
+    hint: "One row per factor. The three column names are set under Headings & buttons.",
+    fields: [
+      I("icon", "Icon"),
+      T("label", "Factor"),
+      T("v1", "First column"),
+      T("v2", "Second column"),
+      T("v3", "Third column"),
+    ],
+    items: HOME_LENDERS,
   },
   {
     key: "home.steps",

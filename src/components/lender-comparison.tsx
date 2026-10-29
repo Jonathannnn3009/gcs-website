@@ -1,37 +1,10 @@
-import { ArrowRight, Briefcase, Clock, FileText, Handshake, Percent, type LucideIcon } from "lucide-react";
+import { ArrowRight, type LucideIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section";
-
-const COLUMNS = ["Public Sector Banks", "Private Banks", "NBFCs & Housing Finance Cos."] as const;
-
-const ROWS: { icon: LucideIcon; label: string; values: [string, string, string] }[] = [
-  {
-    icon: Percent,
-    label: "How the interest rate is set",
-    values: ["Often follows a published benchmark", "Can respond more to the market", "Often based on your profile"],
-  },
-  {
-    icon: FileText,
-    label: "Documents and checks",
-    values: ["Usually step by step, with set checks", "Often led by the relationship", "Often more flexible on proofs"],
-  },
-  {
-    icon: Briefcase,
-    label: "Support for self-employed applicants",
-    values: ["Usually more selective", "Moderate", "Often stronger"],
-  },
-  {
-    icon: Clock,
-    label: "Time to process",
-    values: ["Can take longer", "Often quicker", "Can be quick"],
-  },
-  {
-    icon: Handshake,
-    label: "Room to negotiate",
-    values: ["Usually limited", "Sometimes possible", "Case by case"],
-  },
-];
+import { HOME_LENDERS } from "@/data/page-lists";
+import { useList } from "@/lib/page-lists";
+import { useHomeText } from "@/lib/site-content";
 
 // One colour per column (per kind of lender), carried from the heading down through every cell.
 const COL_TINTS = [
@@ -45,13 +18,20 @@ const COL_TINTS = [
  * not a rule: every lender, and every case, is different, which is why we compare for you.
  */
 export function LenderComparison() {
+  const t = useHomeText();
+  const COLUMNS = [t("lenders.col1"), t("lenders.col2"), t("lenders.col3")];
+  const ROWS = useList("home.lenders", HOME_LENDERS).map((r) => ({
+    icon: r["icon"] as LucideIcon,
+    label: String(r["label"]),
+    values: [String(r["v1"]), String(r["v2"]), String(r["v3"])] as [string, string, string],
+  }));
   return (
     <>
       <Reveal>
         <SectionHeading
-          eyebrow="Know Your Options"
-          title="Which kind of lender may suit you?"
-          description="Banks and NBFCs do not all work the same way. Here is a simple, general guide to how the main types usually differ."
+          eyebrow={t("lenders.eyebrow")}
+          title={t("lenders.title")}
+          description={t("lenders.body")}
           align="center"
         />
       </Reveal>
@@ -111,7 +91,9 @@ export function LenderComparison() {
                       <span className={`h-2 w-2 shrink-0 rounded-full ${COL_TINTS[i]!.dot}`} />
                       {c}
                     </dt>
-                    <dd className="text-right font-semibold text-navy dark:text-white">{row.values[i]}</dd>
+                    <dd className="text-right font-semibold text-navy dark:text-white">
+                      {row.values[i]}
+                    </dd>
                   </div>
                 ))}
               </dl>
@@ -121,12 +103,9 @@ export function LenderComparison() {
       </div>
 
       <Reveal delay={120} className="mx-auto mt-8 max-w-3xl text-center">
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          This is a general guide only. Interest rate, loan amount, tenure, charges, eligibility, approval and
-          disbursement depend on each Bank or NBFC&apos;s policy, your profile and its credit assessment.
-        </p>
+        <p className="text-xs leading-relaxed text-muted-foreground">{t("lenders.note")}</p>
         <Link to="/contact" className="gold-btn mt-5 py-3 text-sm">
-          Compare Loan Options <ArrowRight className="h-4 w-4" />
+          {t("lenders.button")} <ArrowRight className="h-4 w-4" />
         </Link>
       </Reveal>
     </>
