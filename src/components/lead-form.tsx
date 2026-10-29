@@ -180,8 +180,8 @@ export function LeadForm({
   };
   // Only a loan's own page asks these. On the home and other general pages the short form stays short.
   const categoryOptionsFor = (title: string): string[] | null => {
-    // the home page's form asks it too, whichever loan is picked
-    if (!product) return source === "home-enquiry" ? YOU_ARE : null;
+    // the home and contact pages' forms ask it too, whichever loan is picked
+    if (!product) return source === "home-enquiry" || source === "contact-enquiry" ? YOU_ARE : null;
     const slug = slugFor(title);
     return slug && YOU_ARE_LOANS.has(slug) ? YOU_ARE : null;
   };
