@@ -782,18 +782,18 @@ export const PRODUCTS: Product[] = [
       { label: "Savings", value: "Shown in writing first" },
     ],
     glance: [
-      { label: "Existing Loan Track Record", value: "Generally, a satisfactory repayment history of at least the last 12 months is preferred*" },
-      { label: "Repayment Conduct", value: "No recent EMI bounces, significant delays or overdue payments on the existing loan*" },
-      { label: "Eligible Applicants", value: "Salaried Individuals / Self-Employed Professionals / Business Owners with an existing eligible loan*" },
-      { label: "Resident / NRI Eligibility", value: "Resident Indians can apply; NRI cases may be considered by select lenders*" },
-      { label: "Fresh Credit Assessment", value: "Income, existing obligations, credit profile and repayment capacity are reassessed by the new lender*" },
-      { label: "Property Reassessment", value: "For property-backed loans, property documents, valuation and legal/technical checks may be required again*" },
-      { label: "Top-Up Facility", value: "Eligible customers may obtain additional funds over and above the existing outstanding loan*" },
-      { label: "Potential Benefits", value: "Opportunity to explore a better interest rate, suitable tenure, EMI structure or loan terms with another lender*" },
-      { label: "Documentation", value: "Updated income/financial documents, existing loan statements and applicable property documents are generally required*" },
+      { label: "Purpose", value: "Transfer your existing loan to another lender with an optional Top-Up*" },
+      { label: "Eligible Loans", value: "Home Loan / LAP / Other Eligible Property-Backed Loans*" },
+      { label: "Loan Vintage", value: "Preferably 12+ months with a satisfactory repayment track*" },
+      { label: "Top-Up", value: "Additional funds over the existing loan outstanding, subject to eligibility*" },
+      { label: "Key Benefits", value: "Better rate / EMI / Tenure / Loan Terms*" },
+      { label: "Eligible Applicants", value: "Salaried / Self-Employed Professionals / Business Owners*" },
+      { label: "Repayment Track", value: "Regular EMIs with no significant recent delays or overdue*" },
+      { label: "Property Assessment", value: "Fresh valuation and legal/technical checks may apply*" },
+      { label: "Key Assessment", value: "Income / Credit Profile / Obligations / Loan Outstanding / Property Value*" },
     ],
     glanceNote:
-      "*Balance Transfer and Top-Up eligibility, loan amount, interest rate, tenure, charges and approval are subject to the applicant's profile, repayment history, credit assessment, property assessment where applicable, and respective Bank/NBFC policy.",
+      "*Eligibility, Top-Up amount, rate, tenure, charges and approval are subject to applicant profile, existing loan conduct, property assessment and respective Bank/NBFC policy.",
     about:
       "A balance transfer means moving your current loan to another lender that may offer better terms. We put your existing loan next to offers from other lenders, in writing, so you can compare before you decide. If you choose to switch, we guide you through the whole process. A top-up may also be possible if your profile qualifies.",
     features: [
