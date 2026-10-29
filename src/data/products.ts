@@ -691,19 +691,15 @@ export const PRODUCTS: Product[] = [
       { label: "Minimum ticket size", value: "₹20 Lakh" },
     ],
     glance: [
-      {
-        label: "Purpose",
-        value: "Buy a ready flat, an under-construction flat or a plot, or build your own house",
-      },
-      { label: "Loan size", value: "Up to ₹10 Cr" },
-      { label: "Tenor", value: "Up to 30 years" },
-      { label: "Interest rate", value: "From 7.10%* p.a." },
-      { label: "Minimum ticket size", value: "₹20 Lakh" },
-      {
-        label: "Who can apply",
-        value:
-          "Resident Indians, generally 21–65 (up to around 70 if self-employed); NRIs can apply too",
-      },
+      { label: "Purpose", value: "Buy a ready flat, an under-construction flat or a plot, or build your own house" },
+      { label: "Who can apply", value: "Resident Indians, generally 21–65 (up to around 70 if self-employed); NRIs can apply too" },
+      { label: "Applicants", value: "Salaried, self-employed professionals and self-employed business owners" },
+      { label: "Income needed", value: "Salaried take-home from about ₹25,000/month, or self-employed with 2–3 years of ITR" },
+      { label: "Interest type", value: "Floating or fixed-rate options" },
+      { label: "Credit score", value: "Near 700 or above may help you get a better rate; lower scores are reviewed case by case" },
+      { label: "Balance transfer & top-up", value: "Possible later, if a better rate appears" },
+      { label: "Interest saving", value: "Home-loan-linked overdraft (offset account) to trim interest" },
+      { label: "Tax benefits", value: "Joint-applicant structuring for tax breaks under 80C and 24(b)" },
     ],
     about:
       "A home loan helps you buy a ready flat, a flat in an under-construction project, or a plot, or build your own house. We look at your income and documents, then compare options from different Banks and NBFCs that may suit your profile. If one lender delays or does not approve your file, we can explore other lenders that may be a better fit.",
