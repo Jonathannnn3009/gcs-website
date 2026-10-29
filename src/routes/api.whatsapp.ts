@@ -21,8 +21,10 @@ export const Route = createFileRoute("/api/whatsapp")({
 
         const raw = await request.text();
         if (raw.length > 100_000) return new Response("Too large", { status: 413 });
-        if (!(await validSignature(raw, request.headers.get("x-hub-signature-256"))))
+        if (!(await validSignature(raw, request.headers.get("x-hub-signature-256")))) {
+          console.error("[whatsapp] refused a call: bad signature (check WHATSAPP_APP_SECRET)");
           return new Response("Forbidden", { status: 403 });
+        }
 
         let payload: unknown;
         try {

@@ -89,7 +89,16 @@ export function readIncoming(payload: unknown): Incoming[] {
       const value = isObject(change) && isObject(change["value"]) ? change["value"] : null;
       if (!value || !Array.isArray(value["messages"])) continue;
       const meta = isObject(value["metadata"]) ? value["metadata"] : {};
-      if (ours && meta["phone_number_id"] !== ours) continue;
+      if (ours && meta["phone_number_id"] !== ours) {
+        // IDs only, never numbers or text: tells whoever reads the log which setting to change
+        console.error(
+          "[whatsapp] ignored a message sent to number id",
+          String(meta["phone_number_id"]),
+          "but WHATSAPP_PHONE_NUMBER_ID is",
+          ours,
+        );
+        continue;
+      }
       for (const m of value["messages"] as unknown[]) {
         if (!isObject(m) || typeof m["id"] !== "string" || typeof m["from"] !== "string") continue;
         if (!/^\d{8,15}$/.test(m["from"])) continue;
@@ -212,7 +221,12 @@ function cardText(e: Extract<ChatEvent, { t: "card" }>, origin: string): string 
 async function sendText(to: string, body: string, signal: AbortSignal): Promise<boolean> {
   const token = env("WHATSAPP_ACCESS_TOKEN");
   const phoneId = env("WHATSAPP_PHONE_NUMBER_ID");
-  if (!token || !phoneId) return false;
+  if (!token || !phoneId) {
+    console.error(
+      "[whatsapp] cannot send: WHATSAPP_ACCESS_TOKEN or WHATSAPP_PHONE_NUMBER_ID is not set",
+    );
+    return false;
+  }
   const version = env("WHATSAPP_API_VERSION") || DEFAULT_API_VERSION;
   try {
     const graph = env("WHATSAPP_GRAPH_URL") || "https://graph.facebook.com";
@@ -227,7 +241,14 @@ async function sendText(to: string, body: string, signal: AbortSignal): Promise<
       }),
       signal,
     });
-    if (!res.ok) console.error("[whatsapp] send failed", res.status); // status only, never the token or the text
+    if (!res.ok) {
+      // Meta's error code and message (for example 190 = token expired, 131030 = recipient not allowed
+      // yet); never the token or the customer's text.
+      const err = (
+        (await res.json().catch(() => null)) as { error?: Record<string, unknown> } | null
+      )?.error;
+      console.error("[whatsapp] send failed", res.status, err?.["code"], err?.["message"]);
+    }
     return res.ok;
   } catch {
     return false;
@@ -301,7 +322,9 @@ async function answer(msg: Incoming, origin: string, signal: AbortSignal): Promi
  */
 export async function handleWebhook(payload: unknown, origin: string): Promise<void> {
   const signal = AbortSignal.timeout(BUDGET_MS);
-  for (const msg of readIncoming(payload)) {
+  const incoming = readIncoming(payload);
+  const count = incoming.length;
+  for (const msg of incoming) {
     if (!firstTime(msg.id)) continue;
     try {
       if (overLimit(msg.from)) continue;
@@ -321,5 +344,8 @@ export async function handleWebhook(payload: unknown, origin: string): Promise<v
       );
     }
   }
-  console.info("[whatsapp] handled", JSON.stringify({ assistant: ASSISTANT_NAME }));
+  console.info(
+    "[whatsapp] handled",
+    JSON.stringify({ assistant: ASSISTANT_NAME, messages: count }),
+  );
 }
