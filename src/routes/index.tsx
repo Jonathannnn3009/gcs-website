@@ -31,7 +31,7 @@ import { LeadForm } from "@/components/lead-form";
 import { ConsultationBackdrop } from "@/components/consultation-backdrop";
 import { CONTACT } from "@/data/site";
 import { CLIENT_STORIES, type ClientStory } from "@/data/testimonials";
-import { useTestimonials } from "@/lib/site-content";
+import { useHomeText, useTestimonials } from "@/lib/site-content";
 import {
   HOME_HERO_POINTS,
   HOME_PERSONAS,
@@ -398,6 +398,7 @@ function ProcessStepper() {
 function HomePage() {
   const TRUST = useList("home.trust", HOME_TRUST);
   const HERO_POINTS = useList("home.hero", HOME_HERO_POINTS);
+  const t = useHomeText();
   return (
     <>
       {/* ─── HERO ─────────────────────────────────────── */}
@@ -426,12 +427,12 @@ function HomePage() {
             <Reveal delay={60}>
               <p className="mt-8 flex items-center gap-2 text-xs font-bold tracking-[0.3em] text-gold-dark uppercase">
                 <span className="h-px w-8 bg-gold" />
-                Trusted Loan Experts — Since 2017
+                {t("hero.eyebrow")}
               </p>
             </Reveal>
 
             <h1 className="mt-5 text-[2.5rem] leading-[1.08] font-bold text-navy sm:text-5xl lg:text-[3.5rem] dark:text-white">
-              {["Your", "Growth,"].map((w, i) => (
+              {t("hero.line1").split(" ").map((w, i) => (
                 <span
                   key={w}
                   className="word-rise mr-[0.25em]"
@@ -441,7 +442,7 @@ function HomePage() {
                 </span>
               ))}
               <br />
-              {["Our", "Financial", "Expertise."].map((w, i) => (
+              {t("hero.line2").split(" ").map((w, i) => (
                 <span
                   key={w}
                   className="word-rise gold-text-static mr-[0.25em] last:mr-0"
@@ -454,8 +455,7 @@ function HomePage() {
 
             <Reveal delay={200}>
               <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                We help you compare loan options from 75+ Banks and NBFCs and guide you from the
-                first call to the final paperwork. Honest advice, in simple words.
+                {t("hero.intro")}
               </p>
             </Reveal>
 
@@ -465,7 +465,7 @@ function HomePage() {
                   to="/services"
                   className="group inline-flex items-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-bold text-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-soft"
                 >
-                  Explore Loan Products
+                  {t("hero.primary")}
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
                 <a
@@ -477,7 +477,7 @@ function HomePage() {
                   <span className="grid h-11 w-11 place-items-center rounded-full border-2 border-navy/15 text-navy transition-all duration-300 group-hover:border-gold group-hover:bg-gold group-hover:text-navy dark:text-white dark:group-hover:text-navy">
                     <WhatsAppIcon />
                   </span>
-                  Talk to an Expert
+                  {t("hero.secondary")}
                 </a>
               </div>
             </Reveal>
@@ -501,7 +501,7 @@ function HomePage() {
           <Reveal delay={200} className="relative mx-auto w-full max-w-[420px] lg:mr-0">
             <div className="absolute -top-4 -right-4 z-10 hidden items-center gap-1.5 rounded-xl border border-gold/25 bg-navy px-3.5 py-2 shadow-[var(--shadow-lift)] sm:flex">
               <Landmark className="h-3.5 w-3.5 text-gold-light" />
-              <span className="text-[11px] font-bold text-white">75+ Banks & NBFCs</span>
+              <span className="text-[11px] font-bold text-white">{t("hero.badge")}</span>
             </div>
             <LeadForm source="home-enquiry" />
           </Reveal>
@@ -531,16 +531,16 @@ function HomePage() {
           <div className="navy-panel relative flex flex-col items-start justify-between gap-5 overflow-hidden rounded-3xl p-7 sm:flex-row sm:items-center sm:p-9">
             <div className="pointer-events-none absolute top-0 right-0 h-56 w-56 rounded-full bg-gold/10 blur-[90px]" />
             <div className="relative max-w-2xl">
-              <p className="eyebrow">GCS Loan Expert</p>
+              <p className="eyebrow">{t("advisor.eyebrow")}</p>
               <h2 className="mt-2 text-xl font-bold text-white sm:text-2xl" style={{ fontFamily: "var(--font-sans)", letterSpacing: "0" }}>
-                Not sure which loan fits? Answer a few short questions.
+                {t("advisor.title")}
               </h2>
               <p className="mt-2 text-sm text-white/70">
-                Tell us what you need and a GCS loan expert will look at the options that may suit your profile.
+                {t("advisor.body")}
               </p>
             </div>
             <Link to="/ai-loan-advisor" className="gold-btn relative shrink-0 px-6 py-3">
-              Start now
+              {t("advisor.button")}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -551,9 +551,9 @@ function HomePage() {
       <Section>
         <Reveal>
           <SectionHeading
-            eyebrow="Our Services"
-            title="Financing for Every Goal"
-            description="Loan products organized by what you're trying to achieve — home, business or personal."
+            eyebrow={t("services.eyebrow")}
+            title={t("services.title")}
+            description={t("services.body")}
           />
         </Reveal>
         <LoanGoals />
@@ -564,9 +564,9 @@ function HomePage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Who We Serve"
-            title="Real people. Real plans. The right loan."
-            description="Pick your situation — see the loan we'd shape for you, and the reason clients like you choose Growth Capital."
+            eyebrow={t("who.eyebrow")}
+            title={t("who.title")}
+            description={t("who.body")}
           />
         </Reveal>
         <Reveal delay={80} className="mt-10">
@@ -575,7 +575,7 @@ function HomePage() {
 
         <Reveal delay={120} className="mt-14">
           <p className="text-center text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-            Real Clients, Real Outcomes
+            {t("who.stories")}
           </p>
           <div className="mt-6">
             <ClientStoriesMarquee />
@@ -589,8 +589,8 @@ function HomePage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Why Growth Capital"
-            title="A lender offers you a loan. We help you pick the right one."
+            eyebrow={t("why.eyebrow")}
+            title={t("why.title")}
             align="center"
           />
         </Reveal>
@@ -611,8 +611,8 @@ function HomePage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="How It Works"
-            title="From hello to disbursal in four steps"
+            eyebrow={t("how.eyebrow")}
+            title={t("how.title")}
             align="center"
           />
         </Reveal>
@@ -625,9 +625,9 @@ function HomePage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Common Concerns"
-            title="The worries we take off your plate"
-            description="Real questions we hear before someone signs — and how we handle each one."
+            eyebrow={t("concerns.eyebrow")}
+            title={t("concerns.title")}
+            description={t("concerns.body")}
           />
         </Reveal>
         <ConcernCards />
@@ -641,7 +641,7 @@ function HomePage() {
             <div className="relative flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
-                  Ready to move your loan <span className="gold-text">forward?</span>
+                  {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
                 </h3>
                 <p className="mt-2 max-w-xl text-sm text-muted-foreground">
                   Call {CONTACT.phone} · {CONTACT.hours}
@@ -649,7 +649,7 @@ function HomePage() {
               </div>
               <div className="flex flex-wrap gap-3">
                 <Link to="/contact" className="gold-btn group py-3.5 text-base">
-                  Apply Now
+                  {t("cta.primary")}
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
                 <a
@@ -661,7 +661,7 @@ function HomePage() {
                   <span className="text-[#25D366]">
                     <WhatsAppIcon />
                   </span>
-                  WhatsApp Us
+                  {t("cta.secondary")}
                 </a>
               </div>
             </div>
@@ -673,9 +673,9 @@ function HomePage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Our Network"
-            title="Banks in our network"
-            description="We compare offers across major Banks and NBFCs so you can choose with confidence, without the legwork."
+            eyebrow={t("network.eyebrow")}
+            title={t("network.title")}
+            description={t("network.body")}
             align="center"
           />
         </Reveal>

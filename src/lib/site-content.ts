@@ -15,6 +15,7 @@ import type { ClientStory } from "@/data/testimonials";
 import { applyContactInfo, type SiteInfoContact } from "@/data/site";
 import { setHiddenProducts } from "@/data/products";
 import { applyCibilInfo } from "@/data/cibil";
+import { HOME_TEXT } from "@/data/home-text";
 
 type SiteContent = {
   faqs?: Record<string, Faq[]>;
@@ -28,6 +29,8 @@ type SiteContent = {
   seo?: SeoMap;
   testimonials?: (ClientStory & { visible?: boolean })[];
   trustNumbers?: Record<string, string>;
+  /** Home page headings and buttons, by field id (see data/home-text.ts). */
+  homeText?: Record<string, string>;
   customPages?: CustomPage[];
   /** Repeated blocks on the pages, keyed by list name (see data/page-lists.ts). */
   lists?: Record<string, Record<string, string>[]>;
@@ -115,6 +118,15 @@ export function useSiteContent(): SiteContent {
     };
   }, []);
   return content;
+}
+
+/** Home page wording: the CRM's text for a field when staff set one, else the built-in text. */
+export function useHomeText(): (id: string) => string {
+  const edits = useSiteContent().homeText;
+  return (id) => {
+    const text = edits?.[id];
+    return typeof text === "string" && text.trim() ? text : (HOME_TEXT[id] ?? "");
+  };
 }
 
 const nonEmptyList = <T>(v: unknown): v is T[] => Array.isArray(v) && v.length > 0;
