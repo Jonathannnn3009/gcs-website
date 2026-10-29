@@ -388,6 +388,7 @@ function ProductDetailContent() {
                   At A Glance
                 </p>
                 {product.glance ? (
+                  <>
                   <dl className="overflow-hidden rounded-xl border border-gold/25 text-sm">
                     {product.glance.map((g, i) => (
                       <div
@@ -399,6 +400,12 @@ function ProductDetailContent() {
                       </div>
                     ))}
                   </dl>
+                  {product.glanceNote ? (
+                    <p className="-mt-2 text-[11px] leading-snug text-muted-foreground italic">
+                      {product.glanceNote}
+                    </p>
+                  ) : null}
+                  </>
                 ) : product.minimalDisclosure && product.eligibility.length > 0 ? (
                   // The terms are already in the strip on the left, so here show who the product is for.
                   <ul className="space-y-4">

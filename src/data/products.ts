@@ -90,6 +90,8 @@ export type Product = {
   heroNote?: string;
   /** Replaces the list in the "At a glance" box with these label and value lines. */
   glance?: { label: string; value: string }[];
+  /** A small note under the "At a glance" table, for example that the figures are subject to lender policy. */
+  glanceNote?: string;
   /** What the money can be used for, as its own list under "What's included". */
   uses?: { heading: string; items: string[] };
   /** Several programmes of one product side by side (for example loan-amount bands), each with its own terms. */
@@ -829,21 +831,18 @@ export const PRODUCTS: Product[] = [
       { label: "Minimum ticket size", value: "₹20 Lakh" },
     ],
     glance: [
-      {
-        label: "Purpose",
-        value:
-          "Business growth, combining loans, a medical bill or other needs (lender rules apply)",
-      },
-      { label: "Loan size", value: "Up to 100% of property value" },
-      { label: "Tenor", value: "Up to 20 years" },
-      { label: "Interest rate", value: "From 7.50%* p.a." },
-      { label: "Minimum ticket size", value: "₹20 Lakh" },
-      { label: "Property accepted", value: "Residential, commercial and industrial" },
-      {
-        label: "Who can apply",
-        value: "Property owner, generally 21–70 at maturity; salaried or self-employed",
-      },
+      { label: "Purpose", value: "General or Business Use (excluding housing purposes)" },
+      { label: "Loan Amount", value: "₹20 Lakh to ₹35 Crore*" },
+      { label: "Tenure", value: "2 Years to 20 Years*" },
+      { label: "Loan-to-Value (LTV)", value: "55% to 100%* (including insurance, where applicable)" },
+      { label: "Property Accepted", value: "Residential / Shop / Office / Commercial / Industrial / Specialised Properties*" },
+      { label: "Eligible Applicants", value: "Salaried Individuals / Self-Employed Professionals / Business Owners / Eligible Business Entities*" },
+      { label: "Repayment", value: "Flexible EMI options based on loan amount, tenure and applicable interest rate*" },
+      { label: "Balance Transfer & Top-Up", value: "Existing LAP can be transferred to another lender, with additional Top-Up funding for eligible customers*" },
+      { label: "Key Assessment Factors", value: "Income or Business Financials / Credit Profile / Existing Obligations / Property Value & Legal-Technical Assessment*" },
     ],
+    glanceNote:
+      "*Loan amount, tenure, LTV, eligibility, property acceptance, balance transfer, top-up and other terms are subject to applicant profile, property assessment, credit evaluation and respective Bank/NBFC policy.",
     about:
       "A loan against property lets you borrow money using a residential, commercial or industrial property that you already own. You can use it to grow your business, combine other loans, pay a medical bill or meet other needs. Lenders may have rules on how the money can be used. You keep ownership of the property and can continue to use it while you repay.",
     features: [
