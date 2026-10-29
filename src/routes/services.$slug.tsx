@@ -228,7 +228,7 @@ function ProductDetailContent() {
                   ) : null}
                 </div>
                 <div className="navy-panel p-7 sm:p-9">
-                  <TopicHeader icon={FileText} title="Paperwork you'll need" dark />
+                  <TopicHeader icon={FileText} title="Documents Required" dark />
 
                   <div className="mt-2 grid gap-y-6">
                     <div>
