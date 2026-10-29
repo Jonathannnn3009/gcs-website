@@ -405,7 +405,7 @@ export function LeadForm({
 
             {product && !compact ? (
               // On a loan's own page the loan is already known, so it is shown, not asked.
-              <Field id={`${uid}-loan`} label="Loan" error={errors.loanType}>
+              <Field id={`${uid}-loan`} label="Loan" error={errors.loanType} className="sm:col-span-2">
                 <div
                   id={`${uid}-loan`}
                   className={`${fieldClass} flex items-center justify-between gap-2 bg-secondary/50 font-semibold dark:bg-card`}
@@ -415,7 +415,7 @@ export function LeadForm({
                 </div>
               </Field>
             ) : !compact ? (
-              <Field id={`${uid}-loan`} label="Loan Type" error={errors.loanType}>
+              <Field id={`${uid}-loan`} label="Loan Type" error={errors.loanType} className="sm:col-span-2">
                 <select
                   id={`${uid}-loan`}
                   className={selectClass}
@@ -448,7 +448,7 @@ export function LeadForm({
                 id={`${uid}-applicant-category`}
                 label="You Are"
                 error={errors.applicantCategory}
-                className="sm:col-span-2"
+                className=""
               >
                 <select
                   id={`${uid}-applicant-category`}
@@ -476,7 +476,12 @@ export function LeadForm({
               </Field>
             ) : null}
 
-            <Field id={`${uid}-city`} label="City" error={errors.city}>
+            <Field
+              id={`${uid}-city`}
+              label="City"
+              error={errors.city}
+              className={categoryOptionsFor(values.loanType) ? "" : "sm:col-span-2"}
+            >
               <select
                 id={`${uid}-city`}
                 className={selectClass}
