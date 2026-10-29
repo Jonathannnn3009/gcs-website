@@ -160,6 +160,19 @@ function ProductDetailContent() {
     docOptions.find((o) => o.category === activeCategory)?.label ??
     "";
 
+  const pickDocOption = (label: string) => {
+    const pick = docOptions.find((o) => o.label === label);
+    if (!pick) return;
+    setDocChoice(pick.label);
+    setPresetCategory(pick.category.label);
+  };
+  // the checklist PDF follows the kind of paperwork each option opens
+  const homeLoanPdfs: Record<string, string> = {
+    Salaried: "/checklists/home-loan-salaried-checklist.pdf",
+    "Self-Employed": "/checklists/home-loan-self-employed-checklist.pdf",
+    NRI: "/checklists/home-loan-nri-checklist.pdf",
+  };
+
   // "Do you qualify?" and the paperwork checklist download, shared by the full layout and by the
   // short layout of products that carry eligibility details.
   const qualifyBlock = product ? (
@@ -213,25 +226,28 @@ function ProductDetailContent() {
                     <div>
                       {product.documentCategories ? (
                         <>
-                          <label className="mt-4 block">
-                            <span className="sr-only">You are</span>
-                            <select
-                              value={docSelected}
-                              onChange={(e) => {
-                                const pick = docOptions.find((o) => o.label === e.target.value);
-                                if (!pick) return;
-                                setDocChoice(pick.label);
-                                setPresetCategory(pick.category.label);
-                              }}
-                              className="w-full max-w-xs cursor-pointer rounded-lg border border-white/25 bg-white/10 px-3.5 py-2.5 text-sm font-bold text-white outline-none focus:border-gold [&>option]:text-navy"
-                            >
-                              {docOptions.map((o) => (
-                                <option key={o.label} value={o.label}>
-                                  {o.label}
-                                </option>
-                              ))}
-                            </select>
-                          </label>
+                          <div
+                            className="mt-4 flex flex-wrap gap-1.5"
+                            role="tablist"
+                            aria-label="Applicant type"
+                          >
+                            {docOptions.map((o) => (
+                              <button
+                                key={o.label}
+                                type="button"
+                                role="tab"
+                                aria-selected={docSelected === o.label}
+                                onClick={() => pickDocOption(o.label)}
+                                className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
+                                  docSelected === o.label
+                                    ? "border-gold bg-gold text-navy"
+                                    : "border-white/20 text-white/60 hover:border-gold/40 hover:text-white"
+                                }`}
+                              >
+                                {o.label}
+                              </button>
+                            ))}
+                          </div>
                           {activeCategory ? (
                             <>
                               <p className="mt-5 text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
@@ -298,18 +314,17 @@ function ProductDetailContent() {
                     pdfHref={`/checklists/${product.slug}-checklist.pdf`}
                     pdfHrefByCategory={
                       product.slug === "home-loan"
-                        ? {
-                            Salaried: "/checklists/home-loan-salaried-checklist.pdf",
-                            "Self-Employed": "/checklists/home-loan-self-employed-checklist.pdf",
-                            NRI: "/checklists/home-loan-nri-checklist.pdf",
-                          }
+                        ? Object.fromEntries(
+                            docOptions.map((o) => [o.label, homeLoanPdfs[o.category.label] ?? ""]),
+                          )
                         : undefined
                     }
+                    variantOf={Object.fromEntries(docOptions.map((o) => [o.label, o.category.label]))}
                     productTitle={product.title}
                     productSlug={product.slug}
-                    categories={product.documentCategories?.map((c) => c.label)}
-                    presetCategory={activeCategory?.label ?? presetCategory}
-                    onCategoryChange={setPresetCategory}
+                    categories={product.documentCategories ? docOptions.map((o) => o.label) : undefined}
+                    presetCategory={docSelected || null}
+                    onCategoryChange={pickDocOption}
                     intakeFields={intakeFields}
                   />
                     </div>

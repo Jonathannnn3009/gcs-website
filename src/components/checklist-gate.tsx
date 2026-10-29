@@ -47,6 +47,7 @@ const THEMES = {
 export function ChecklistGate({
   pdfHref,
   pdfHrefByCategory,
+  variantOf,
   productTitle,
   productSlug,
   categories,
@@ -58,6 +59,8 @@ export function ChecklistGate({
   pdfHref: string;
   /** When the checklist itself differs by category (e.g. Home Loan's Salaried/Self-Employed/NRI each have their own PDF), map category label to its PDF path — takes priority over `pdfHref` once a category is picked. */
   pdfHrefByCategory?: Record<string, string>;
+  /** When the dropdown's names are not the checklist's own (for example "Proprietor" for "Self-Employed"), the name to look the checklist up by. */
+  variantOf?: Record<string, string>;
   productTitle: string;
   /** The product's slug, so the CRM files the lead under that loan product. */
   productSlug?: string;
@@ -167,7 +170,7 @@ export function ChecklistGate({
 
   if (unlocked) {
     const baseHref = (category && pdfHrefByCategory?.[category]) || pdfHref;
-    const resolvedHref = resolveChecklistHref(docs, baseHref, category || undefined);
+    const resolvedHref = resolveChecklistHref(docs, baseHref, (variantOf?.[category] ?? category) || undefined);
     return (
       <a href={resolvedHref} download className={t.unlockedLink}>
         <Download className="h-4 w-4" /> Download Now
