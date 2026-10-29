@@ -98,7 +98,7 @@ function readBody(raw: unknown): ChatRequestBody | null {
 
 // ── the conversation ────────────────────────────────────────────────────────
 
-async function converse(opts: {
+export async function converse(opts: {
   body: ChatRequestBody;
   origin: string;
   apiKey: string;

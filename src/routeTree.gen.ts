@@ -29,6 +29,7 @@ import { Route as TrackApplicationRouteImport } from './routes/track-application
 import { Route as WhyUsRouteImport } from './routes/why-us'
 import { Route as ApiChatRouteImport } from './routes/api.chat'
 import { Route as ApiNotifyLeadRouteImport } from './routes/api.notify-lead'
+import { Route as ApiWhatsappRouteImport } from './routes/api.whatsapp'
 import { Route as CaLegalServicesIndexRouteImport } from './routes/ca-legal-services.index'
 import { Route as CaLegalServicesSlugRouteImport } from './routes/ca-legal-services.$slug'
 import { Route as CaseStudiesIndexRouteImport } from './routes/case-studies.index'
@@ -142,6 +143,11 @@ const ApiNotifyLeadRoute = ApiNotifyLeadRouteImport.update({
   path: '/api/notify-lead',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWhatsappRoute = ApiWhatsappRouteImport.update({
+  id: '/api/whatsapp',
+  path: '/api/whatsapp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CaLegalServicesIndexRoute = CaLegalServicesIndexRouteImport.update({
   id: '/ca-legal-services/',
   path: '/ca-legal-services/',
@@ -224,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/why-us': typeof WhyUsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/notify-lead': typeof ApiNotifyLeadRoute
+  '/api/whatsapp': typeof ApiWhatsappRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/p/$slug': typeof PSlugRoute
@@ -256,6 +263,7 @@ export interface FileRoutesByTo {
   '/why-us': typeof WhyUsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/notify-lead': typeof ApiNotifyLeadRoute
+  '/api/whatsapp': typeof ApiWhatsappRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/p/$slug': typeof PSlugRoute
@@ -291,6 +299,7 @@ export interface FileRoutesById {
   '/why-us': typeof WhyUsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/notify-lead': typeof ApiNotifyLeadRoute
+  '/api/whatsapp': typeof ApiWhatsappRoute
   '/ca-legal-services/$slug': typeof CaLegalServicesSlugRoute
   '/case-studies/$slug': typeof CaseStudiesSlugRoute
   '/p/$slug': typeof PSlugRoute
@@ -327,6 +336,7 @@ export interface FileRouteTypes {
     | '/why-us'
     | '/api/chat'
     | '/api/notify-lead'
+    | '/api/whatsapp'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/p/$slug'
@@ -359,6 +369,7 @@ export interface FileRouteTypes {
     | '/why-us'
     | '/api/chat'
     | '/api/notify-lead'
+    | '/api/whatsapp'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/p/$slug'
@@ -393,6 +404,7 @@ export interface FileRouteTypes {
     | '/why-us'
     | '/api/chat'
     | '/api/notify-lead'
+    | '/api/whatsapp'
     | '/ca-legal-services/$slug'
     | '/case-studies/$slug'
     | '/p/$slug'
@@ -428,6 +440,7 @@ export interface RootRouteChildren {
   WhyUsRoute: typeof WhyUsRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiNotifyLeadRoute: typeof ApiNotifyLeadRoute
+  ApiWhatsappRoute: typeof ApiWhatsappRoute
   CaLegalServicesSlugRoute: typeof CaLegalServicesSlugRoute
   PSlugRoute: typeof PSlugRoute
   PartnerBuilderRoute: typeof PartnerBuilderRoute
@@ -580,6 +593,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiNotifyLeadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/whatsapp': {
+      id: '/api/whatsapp'
+      path: '/api/whatsapp'
+      fullPath: '/api/whatsapp'
+      preLoaderRoute: typeof ApiWhatsappRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ca-legal-services/': {
       id: '/ca-legal-services/'
       path: '/ca-legal-services'
@@ -716,6 +736,7 @@ const rootRouteChildren: RootRouteChildren = {
   WhyUsRoute: WhyUsRoute,
   ApiChatRoute: ApiChatRoute,
   ApiNotifyLeadRoute: ApiNotifyLeadRoute,
+  ApiWhatsappRoute: ApiWhatsappRoute,
   CaLegalServicesSlugRoute: CaLegalServicesSlugRoute,
   PSlugRoute: PSlugRoute,
   PartnerBuilderRoute: PartnerBuilderRoute,
