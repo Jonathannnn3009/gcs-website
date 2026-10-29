@@ -160,6 +160,14 @@ function ProductDetailContent() {
     docOptions.find((o) => o.category === activeCategory)?.label ??
     "";
 
+  // the buttons are the three broad kinds; the dropdown under the list has the finer options
+  const docGroupOf = (label: string) =>
+    label === "Salaried" || label === "NRI"
+      ? label
+      : ["Proprietor", "Partner", "Director", "Professional"].includes(label)
+        ? "Self-Employed"
+        : label;
+  const docGroups = [...new Set(docOptions.map((o) => docGroupOf(o.label)))];
   const pickDocOption = (label: string) => {
     const pick = docOptions.find((o) => o.label === label);
     if (!pick) return;
@@ -226,32 +234,37 @@ function ProductDetailContent() {
                     <div>
                       {product.documentCategories ? (
                         <>
-                          <div
-                            className="mt-4 flex flex-wrap gap-1.5"
-                            role="tablist"
-                            aria-label="Applicant type"
-                          >
-                            {docOptions.map((o) => (
-                              <button
-                                key={o.label}
-                                type="button"
-                                role="tab"
-                                aria-selected={docSelected === o.label}
-                                onClick={() => pickDocOption(o.label)}
-                                className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
-                                  docSelected === o.label
-                                    ? "border-gold bg-gold text-navy"
-                                    : "border-white/20 text-white/60 hover:border-gold/40 hover:text-white"
-                                }`}
-                              >
-                                {o.label}
-                              </button>
-                            ))}
-                          </div>
+                          {docGroups.length > 1 ? (
+                            <div
+                              className="mt-4 flex flex-wrap gap-1.5"
+                              role="tablist"
+                              aria-label="Applicant type"
+                            >
+                              {docGroups.map((g) => (
+                                <button
+                                  key={g}
+                                  type="button"
+                                  role="tab"
+                                  aria-selected={docGroupOf(docSelected) === g}
+                                  onClick={() => {
+                                    const first = docOptions.find((o) => docGroupOf(o.label) === g);
+                                    if (first) pickDocOption(first.label);
+                                  }}
+                                  className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
+                                    docGroupOf(docSelected) === g
+                                      ? "border-gold bg-gold text-navy"
+                                      : "border-white/20 text-white/60 hover:border-gold/40 hover:text-white"
+                                  }`}
+                                >
+                                  {g}
+                                </button>
+                              ))}
+                            </div>
+                          ) : null}
                           {activeCategory ? (
                             <>
                               <p className="mt-5 text-[10px] font-bold tracking-[0.2em] text-gold uppercase">
-                                For {docSelected || activeCategory.label}
+                                For {docGroupOf(docSelected) || activeCategory.label}
                               </p>
                               <ul className="mt-3 space-y-3">
                                 {activeCategory.items.map((item) => (
