@@ -403,6 +403,71 @@ export function LeadForm({
               </Field>
             ) : null}
 
+            <Field
+              id={`${uid}-city`}
+              label="City"
+              error={errors.city}
+              className={categoryOptionsFor(values.loanType) ? "" : "sm:col-span-2"}
+            >
+              <select
+                id={`${uid}-city`}
+                className={selectClass}
+                value={values.city}
+                onChange={setCity}
+              >
+                <option value="">Select city</option>
+                {cities.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+                <option value="Other">Other</option>
+              </select>
+              {values.city === "Other" ? (
+                <input
+                  className={`${fieldClass} mt-2`}
+                  value={values.cityOther}
+                  onChange={set("cityOther")}
+                  maxLength={100}
+                  placeholder="Enter your city"
+                  autoFocus
+                />
+              ) : null}
+            </Field>
+
+            {categoryOptionsFor(values.loanType) ? (
+              <Field
+                id={`${uid}-applicant-category`}
+                label="You Are"
+                error={errors.applicantCategory}
+                className=""
+              >
+                <select
+                  id={`${uid}-applicant-category`}
+                  className={selectClass}
+                  value={values.applicantCategory}
+                  onChange={set("applicantCategory")}
+                >
+                  <option value="">Select one</option>
+                  {(categoryOptionsFor(values.loanType) ?? []).map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+                {values.applicantCategory === "Other" ? (
+                  <input
+                    className={`${fieldClass} mt-2`}
+                    value={values.categoryOther}
+                    onChange={set("categoryOther")}
+                    maxLength={100}
+                    placeholder="Please tell us what you are"
+                    autoFocus
+                  />
+                ) : null}
+              </Field>
+            ) : null}
+
             {product && !compact ? (
               // On a loan's own page the loan is already known, so it is shown, not asked.
               <Field id={`${uid}-loan`} label="Loan" error={errors.loanType} className="sm:col-span-2">
@@ -442,71 +507,6 @@ export function LeadForm({
                 ) : null}
               </Field>
             ) : null}
-
-            {categoryOptionsFor(values.loanType) ? (
-              <Field
-                id={`${uid}-applicant-category`}
-                label="You Are"
-                error={errors.applicantCategory}
-                className=""
-              >
-                <select
-                  id={`${uid}-applicant-category`}
-                  className={selectClass}
-                  value={values.applicantCategory}
-                  onChange={set("applicantCategory")}
-                >
-                  <option value="">Select one</option>
-                  {(categoryOptionsFor(values.loanType) ?? []).map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-                {values.applicantCategory === "Other" ? (
-                  <input
-                    className={`${fieldClass} mt-2`}
-                    value={values.categoryOther}
-                    onChange={set("categoryOther")}
-                    maxLength={100}
-                    placeholder="Please tell us what you are"
-                    autoFocus
-                  />
-                ) : null}
-              </Field>
-            ) : null}
-
-            <Field
-              id={`${uid}-city`}
-              label="City"
-              error={errors.city}
-              className={categoryOptionsFor(values.loanType) ? "" : "sm:col-span-2"}
-            >
-              <select
-                id={`${uid}-city`}
-                className={selectClass}
-                value={values.city}
-                onChange={setCity}
-              >
-                <option value="">Select city</option>
-                {cities.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-                <option value="Other">Other</option>
-              </select>
-              {values.city === "Other" ? (
-                <input
-                  className={`${fieldClass} mt-2`}
-                  value={values.cityOther}
-                  onChange={set("cityOther")}
-                  maxLength={100}
-                  placeholder="Enter your city"
-                  autoFocus
-                />
-              ) : null}
-            </Field>
 
             <Field
               id={`${uid}-amount`}
