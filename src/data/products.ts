@@ -782,15 +782,18 @@ export const PRODUCTS: Product[] = [
       { label: "Savings", value: "Shown in writing first" },
     ],
     glance: [
-      {
-        label: "Purpose",
-        value: "Move your current loan to a lender with better terms, with or without a top-up",
-      },
-      { label: "Works on", value: "Home, LAP and business loans" },
-      { label: "Benefit", value: "Lower rate + top-up" },
-      { label: "Savings", value: "Shown in writing first" },
-      { label: "Who can apply", value: "A record of on-time EMIs for at least the last 12 months" },
+      { label: "Existing Loan Track Record", value: "Generally, a satisfactory repayment history of at least the last 12 months is preferred*" },
+      { label: "Repayment Conduct", value: "No recent EMI bounces, significant delays or overdue payments on the existing loan*" },
+      { label: "Eligible Applicants", value: "Salaried Individuals / Self-Employed Professionals / Business Owners with an existing eligible loan*" },
+      { label: "Resident / NRI Eligibility", value: "Resident Indians can apply; NRI cases may be considered by select lenders*" },
+      { label: "Fresh Credit Assessment", value: "Income, existing obligations, credit profile and repayment capacity are reassessed by the new lender*" },
+      { label: "Property Reassessment", value: "For property-backed loans, property documents, valuation and legal/technical checks may be required again*" },
+      { label: "Top-Up Facility", value: "Eligible customers may obtain additional funds over and above the existing outstanding loan*" },
+      { label: "Potential Benefits", value: "Opportunity to explore a better interest rate, suitable tenure, EMI structure or loan terms with another lender*" },
+      { label: "Documentation", value: "Updated income/financial documents, existing loan statements and applicable property documents are generally required*" },
     ],
+    glanceNote:
+      "*Balance Transfer and Top-Up eligibility, loan amount, interest rate, tenure, charges and approval are subject to the applicant's profile, repayment history, credit assessment, property assessment where applicable, and respective Bank/NBFC policy.",
     about:
       "A balance transfer means moving your current loan to another lender that may offer better terms. We put your existing loan next to offers from other lenders, in writing, so you can compare before you decide. If you choose to switch, we guide you through the whole process. A top-up may also be possible if your profile qualifies.",
     features: [

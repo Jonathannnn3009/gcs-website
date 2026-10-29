@@ -22,6 +22,7 @@ import { LOAN_PROCESS } from "@/data/loan-process";
 import { ExpertNote } from "@/components/expert-note";
 import { useProduct } from "@/lib/site-content";
 import { FactsStrip } from "@/components/facts-strip";
+import { GlanceTable } from "@/components/glance-table";
 import { CheckBadge, TopicHeader } from "@/components/topic-header";
 import { ChargesBlock, NriBlock } from "@/components/product-extras";
 import { useIntakeFields, withLoanAmount } from "@/lib/page-lists";
@@ -382,24 +383,7 @@ function ProductDetailContent() {
                   At A Glance
                 </p>
                 {product.glance ? (
-                  <>
-                  <dl className="overflow-hidden rounded-xl border border-gold/25 text-[13px]">
-                    {product.glance.map((g, i) => (
-                      <div
-                        key={g.label}
-                        className={`grid grid-cols-[34%_1fr] gap-3 px-3.5 py-2.5 ${i % 2 === 0 ? "bg-white dark:bg-card" : "bg-gold-pale/60 dark:bg-white/5"}`}
-                      >
-                        <dt className="font-bold text-navy dark:text-white">{g.label}</dt>
-                        <dd className="leading-snug text-foreground">{g.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                  {product.glanceNote ? (
-                    <p className="-mt-2 text-[11px] leading-snug text-muted-foreground italic">
-                      {product.glanceNote}
-                    </p>
-                  ) : null}
-                  </>
+                  <GlanceTable rows={product.glance} note={product.glanceNote} />
                 ) : product.minimalDisclosure && product.eligibility.length > 0 ? (
                   // The terms are already in the strip on the left, so here show who the product is for.
                   <ul className="space-y-4">
