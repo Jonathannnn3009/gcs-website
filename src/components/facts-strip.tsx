@@ -48,14 +48,9 @@ export function FactsStrip({ facts }: { facts: { label: string; value: string }[
 
   if (facts.length === 0) return null;
   const n = facts.length;
-  // the more facts share the row, the smaller the type
-  const valueSize =
-    n <= 3
-      ? "text-[1.2rem] sm:text-[1.4rem]"
-      : n === 4
-        ? "text-[1.05rem] sm:text-[1.2rem]"
-        : "text-[0.95rem] sm:text-[1.05rem]";
-  const labelSize = n <= 3 ? "text-[11px] tracking-[0.2em]" : "text-[10px] tracking-[0.14em]";
+  // one size for every figure and label, on every loan page, however many there are or however long they run
+  const valueSize = "text-[1.05rem] sm:text-[1.15rem]";
+  const labelSize = "text-[11px] tracking-[0.16em]";
   const glide = `${GLIDE_MS}ms cubic-bezier(0.65, 0, 0.35, 1)`;
 
   return (
@@ -102,13 +97,7 @@ export function FactsStrip({ facts }: { facts: { label: string; value: string }[
             <dd
               className={`relative mt-2 font-heading leading-snug text-gold-light transition-colors duration-700 ${
                 on ? "text-[#ffe08a]" : ""
-              } ${
-                fact.value.length > 40
-                  ? "text-[0.9rem]"
-                  : fact.value.length > 24
-                    ? "text-[0.95rem]"
-                    : valueSize
-              }`}
+              } ${valueSize}`}
             >
               {fact.value}
             </dd>

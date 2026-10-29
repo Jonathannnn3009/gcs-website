@@ -314,13 +314,7 @@ function ProductDetailContent() {
       <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal animate={false}>
-            <div className={`grid gap-0 overflow-hidden rounded-3xl ${
-                product.facts.length >= 5
-                  ? "lg:grid-cols-[2.9fr_1fr]"
-                  : product.facts.length === 4
-                    ? "lg:grid-cols-[2.3fr_1fr]"
-                    : "lg:grid-cols-[1.4fr_1fr]"
-              }`}>
+            <div className="grid gap-0 overflow-hidden rounded-3xl lg:grid-cols-[minmax(0,1fr)_26rem]">
               {/* Navy card */}
               <div className="navy-panel relative overflow-hidden p-8 sm:p-12">
                 <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
@@ -383,13 +377,13 @@ function ProductDetailContent() {
               </div>
 
               {/* At-a-glance snapshot */}
-              <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-8 lg:flex dark:bg-gold/10">
+              <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-6 lg:flex dark:bg-gold/10">
                 <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
                   At A Glance
                 </p>
                 {product.glance ? (
                   <>
-                  <dl className="overflow-hidden rounded-xl border border-gold/25 text-sm">
+                  <dl className="overflow-hidden rounded-xl border border-gold/25 text-[13px]">
                     {product.glance.map((g, i) => (
                       <div
                         key={g.label}
