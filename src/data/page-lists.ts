@@ -447,15 +447,53 @@ export const FOOTER_PRODUCTS = SERVICES.slice(0, 8).map((s) => ({
   to: `/services#${s.id}`,
 }));
 
-// The enquiry form's loan types on the home, contact and other general pages: the headline services, then every other
-// loan that has its own page, so each of them can be picked. Only the overdraft page is left out, because
-// "Overdraft Facility" already is that loan. (On a loan's own page the loan is fixed, not chosen.)
-const FORM_LOAN_SKIP = new Set(["overdraft-limit"]);
+// The enquiry form's loan types on the home, contact and other general pages: every loan that has its own page, in
+// the same order as the Our Services menu. (On a loan's own page the loan is fixed, not chosen.)
+const FORM_LOAN_ORDER = [
+  // Property finance
+  "home-loan",
+  "balance-transfer",
+  "loan-against-property",
+  "micro-lap",
+  "lease-rental-discounting",
+  "dlod",
+  "project-funding",
+  // Business growth
+  "business-loan",
+  "micro-business-loan",
+  "unsecured-dod",
+  "professional-loan",
+  "private-funding",
+  // Cash flow and trade
+  "cgtmse",
+  "machine-loan",
+  "working-capital-term-loan",
+  "cash-credit",
+  "overdraft-limit",
+  "bank-guarantee",
+  "letter-of-credit",
+  "bill-discounting",
+  // Personal, education, vehicle and other
+  "personal-loan",
+  "education-loan",
+  "new-car-loan",
+  "used-car-loan",
+  "car-refinance",
+  "commercial-vehicle",
+  "loan-against-securities",
+];
+// The overdraft is filed in the CRM under its older name.
+const FORM_LOAN_SLUG: Record<string, string> = { "overdraft-limit": "overdraft-facility" };
 export const FORM_LOAN_TYPES = [
-  ...SERVICES.map((s) => ({ title: s.title, slug: s.id })),
-  ...PRODUCTS.filter(
-    (p) => !FORM_LOAN_SKIP.has(p.slug) && !SERVICES.some((s) => s.id === p.slug),
-  ).map((p) => ({ title: p.title, slug: p.slug })),
+  ...FORM_LOAN_ORDER.flatMap((slug) => {
+    const p = PRODUCTS.find((x) => x.slug === slug);
+    return p ? [{ title: p.title, slug: FORM_LOAN_SLUG[slug] ?? slug }] : [];
+  }),
+  // a loan added later that is not in the menu order yet still appears, at the end
+  ...PRODUCTS.filter((p) => !FORM_LOAN_ORDER.includes(p.slug)).map((p) => ({
+    title: p.title,
+    slug: p.slug,
+  })),
 ];
 
 export const FORM_CITIES = CONTACT.cities.map((city) => ({ city }));
