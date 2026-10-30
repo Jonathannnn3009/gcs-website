@@ -17,6 +17,7 @@ import { setHiddenProducts } from "@/data/products";
 import { applyCibilInfo } from "@/data/cibil";
 import { HOME_TEXT } from "@/data/home-text";
 import { ABOUT_TEXT } from "@/data/about-text";
+import { CONTACT_TEXT } from "@/data/contact-text";
 
 type SiteContent = {
   faqs?: Record<string, Faq[]>;
@@ -34,6 +35,8 @@ type SiteContent = {
   homeText?: Record<string, string>;
   /** About page headings and paragraphs, by field id (see data/about-text.ts). */
   aboutText?: Record<string, string>;
+  /** Contact page headings, paragraphs and buttons, by field id (see data/contact-text.ts). */
+  contactText?: Record<string, string>;
   customPages?: CustomPage[];
   /** Repeated blocks on the pages, keyed by list name (see data/page-lists.ts). */
   lists?: Record<string, Record<string, string>[]>;
@@ -138,6 +141,15 @@ export function useAboutText(): (id: string) => string {
   return (id) => {
     const text = edits?.[id];
     return typeof text === "string" && text.trim() ? text : (ABOUT_TEXT[id] ?? "");
+  };
+}
+
+/** Contact page wording: the CRM's text for a field when staff set one, else the built-in text. */
+export function useContactText(): (id: string) => string {
+  const edits = useSiteContent().contactText;
+  return (id) => {
+    const text = edits?.[id];
+    return typeof text === "string" && text.trim() ? text : (CONTACT_TEXT[id] ?? "");
   };
 }
 

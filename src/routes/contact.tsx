@@ -5,7 +5,9 @@ import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { LeadForm } from "@/components/lead-form";
 import { CONTACT_FAQS } from "@/data/faqs";
-import { useFaqs } from "@/lib/site-content";
+import { useContactText, useFaqs } from "@/lib/site-content";
+import { CONTACT_BENEFITS } from "@/data/page-lists";
+import { useList } from "@/lib/page-lists";
 import { CONTACT } from "@/data/site";
 import { useMorePhones } from "@/lib/public-settings";
 
@@ -27,13 +29,6 @@ export const Route = createFileRoute("/contact")({
   }),
   component: ContactPage,
 });
-
-const BENEFITS = [
-  "Callback from a senior expert within one business day",
-  "Indicative offer & lender shortlist within 48 hours",
-  "No hidden charges — every fee is shared in writing before you go ahead",
-  "Full confidentiality on profile, file and amount",
-];
 
 const reachMethods = () => [
   { icon: Phone, label: "Call", value: CONTACT.phone, href: CONTACT.phoneHref },
@@ -78,6 +73,8 @@ function FaqAccordion() {
 function ContactPage() {
   const REACH_METHODS = reachMethods();
   const morePhones = useMorePhones();
+  const t = useContactText();
+  const BENEFITS = useList("contact.benefits", CONTACT_BENEFITS).map((b) => String(b["text"]));
   return (
     <>
       {/* Split hero: navy intro (now carrying the reach-methods inline) + form */}
@@ -88,15 +85,13 @@ function ContactPage() {
               <div className="navy-panel relative flex h-full flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
                 <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
                 <p className="relative text-xs font-bold tracking-[0.2em] text-gold uppercase">
-                  Get In Touch
+                  {t("hero.eyebrow")}
                 </p>
                 <h1 className="relative mt-3 font-heading text-3xl font-bold text-white sm:text-4xl">
-                  Let's structure <span className="italic text-gold-light">your file.</span>
+                  {t("hero.title")} <span className="italic text-gold-light">{t("hero.gold")}</span>
                 </h1>
                 <p className="relative mt-4 text-sm leading-relaxed text-white/65">
-                  Tell us what you're trying to do — refinance, expand, unlock value from a
-                  property, or push a file another bank has rejected. We'll come back with an
-                  indicative number and a pre-approval check.
+                  {t("hero.body")}
                 </p>
 
                 {/* Reach methods, folded directly into the hero as chips */}
@@ -135,13 +130,11 @@ function ContactPage() {
 
                 <div className="relative mt-auto pt-8">
                   <p className="font-heading text-base italic leading-relaxed text-white/80">
-                    "<span className="font-bold text-gold-light not-italic">Your Loan Deserves Expert Attention.</span>{" "}
-                    Your loan is handled by an experienced professional who understands your profile,
-                    carefully structures the right approach and supports you through every stage up
-                    to disbursement."
+                    "<span className="font-bold text-gold-light not-italic">{t("quote.lead")}</span>{" "}
+                    {t("quote.body")}"
                   </p>
                   <p className="mt-2 text-[11px] font-bold tracking-[0.18em] text-gold-light uppercase">
-                    — The Growth Capital Services Team
+                    {t("quote.by")}
                   </p>
                 </div>
               </div>
@@ -158,13 +151,12 @@ function ContactPage() {
       <Section className="pt-0">
         <div className="grid items-center gap-8 lg:grid-cols-2">
           <Reveal>
-            <p className="eyebrow">Visit Our Office</p>
+            <p className="eyebrow">{t("office.eyebrow")}</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              Our Office in <span className="gold-text-static italic">Ghatkopar West.</span>
+              {t("office.title")} <span className="gold-text-static italic">{t("office.gold")}</span>
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Our advisory team is based at Avadhoot Chhaya CHS on R. B. Marg, near Jagruti Nagar Metro Station, accessible to
-              clients across the western suburbs. Visit by appointment for a structured file review.
+              {t("office.body")}
             </p>
 
             <div className="mt-6 space-y-4">
@@ -174,7 +166,7 @@ function ContactPage() {
                 </span>
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
-                    Address
+                    {t("office.addressLabel")}
                   </p>
                   <a
                     href={CONTACT.mapsLink}
@@ -193,7 +185,7 @@ function ContactPage() {
                 </span>
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
-                    Hours
+                    {t("office.hoursLabel")}
                   </p>
                   <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">
                     {CONTACT.hours}
@@ -209,7 +201,7 @@ function ContactPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-md bg-navy px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-navy-soft"
               >
-                <Navigation className="h-4 w-4" /> Get directions
+                <Navigation className="h-4 w-4" /> {t("office.directions")}
               </a>
               <a
                 href={CONTACT.whatsappLink}
@@ -217,7 +209,7 @@ function ContactPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-md border border-navy/20 px-5 py-3 text-sm font-bold text-navy transition-colors hover:border-gold/40 dark:text-white"
               >
-                Book an appointment
+                {t("office.appointment")}
               </a>
             </div>
           </Reveal>
@@ -241,9 +233,9 @@ function ContactPage() {
       {/* FAQ */}
       <Section className="pt-0">
         <Reveal>
-          <p className="eyebrow text-center">Before You Write</p>
+          <p className="eyebrow text-center">{t("faq.eyebrow")}</p>
           <h2 className="mt-2 text-center text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-            Quick answers.
+            {t("faq.title")}
           </h2>
         </Reveal>
         <Reveal delay={100} className="mx-auto mt-8 max-w-2xl">

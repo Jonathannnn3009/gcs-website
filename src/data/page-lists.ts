@@ -688,6 +688,14 @@ export const HOME_LENDERS = [
   { icon: Handshake, label: "Room to negotiate", v1: "Usually limited", v2: "Sometimes possible", v3: "Case by case" },
 ];
 
+/** The tick points in the Contact page's opening panel. */
+export const CONTACT_BENEFITS = [
+  { text: "Callback from a senior expert within one business day" },
+  { text: "Indicative offer & lender shortlist within 48 hours" },
+  { text: "No hidden charges — every fee is shared in writing before you go ahead" },
+  { text: "Full confidentiality on profile, file and amount" },
+];
+
 export type ListItem = Record<string, string | LucideIcon>;
 export type ListSpec = {
   key: string;
@@ -772,6 +780,14 @@ export const LIST_SPECS: ListSpec[] = [
       T("v3", "Third column"),
     ],
     items: HOME_LENDERS,
+  },
+  {
+    key: "contact.benefits",
+    page: "Contact",
+    label: "Tick points in the opening panel",
+    hint: "The short promises under the Call, WhatsApp and Email buttons.",
+    fields: [T("text", "Point")],
+    items: CONTACT_BENEFITS,
   },
   {
     key: "home.steps",
