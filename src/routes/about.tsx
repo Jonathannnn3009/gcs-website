@@ -8,6 +8,7 @@ import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { ABOUT_PROCESS, ABOUT_STATS, ABOUT_WHY } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
 import { useProductGroups } from "@/lib/page-lists";
+import { useAboutText } from "@/lib/site-content";
 
 // One animated icon beside each "why choose us" point, in the same order as the list.
 const WHY_ICONS = [Landmark, UserCheck, Zap, Eye, SlidersHorizontal];
@@ -39,6 +40,11 @@ function AboutPage() {
   const WHY_CHOOSE = useList("about.why", ABOUT_WHY);
   const PRODUCT_GROUPS = useProductGroups();
   const STATS = useList("about.stats", ABOUT_STATS);
+  const t = useAboutText();
+  // the company name is shown in bold where it starts the story
+  const brand = "Growth Capital Services";
+  const story1 = t("story.p1");
+  const story1Brand = story1.startsWith(brand);
   return (
     <>
       <AboutTabs current="/about" />
@@ -49,14 +55,12 @@ function AboutPage() {
             <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               Home <span className="text-gold">/</span> About
             </p>
-            <p className="eyebrow mt-4">About Growth Capital Services</p>
+            <p className="eyebrow mt-4">{t("banner.eyebrow")}</p>
             <h1 className="mt-3 max-w-3xl text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              A loan advisory built around one discipline.
+              {t("banner.title")}
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Since {2017}, Growth Capital Services has focused on one thing: reading a borrower's
-              actual file — the irregular income, the awkward timing, the bank that already
-              declined it — and matching it to the right lender in our network.
+              {t("banner.body")}
             </p>
           </Reveal>
 
@@ -86,34 +90,36 @@ function AboutPage() {
                 />
               </div>
               <p className="mt-6 font-heading text-2xl leading-snug italic text-navy sm:text-3xl dark:text-white">
-                "We read the file behind the file."
+                {t("story.quote")}
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                The question we ask before any other: what will get this approved?
+                {t("story.quoteNote")}
               </p>
             </Reveal>
 
             <Reveal delay={100} className="lg:pt-4">
-              <p className="eyebrow">How It Started</p>
+              <p className="eyebrow">{t("story.eyebrow")}</p>
               <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
-                Too many good files were getting rejected for the wrong reasons.
+                {t("story.title")}
               </h2>
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                <strong className="text-foreground">Growth Capital Services</strong> opened in
-                2017 as a Direct Selling Agent, built around a simple idea: a borrower's paperwork
-                shouldn't decide their financial future — the right expert, matching them to the
-                right lender, should. That's still the job today.
+                {story1Brand ? (
+                  <>
+                    <strong className="text-foreground">{brand}</strong>
+                    {story1.slice(brand.length)}
+                  </>
+                ) : (
+                  story1
+                )}
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                A first home, a business that's outgrown its funding, or equity sitting locked
-                inside a property already owned — we've structured all three, often for clients
-                another expert had already turned away.
+                {t("story.p2")}
               </p>
               <Link
                 to="/services"
                 className="mt-7 inline-flex items-center gap-2 rounded-md border border-navy/20 px-6 py-3 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50 dark:text-white"
               >
-                See our loan products <ArrowRight className="h-4 w-4" />
+                {t("story.button")} <ArrowRight className="h-4 w-4" />
               </Link>
             </Reveal>
           </div>
@@ -128,25 +134,21 @@ function AboutPage() {
               <div className="absolute top-0 right-1/4 h-72 w-72 rounded-full bg-gold/8 blur-[100px]" />
               <div className="relative grid gap-10 lg:grid-cols-2 lg:divide-x lg:divide-border">
                 <div className="lg:pr-10">
-                  <p className="eyebrow">Our Mission</p>
+                  <p className="eyebrow">{t("mission.eyebrow")}</p>
                   <h3 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-                    Match the file to the lender who actually wants it.
+                    {t("mission.title")}
                   </h3>
                   <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
-                    Every profile fits somewhere — irregular income, a thin credit file, an
-                    unconventional business. Our job is finding which of our partner lenders is
-                    the right fit, instead of forcing your file into a template it was never going
-                    to clear.
+                    {t("mission.body")}
                   </p>
                 </div>
                 <div className="lg:pl-10">
-                  <p className="eyebrow">Our Vision</p>
+                  <p className="eyebrow">{t("vision.eyebrow")}</p>
                   <h3 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-                    The expert people call before they call a bank.
+                    {t("vision.title")}
                   </h3>
                   <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
-                    To be the first call a borrower makes across our markets — because they
-                    already trust we'll route them honestly, and to the lender that actually fits.
+                    {t("vision.body")}
                   </p>
                 </div>
               </div>
@@ -159,9 +161,9 @@ function AboutPage() {
       <section className="bg-gradient-to-b from-background via-gold/[0.03] to-background py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <p className="eyebrow">Why Choose Growth Capital Services</p>
+            <p className="eyebrow">{t("why.eyebrow")}</p>
             <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
-              What clients mention <span className="gold-text-static italic">when they refer us.</span>
+              {t("why.title")} <span className="gold-text-static italic">{t("why.gold")}</span>
             </h2>
           </Reveal>
           <div className="mt-12 border-t border-border">
@@ -208,16 +210,16 @@ function AboutPage() {
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="eyebrow">Our Services</p>
+                <p className="eyebrow">{t("services.eyebrow")}</p>
                 <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
-                  {PRODUCTS.length} products, <span className="gold-text-static italic">one expert who knows all of them.</span>
+                  {t("services.title").replace("{count}", String(PRODUCTS.length))} <span className="gold-text-static italic">{t("services.gold")}</span>
                 </h2>
               </div>
               <Link
                 to="/services"
                 className="inline-flex items-center gap-2 rounded-md border border-navy/20 px-5 py-2.5 text-sm font-bold text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50 dark:text-white"
               >
-                View all services <ArrowRight className="h-4 w-4" />
+                {t("services.button")} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </Reveal>
@@ -261,12 +263,12 @@ function AboutPage() {
       <section className="bg-gradient-to-b from-background via-gold/[0.03] to-background py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <p className="eyebrow">Our Partners</p>
+            <p className="eyebrow">{t("partners.eyebrow")}</p>
             <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
-              India's leading <span className="gold-text-static italic">banks & NBFCs.</span>
+              {t("partners.title")} <span className="gold-text-static italic">{t("partners.gold")}</span>
             </h2>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              We're proud to work with India's leading financial institutions, including:
+              {t("partners.body")}
             </p>
           </Reveal>
           <Reveal delay={100} className="mt-10">
@@ -280,9 +282,9 @@ function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
-              <p className="eyebrow">How We Work</p>
+              <p className="eyebrow">{t("how.eyebrow")}</p>
               <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
-                A guided process — <span className="gold-text-static italic">from first call to disbursal.</span>
+                {t("how.title")} <span className="gold-text-static italic">{t("how.gold")}</span>
               </h2>
             </div>
           </Reveal>
@@ -312,16 +314,16 @@ function AboutPage() {
             <div className="navy-panel relative overflow-hidden rounded-3xl p-8 text-center sm:p-14">
               <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
               <div className="relative">
-                <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">A Promise</p>
+                <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">{t("promise.label")}</p>
                 <p className="mx-auto mt-5 max-w-xl font-heading text-2xl italic text-white sm:text-3xl">
-                  "Let Growth Capital Services help turn your financial goals into reality."
+                  {t("promise.quote")}
                 </p>
                 <p className="mt-4 text-sm text-white/60">
-                  No cost, no obligation — just a straight answer on what you qualify for.
+                  {t("promise.body")}
                 </p>
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                   <Link to="/contact" className="gold-btn py-3.5 text-base">
-                    Apply Now <ArrowRight className="h-4 w-4" />
+                    {t("promise.primary")} <ArrowRight className="h-4 w-4" />
                   </Link>
                   <a
                     href={CONTACT.whatsappLink}
@@ -329,7 +331,7 @@ function AboutPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-md border border-white/25 px-6 py-3.5 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/50"
                   >
-                    Talk on WhatsApp
+                    {t("promise.secondary")}
                   </a>
                 </div>
               </div>

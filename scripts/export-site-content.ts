@@ -14,6 +14,7 @@ import { PROFESSIONAL_SERVICES } from "../src/data/professional-services";
 import { CONTACT } from "../src/data/site";
 import { LEGAL_DRAFTS } from "../src/data/legal-drafts";
 import { HOME_TEXT, HOME_TEXT_SECTIONS } from "../src/data/home-text";
+import { ABOUT_TEXT, ABOUT_TEXT_SECTIONS } from "../src/data/about-text";
 
 const out = process.argv[2];
 if (!out) throw new Error("Pass the output file path");
@@ -159,6 +160,8 @@ writeFileSync(
       iconNames: ICON_NAMES,
       homeText: HOME_TEXT,
       homeTextSpec: HOME_TEXT_SECTIONS,
+      aboutText: ABOUT_TEXT,
+      aboutTextSpec: ABOUT_TEXT_SECTIONS,
       trustNumbers: { "75+": "75+", "25+": "25+", "2017": "2017", "100%": "100%" },
     },
     null,
