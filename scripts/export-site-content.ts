@@ -51,6 +51,16 @@ import {
 } from "../src/data/page-text-three";
 import { ADVISORY_TEXT, ADVISORY_TEXT_SECTIONS } from "../src/data/advisory-text";
 import { CITY_TEXT, CITY_TEXT_SECTIONS } from "../src/data/city-text";
+import {
+  CASEPAGE_TEXT,
+  CASEPAGE_TEXT_SECTIONS,
+  LOANPAGE_TEXT,
+  LOANPAGE_TEXT_SECTIONS,
+  SERVICEPAGE_TEXT,
+  SERVICEPAGE_TEXT_SECTIONS,
+  SITE_TEXT,
+  SITE_TEXT_SECTIONS,
+} from "../src/data/template-text";
 
 const out = process.argv[2];
 if (!out) throw new Error("Pass the output file path");
@@ -239,6 +249,14 @@ writeFileSync(
       advisoryTextSpec: ADVISORY_TEXT_SECTIONS,
       cityText: CITY_TEXT,
       cityTextSpec: CITY_TEXT_SECTIONS,
+      loanPageText: LOANPAGE_TEXT,
+      loanPageTextSpec: LOANPAGE_TEXT_SECTIONS,
+      casePageText: CASEPAGE_TEXT,
+      casePageTextSpec: CASEPAGE_TEXT_SECTIONS,
+      servicePageText: SERVICEPAGE_TEXT,
+      servicePageTextSpec: SERVICEPAGE_TEXT_SECTIONS,
+      siteText: SITE_TEXT,
+      siteTextSpec: SITE_TEXT_SECTIONS,
       trustNumbers: { "75+": "75+", "25+": "25+", "2017": "2017", "100%": "100%" },
     },
     null,

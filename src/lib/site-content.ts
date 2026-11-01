@@ -27,6 +27,7 @@ import { ESTIMATOR_TEXT, INSIGHTS_TEXT } from "@/data/small-page-text";
 import { ADVISOR_TEXT, CASES_TEXT, RATES_TEXT, TOOLS_TEXT } from "@/data/page-text-three";
 import { ADVISORY_TEXT } from "@/data/advisory-text";
 import { CITY_TEXT } from "@/data/city-text";
+import { CASEPAGE_TEXT, LOANPAGE_TEXT, SERVICEPAGE_TEXT, SITE_TEXT } from "@/data/template-text";
 
 type SiteContent = {
   faqs?: Record<string, Faq[]>;
@@ -66,6 +67,10 @@ type SiteContent = {
   advisorText?: Record<string, string>;
   advisoryText?: Record<string, string>;
   cityText?: Record<string, string>;
+  loanPageText?: Record<string, string>;
+  casePageText?: Record<string, string>;
+  servicePageText?: Record<string, string>;
+  siteText?: Record<string, string>;
   customPages?: CustomPage[];
   /** Repeated blocks on the pages, keyed by list name (see data/page-lists.ts). */
   lists?: Record<string, Record<string, string>[]>;
@@ -232,6 +237,12 @@ export const useToolsText = () => copyOf(useSiteContent().toolsText, TOOLS_TEXT)
 export const useAdvisorText = () => copyOf(useSiteContent().advisorText, ADVISOR_TEXT);
 /** CIBIL Advisory page wording, the same way. */
 export const useAdvisoryText = () => copyOf(useSiteContent().advisoryText, ADVISORY_TEXT);
+/** Wording shared by every loan page, case study page and CA & legal service page, the same way. */
+export const useLoanPageText = () => copyOf(useSiteContent().loanPageText, LOANPAGE_TEXT);
+export const useCasePageText = () => copyOf(useSiteContent().casePageText, CASEPAGE_TEXT);
+export const useServicePageText = () => copyOf(useSiteContent().servicePageText, SERVICEPAGE_TEXT);
+/** Header and footer wording shown on every page, the same way. */
+export const useSiteText = () => copyOf(useSiteContent().siteText, SITE_TEXT);
 /** City page wording ({city} becomes the page's city), the same way. */
 export function useCityText(city: string): (id: string) => string {
   const t = copyOf(useSiteContent().cityText, CITY_TEXT);

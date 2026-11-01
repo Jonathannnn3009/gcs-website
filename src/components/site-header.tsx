@@ -9,10 +9,12 @@ import { NAV_CIBIL, NAV_HEADER, NAV_PARTNER, NAV_TOOLS } from "@/data/page-lists
 import { useList, useProductGroups } from "@/lib/page-lists";
 import { CA_LEGAL_MENU } from "@/data/ca-legal-menu";
 import { CaLegalMenuItem } from "@/components/ca-legal-menu-item";
+import { useSiteText } from "@/lib/site-content";
 
 
 
 export function SiteHeader() {
+  const t = useSiteText();
   // The contact page has its own button, and Case Studies sits under About Us as a tab, so neither is listed again here.
   const NAV = useList("nav.header", NAV_HEADER)
     .filter((l) => l["to"] !== "/contact" && l["to"] !== "/case-studies")
@@ -484,7 +486,7 @@ export function SiteHeader() {
 
           {/* Apply CTA */}
           <Link to="/contact" className="gold-btn hidden py-2 whitespace-nowrap sm:inline-flex xl:px-[1.1em] xl:text-[15px] min-[1536px]:py-2.5">
-            Contact Us
+            {t("header.contact")}
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
 
@@ -560,7 +562,7 @@ export function SiteHeader() {
               onClick={() => setMobileOpen(false)}
               className="gold-btn mt-3 justify-center py-3"
             >
-              Contact Us
+              {t("header.contact")}
               <ArrowRight className="h-4 w-4" />
             </Link>
             <a

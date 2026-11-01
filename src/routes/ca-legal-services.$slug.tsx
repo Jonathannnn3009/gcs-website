@@ -13,6 +13,7 @@ import {
 } from "@/data/professional-services";
 import { useProfessionalService } from "@/lib/site-content";
 import { FactsStrip } from "@/components/facts-strip";
+import { useServicePageText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/ca-legal-services/$slug")({
   head: ({ params }) => {
@@ -58,6 +59,7 @@ function DetailDossier({
   slug: string;
   title: string;
 }) {
+  const t = useServicePageText();
   return (
     <>
       <div className="p-7 sm:p-9">
@@ -95,7 +97,7 @@ function DetailDossier({
       <div className="border-t border-dashed border-border" />
 
       <div className="p-7 sm:p-9">
-        <p className="eyebrow">How It Works</p>
+        <p className="eyebrow">{t("how.eyebrow")}</p>
         <div className="mt-5 space-y-5">
           {detail.steps.map((step, i) => (
             <div key={step.title} className="flex gap-4">
@@ -115,7 +117,7 @@ function DetailDossier({
 
       <div className="p-7 sm:p-9">
         <p className="eyebrow flex items-center gap-1.5">
-          <FileText className="h-3.5 w-3.5" /> Documents Required for {title}
+          <FileText className="h-3.5 w-3.5" /> {t("docs.full").replaceAll("{title}", title)}
         </p>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
           {detail.documentsIntro}
@@ -171,7 +173,7 @@ function DetailDossier({
 
       <div className="p-7 sm:p-9">
         <p className="eyebrow flex items-center gap-1.5">
-          <ShieldCheck className="h-3.5 w-3.5" /> Why Choose Our {title} Assistance?
+          <ShieldCheck className="h-3.5 w-3.5" /> {t("why.eyebrow").replaceAll("{title}", title)}
         </p>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           {detail.why.map((w) => (
@@ -196,7 +198,7 @@ function DetailDossier({
       </div>
 
       <div className="bg-secondary/40 p-5 text-xs leading-relaxed text-muted-foreground">
-        <strong className="font-bold text-navy dark:text-white">Important:</strong>{" "}
+        <strong className="font-bold text-navy dark:text-white">{t("important.label")}</strong>{" "}
         {detail.important}
       </div>
     </>
@@ -210,6 +212,7 @@ function ProfessionalServiceDetailPage() {
 }
 
 function ProfessionalServiceDetailContent() {
+  const t = useServicePageText();
   const { slug } = Route.useParams();
   const service = useProfessionalService(getProfessionalService(slug));
   if (!service) return <NotFoundBlock />;
@@ -288,7 +291,7 @@ function ProfessionalServiceDetailContent() {
                 <>
                   <div className="p-7 sm:p-9">
                     <p className="eyebrow flex items-center gap-1.5">
-                      <Users className="h-3.5 w-3.5" /> Who Needs This
+                      <Users className="h-3.5 w-3.5" /> {t("who.eyebrow")}
                     </p>
                     <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                       {service.whoNeedsIt}
@@ -298,7 +301,7 @@ function ProfessionalServiceDetailContent() {
                   <div className="border-t border-dashed border-border" />
 
                   <div className="p-7 sm:p-9">
-                    <p className="eyebrow">How It Works</p>
+                    <p className="eyebrow">{t("how.eyebrow")}</p>
                     <div className="mt-5 space-y-5">
                       {service.process.map((step, i) => (
                         <div key={step} className="flex gap-4">
@@ -317,7 +320,7 @@ function ProfessionalServiceDetailContent() {
 
                   <div className="p-7 sm:p-9">
                     <p className="eyebrow flex items-center gap-1.5">
-                      <FileText className="h-3.5 w-3.5" /> Documents Typically Required
+                      <FileText className="h-3.5 w-3.5" /> {t("docs.brief")}
                     </p>
                     <ul className="mt-5 space-y-2.5">
                       {service.documents.map((doc) => (
@@ -356,14 +359,14 @@ function ProfessionalServiceDetailContent() {
               showIncomeType={service.division === "CA Services"}
             />
             <div className="mt-4 text-center text-xs text-muted-foreground">
-              Prefer to talk it through? Call {CONTACT.phone} or{" "}
+              {t("side.call").replace("{phone}", CONTACT.phone)}{" "}
               <a
                 href={CONTACT.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-bold text-gold-dark hover:underline"
               >
-                WhatsApp us
+                {t("side.whatsapp")}
               </a>
               .
             </div>
@@ -375,7 +378,7 @@ function ProfessionalServiceDetailContent() {
       {similar.length > 0 && (
         <Section className="pt-0">
           <Reveal>
-            <p className="eyebrow">More in {service.category}</p>
+            <p className="eyebrow">{t("similar.eyebrow").replace("{category}", service.category)}</p>
           </Reveal>
           <div className="mt-6 border-t border-border">
             {similar.map((s, i) => (

@@ -30,6 +30,7 @@ import { useIntakeFields, withLoanAmount } from "@/lib/page-lists";
 import { CONTACT, waLink } from "@/data/site";
 import { PageCalculators } from "@/components/page-calculators";
 import { PRODUCT_CALCULATORS } from "@/data/page-calculators";
+import { useLoanPageText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/services/$slug")({
   head: ({ params }) => {
@@ -135,6 +136,7 @@ function ProductDetailContent() {
   const { slug } = Route.useParams();
   const product = useProduct(getProduct(slug));
   const intakeFields = withLoanAmount(useIntakeFields(slug, product?.checklistIntake));
+  const lt = useLoanPageText();
   const [presetCategory, setPresetCategory] = useState<string | null>(null);
   // the option picked in the paperwork dropdown (the "You Are" names)
   const [docChoice, setDocChoice] = useState<string | null>(null);
@@ -149,6 +151,11 @@ function ProductDetailContent() {
     related.length > 0 ? related : PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
   const code = CODE_OVERRIDES[product.slug] ?? productCode(product.title);
   const questionnaire = questionnaireFor(product.slug);
+  const t = (id: string) =>
+    lt(id)
+      .replaceAll("{loan}", product.title)
+      .replaceAll("{group}", product.group)
+      .replaceAll("{code}", code);
   // the applicant type whose documents the panel shows: the one picked, otherwise the first
   const activeCategory =
     product.documentCategories?.find((c) => c.label === presetCategory) ??
@@ -186,7 +193,7 @@ function ProductDetailContent() {
   const qualifyBlock = product ? (
               <div>
                 <div id="qualify" className="scroll-mt-28 p-7 sm:p-9">
-                  <TopicHeader icon={UserCheck} title="Do you qualify?" />
+                  <TopicHeader icon={UserCheck} title={t("qualify.title")} />
                   <ul
                     className={`mt-6 grid gap-x-10 gap-y-3.5 ${product.eligibility.length > 4 ? "md:grid-cols-2" : ""}`}
                   >
@@ -204,7 +211,7 @@ function ProductDetailContent() {
                   {product.documentCategories ? (
                     <div className="mt-8">
                       <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
-                        Which One Are You
+                        {t("qualify.which")}
                       </p>
                       {/* one row per applicant type: the name on the left, what it means on the right */}
                       <div className="mt-3 overflow-hidden rounded-xl border border-border">
@@ -228,7 +235,7 @@ function ProductDetailContent() {
                   ) : null}
                 </div>
                 <div className="navy-panel p-7 sm:p-9">
-                  <TopicHeader icon={FileText} title="Documents Required" dark />
+                  <TopicHeader icon={FileText} title={t("docs.title")} dark />
 
                   <div className="mt-2 grid gap-y-6">
                     <div>
@@ -401,7 +408,7 @@ function ProductDetailContent() {
                     }}
                     className="gold-btn py-3.5 text-base"
                   >
-                    Apply for {code} <ArrowRight className="h-4 w-4" />
+                    {t("top.apply")} <ArrowRight className="h-4 w-4" />
                   </a>
                   <a
                     href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
@@ -409,7 +416,7 @@ function ProductDetailContent() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-sm font-bold text-white/70 transition-colors hover:text-white"
                   >
-                    or message on WhatsApp <ArrowRight className="h-3.5 w-3.5" />
+                    {t("top.whatsapp")} <ArrowRight className="h-3.5 w-3.5" />
                   </a>
                 </div>
               </div>
@@ -417,7 +424,7 @@ function ProductDetailContent() {
               {/* At-a-glance snapshot */}
               <div className="hidden flex-col justify-center gap-5 bg-gold-pale/40 p-6 lg:flex dark:bg-gold/10">
                 <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
-                  At A Glance
+                  {t("top.glance")}
                 </p>
                 {product.glance ? (
                   <GlanceTable rows={product.glance} facts={product.facts} note={product.glanceNote} />
@@ -458,8 +465,8 @@ function ProductDetailContent() {
                     className="inline-flex items-center gap-1.5 self-start text-xs font-bold text-gold-dark transition-colors hover:text-navy dark:hover:text-white"
                   >
                     {product.eligibility.length > 5
-                      ? `See all ${product.eligibility.length} requirements`
-                      : "See what you will need"}
+                      ? t("top.seeAll").replace("{count}", String(product.eligibility.length))
+                      : t("top.seeNeeds")}
                     <ArrowRight className="h-3.5 w-3.5 rotate-90" />
                   </a>
                 )}
@@ -476,9 +483,9 @@ function ProductDetailContent() {
           <Reveal animate={false}>
             <div className="overflow-hidden rounded-2xl border border-gold/15 bg-white dark:bg-card">
               <div className="p-7 sm:p-9">
-                <p className="eyebrow">The Short Version</p>
+                <p className="eyebrow">{t("short.eyebrow")}</p>
                 <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-                  What {product.title} actually does for you.
+                  {t("short.title")}
                 </h2>
                 <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                   {product.about}
@@ -502,7 +509,7 @@ function ProductDetailContent() {
                     <>
                       <div className="border-t border-dashed border-border" />
                       <div className="p-7 sm:p-9">
-                        <p className="eyebrow">Why Clients Choose This</p>
+                        <p className="eyebrow">{t("short.clients")}</p>
                         <ul className="mt-5 space-y-2.5">
                           {product.features.map((item) => (
                             <li
@@ -554,7 +561,7 @@ function ProductDetailContent() {
               <div className="border-t border-dashed border-border" />
 
               <div className="p-7 sm:p-9">
-                <TopicHeader icon={ListChecks} title="What's included" />
+                <TopicHeader icon={ListChecks} title={t("short.included")} />
                 <ul className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
                   {product.features.map((item) => (
                     <li
@@ -644,17 +651,16 @@ function ProductDetailContent() {
       <Section className="pt-0">
         <Reveal animate={false}>
           <div className="rounded-2xl border border-blue-soft-border bg-blue-soft p-7 sm:p-9 dark:border-gold/15 dark:bg-card">
-            <p className="eyebrow">Why Growth Capital Services</p>
+            <p className="eyebrow">{t("why.eyebrow")}</p>
             <h2 className="mt-3 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              One conversation, many lenders to compare.
+              {t("why.title")}
             </h2>
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
-              {product.whyGcs ??
-                "We are a loan consultant, not the lender. We help you compare options from 75+ Banks and NBFCs, prepare your documents, and follow your application through each step."}
+              {product.whyGcs ?? t("why.body")}
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Link to="/tools" hash="eligibility" className="gold-btn py-3 text-sm">
-                Check Your Eligibility <ArrowRight className="h-4 w-4" />
+                {t("why.primary")} <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
@@ -662,13 +668,12 @@ function ProductDetailContent() {
                 rel="noopener noreferrer"
                 className="outline-btn dark:bg-card dark:text-white"
               >
-                Talk to Our Loan Expert
+                {t("why.secondary")}
               </a>
             </div>
             <p className="mt-6 border-t border-dashed border-border pt-4 text-xs leading-relaxed text-muted-foreground">
-              <span className="font-bold text-navy dark:text-white">Important note: </span>
-              {product.importantNote ??
-                "Interest rate, loan amount, tenure, charges, eligibility, approval and disbursement depend on the policy of the respective Bank or NBFC, your profile, credit assessment and the applicable terms. Growth Capital Services is a loan consultant and does not lend money itself. The details on this page are for general information."}
+              <span className="font-bold text-navy dark:text-white">{t("why.noteLabel")} </span>
+              {product.importantNote ?? t("why.note")}
             </p>
           </div>
         </Reveal>
@@ -678,9 +683,9 @@ function ProductDetailContent() {
       {(PRODUCT_CALCULATORS[product.slug] ?? []).length > 0 && (
         <PageCalculators
           ids={PRODUCT_CALCULATORS[product.slug] ?? []}
-          eyebrow="Run the numbers"
-          title={`Calculators for your ${product.title}`}
-          description="Try your own figures before you apply — nothing is saved or sent."
+          eyebrow={t("calc.eyebrow")}
+          title={t("calc.title")}
+          description={t("calc.body")}
         />
       )}
 
@@ -692,8 +697,8 @@ function ProductDetailContent() {
             <Section className="pt-0">
               <Reveal animate={false}>
                 <SectionHeading
-                  eyebrow="Our Process"
-                  title="From first conversation to disbursal."
+                  eyebrow={t("process.eyebrow")}
+                  title={t("process.title")}
                   align="center"
                 />
               </Reveal>
@@ -726,8 +731,8 @@ function ProductDetailContent() {
           <Section className="pt-0">
             <Reveal animate={false}>
               <SectionHeading
-                eyebrow="Step-by-step guide"
-                title={`${product.title} process, step by step.`}
+                eyebrow={t("guide.eyebrow")}
+                title={t("guide.title")}
                 description={guide.intro}
                 align="center"
               />
@@ -747,9 +752,7 @@ function ProductDetailContent() {
               ))}
             </ol>
             <ExpertNote className="mt-8">
-              With GCS, your expert looks at your profile, matches it with suitable lenders, and
-              coordinates with the banks for you. That means less confusion and more confidence when
-              you apply.
+              {t("guide.note")}
             </ExpertNote>
           </Section>
         );
@@ -759,9 +762,9 @@ function ProductDetailContent() {
       <Section className="pt-0">
         <Reveal animate={false}>
           <SectionHeading
-            eyebrow="Worth Comparing"
-            title={`The rest of ${product.group}`}
-            description={`So you can weigh ${product.title} against everything else we arrange in this category before deciding.`}
+            eyebrow={t("related.eyebrow")}
+            title={t("related.title")}
+            description={t("related.body")}
           />
         </Reveal>
         <div className="mt-8 border-t border-border">
@@ -789,7 +792,7 @@ function ProductDetailContent() {
             to="/services"
             className="inline-flex items-center gap-2 text-sm font-bold text-navy hover:text-gold-dark dark:text-white"
           >
-            View all services <ArrowRight className="h-4 w-4" />
+            {t("related.all")} <ArrowRight className="h-4 w-4" />
           </Link>
         </Reveal>
       </Section>
@@ -800,14 +803,14 @@ function ProductDetailContent() {
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
             <h3 className="relative text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              Still deciding on {product.title}? <span className="gold-text">Ask us directly.</span>
+              {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
-              Call {CONTACT.phone} · {CONTACT.hours}
+              {t("cta.call").replace("{phone}", CONTACT.phone).replace("{hours}", CONTACT.hours)}
             </p>
             <div className="relative mt-6 flex flex-wrap justify-center gap-3">
               <Link to="/contact" className="gold-btn py-3.5 text-base">
-                Request a Call Back <ArrowRight className="h-4 w-4" />
+                {t("cta.primary")} <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href={waLink(`Hi, I'd like to know more about ${product.title}.`)}
@@ -815,7 +818,7 @@ function ProductDetailContent() {
                 rel="noopener noreferrer"
                 className="outline-btn dark:bg-card dark:text-white"
               >
-                WhatsApp Us
+                {t("cta.secondary")}
               </a>
             </div>
           </div>

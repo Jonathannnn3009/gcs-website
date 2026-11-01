@@ -8,6 +8,7 @@ import { CASE_STUDIES, getCaseStudy, type CaseStudy } from "@/data/case-studies"
 import { useCaseStudies } from "@/lib/site-content";
 import { getProduct } from "@/data/products";
 import { waLink } from "@/data/site";
+import { useCasePageText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/case-studies/$slug")({
   head: ({ params }) => {
@@ -59,6 +60,7 @@ const STAGES = [
 
 /** Click-through stepper replacing a plain read-down list — same three facts, revealed on demand. */
 function NarrativeStepper({ study }: { study: CaseStudy }) {
+  const t = useCasePageText();
   const [active, setActive] = useState(0);
   const stage = STAGES[active] ?? STAGES[0]!;
 
@@ -79,7 +81,7 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
               }`}
             >
               <s.icon className={`h-4 w-4 ${isActive ? "text-gold-light" : "text-gold-dark"}`} />
-              <span className="hidden sm:inline">{s.label}</span>
+              <span className="hidden sm:inline">{t(`stage.${s.key}.label`)}</span>
               <span className="sm:hidden">{i + 1}</span>
             </button>
           );
@@ -91,9 +93,9 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
         className="rise-in mt-6 rounded-2xl border border-gold/15 bg-white p-7 shadow-[var(--shadow-card)] sm:p-8 dark:bg-card"
       >
         <p className="text-[10px] font-bold tracking-[0.2em] text-gold-dark uppercase">
-          {stage.eyebrow}
+          {t(`stage.${stage.key}.eyebrow`)}
         </p>
-        <h2 className="mt-1 text-xl font-extrabold text-navy dark:text-white">{stage.label}</h2>
+        <h2 className="mt-1 text-xl font-extrabold text-navy dark:text-white">{t(`stage.${stage.key}.label`)}</h2>
         <p className="mt-3 text-base leading-relaxed text-muted-foreground">{study[stage.key]}</p>
 
         <div className="mt-6 flex items-center justify-between border-t border-border pt-5">
@@ -103,7 +105,7 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
             onClick={() => setActive((v) => Math.max(0, v - 1))}
             className="text-xs font-bold text-navy transition-colors disabled:pointer-events-none disabled:opacity-30 dark:text-white"
           >
-            ← Back
+            {t("stepper.back")}
           </button>
           <div className="flex gap-1.5">
             {STAGES.map((s, i) => (
@@ -121,7 +123,7 @@ function NarrativeStepper({ study }: { study: CaseStudy }) {
             onClick={() => setActive((v) => Math.min(STAGES.length - 1, v + 1))}
             className="text-xs font-bold text-navy transition-colors disabled:pointer-events-none disabled:opacity-30 dark:text-white"
           >
-            Next →
+            {t("stepper.next")}
           </button>
         </div>
       </div>
@@ -136,6 +138,7 @@ function CaseStudyDetailPage() {
 }
 
 function CaseStudyDetailContent() {
+  const t = useCasePageText();
   const { slug } = Route.useParams();
   const allStudies = useCaseStudies(CASE_STUDIES);
   const study = allStudies.find((c) => c.slug === slug);
@@ -187,7 +190,7 @@ function CaseStudyDetailContent() {
                 {/* Amount as a standalone receipt-style chip instead of an inline stat row */}
                 <div className="shrink-0 rounded-2xl border border-gold/25 bg-white/5 px-6 py-4 text-center backdrop-blur-sm">
                   <p className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase">
-                    Sanctioned
+                    {t("top.sanctioned")}
                   </p>
                   <p className="mt-1 font-heading text-2xl font-bold text-gold-light">
                     {study.amountLabel}
@@ -209,7 +212,7 @@ function CaseStudyDetailContent() {
           <div className="space-y-8">
             <Reveal>
               <p className="eyebrow flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5" /> Client Profile
+                <MapPin className="h-3.5 w-3.5" /> {t("top.profile")}
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                 {study.clientProfile}
@@ -225,14 +228,13 @@ function CaseStudyDetailContent() {
           <Reveal delay={100} className="lg:sticky lg:top-[73px]">
             <div className="rounded-2xl border border-gold/15 panel-light p-7">
               <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-                Have a Similar Profile?
+                {t("card.eyebrow")}
               </p>
               <h3 className="mt-3 font-heading text-2xl font-bold text-navy dark:text-white">
                 Explore <span className="italic text-gold-dark">{study.productLabel}.</span>
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                A senior expert will review your situation and tell you which lenders in our
-                network are the best fit — free of cost.
+                {t("card.body")}
               </p>
               <div className="mt-6 flex flex-col gap-3">
                 {product && (
@@ -241,7 +243,7 @@ function CaseStudyDetailContent() {
                     params={{ slug: product.slug }}
                     className="gold-btn justify-center py-3.5 text-sm"
                   >
-                    {product.title} Details <ArrowRight className="h-4 w-4" />
+                    {t("card.details").replace("{title}", product.title)} <ArrowRight className="h-4 w-4" />
                   </Link>
                 )}
                 <Link
@@ -249,7 +251,7 @@ function CaseStudyDetailContent() {
                   hash="eligibility"
                   className="inline-flex items-center justify-center gap-2 rounded-md border border-navy/20 px-6 py-3.5 text-sm font-bold text-navy transition-all hover:-translate-y-0.5 dark:text-white"
                 >
-                  <Calculator className="h-4 w-4" /> Check Your Eligibility
+                  <Calculator className="h-4 w-4" /> {t("card.eligibility")}
                 </Link>
                 <a
                   href={waLink(
@@ -262,7 +264,7 @@ function CaseStudyDetailContent() {
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                     <path d="M12.04 2A10 10 0 0 0 2 12.04a9.94 9.94 0 0 0 1.34 4.99L2 22l5.13-1.34A9.95 9.95 0 0 0 12.04 22 10 10 0 0 0 22 12.04 10 10 0 0 0 12.04 2zm5.82 14.12c-.24.67-1.42 1.24-1.96 1.32-.5.07-1.14.1-1.84-.12a16.84 16.84 0 0 1-1.67-.62c-2.93-1.27-4.84-4.23-4.99-4.43-.15-.2-1.2-1.6-1.2-3.06 0-1.45.76-2.17 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.02.9 2.17.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.13.99 2.09 1.3 2.39 1.44.3.15.47.13.64-.07.17-.21.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z" />
                   </svg>
-                  Chat on WhatsApp
+                  {t("card.whatsapp")}
                 </a>
               </div>
             </div>
@@ -275,7 +277,7 @@ function CaseStudyDetailContent() {
         <Section className="pt-0">
           <Reveal>
             <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-              Similar Case Studies
+              {t("similar.title")}
             </p>
           </Reveal>
           <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -298,7 +300,7 @@ function CaseStudyDetailContent() {
                     </p>
                   </div>
                   <span className="mt-auto inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark dark:text-white">
-                    Read the case
+                    {t("similar.read")}
                     <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
                   </span>
                 </Link>

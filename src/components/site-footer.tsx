@@ -8,8 +8,10 @@ import { useCities, useList } from "@/lib/page-lists";
 import { useCustomPages } from "@/lib/site-content";
 import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import { SiteLink } from "@/components/site-link";
+import { useSiteText } from "@/lib/site-content";
 
 export function SiteFooter() {
+  const t = useSiteText();
   const exploreLinks = useList("footer.explore", FOOTER_EXPLORE);
   const productLinks = useList("footer.products", FOOTER_PRODUCTS);
   const cities = useCities();
@@ -32,10 +34,7 @@ export function SiteFooter() {
               height={595}
               className="h-28 w-auto rounded-xl bg-white object-contain p-3"
             />
-            <p className="mt-4 text-sm leading-relaxed text-white/70">
-              Established in 2017. Tailored loan solutions from leading Banks and NBFCs across
-              Mumbai, Thane, Navi Mumbai and Pune. Your Growth, Our Financial Expertise.
-            </p>
+            <p className="mt-4 text-sm leading-relaxed text-white/70">{t("footer.blurb")}</p>
             <div className="mt-5 flex gap-3">
               <a
                 href={CONTACT.whatsappLink}
@@ -89,7 +88,7 @@ export function SiteFooter() {
 
           {/* Explore */}
           <div>
-            <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">Explore</h3>
+            <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">{t("footer.explore")}</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               {exploreLinks.map((l) => (
                 <li key={String(l["to"])}>
@@ -107,7 +106,7 @@ export function SiteFooter() {
           {/* Loan Products */}
           <div>
             <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">
-              Loan Products
+              {t("footer.products")}
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               {productLinks
@@ -130,7 +129,7 @@ export function SiteFooter() {
 
           {/* Reach Us */}
           <div>
-            <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">Reach Us</h3>
+            <h3 className="text-xs font-bold tracking-[0.18em] text-gold uppercase">{t("footer.reach")}</h3>
             <ul className="mt-4 space-y-4 text-sm">
               <li className="flex gap-3">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
@@ -178,7 +177,7 @@ export function SiteFooter() {
 
             {/* CTA */}
             <Link to="/contact" className="gold-btn mt-6 inline-flex">
-              Request a Callback
+              {t("footer.callback")}
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -189,7 +188,7 @@ export function SiteFooter() {
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-white/70 sm:flex-row sm:px-6 lg:px-8">
             <span className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
               <span>
-                © {new Date().getFullYear()} Growth Capital Services. All rights reserved.
+                {t("footer.copyright").replace("{year}", String(new Date().getFullYear()))}
               </span>
               {legalPages.map((p) => (
                 <Link
