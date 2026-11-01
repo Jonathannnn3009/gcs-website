@@ -1,3 +1,5 @@
+import { useList } from "@/lib/page-lists";
+import { FREELANCER_WHO, FREELANCER_STEPS, FREELANCER_PERKS, FREELANCER_ASSISTANT } from "@/data/page-lists";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -45,38 +47,6 @@ export const Route = createFileRoute("/partner/freelancer")({
   component: FreelancerPage,
 });
 
-const WHO: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: Home,
-    title: "Homemakers",
-    body: "Earn from home, around your own schedule, using people you already know.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Students & fresh graduates",
-    body: "A first source of income and a real look at how finance works.",
-  },
-  {
-    icon: Landmark,
-    title: "Retired bankers & professionals",
-    body: "Put your reputation and years of contacts to work again, without the 9-to-5.",
-  },
-  {
-    icon: Smartphone,
-    title: "Salaried, with time to spare",
-    body: "Keep your job and add a second income from evenings and weekends.",
-  },
-  {
-    icon: Store,
-    title: "Shop & small-business owners",
-    body: "Customers and neighbours ask about loans all the time. Now you can help them.",
-  },
-  {
-    icon: Heart,
-    title: "Community connectors",
-    body: "Society members, tutors, tailors, agents of all kinds: anyone people trust and talk to.",
-  },
-];
 
 const YOU_WE: { you: string[]; we: string[] } = {
   you: [
@@ -92,74 +62,8 @@ const YOU_WE: { you: string[]; we: string[] } = {
   ],
 };
 
-const STEPS: { title: string; body: string }[] = [
-  {
-    title: "Sign up",
-    body: "Fill in the short form. It takes about two minutes and costs nothing.",
-  },
-  {
-    title: "Quick orientation",
-    body: "A team member walks you through the loans we offer and exactly what to share.",
-  },
-  { title: "Refer", body: "Send us a name, number and requirement whenever someone needs a loan." },
-  { title: "Get paid", body: "Your payout is settled once the loan is disbursed." },
-];
 
-const PERKS: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: Wallet,
-    title: "Nothing to invest",
-    body: "No joining fee, no deposit, no stock. Referring is free.",
-  },
-  {
-    icon: Clock,
-    title: "Your hours, no targets",
-    body: "Refer one person a month or ten. There is no minimum and no lock-in.",
-  },
-  {
-    icon: Check,
-    title: "No licence needed",
-    body: "Our experts handle the lending side, so you only make the introduction.",
-  },
-  {
-    icon: UserRound,
-    title: "A person to call",
-    body: "A dedicated contact answers your questions and updates you on each case.",
-  },
-  {
-    icon: Landmark,
-    title: "75+ lenders behind you",
-    body: "The people you refer get more chances of approval than at a single bank.",
-  },
-  {
-    icon: Rocket,
-    title: "Room to grow",
-    body: "Referring regularly? You can step up to our Agent partnership with a fuller set-up.",
-  },
-];
 
-const ASSISTANT_POINTS: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: Calculator,
-    title: "Quick numbers for anyone you help",
-    body: "Work out a person's likely EMI or loan amount on the spot, so you can answer them with confidence.",
-  },
-  {
-    icon: FileText,
-    title: "What to ask for",
-    body: "See which documents and details a person needs before you pass their requirement to us.",
-  },
-  {
-    icon: UserRound,
-    title: "No finance background needed",
-    body: "Ask in plain words. It explains loan terms simply, so you never have to pretend to know.",
-  },
-  {
-    icon: MessageCircle,
-    title: "Hand over to our team",
-    body: "When the person is ready, the assistant passes their details to an expert and we take it from there.",
-  },
-];
 
 const FAQS = [
   {
@@ -189,6 +93,10 @@ const FAQS = [
 ];
 
 function FreelancerPage() {
+  const ASSISTANT_POINTS = useList("freelancer.assistant", FREELANCER_ASSISTANT);
+  const PERKS = useList("freelancer.perks", FREELANCER_PERKS);
+  const STEPS = useList("freelancer.steps", FREELANCER_STEPS);
+  const WHO = useList("freelancer.who", FREELANCER_WHO);
   const t = useFreelancerText();
   return (
     <>

@@ -1,3 +1,5 @@
+import { useList } from "@/lib/page-lists";
+import { BUILDER_WHAT_WE_DO, BUILDER_POINTS, BUILDER_STEPS, BUILDER_WHY, BUILDER_MODELS, BUILDER_ASSISTANT } from "@/data/page-lists";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -41,118 +43,11 @@ export const Route = createFileRoute("/partner/builder")({
   component: BuilderPage,
 });
 
-const WHAT_WE_DO: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: ClipboardCheck,
-    title: "Project approvals with lenders",
-    body: "We take your project through lender approval so buyers can be financed without delay.",
-  },
-  {
-    icon: Landmark,
-    title: "One desk, many lenders",
-    body: "Each buyer is matched to the bank or NBFC that suits their profile, instead of a single option.",
-  },
-  {
-    icon: LayoutDashboard,
-    title: "Tracked file by file",
-    body: "Every buyer's loan is tracked in our in-house CRM, with status your sales team can ask for any time.",
-  },
-  {
-    icon: Users,
-    title: "Help on the ground",
-    body: "Document collection and follow-ups handled by our team, so your sales staff can keep selling.",
-  },
-];
 
-const FOR_BUILDERS = [
-  "One point of contact for every lender, with no juggling of banks and agents",
-  "A clear status on each buyer's loan, from login to sanction to disbursal",
-  "A finance executive at your sales office when a launch needs one",
-  "Lender approvals for your project managed across banks in one place",
-];
 
-const STEPS: { title: string; body: string }[] = [
-  {
-    title: "Share your project",
-    body: "Tell us about the project, its stage, the units on offer and how you sell.",
-  },
-  {
-    title: "We line up the lenders",
-    body: "We approach suitable banks and NBFCs for project approval and buyer financing.",
-  },
-  {
-    title: "Buyers get their loans",
-    body: "Your buyers are guided from eligibility to sanction by one named expert.",
-  },
-  {
-    title: "Disbursals follow your milestones",
-    body: "We track each file so releases line up with your construction and collection schedule.",
-  },
-];
 
-const WHY: { title: string; body: string }[] = [
-  {
-    title: "Support from project approval to disbursal",
-    body: "The paperwork around lender approval and the buyers' loans sits with one team, so nothing falls between desks.",
-  },
-  {
-    title: "An independent view across lenders",
-    body: "We are not tied to a single bank, so each buyer is steered to the lender most likely to say yes on good terms.",
-  },
-  {
-    title: "Your sales team stays on sales",
-    body: "Eligibility questions, document lists and bank follow-ups come to us, not to your booking desk.",
-  },
-  {
-    title: "Works with how you already sell",
-    body: "We coordinate with your sales team, your CRM contacts and your channel partners rather than asking you to change anything.",
-  },
-  {
-    title: "Zero advisory fee to your buyers",
-    body: "Buyers are not charged for our advice, which helps conversions and keeps goodwill high.",
-  },
-];
 
-const MODELS: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: Handshake,
-    title: "Direct",
-    body: "We deal with your buyers directly once they book, and keep your team informed.",
-  },
-  {
-    icon: Network,
-    title: "Channel-partner led",
-    body: "Your channel partners bring the buyer; we run the loan and keep everyone updated.",
-  },
-  {
-    icon: Building2,
-    title: "Hybrid",
-    body: "A mix of both, set up project by project to fit how each launch is sold.",
-  },
-];
 
-const ASSISTANT_POINTS: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: Clock,
-    title: "Answers at any hour",
-    body: "Buyers get replies on loans, documents and rates when they are browsing, not only in office hours.",
-  },
-  {
-    icon: Calculator,
-    title: "Instant eligibility and EMI",
-    body: "A buyer can see a likely loan amount and monthly EMI in a minute, before they visit your site office.",
-  },
-  {
-    icon: MessageCircle,
-    title: "A straight line to an expert",
-    body: "When a buyer wants a call, the request reaches our team with a short summary of the chat.",
-  },
-  {
-    icon: LayoutDashboard,
-    title: "Tracked in our CRM",
-    body: "Each enquiry becomes a file in our CRM, so the follow-up is never lost between your sales desk and ours.",
-  },
-];
 
 const FAQS = [
   {
@@ -178,6 +73,12 @@ const FAQS = [
 ];
 
 function BuilderPage() {
+  const ASSISTANT_POINTS = useList("builder.assistant", BUILDER_ASSISTANT);
+  const MODELS = useList("builder.models", BUILDER_MODELS);
+  const WHY = useList("builder.why", BUILDER_WHY);
+  const STEPS = useList("builder.steps", BUILDER_STEPS);
+  const FOR_BUILDERS = useList("builder.points", BUILDER_POINTS).map((r) => r.text);
+  const WHAT_WE_DO = useList("builder.whatwedo", BUILDER_WHAT_WE_DO);
   const t = useBuilderText();
   return (
     <>

@@ -52,6 +52,10 @@ import {
   PARTNER_SEGMENTS,
   PARTNER_STATS,
   PARTNER_STEPS,
+  PARTNER_WHAT_WE_DO,
+  PARTNER_WHY_CHOOSE,
+  PARTNER_ASSISTANT,
+  PARTNER_GET_STARTED,
 } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
 import { usePartnerText } from "@/lib/site-content";
@@ -76,84 +80,9 @@ export const Route = createFileRoute("/partner/")({
   component: PartnerPage,
 });
 
-const WHAT_WE_DO: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: Layers,
-    title: "75+ lenders, one desk",
-    body: "Offer your clients the right bank or NBFC for their profile, without sending them from branch to branch.",
-  },
-  {
-    icon: Wallet,
-    title: "Clear, written payouts",
-    body: "Commission by loan type is shown up front, and your share is settled once the loan disburses.",
-  },
-  {
-    icon: UserCheck,
-    title: "One contact who handles the file",
-    body: "A named expert looks after login, documents and bank follow-ups, and keeps you informed.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Guidance as you start",
-    body: "A short walk-through of our loan products and what to share, and answers whenever you need them.",
-  },
-];
 
-const WHY_CHOOSE: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: Languages,
-    title: "In your clients' language",
-    body: "Our website reads in English, Hindi and Marathi, and we speak to clients in the language they are comfortable with.",
-  },
-  {
-    icon: Briefcase,
-    title: "Salaried and self-employed",
-    body: "Whether your clients draw a salary or run a business, we have loan options and lenders for both.",
-  },
-  {
-    icon: MapPin,
-    title: "Rooted in Mumbai, Thane & Pune",
-    body: "Experts who know the local banks, builders and projects, so your clients are not treated as a number.",
-  },
-];
 
-const ASSISTANT_POINTS: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: ListChecks,
-    title: "Check eligibility",
-    body: "A client's likely loan amount from their income and obligations, in a minute.",
-  },
-  {
-    icon: Calculator,
-    title: "Work out the EMI",
-    body: "EMI, total interest and the effect of a part-payment, worked out instantly.",
-  },
-  {
-    icon: FileText,
-    title: "Documents and rates",
-    body: "The documents each profile needs, and indicative rates and charges.",
-  },
-  {
-    icon: MessageCircle,
-    title: "Hand-off to an expert",
-    body: "If a client wants a call, the request lands straight in our CRM with a short summary.",
-  },
-];
 
-const GET_STARTED = [
-  {
-    title: "Register with us",
-    body: "Fill the short form on this page. A member of our team calls you to set up your partnership.",
-  },
-  {
-    title: "Refer a case",
-    body: "Send your client's name, number and requirement. Our expert checks eligibility and matches the case with suitable lenders from 75+.",
-  },
-  {
-    title: "Sit back and get paid",
-    body: "We run the loan process while you carry on with your work. Your payout follows each disbursal.",
-  },
-];
 
 const fieldClass =
   "mt-1.5 w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-300 placeholder:text-muted-foreground/70 focus:border-gold focus:ring-2 focus:ring-gold/20 dark:bg-card dark:text-white";
@@ -452,6 +381,10 @@ function Accordion({ items }: { items: { q: string; a: string }[] }) {
 }
 
 function PartnerPage() {
+  const GET_STARTED = useList("partner.getstarted", PARTNER_GET_STARTED);
+  const ASSISTANT_POINTS = useList("partner.assistant", PARTNER_ASSISTANT);
+  const WHY_CHOOSE = useList("partner.whychoose", PARTNER_WHY_CHOOSE);
+  const WHAT_WE_DO = useList("partner.whatwedo", PARTNER_WHAT_WE_DO);
   const MORE_REASONS = useList("partner.reasons", PARTNER_REASONS);
   const BENEFITS = useList("partner.benefits", PARTNER_BENEFITS);
   const SEGMENTS = useList("partner.segments", PARTNER_SEGMENTS);

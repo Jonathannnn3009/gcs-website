@@ -1,3 +1,5 @@
+import { useList } from "@/lib/page-lists";
+import { ADVISORY_WHY_CREDIT, ADVISORY_INDIVIDUALS, ADVISORY_INDIVIDUAL_BENEFITS, ADVISORY_BUSINESSES, ADVISORY_BUSINESS_BENEFITS, ADVISORY_AUDIENCE, ADVISORY_STEPS } from "@/data/page-lists";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -48,86 +50,10 @@ export const Route = createFileRoute("/cibil-advisory")({
 
 type Item = { icon: LucideIcon; title: string; text: string };
 
-const WHY_CREDIT = [
-  "May improve your chances of loan approval",
-  "May help you get a lower interest rate",
-  "May open the way to higher credit limits",
-  "Gives you access to more financial products",
-  "Builds a stronger financial profile",
-];
 
-const FOR_INDIVIDUALS: Item[] = [
-  {
-    icon: Gauge,
-    title: "Credit Score Guidance & Monitoring",
-    text: "A step-by-step plan to work on your score, with regular check-ins on how it is moving.",
-  },
-  {
-    icon: FileSearch,
-    title: "Credit Report Review & Error Spotting",
-    text: "We go through your report, spot mistakes and guide you on getting them corrected with the bureau.",
-  },
-  {
-    icon: Handshake,
-    title: "Loan Assistance & Financial Advisory",
-    text: "Help choosing the right loan or card for your profile, with options compared from 75+ Banks and NBFCs.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Credit Education & Guidance",
-    text: "Plain-language advice on dues, closed accounts and credit use, so you stay credit healthy.",
-  },
-];
-const INDIVIDUAL_BENEFITS = [
-  "See your credit score clearly",
-  "Know why a loan was turned down",
-  "Get expert guidance on fixing issues",
-  "Be ready to apply, sooner",
-];
 
-const FOR_BUSINESSES: Item[] = [
-  {
-    icon: Building2,
-    title: "Commercial Credit Report (CMR) Review",
-    text: "We explain your Commercial Credit Report and your CIBIL MSME Rank (CMR) in simple words.",
-  },
-  {
-    icon: Briefcase,
-    title: "Business Credit Advisory",
-    text: "Guidance on building your business credit, and what lenders look at before they lend.",
-  },
-  {
-    icon: LineChart,
-    title: "Credit Rating Guidance",
-    text: "A focused plan to work on your CMR (1 is the lowest risk, 10 the highest).",
-  },
-  {
-    icon: ClipboardCheck,
-    title: "Loan Assistance for Business / MSME",
-    text: "Get funding-ready and approach the right lenders for your business needs.",
-  },
-];
-const BUSINESS_BENEFITS = [
-  "Get ready for MSME loans",
-  "Understand your business rating",
-  "Be better placed for lender terms",
-  "Plan your business growth",
-];
 
-const AUDIENCE: Item[] = [
-  { icon: UserCheck, title: "Salaried people", text: "Planning a home, car or personal loan and want to know where they stand." },
-  { icon: Briefcase, title: "Business owners", text: "Self-employed and professionals who need credit for their work." },
-  { icon: Building2, title: "MSMEs", text: "Small and medium businesses who want to understand their business credit report." },
-  { icon: ShieldCheck, title: "Anyone turned down", text: "People whose loan was declined and who want to know why, and what to do next." },
-];
 
-const STEPS: Item[] = [
-  { icon: FileSearch, title: "Fetch your credit report", text: "We help you get your official report from the credit bureau, with your consent." },
-  { icon: SearchCheck, title: "Analyse and spot issues", text: "Our team reads your report and marks errors or negative items." },
-  { icon: ListChecks, title: "Prepare an action plan", text: "You get a clear plan, with the most important steps first." },
-  { icon: Handshake, title: "Resolve and follow up", text: "We guide you on raising disputes with the bureau or lender, and on following them up." },
-  { icon: TrendingUp, title: "Track your progress", text: "Keep an eye on your report as you work towards your target score." },
-];
 
 function ServiceCards({ items }: { items: Item[] }) {
   return (
@@ -163,6 +89,13 @@ function BenefitStrip({ items, icon: Icon }: { items: string[]; icon: LucideIcon
 }
 
 function CibilAdvisoryPage() {
+  const STEPS = useList("advisory.steps", ADVISORY_STEPS);
+  const AUDIENCE = useList("advisory.audience", ADVISORY_AUDIENCE);
+  const BUSINESS_BENEFITS = useList("advisory.businessbenefits", ADVISORY_BUSINESS_BENEFITS).map((r) => r.text);
+  const FOR_BUSINESSES = useList("advisory.businesses", ADVISORY_BUSINESSES);
+  const INDIVIDUAL_BENEFITS = useList("advisory.individualbenefits", ADVISORY_INDIVIDUAL_BENEFITS).map((r) => r.text);
+  const FOR_INDIVIDUALS = useList("advisory.individuals", ADVISORY_INDIVIDUALS);
+  const WHY_CREDIT = useList("advisory.whycredit", ADVISORY_WHY_CREDIT).map((r) => r.text);
   const t = useAdvisoryText();
   return (
     <>
