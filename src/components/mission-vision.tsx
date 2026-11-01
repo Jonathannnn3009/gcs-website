@@ -2,10 +2,20 @@ import { Eye, Target } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 
 /** Matching Mission & Vision cards, shared by the Home, About and Why Us pages. */
-export function MissionVision({ mission, vision }: { mission: string; vision: string }) {
+export function MissionVision({
+  mission,
+  vision,
+  missionTitle = "Our Mission",
+  visionTitle = "Our Vision",
+}: {
+  mission: string;
+  vision: string;
+  missionTitle?: string;
+  visionTitle?: string;
+}) {
   const items = [
-    { icon: Target, title: "Our Mission", body: mission },
-    { icon: Eye, title: "Our Vision", body: vision },
+    { icon: Target, title: missionTitle, body: mission },
+    { icon: Eye, title: visionTitle, body: vision },
   ];
 
   return (

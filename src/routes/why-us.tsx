@@ -13,6 +13,7 @@ import { MissionVision } from "@/components/mission-vision";
 import { PAIN_POINTS, CONTACT } from "@/data/site";
 import { WHYUS_ADVANTAGES, WHYUS_PILLARS } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
+import { useWhyUsText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/why-us")({
   head: () => ({
@@ -39,6 +40,7 @@ function WhyUsPage() {
   const CONCERNS = useList("home.concerns", PAIN_POINTS);
   const ADVANTAGES = useList("whyus.advantages", WHYUS_ADVANTAGES);
   const PILLARS = useList("whyus.pillars", WHYUS_PILLARS);
+  const t = useWhyUsText();
   return (
     <>
       {/* Hero */}
@@ -46,14 +48,12 @@ function WhyUsPage() {
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <p className="eyebrow">Why Choose Us</p>
+            <p className="eyebrow">{t("hero.eyebrow")}</p>
             <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              Experience Financial Freedom <span className="gold-text">With Us</span>
+              {t("hero.title")} <span className="gold-text">{t("hero.gold")}</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Unlike banks, we prioritize your needs and secure better deals by leveraging our
-              vast network with Banks and NBFCs. Trusted by our customers, we aim to become the
-              largest firm in India, serving Mumbai, Thane, Navi Mumbai and Pune.
+              {t("hero.body")}
             </p>
           </Reveal>
         </div>
@@ -63,9 +63,9 @@ function WhyUsPage() {
       <Section>
         <Reveal>
           <SectionHeading
-            eyebrow="Our Strengths"
-            title="Built on trust, transparency and speed"
-            description="Growth Capital Services began by spotting the gaps borrowers face. Unlike banks, we work for you — leveraging a wide lender network to secure better terms."
+            eyebrow={t("strengths.eyebrow")}
+            title={t("strengths.title")}
+            description={t("strengths.body")}
           />
         </Reveal>
 
@@ -91,13 +91,12 @@ function WhyUsPage() {
           <div className="glass-card overflow-hidden">
             <div className="grid lg:grid-cols-2">
               <div className="panel-light p-8 sm:p-10">
-                <p className="eyebrow">The Difference</p>
+                <p className="eyebrow">{t("difference.eyebrow")}</p>
                 <h3 className="mt-3 text-2xl font-extrabold">
-                  Why Growth Capital <span className="text-gold">over going direct?</span>
+                  {t("difference.title")} <span className="text-gold">{t("difference.gold")}</span>
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Our dedicated team continually enhances the speed and accuracy of our services,
-                  exploring innovative and attractive new loan schemes to better serve you.
+                  {t("difference.body")}
                 </p>
               </div>
               <div className="flex items-center p-8 sm:p-10">
@@ -119,9 +118,9 @@ function WhyUsPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Common Concerns"
-            title="The questions we answer before you sign"
-            description="These are the concerns we heard again and again. Each one is handled upfront on every file."
+            eyebrow={t("concerns.eyebrow")}
+            title={t("concerns.title")}
+            description={t("concerns.body")}
           />
         </Reveal>
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
@@ -139,8 +138,10 @@ function WhyUsPage() {
       {/* Mission & Vision */}
       <Section className="pt-0">
         <MissionVision
-          mission="To foster lasting relationships with each client and deliver excellent service for years to come. Unlike many large national mortgage firms, we prioritise the security and privacy of your information, ensuring a trustworthy partnership."
-          vision="A future where everyone's dreams can come true without obstacles. We aim to introduce innovative ideas, foster trust, and reshape the landscape of financial solutions in India."
+          mission={t("mission.body")}
+          vision={t("vision.body")}
+          missionTitle={t("mission.title")}
+          visionTitle={t("vision.title")}
         />
       </Section>
 
@@ -150,13 +151,13 @@ function WhyUsPage() {
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 sm:p-12 text-center">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
             <h3 className="relative text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              Ready to experience the <span className="gold-text">difference?</span>
+              {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
-              Call {CONTACT.phone} · {CONTACT.hours}
+              {t("cta.call").replace("{phone}", CONTACT.phone).replace("{hours}", CONTACT.hours)}
             </p>
             <Link to="/contact" className="gold-btn relative mt-6 py-3.5 text-base">
-              Talk to an Expert <ArrowRight className="h-4 w-4" />
+              {t("cta.button")} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </Reveal>

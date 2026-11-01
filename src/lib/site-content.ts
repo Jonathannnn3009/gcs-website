@@ -20,6 +20,7 @@ import { ABOUT_TEXT } from "@/data/about-text";
 import { CONTACT_TEXT } from "@/data/contact-text";
 import { SERVICES_TEXT } from "@/data/services-text";
 import { CIBIL_TEXT } from "@/data/cibil-text";
+import { WHYUS_TEXT } from "@/data/whyus-text";
 
 type SiteContent = {
   faqs?: Record<string, Faq[]>;
@@ -43,6 +44,8 @@ type SiteContent = {
   servicesText?: Record<string, string>;
   /** CIBIL page headings and notes, by field id (see data/cibil-text.ts). */
   cibilText?: Record<string, string>;
+  /** Why Us page headings, paragraphs and buttons, by field id (see data/whyus-text.ts). */
+  whyusText?: Record<string, string>;
   customPages?: CustomPage[];
   /** Repeated blocks on the pages, keyed by list name (see data/page-lists.ts). */
   lists?: Record<string, Record<string, string>[]>;
@@ -174,6 +177,15 @@ export function useCibilText(): (id: string) => string {
   return (id) => {
     const text = edits?.[id];
     return typeof text === "string" && text.trim() ? text : (CIBIL_TEXT[id] ?? "");
+  };
+}
+
+/** Why Us page wording: the CRM's text for a field when staff set one, else the built-in text. */
+export function useWhyUsText(): (id: string) => string {
+  const edits = useSiteContent().whyusText;
+  return (id) => {
+    const text = edits?.[id];
+    return typeof text === "string" && text.trim() ? text : (WHYUS_TEXT[id] ?? "");
   };
 }
 
