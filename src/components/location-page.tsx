@@ -5,7 +5,7 @@ import { PageCalculators } from "@/components/page-calculators";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { PRODUCT_GROUPS, PRODUCTS } from "@/data/products";
-import { useFaqs } from "@/lib/site-content";
+import { useCityText, useFaqs } from "@/lib/site-content";
 import { CONTACT } from "@/data/site";
 import type { LocationContent } from "@/data/locations";
 import { useCities, useCityPage, useProductGroups } from "@/lib/page-lists";
@@ -40,6 +40,7 @@ function FaqAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
 
 export function LocationPage({ location: builtInLocation }: { location: LocationContent }) {
   const location = useCityPage(builtInLocation);
+  const t = useCityText(builtInLocation.city);
   const GROUPS = useProductGroups();
   const faqs = useFaqs(location.slug, location.faqs);
   const otherCities = useCities().filter((c) => c !== location.city);
@@ -59,16 +60,16 @@ export function LocationPage({ location: builtInLocation }: { location: Location
               <span className="text-gold">/</span>
               <span className="text-navy dark:text-white">{location.city}</span>
             </p>
-            <p className="eyebrow mt-5">Loan Advisory in {location.city}</p>
+            <p className="eyebrow mt-5">{t("hero.eyebrow")}</p>
             <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              Trusted Loan Experts in <span className="gold-text">{location.city}.</span>
+              {t("hero.title")} <span className="gold-text">{t("hero.gold")}</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
               {location.intro}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/contact" className="gold-btn py-3.5 text-base">
-                Check Eligibility <ArrowRight className="h-4 w-4" />
+                {t("hero.primary")} <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href={CONTACT.whatsappLink}
@@ -76,7 +77,7 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                 rel="noopener noreferrer"
                 className="outline-btn dark:bg-card dark:text-white"
               >
-                WhatsApp Us
+                {t("hero.secondary")}
               </a>
             </div>
           </Reveal>
@@ -87,11 +88,9 @@ export function LocationPage({ location: builtInLocation }: { location: Location
       <Section>
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <Reveal>
-            <p className="eyebrow">{location.hasOffice ? "Our Office" : "How We Serve You Here"}</p>
+            <p className="eyebrow">{location.hasOffice ? t("serve.officeEyebrow") : t("serve.remoteEyebrow")}</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              {location.hasOffice
-                ? "Visit us, or handle everything remotely."
-                : `${location.city}, without a branch counter.`}
+              {location.hasOffice ? t("serve.officeTitle") : t("serve.remoteTitle")}
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               {location.serviceNote}
@@ -104,7 +103,7 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                 </span>
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
-                    {location.hasOffice ? "Address" : "Registered Office"}
+                    {location.hasOffice ? t("serve.officeAddress") : t("serve.remoteAddress")}
                   </p>
                   <a
                     href={CONTACT.mapsLink}
@@ -123,7 +122,7 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                 </span>
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
-                    Hours
+                    {t("serve.hours")}
                   </p>
                   <p className="mt-0.5 text-sm font-semibold text-navy dark:text-white">
                     {CONTACT.hours}
@@ -136,7 +135,7 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                 </span>
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.18em] text-gold-dark uppercase">
-                    Call or WhatsApp
+                    {t("serve.call")}
                   </p>
                   <a
                     href={CONTACT.phoneHref}
@@ -170,9 +169,9 @@ export function LocationPage({ location: builtInLocation }: { location: Location
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow={`Loans We Arrange in ${location.city}`}
-            title="The same 75+ lender network, wherever you're based."
-            description={`Every product below is available to ${location.city} clients through the same process — profile review, lender matching, documentation and disbursal.`}
+            eyebrow={t("loans.eyebrow")}
+            title={t("loans.title")}
+            description={t("loans.body")}
           />
         </Reveal>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -194,7 +193,7 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                   </h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">{group.description}</p>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-gold-dark">
-                    Explore products
+                    {t("loans.link")}
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                   </span>
                 </Link>
@@ -206,17 +205,17 @@ export function LocationPage({ location: builtInLocation }: { location: Location
 
       <PageCalculators
         ids={["emi", "eligibility", "stamp-duty"]}
-        eyebrow={`Plan your loan in ${location.city}`}
-        title="Work out your EMI, eligibility and stamp duty"
-        description="Quick estimates before you speak to us — nothing is saved or sent."
+        eyebrow={t("calc.eyebrow")}
+        title={t("calc.title")}
+        description={t("calc.body")}
       />
 
       {/* FAQ */}
       <Section className="pt-0">
         <Reveal>
-          <p className="eyebrow text-center">{location.city} FAQs</p>
+          <p className="eyebrow text-center">{t("faq.eyebrow")}</p>
           <h2 className="mt-2 text-center text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-            Common questions from {location.city} clients.
+            {t("faq.title")}
           </h2>
         </Reveal>
         <Reveal delay={100} className="mx-auto mt-8 max-w-2xl">
@@ -230,14 +229,14 @@ export function LocationPage({ location: builtInLocation }: { location: Location
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
             <h3 className="relative font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
-              Ready to talk? <span className="gold-text">Let's start.</span>
+              {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
-              Call {CONTACT.phone} · {CONTACT.hours}
+              {t("cta.call").replace("{phone}", CONTACT.phone).replace("{hours}", CONTACT.hours)}
             </p>
             <div className="relative mt-6 flex flex-wrap justify-center gap-3">
               <Link to="/contact" className="gold-btn py-3.5 text-base">
-                Get Free Consultation <ArrowRight className="h-4 w-4" />
+                {t("cta.primary")} <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href={CONTACT.whatsappLink}
@@ -245,11 +244,11 @@ export function LocationPage({ location: builtInLocation }: { location: Location
                 rel="noopener noreferrer"
                 className="outline-btn dark:bg-card dark:text-white"
               >
-                WhatsApp Us
+                {t("cta.secondary")}
               </a>
             </div>
             <p className="relative mt-6 text-xs text-muted-foreground">
-              Also serving{" "}
+              {t("cta.also")}{" "}
               {otherCities.map((c, i) => (
                 <span key={c}>
                   <Link to={`/${citySlug(c)}`} className="font-bold text-gold-dark hover:underline">

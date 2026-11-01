@@ -25,6 +25,7 @@ import { Reveal } from "@/components/reveal";
 import { LeadForm } from "@/components/lead-form";
 import { BusinessVisual, GrowthStairs, IndividualVisual, ScorePhone } from "@/components/cibil-visuals";
 import { CONTACT } from "@/data/site";
+import { useAdvisoryText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/cibil-advisory")({
   head: () => ({
@@ -162,6 +163,7 @@ function BenefitStrip({ items, icon: Icon }: { items: string[]; icon: LucideIcon
 }
 
 function CibilAdvisoryPage() {
+  const t = useAdvisoryText();
   return (
     <>
       <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
@@ -181,20 +183,19 @@ function CibilAdvisoryPage() {
                   <span className="text-gold">/</span>
                   <span className="text-white">CIBIL Advisory Services</span>
                 </p>
-                <p className="eyebrow mt-5">CIBIL Advisory Services</p>
+                <p className="eyebrow mt-5">{t("hero.eyebrow")}</p>
                 <h1
                   className="mt-4 max-w-3xl text-3xl leading-tight font-extrabold text-white sm:text-5xl"
                   style={{ fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }}
                 >
-                  Understand your credit. <span className="gold-text">Improve it, step by step.</span>
+                  {t("hero.title")} <span className="gold-text">{t("hero.gold")}</span>
                 </h1>
                 <p className="mt-4 max-w-2xl text-base text-white/70">
-                  Your credit report decides how lenders see you. Our experts help individuals and business owners
-                  read their report, spot problems and make a clear plan before they apply for a loan.
+                  {t("hero.body")}
                 </p>
                 <div className="mt-6 flex flex-wrap items-center gap-4">
                   <a href="#talk" className="gold-btn py-3 text-sm">
-                    Request a Call Back <ArrowRight className="h-4 w-4" />
+                    {t("hero.primary")} <ArrowRight className="h-4 w-4" />
                   </a>
                   <a
                     href={CONTACT.whatsappLink}
@@ -202,7 +203,7 @@ function CibilAdvisoryPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-3 text-sm font-bold text-white/85 transition-colors hover:border-gold/40 hover:text-white"
                   >
-                    <MessageCircle className="h-4 w-4 text-gold" /> Talk to Our Loan Expert
+                    <MessageCircle className="h-4 w-4 text-gold" /> {t("hero.secondary")}
                   </a>
                 </div>
               </div>
@@ -215,15 +216,13 @@ function CibilAdvisoryPage() {
       <Section className="pt-0">
         <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <Reveal>
-            <p className="eyebrow">Credit Basics</p>
+            <p className="eyebrow">{t("basics.eyebrow")}</p>
             <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
-              Why credit <span className="gold-text-static italic">matters.</span>
+              {t("basics.title")} <span className="gold-text-static italic">{t("basics.gold")}</span>
             </h2>
-            <p className="mt-2 text-lg font-bold text-gold-dark">Your credit score is your financial passport.</p>
+            <p className="mt-2 text-lg font-bold text-gold-dark">{t("basics.lead")}</p>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
-              A credit score is a three-digit number (300 to 900) that shows how reliably you have handled credit in
-              the past. It helps banks and financial institutions decide whether to give you a loan, a credit card
-              or another financial product.
+              {t("basics.body")}
             </p>
             <ul className="mt-6 space-y-3">
               {WHY_CREDIT.map((w) => (
@@ -239,7 +238,7 @@ function CibilAdvisoryPage() {
           <Reveal delay={100}>
             <ScorePhone />
             <p className="mt-3 text-center text-[11px] text-muted-foreground">
-              An example to explain the idea, not a real score.
+              {t("basics.note")}
             </p>
           </Reveal>
         </div>
@@ -250,16 +249,16 @@ function CibilAdvisoryPage() {
         <Section className="pt-12">
           <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
             <Reveal>
-              <p className="eyebrow">Our Services · Individuals</p>
-              <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">For individuals.</h2>
+              <p className="eyebrow">{t("individuals.eyebrow")}</p>
+              <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">{t("individuals.title")}</h2>
               <p className="mt-2 text-base text-muted-foreground">
-                Understand your credit and get ready for the loan you want.
+                {t("individuals.body")}
               </p>
               <ServiceCards items={FOR_INDIVIDUALS} />
             </Reveal>
             <Reveal delay={100}>
               <IndividualVisual />
-              <p className="mt-3 text-center text-[11px] text-muted-foreground">Examples to explain the idea.</p>
+              <p className="mt-3 text-center text-[11px] text-muted-foreground">{t("visual.note")}</p>
             </Reveal>
           </div>
           <Reveal delay={60}>
@@ -273,15 +272,15 @@ function CibilAdvisoryPage() {
         <div className="grid items-center gap-10 lg:grid-cols-[0.85fr_1.15fr]">
           <Reveal className="order-2 lg:order-1" delay={100}>
             <BusinessVisual />
-            <p className="mt-3 text-center text-[11px] text-muted-foreground">Examples to explain the idea.</p>
+            <p className="mt-3 text-center text-[11px] text-muted-foreground">{t("visual.note")}</p>
           </Reveal>
           <Reveal className="order-1 lg:order-2">
-            <p className="eyebrow">Our Services · Business</p>
+            <p className="eyebrow">{t("business.eyebrow")}</p>
             <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl dark:text-white">
-              For businesses <span className="text-gold-dark">(MSME &amp; corporate).</span>
+              {t("business.title")} <span className="text-gold-dark">{t("business.gold")}</span>
             </h2>
             <p className="mt-2 text-base text-muted-foreground">
-              Build your business credit and get ready for growth funding.
+              {t("business.body")}
             </p>
             <ServiceCards items={FOR_BUSINESSES} />
           </Reveal>
@@ -293,7 +292,7 @@ function CibilAdvisoryPage() {
 
       <Section className="pt-0">
         <Reveal>
-          <SectionHeading eyebrow="Who It Is For" title="Whether you are an individual or a business." align="center" />
+          <SectionHeading eyebrow={t("audience.eyebrow")} title={t("audience.title")} align="center" />
         </Reveal>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {AUDIENCE.map((a, i) => (
@@ -313,9 +312,9 @@ function CibilAdvisoryPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="How It Works"
-            title="Five simple steps."
-            description="No jargon. A clear path, one step at a time."
+            eyebrow={t("how.eyebrow")}
+            title={t("how.title")}
+            description={t("how.body")}
             align="center"
           />
         </Reveal>
@@ -339,7 +338,7 @@ function CibilAdvisoryPage() {
           <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row">
             <GrowthStairs />
             <p className="max-w-xs text-center font-heading text-2xl font-bold text-navy sm:text-right dark:text-white">
-              A step-by-step journey towards <span className="gold-text-static">a stronger credit future.</span>
+              {t("how.closing")} <span className="gold-text-static">{t("how.closingGold")}</span>
             </p>
           </div>
         </Reveal>
@@ -348,29 +347,24 @@ function CibilAdvisoryPage() {
       <Section className="pt-0" id="talk">
         <div className="grid gap-8 rounded-2xl border border-blue-soft-border bg-blue-soft p-8 sm:p-12 lg:grid-cols-[1fr_480px] lg:items-stretch dark:border-gold/15 dark:bg-card">
           <Reveal>
-            <p className="eyebrow">Talk to Us</p>
+            <p className="eyebrow">{t("talk.eyebrow")}</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              Better credit health helps <span className="gold-text">every loan you apply for.</span>
+              {t("talk.title")} <span className="gold-text">{t("talk.gold")}</span>
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-              A clear credit report can make your cash flow easier to plan, give lenders more confidence in you, and
-              help you avoid surprises when you apply. Share your details and a loan expert will call you back.
+              {t("talk.body")}
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link to="/cibil" className="outline-btn dark:bg-card dark:text-white">
-                Get your credit report
+                {t("talk.report")}
               </Link>
               <Link to="/credit-score-estimator" className="outline-btn dark:bg-card dark:text-white">
-                Try the score estimator
+                {t("talk.estimator")}
               </Link>
             </div>
             <p className="mt-6 border-t border-dashed border-border pt-4 text-xs leading-relaxed text-muted-foreground">
-              <span className="font-bold text-navy dark:text-white">Important note: </span>
-              Growth Capital Services is a loan consultant. We are not a credit bureau or a lender. Only the credit
-              bureau and the lender can correct or change what is in your report, after their own checks. We cannot
-              promise a change in your score or the approval of a loan. Results depend on your credit history, your
-              profile and each lender&apos;s policy. The scores, ranks and tick-lists shown on this page are examples
-              to explain the idea, not real data.
+              <span className="font-bold text-navy dark:text-white">{t("talk.noteLabel")} </span>
+              {t("talk.note")}
             </p>
           </Reveal>
           <Reveal delay={100} className="h-full">

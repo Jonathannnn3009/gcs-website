@@ -3,6 +3,7 @@ import { ArrowRight, Compass, FileText } from "lucide-react";
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { CreditScoreEstimator } from "@/components/credit-score-estimator";
+import { useEstimatorText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/credit-score-estimator")({
   head: () => ({
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/credit-score-estimator")({
 });
 
 function CreditScoreEstimatorPage() {
+  const t = useEstimatorText();
   return (
     <>
       <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
@@ -43,16 +45,15 @@ function CreditScoreEstimatorPage() {
                   <span className="text-gold">/</span>
                   <span className="text-white">Credit Score Estimator</span>
                 </p>
-                <p className="eyebrow mt-5">CIBIL</p>
+                <p className="eyebrow mt-5">{t("hero.eyebrow")}</p>
                 <h1
                   className="mt-4 text-3xl leading-tight font-extrabold text-white sm:text-5xl"
                   style={{ fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }}
                 >
-                  Credit Score <span className="gold-text">Estimator</span>
+                  {t("hero.title")} <span className="gold-text">{t("hero.gold")}</span>
                 </h1>
                 <p className="mt-4 max-w-2xl text-base text-white/70">
-                  Answer a few simple questions to see an indicative score range. It is a quick estimate, not a
-                  credit bureau report, and nothing you enter is saved or sent.
+                  {t("hero.body")}
                 </p>
               </div>
             </div>
@@ -74,12 +75,12 @@ function CreditScoreEstimatorPage() {
               <FileText className="h-5 w-5" />
             </span>
             <span>
-              <span className="block text-base font-extrabold text-navy dark:text-white">Want your real report?</span>
+              <span className="block text-base font-extrabold text-navy dark:text-white">{t("next.reportTitle")}</span>
               <span className="mt-1 block text-sm text-muted-foreground">
-                Request your CIBIL or other bureau report through us.
+                {t("next.reportBody")}
               </span>
               <span className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-gold-dark">
-                Get your credit report <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                {t("next.reportLink")} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
               </span>
             </span>
           </Link>
@@ -91,19 +92,18 @@ function CreditScoreEstimatorPage() {
               <Compass className="h-5 w-5" />
             </span>
             <span>
-              <span className="block text-base font-extrabold text-navy dark:text-white">Need help with the next step?</span>
+              <span className="block text-base font-extrabold text-navy dark:text-white">{t("next.helpTitle")}</span>
               <span className="mt-1 block text-sm text-muted-foreground">
-                Our experts can go through your report with you and plan what to do.
+                {t("next.helpBody")}
               </span>
               <span className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-gold-dark">
-                CIBIL Advisory Services <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                {t("next.helpLink")} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
               </span>
             </span>
           </Link>
         </div>
         <p className="mx-auto mt-6 max-w-3xl text-center text-xs leading-relaxed text-muted-foreground">
-          This estimate is only a guide. Your actual score comes from the credit bureau and depends on your full
-          credit history. Lenders decide on their own policy and credit assessment.
+          {t("next.note")}
         </p>
       </Section>
     </>

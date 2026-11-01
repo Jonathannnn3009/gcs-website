@@ -22,6 +22,7 @@ import { Reveal } from "@/components/reveal";
 import { EarningsEstimator } from "@/components/earnings-estimator";
 import { ZoneAssistant, ZoneFaq, ZoneForm, ZoneHero, ZoneTabs } from "@/components/partner-zones";
 import { CONTACT } from "@/data/site";
+import { useFreelancerText } from "@/lib/site-content";
 import { ASSISTANT_NAME } from "@/lib/chat/config";
 
 export const Route = createFileRoute("/partner/freelancer")({
@@ -188,20 +189,21 @@ const FAQS = [
 ];
 
 function FreelancerPage() {
+  const t = useFreelancerText();
   return (
     <>
       <ZoneTabs current="/partner/freelancer" />
 
       <div id="join" className="scroll-mt-24" />
       <ZoneHero
-        eyebrow="Freelance Associate"
+        eyebrow={t("hero.eyebrow")}
         title={
           <>
-            Earn on your own time,{" "}
-            <span className="text-gold-light italic">by helping people borrow well.</span>
+            {t("hero.title")}{" "}
+            <span className="text-gold-light italic">{t("hero.gold")}</span>
           </>
         }
-        intro="Know someone who needs a loan? Introduce them to us. We handle everything from eligibility to disbursal, and you get paid when the loan is disbursed. No investment, no licence and no targets."
+        intro={t("hero.intro")}
         stats={[
           { value: "₹0", label: "To Get Started" },
           { value: "No", label: "Targets or Lock-in" },
@@ -213,17 +215,17 @@ function FreelancerPage() {
           "A short orientation call so you know exactly what to share",
           "Updates on every case you refer, until it disburses",
         ]}
-        quote="You make the introduction. We do the lending, the paperwork and the follow-up."
+        quote={t("hero.quote")}
         form={
           <ZoneForm
             source="partner-freelancer"
-            heading="Become a Freelance Associate"
-            intro="Share a few details and we will call you for a short orientation. It takes about two minutes."
+            heading={t("form.heading")}
+            intro={t("form.intro")}
             orgLabel="What you do today"
             orgPlaceholder="e.g. Homemaker, B.Com student, retired banker"
             messagePlaceholder="How many people do you think you could help in a month? (optional)"
-            cta="Join as a Freelancer"
-            thanks="A member of our team will call you for a short orientation and to set you up as a Freelance Associate."
+            cta={t("form.button")}
+            thanks={t("form.thanks")}
           />
         }
       />
@@ -232,9 +234,9 @@ function FreelancerPage() {
       <Section>
         <Reveal>
           <SectionHeading
-            eyebrow="Who It's For"
-            title="If people trust you, you can do this."
-            description="No business, no office, no background in finance. Just people who sometimes need a loan."
+            eyebrow={t("who.eyebrow")}
+            title={t("who.title")}
+            description={t("who.body")}
           />
         </Reveal>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -258,8 +260,8 @@ function FreelancerPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Who Does What"
-            title="A small part for you. The heavy lifting is ours."
+            eyebrow={t("split.eyebrow")}
+            title={t("split.title")}
             align="center"
           />
         </Reveal>
@@ -267,7 +269,7 @@ function FreelancerPage() {
           <Reveal>
             <div className="h-full rounded-2xl border border-gold/25 bg-gold-pale/20 p-6 sm:p-7">
               <p className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
-                Your part
+                {t("split.you")}
               </p>
               <ul className="mt-4 space-y-3">
                 {YOU_WE.you.map((t) => (
@@ -281,7 +283,7 @@ function FreelancerPage() {
           </Reveal>
           <Reveal delay={90}>
             <div className="navy-panel h-full rounded-2xl p-6 sm:p-7">
-              <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">Our part</p>
+              <p className="text-xs font-bold tracking-[0.2em] text-gold uppercase">{t("split.we")}</p>
               <ul className="mt-4 space-y-3">
                 {YOU_WE.we.map((t) => (
                   <li key={t} className="flex items-start gap-3 text-sm text-white/85">
@@ -299,9 +301,9 @@ function FreelancerPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="What You Could Earn"
-            title="Work out your own numbers."
-            description="Pick a loan type, a typical amount and how many people you might help in a month."
+            eyebrow={t("estimate.eyebrow")}
+            title={t("estimate.title")}
+            description={t("estimate.body")}
             align="center"
           />
         </Reveal>
@@ -314,8 +316,8 @@ function FreelancerPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Getting Started"
-            title="Up and running in four steps."
+            eyebrow={t("steps.eyebrow")}
+            title={t("steps.title")}
             align="center"
           />
         </Reveal>
@@ -347,7 +349,7 @@ function FreelancerPage() {
       {/* Perks */}
       <Section className="pt-0">
         <Reveal>
-          <SectionHeading eyebrow="Why Join" title="What you get as an associate." />
+          <SectionHeading eyebrow={t("perks.eyebrow")} title={t("perks.title")} />
         </Reveal>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {PERKS.map((p, i) => (
@@ -367,9 +369,9 @@ function FreelancerPage() {
       </Section>
 
       <ZoneAssistant
-        eyebrow={`${ASSISTANT_NAME}: your pocket guide`}
-        title="Not sure how to answer? Ask our AI assistant."
-        intro="You do not need to be a finance expert to help someone with a loan. Use the assistant to get quick answers, then pass the person on to us."
+        eyebrow={t("assistant.eyebrow").replace("{name}", ASSISTANT_NAME)}
+        title={t("assistant.title")}
+        intro={t("assistant.body")}
         points={ASSISTANT_POINTS}
         prompts={[
           {
@@ -385,9 +387,9 @@ function FreelancerPage() {
       <Section className="pt-0">
         <div className="mx-auto max-w-3xl">
           <Reveal>
-            <p className="eyebrow">Before You Join</p>
+            <p className="eyebrow">{t("faq.eyebrow")}</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              Quick answers.
+              {t("faq.title")}
             </h2>
           </Reveal>
           <Reveal delay={80} className="mt-6">
@@ -403,14 +405,14 @@ function FreelancerPage() {
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
             <Rocket className="float-animation relative mx-auto h-10 w-10 text-gold-dark" />
             <h3 className="relative mt-4 font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
-              Have questions? <span className="gold-text">Talk to a person.</span>
+              {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
               {CONTACT.phone} · {CONTACT.hours}
             </p>
             <div className="relative mt-6 flex flex-wrap justify-center gap-3">
               <a href={CONTACT.phoneHref} className="gold-btn py-3.5 text-base">
-                Call Us <ArrowRight className="h-4 w-4" />
+                {t("cta.call")} <ArrowRight className="h-4 w-4" />
               </a>
               <a
                 href={CONTACT.whatsappLink}
@@ -418,7 +420,7 @@ function FreelancerPage() {
                 rel="noopener noreferrer"
                 className="outline-btn dark:bg-card dark:text-white"
               >
-                WhatsApp Us
+                {t("cta.whatsapp")}
               </a>
             </div>
           </div>

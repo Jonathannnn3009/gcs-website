@@ -27,6 +27,30 @@ import {
   TRACK_TEXT,
   TRACK_TEXT_SECTIONS,
 } from "../src/data/more-page-text";
+import {
+  BUILDER_TEXT,
+  BUILDER_TEXT_SECTIONS,
+  FREELANCER_TEXT,
+  FREELANCER_TEXT_SECTIONS,
+} from "../src/data/partner-zone-text";
+import {
+  ESTIMATOR_TEXT,
+  ESTIMATOR_TEXT_SECTIONS,
+  INSIGHTS_TEXT,
+  INSIGHTS_TEXT_SECTIONS,
+} from "../src/data/small-page-text";
+import {
+  ADVISOR_TEXT,
+  ADVISOR_TEXT_SECTIONS,
+  CASES_TEXT,
+  CASES_TEXT_SECTIONS,
+  RATES_TEXT,
+  RATES_TEXT_SECTIONS,
+  TOOLS_TEXT,
+  TOOLS_TEXT_SECTIONS,
+} from "../src/data/page-text-three";
+import { ADVISORY_TEXT, ADVISORY_TEXT_SECTIONS } from "../src/data/advisory-text";
+import { CITY_TEXT, CITY_TEXT_SECTIONS } from "../src/data/city-text";
 
 const out = process.argv[2];
 if (!out) throw new Error("Pass the output file path");
@@ -104,7 +128,14 @@ const staticPages: [string, string, string][] = [
   ["/cibil", "CIBIL report", "cibil.tsx"],
   ["/case-studies", "Case studies", "case-studies.index.tsx"],
   ["/ca-legal-services", "CA & legal services", "ca-legal-services.index.tsx"],
-  ["/partner", "Partner with us", "partner.tsx"],
+  ["/partner", "Partner with us", "partner.index.tsx"],
+  ["/partner/builder", "Partner: builder", "partner.builder.tsx"],
+  ["/partner/freelancer", "Partner: freelancer", "partner.freelancer.tsx"],
+  ["/track-application", "Track application", "track-application.tsx"],
+  ["/cibil-advisory", "CIBIL advisory", "cibil-advisory.tsx"],
+  ["/credit-score-estimator", "Credit score estimator", "credit-score-estimator.tsx"],
+  ["/insights", "Insights", "insights.tsx"],
+  ["/ai-loan-advisor", "Loan expert", "ai-loan-advisor.tsx"],
   ["/contact", "Contact", "contact.tsx"],
   ["/why-us", "Why us", "why-us.tsx"],
   ["/mumbai", "Mumbai", "mumbai.tsx"],
@@ -188,6 +219,26 @@ writeFileSync(
       partnerTextSpec: PARTNER_TEXT_SECTIONS,
       trackText: TRACK_TEXT,
       trackTextSpec: TRACK_TEXT_SECTIONS,
+      builderText: BUILDER_TEXT,
+      builderTextSpec: BUILDER_TEXT_SECTIONS,
+      freelancerText: FREELANCER_TEXT,
+      freelancerTextSpec: FREELANCER_TEXT_SECTIONS,
+      estimatorText: ESTIMATOR_TEXT,
+      estimatorTextSpec: ESTIMATOR_TEXT_SECTIONS,
+      insightsText: INSIGHTS_TEXT,
+      insightsTextSpec: INSIGHTS_TEXT_SECTIONS,
+      casesText: CASES_TEXT,
+      casesTextSpec: CASES_TEXT_SECTIONS,
+      ratesText: RATES_TEXT,
+      ratesTextSpec: RATES_TEXT_SECTIONS,
+      toolsText: TOOLS_TEXT,
+      toolsTextSpec: TOOLS_TEXT_SECTIONS,
+      advisorText: ADVISOR_TEXT,
+      advisorTextSpec: ADVISOR_TEXT_SECTIONS,
+      advisoryText: ADVISORY_TEXT,
+      advisoryTextSpec: ADVISORY_TEXT_SECTIONS,
+      cityText: CITY_TEXT,
+      cityTextSpec: CITY_TEXT_SECTIONS,
       trustNumbers: { "75+": "75+", "25+": "25+", "2017": "2017", "100%": "100%" },
     },
     null,

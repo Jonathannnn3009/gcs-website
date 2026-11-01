@@ -22,6 +22,11 @@ import { SERVICES_TEXT } from "@/data/services-text";
 import { CIBIL_TEXT } from "@/data/cibil-text";
 import { WHYUS_TEXT } from "@/data/whyus-text";
 import { CALEGAL_TEXT, PARTNER_TEXT, TRACK_TEXT } from "@/data/more-page-text";
+import { BUILDER_TEXT, FREELANCER_TEXT } from "@/data/partner-zone-text";
+import { ESTIMATOR_TEXT, INSIGHTS_TEXT } from "@/data/small-page-text";
+import { ADVISOR_TEXT, CASES_TEXT, RATES_TEXT, TOOLS_TEXT } from "@/data/page-text-three";
+import { ADVISORY_TEXT } from "@/data/advisory-text";
+import { CITY_TEXT } from "@/data/city-text";
 
 type SiteContent = {
   faqs?: Record<string, Faq[]>;
@@ -51,6 +56,16 @@ type SiteContent = {
   calegalText?: Record<string, string>;
   partnerText?: Record<string, string>;
   trackText?: Record<string, string>;
+  builderText?: Record<string, string>;
+  freelancerText?: Record<string, string>;
+  estimatorText?: Record<string, string>;
+  insightsText?: Record<string, string>;
+  casesText?: Record<string, string>;
+  ratesText?: Record<string, string>;
+  toolsText?: Record<string, string>;
+  advisorText?: Record<string, string>;
+  advisoryText?: Record<string, string>;
+  cityText?: Record<string, string>;
   customPages?: CustomPage[];
   /** Repeated blocks on the pages, keyed by list name (see data/page-lists.ts). */
   lists?: Record<string, Record<string, string>[]>;
@@ -204,6 +219,24 @@ export const useCalegalText = () => copyOf(useSiteContent().calegalText, CALEGAL
 export const usePartnerText = () => copyOf(useSiteContent().partnerText, PARTNER_TEXT);
 /** Track Application page wording, the same way. */
 export const useTrackText = () => copyOf(useSiteContent().trackText, TRACK_TEXT);
+/** Builder and Freelancer partner page wording, the same way. */
+export const useBuilderText = () => copyOf(useSiteContent().builderText, BUILDER_TEXT);
+export const useFreelancerText = () => copyOf(useSiteContent().freelancerText, FREELANCER_TEXT);
+/** Credit Score Estimator and Insights page wording, the same way. */
+export const useEstimatorText = () => copyOf(useSiteContent().estimatorText, ESTIMATOR_TEXT);
+export const useInsightsText = () => copyOf(useSiteContent().insightsText, INSIGHTS_TEXT);
+/** Case Studies, Interest Rates, Calculators and Loan Expert page wording, the same way. */
+export const useCasesText = () => copyOf(useSiteContent().casesText, CASES_TEXT);
+export const useRatesText = () => copyOf(useSiteContent().ratesText, RATES_TEXT);
+export const useToolsText = () => copyOf(useSiteContent().toolsText, TOOLS_TEXT);
+export const useAdvisorText = () => copyOf(useSiteContent().advisorText, ADVISOR_TEXT);
+/** CIBIL Advisory page wording, the same way. */
+export const useAdvisoryText = () => copyOf(useSiteContent().advisoryText, ADVISORY_TEXT);
+/** City page wording ({city} becomes the page's city), the same way. */
+export function useCityText(city: string): (id: string) => string {
+  const t = copyOf(useSiteContent().cityText, CITY_TEXT);
+  return (id) => t(id).replaceAll("{city}", city);
+}
 
 const nonEmptyList = <T>(v: unknown): v is T[] => Array.isArray(v) && v.length > 0;
 

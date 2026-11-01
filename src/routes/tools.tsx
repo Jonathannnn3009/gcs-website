@@ -26,6 +26,7 @@ import { CgtmseCalculator } from "@/components/cgtmse-calculator";
 import { LapLtvCalculator } from "@/components/lap-ltv-calculator";
 import { TOOLS_CARDS } from "@/data/page-lists";
 import { useFixedList } from "@/lib/page-lists";
+import { useToolsText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/tools")({
   head: () => ({
@@ -96,6 +97,7 @@ function useHashTool(defaultId: string) {
 }
 
 function ToolsPage() {
+  const t = useToolsText();
   const tools = useFixedList("tools.cards", TOOLS_CARDS, "id")
     .map((c) => {
       const base = TOOLS.find((t) => t.id === c.id);
@@ -113,13 +115,12 @@ function ToolsPage() {
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <p className="eyebrow">Calculators</p>
+            <p className="eyebrow">{t("hero.eyebrow")}</p>
             <h1 className="mt-4 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              Know Your Numbers. <span className="gold-text">Then Apply with Confidence.</span>
+              {t("hero.title")} <span className="gold-text">{t("hero.gold")}</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Ten free calculators covering every loan on our desk — from EMI and eligibility to
-              CGTMSE fees. Pick a calculator from the menu. No signup required.
+              {t("hero.body")}
             </p>
           </Reveal>
         </div>
@@ -157,7 +158,7 @@ function ToolsPage() {
             className="navy-panel sticky top-24 hidden max-h-[calc(100vh-7rem)] overflow-y-auto rounded-3xl border border-white/10 p-4 shadow-[var(--shadow-lift)] lg:block"
           >
             <p className="px-3 pt-1 pb-3 text-xs font-extrabold tracking-[0.2em] text-gold uppercase">
-              Calculators
+              {t("menu.title")}
             </p>
             <ul className="space-y-1">
               {tools.map((t) => {
@@ -195,8 +196,7 @@ function ToolsPage() {
           <div className="min-w-0" id={active?.id}>
             <div key={active?.id}>{active?.render()}</div>
             <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-              Results are indicative and may vary according to lender policy. Final rates, charges
-              and eligibility are decided by the lender.
+              {t("note")}
             </p>
           </div>
         </div>
@@ -206,18 +206,9 @@ function ToolsPage() {
       <Section className="pt-0">
         <div className="grid gap-4 sm:grid-cols-3">
           {[
-            {
-              title: "How EMI is Calculated",
-              body: "EMI = P × r × (1+r)^n / ((1+r)^n - 1), where P = principal, r = monthly rate, n = total months. A higher tenure reduces EMI but increases total interest.",
-            },
-            {
-              title: "What is FOIR?",
-              body: "Fixed Obligation to Income Ratio (FOIR) is the percentage of your income going toward EMIs. Most banks use a 50-60% FOIR cap to determine your maximum loan eligibility.",
-            },
-            {
-              title: "Need Expert Advice?",
-              body: "These calculators give estimates. Actual rates and eligibility depend on your profile, lender policies and property valuation. Talk to our experts for a precise assessment.",
-            },
+            { title: t("card1.title"), body: t("card1.body") },
+            { title: t("card2.title"), body: t("card2.body") },
+            { title: t("card3.title"), body: t("card3.body") },
           ].map((card, i) => (
             <Reveal key={card.title} delay={i * 60}>
               <div className="surface-card h-full p-6">

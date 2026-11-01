@@ -6,6 +6,7 @@ import { Reveal } from "@/components/reveal";
 import { CASE_STUDIES, CASE_STUDY_GROUPS, type CaseStudyGroup } from "@/data/case-studies";
 import { useCaseStudies } from "@/lib/site-content";
 import { CONTACT } from "@/data/site";
+import { useCasesText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/case-studies/")({
   head: () => ({
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/case-studies/")({
 type Filter = "All" | CaseStudyGroup;
 
 function CaseStudiesPage() {
+  const t = useCasesText();
   const allStudies = useCaseStudies(CASE_STUDIES);
   const [filter, setFilter] = useState<Filter>("All");
 
@@ -54,14 +56,14 @@ function CaseStudiesPage() {
                 <span className="text-gold">/</span>
                 <span className="text-navy dark:text-white">Case Studies</span>
               </p>
-              <p className="eyebrow mt-5">Real Scenarios</p>
+              <p className="eyebrow mt-5">{t("hero.eyebrow")}</p>
               <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-                What stood in the way —<br />
-                <span className="gold-text-static italic">and how we routed it.</span>
+                {t("hero.title")}
+                <br />
+                <span className="gold-text-static italic">{t("hero.gold")}</span>
               </h1>
               <p className="mt-4 max-w-xl text-base text-muted-foreground">
-                From a first rejection to a sanctioned loan — how we've structured real lending
-                situations across our network of banks and NBFCs.
+                {t("hero.body")}
               </p>
             </Reveal>
 
@@ -75,10 +77,10 @@ function CaseStudiesPage() {
                 />
               </div>
               <p className="mt-6 font-heading text-2xl leading-snug italic text-navy sm:text-3xl dark:text-white">
-                "Every file here started with a no from somewhere else."
+                {t("hero.quote")}
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                The scenarios below show how we routed each one to a yes.
+                {t("hero.quoteNote")}
               </p>
             </Reveal>
           </div>
@@ -98,7 +100,7 @@ function CaseStudiesPage() {
             }`}
           >
             <LayoutGrid className="h-3.5 w-3.5" />
-            All Cases
+            {t("list.all")}
             <span className={filter === "All" ? "text-gold-light" : "text-gold-dark"}>
               {allStudies.length}
             </span>
@@ -157,7 +159,7 @@ function CaseStudiesPage() {
                 </p>
 
                 <span className="relative mt-4 inline-flex w-fit items-center gap-1 text-xs font-bold text-navy transition-colors group-hover:text-gold-dark dark:text-white">
-                  Read the case
+                  {t("list.read")}
                   <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
                   <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gold-dark transition-all duration-300 group-hover:w-[calc(100%-4.75rem)]" />
                 </span>
@@ -174,15 +176,14 @@ function CaseStudiesPage() {
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
             <div className="relative">
               <h3 className="text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-                See what's <span className="gold-text">possible for your profile.</span>
+                {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
               </h3>
               <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-                Tell an expert your situation, and we'll tell you which lenders in our network fit
-                it best.
+                {t("cta.body")}
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link to="/tools" hash="eligibility" className="gold-btn py-3.5 text-base">
-                  <Calculator className="h-4 w-4" /> Check Your Eligibility
+                  <Calculator className="h-4 w-4" /> {t("cta.primary")}
                 </Link>
                 <a
                   href={CONTACT.whatsappLink}
@@ -193,7 +194,7 @@ function CaseStudiesPage() {
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="#25D366">
                     <path d="M12.04 2A10 10 0 0 0 2 12.04a9.94 9.94 0 0 0 1.34 4.99L2 22l5.13-1.34A9.95 9.95 0 0 0 12.04 22 10 10 0 0 0 22 12.04 10 10 0 0 0 12.04 2zm5.82 14.12c-.24.67-1.42 1.24-1.96 1.32-.5.07-1.14.1-1.84-.12a16.84 16.84 0 0 1-1.67-.62c-2.93-1.27-4.84-4.23-4.99-4.43-.15-.2-1.2-1.6-1.2-3.06 0-1.45.76-2.17 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.02.9 2.17.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.13.99 2.09 1.3 2.39 1.44.3.15.47.13.64-.07.17-.21.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z" />
                   </svg>
-                  Chat on WhatsApp
+                  {t("cta.secondary")}
                 </a>
               </div>
             </div>

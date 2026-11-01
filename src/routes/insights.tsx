@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { CRM_API } from "@/lib/crm";
 import { formatPageDate, useCustomPages } from "@/lib/site-content";
+import { useInsightsText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/insights")({
   head: () => ({
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/insights")({
 });
 
 function InsightsPage() {
+  const t = useInsightsText();
   const { pages, loaded } = useCustomPages();
   const posts = pages
     .filter((p) => p.kind === "post")
@@ -31,9 +33,9 @@ function InsightsPage() {
         <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gold/8 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <p className="eyebrow">Insights</p>
+            <p className="eyebrow">{t("hero.eyebrow")}</p>
             <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              Guides and updates <span className="gold-text-static italic">from our desk.</span>
+              {t("hero.title")} <span className="gold-text-static italic">{t("hero.gold")}</span>
             </h1>
           </Reveal>
         </div>
@@ -41,7 +43,7 @@ function InsightsPage() {
       <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
         {posts.length === 0 ? (
           <p className="py-12 text-center text-muted-foreground">
-            {loaded ? "New articles are on the way. Check back soon." : "Loading…"}
+            {loaded ? t("empty") : "Loading…"}
           </p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2">
@@ -66,7 +68,7 @@ function InsightsPage() {
                   </h2>
                   {p.summary && <p className="mt-2 text-sm text-muted-foreground">{p.summary}</p>}
                   <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-gold-dark">
-                    Read more <ArrowRight className="h-3.5 w-3.5" />
+                    {t("readMore")} <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
               </Link>

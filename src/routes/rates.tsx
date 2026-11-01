@@ -6,6 +6,7 @@ import { ExpertNote } from "@/components/expert-note";
 import { PageCalculators } from "@/components/page-calculators";
 import { CONTACT } from "@/data/site";
 import { useBankRates } from "@/lib/site-content";
+import { useRatesText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/rates")({
   head: () => ({
@@ -34,6 +35,7 @@ function formatDate(iso: string) {
 }
 
 function RatesPage() {
+  const t = useRatesText();
   const rates = useBankRates();
   const products = useMemo(
     () => Array.from(new Set(rates.rows.map((r) => r.product))),
@@ -57,14 +59,13 @@ function RatesPage() {
               <span className="text-gold">/</span>
               <span className="text-navy dark:text-white">Interest Rates</span>
             </p>
-            <p className="eyebrow mt-5">Indicative Rates</p>
+            <p className="eyebrow mt-5">{t("hero.eyebrow")}</p>
             <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              Where loan rates start <span className="gold-text-static italic">today.</span>
+              {t("hero.title")} <span className="gold-text-static italic">{t("hero.gold")}</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-              Starting rates by loan type, kept current by our team.
-              {rates.asOf ? ` Last checked ${formatDate(rates.asOf)}.` : ""} Your own rate depends
-              on your profile — we shortlist the lender that offers you the best one.
+              {t("hero.body1")}
+              {rates.asOf ? ` Last checked ${formatDate(rates.asOf)}.` : ""} {t("hero.body2")}
             </p>
           </Reveal>
         </div>
@@ -124,35 +125,33 @@ function RatesPage() {
         <p className="mt-3 text-xs text-muted-foreground italic">{rates.disclaimer}</p>
 
         <ExpertNote className="mt-8">
-          A rate table alone rarely tells the whole story. Some lenders favour salaried applicants,
-          while others suit self-employed income or under-construction properties. Your expert
-          studies your income, credit history and property before recommending the right lender.
+          {t("note")}
         </ExpertNote>
 
         <div className="mt-10 flex flex-wrap gap-3">
           <Link to="/contact" className="gold-btn px-6 py-3 text-sm">
-            Get my rate <ArrowRight className="h-4 w-4" />
+            {t("button.rate")} <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             to="/tools"
             className="inline-flex items-center gap-2 rounded-lg border border-gold/40 px-6 py-3 text-sm font-bold text-gold-dark hover:bg-gold-pale/40"
           >
-            <Calculator className="h-4 w-4" /> Work out my EMI
+            <Calculator className="h-4 w-4" /> {t("button.emi")}
           </Link>
           <a
             href={CONTACT.phoneHref}
             className="inline-flex items-center gap-2 px-2 py-3 text-sm font-semibold text-muted-foreground hover:text-navy"
           >
-            or call {CONTACT.phone}
+            {t("button.call").replace("{phone}", CONTACT.phone)}
           </a>
         </div>
       </section>
 
       <PageCalculators
         ids={["emi", "loan-comparison", "eligibility"]}
-        eyebrow="Put a rate to work"
-        title="See what these rates mean for your EMI"
-        description="Pick a rate from the table above and try it here."
+        eyebrow={t("calc.eyebrow")}
+        title={t("calc.title")}
+        description={t("calc.body")}
         className="pt-4"
       />
     </>

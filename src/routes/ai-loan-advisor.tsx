@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { LoanAdvisor } from "@/components/loan-advisor";
+import { useAdvisorText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/ai-loan-advisor")({
   head: () => ({
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/ai-loan-advisor")({
 });
 
 function AdvisorPage() {
+  const t = useAdvisorText();
   return (
     <>
       <section className="relative overflow-hidden bg-bg-light py-12 sm:py-16 dark:bg-background">
@@ -36,15 +38,13 @@ function AdvisorPage() {
               <span className="text-gold">/</span>
               <span className="text-navy dark:text-white">Loan Expert</span>
             </p>
-            <p className="eyebrow mt-5">GCS Loan Expert</p>
+            <p className="eyebrow mt-5">{t("hero.eyebrow")}</p>
             <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              Tell us what you need.{" "}
-              <span className="gold-text-static">We'll help you find the right direction.</span>
+              {t("hero.title")}{" "}
+              <span className="gold-text-static">{t("hero.gold")}</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-              Answer a few short questions about your requirement. A GCS loan expert then checks
-              which lender options may suit your profile and contacts you. This is an enquiry, not
-              a loan approval.
+              {t("hero.body")}
             </p>
           </Reveal>
         </div>

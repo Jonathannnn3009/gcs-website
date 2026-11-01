@@ -19,6 +19,7 @@ import { Reveal } from "@/components/reveal";
 import { BankMarquee } from "@/components/bank-marquee";
 import { ZoneAssistant, ZoneFaq, ZoneForm, ZoneHero, ZoneTabs } from "@/components/partner-zones";
 import { CONTACT } from "@/data/site";
+import { useBuilderText } from "@/lib/site-content";
 import { ASSISTANT_NAME } from "@/lib/chat/config";
 
 export const Route = createFileRoute("/partner/builder")({
@@ -177,18 +178,19 @@ const FAQS = [
 ];
 
 function BuilderPage() {
+  const t = useBuilderText();
   return (
     <>
       <ZoneTabs current="/partner/builder" />
 
       <ZoneHero
-        eyebrow="Builder Partner"
+        eyebrow={t("hero.eyebrow")}
         title={
           <>
-            Turn your bookings <span className="text-gold-light italic">into disbursals.</span>
+            {t("hero.title")} <span className="text-gold-light italic">{t("hero.gold")}</span>
           </>
         }
-        intro="Give your buyers a smoother route from booking to possession. One finance desk handles lenders, approvals and buyer loans, so your team can stay focused on selling."
+        intro={t("hero.intro")}
         stats={[
           { value: "75+", label: "Bank & NBFC Partners" },
           { value: "2017", label: "Arranging Loans Since" },
@@ -200,18 +202,18 @@ function BuilderPage() {
           "Every buyer's loan tracked from login to disbursal",
           "Flexible set-up: direct, channel-partner led or hybrid",
         ]}
-        quote="You build the homes. We help your buyers finance them."
+        quote={t("hero.quote")}
         form={
           <ZoneForm
             source="partner-builder"
             volumeLabel="How many buyers could you refer in a month?"
-            heading="Talk to our project finance desk"
-            intro="Tell us about your project and we will call you to plan how buyer financing can work for it."
+            heading={t("form.heading")}
+            intro={t("form.intro")}
             orgLabel="Company / Project"
             orgPlaceholder="e.g. Sai Developers, Sai Heights"
             messagePlaceholder="Stage of the project, number of units, city…"
-            cta="Request a Call"
-            thanks="Our project finance team will reach out to discuss your project and how we can support your buyers."
+            cta={t("form.button")}
+            thanks={t("form.thanks")}
           />
         }
       />
@@ -220,9 +222,9 @@ function BuilderPage() {
       <Section>
         <Reveal>
           <SectionHeading
-            eyebrow="What We Do"
-            title="One operating desk between builders, buyers and lenders."
-            description="We bridge developers, home buyers and banks, so your buyers' home-loan journey has one place to start and one team to ask."
+            eyebrow={t("what.eyebrow")}
+            title={t("what.title")}
+            description={t("what.body")}
           />
         </Reveal>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -247,9 +249,9 @@ function BuilderPage() {
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <Reveal>
             <SectionHeading
-              eyebrow="Growth Capital for Builders"
-              title="Built to help you scale, with full visibility."
-              description="Our model keeps financing out of your way, so you can concentrate on building good projects."
+              eyebrow={t("scale.eyebrow")}
+              title={t("scale.title")}
+              description={t("scale.body")}
             />
             <ul className="mt-6 space-y-3">
               {FOR_BUILDERS.map((t) => (
@@ -276,8 +278,8 @@ function BuilderPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Our Lending Partners"
-            title="Your buyers get more than one bank to choose from."
+            eyebrow={t("lenders.eyebrow")}
+            title={t("lenders.title")}
             align="center"
           />
         </Reveal>
@@ -292,8 +294,8 @@ function BuilderPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="How It Works"
-            title="From launch to disbursal, in four steps."
+            eyebrow={t("how.eyebrow")}
+            title={t("how.title")}
             align="center"
           />
         </Reveal>
@@ -326,9 +328,9 @@ function BuilderPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Why Choose Us"
-            title="More than another channel of agents."
-            description="Technology tracking, hands-on support and a wide lender panel, working as one team for your project."
+            eyebrow={t("why.eyebrow")}
+            title={t("why.title")}
+            description={t("why.body")}
           />
         </Reveal>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -344,9 +346,9 @@ function BuilderPage() {
       </Section>
 
       <ZoneAssistant
-        eyebrow={`${ASSISTANT_NAME}: the GCS advantage`}
-        title="Buyer questions answered without loading your sales team."
-        intro="Our AI assistant takes the first round of a buyer's loan questions, then hands over to an expert when they are ready to move."
+        eyebrow={t("assistant.eyebrow").replace("{name}", ASSISTANT_NAME)}
+        title={t("assistant.title")}
+        intro={t("assistant.body")}
         points={ASSISTANT_POINTS}
         prompts={[
           {
@@ -365,8 +367,8 @@ function BuilderPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Ways to Work Together"
-            title="Pick the set-up that fits your sales."
+            eyebrow={t("models.eyebrow")}
+            title={t("models.title")}
             align="center"
           />
         </Reveal>
@@ -391,9 +393,9 @@ function BuilderPage() {
       <Section className="pt-0">
         <div className="mx-auto max-w-3xl">
           <Reveal>
-            <p className="eyebrow">Before You Reach Out</p>
+            <p className="eyebrow">{t("faq.eyebrow")}</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              Quick answers for builders.
+              {t("faq.title")}
             </h2>
           </Reveal>
           <Reveal delay={80} className="mt-6">
@@ -409,14 +411,14 @@ function BuilderPage() {
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
             <Building2 className="float-animation relative mx-auto h-10 w-10 text-gold-dark" />
             <h3 className="relative mt-4 font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
-              Let's enable financing <span className="gold-text">for your project.</span>
+              {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
               Call {CONTACT.phone} · {CONTACT.hours}
             </p>
             <div className="relative mt-6 flex flex-wrap justify-center gap-3">
               <a href={CONTACT.phoneHref} className="gold-btn py-3.5 text-base">
-                Call Us <ArrowRight className="h-4 w-4" />
+                {t("cta.call")} <ArrowRight className="h-4 w-4" />
               </a>
               <a
                 href={CONTACT.whatsappLink}
@@ -424,7 +426,7 @@ function BuilderPage() {
                 rel="noopener noreferrer"
                 className="outline-btn dark:bg-card dark:text-white"
               >
-                WhatsApp Us
+                {t("cta.whatsapp")}
               </a>
             </div>
           </div>
