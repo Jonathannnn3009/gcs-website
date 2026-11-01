@@ -4,7 +4,9 @@ import { CONTACT } from "@/data/site";
 import { Reveal } from "@/components/reveal";
 import { ServiceEnquiryForm } from "@/components/service-enquiry-form";
 import { PROFESSIONAL_SERVICES, SERVICE_DIVISIONS, divisionLabel, type ServiceDivision } from "@/data/professional-services";
-import { useProfessionalServices } from "@/lib/site-content";
+import { useCalegalText, useProfessionalServices } from "@/lib/site-content";
+import { useList } from "@/lib/page-lists";
+import { CALEGAL_STEPS } from "@/data/more-page-text";
 import { categoryAnchor } from "@/data/ca-legal-menu";
 
 const divisionId = (division: ServiceDivision) => division.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -30,6 +32,8 @@ export const Route = createFileRoute("/ca-legal-services/")({
 
 function CaLegalServicesPage() {
   const allServices = useProfessionalServices(PROFESSIONAL_SERVICES);
+  const t = useCalegalText();
+  const steps = useList("calegal.steps", CALEGAL_STEPS);
   return (
     <>
       {/* Hero */}
@@ -44,16 +48,14 @@ function CaLegalServicesPage() {
               <span className="text-gold">/</span>
               <span className="text-navy dark:text-white">CA & Legal Services</span>
             </p>
-            <p className="eyebrow mt-5">Beyond Your Loan</p>
+            <p className="eyebrow mt-5">{t("hero.eyebrow")}</p>
             <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              Tax, Compliance &<br />
-              <span className="gold-text-static italic">Legal Documentation, Sorted.</span>
+              {t("hero.title")}
+              <br />
+              <span className="gold-text-static italic">{t("hero.gold")}</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-              Alongside our loan business, we connect you with our associated professionals — our
-              CA Services team for tax, GST and business compliance, and our Professional Legal Services team for
-              property and legal documentation — each handling the work through their own
-              professional process, with GCS as your single point of contact.
+              {t("hero.body")}
             </p>
           </Reveal>
 
@@ -107,12 +109,10 @@ function CaLegalServicesPage() {
                     <div className={isLegal ? "lg:order-1" : ""}>
                       <p className="eyebrow">{divisionLabel(division)}</p>
                       <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-                        {isLegal
-                          ? "Property, society and legal documentation."
-                          : "Tax, GST, accounting and business registration."}
+                        {t(isLegal ? "legal.title" : "ca.title")}
                       </h2>
                       <p className="mt-4 text-sm font-bold text-navy dark:text-white">
-                        What's included · {services.length} services
+                        {t("divisions.included").replace("{count}", String(services.length))}
                       </p>
                       <ul className="mt-3 flex flex-wrap gap-2">
                         {services.map((s) => (
@@ -172,21 +172,19 @@ function CaLegalServicesPage() {
       <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 sm:pb-20 lg:px-8">
         <div className="grid gap-8 rounded-2xl border border-gold/25 panel-light p-8 sm:p-12 lg:grid-cols-[1fr_480px] lg:items-stretch">
           <Reveal className="flex h-full flex-col">
-            <p className="eyebrow">Not Sure Where to Start?</p>
+            <p className="eyebrow">{t("cta.eyebrow")}</p>
             <h3 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              Tell us what you need — <span className="gold-text">we'll point you right.</span>
+              {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
             </h3>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
-              Whether it's a tax filing, a GST question or a property document, share your
-              requirement and our team will connect you with the right associated professional.
+              {t("cta.body")}
             </p>
 
             <ol className="mt-8 space-y-5">
-              {[
-                ["Tell us what you need", "A few words are enough. A tax filing, a GST question or a property document."],
-                ["We connect you", "Our team matches you with the right CA or legal professional."],
-                ["You get clear next steps", "You are told what documents are needed and how the work will go."],
-              ].map(([title, body], i) => (
+              {steps.map((st, i) => {
+                const title = String(st["title"]);
+                const body = String(st["body"]);
+                return (
                 <li key={title} className="flex gap-4">
                   <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-navy text-sm font-extrabold text-white">
                     {i + 1}
@@ -196,12 +194,13 @@ function CaLegalServicesPage() {
                     <span className="mt-0.5 block text-sm leading-relaxed text-muted-foreground">{body}</span>
                   </span>
                 </li>
-              ))}
+                );
+              })}
             </ol>
 
             <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-dashed border-gold/30 pt-6 lg:mt-auto">
               <a href={CONTACT.phoneHref} className="gold-btn px-5 py-3 text-sm">
-                <Phone className="h-4 w-4" /> Call {CONTACT.phone}
+                <Phone className="h-4 w-4" /> {t("cta.call").replace("{phone}", CONTACT.phone)}
               </a>
               <a
                 href={CONTACT.whatsappLink}
@@ -209,7 +208,7 @@ function CaLegalServicesPage() {
                 rel="noopener noreferrer"
                 className="outline-btn dark:bg-card dark:text-white"
               >
-                WhatsApp Us
+                {t("cta.whatsapp")}
               </a>
             </div>
           </Reveal>

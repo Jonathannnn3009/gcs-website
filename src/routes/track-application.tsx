@@ -3,6 +3,7 @@ import { useEffect, useId, useState } from "react";
 import { ArrowRight, Check, Handshake, UserRound } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { CONTACT } from "@/data/site";
+import { useTrackText } from "@/lib/site-content";
 import { CRM_APP } from "@/lib/crm";
 import { normalizePhone } from "@/lib/lead-dedupe";
 import { confirmIdCode, IdRecoveryError, requestIdCode, type IdKind } from "@/lib/gcs-id-recovery";
@@ -363,33 +364,14 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
   );
 }
 
-const SIDE: Record<Who, { eyebrow: string; title: string; text: string; points: string[] }> = {
-  client: {
-    eyebrow: "For clients",
-    title: "Track your loan file",
-    text: "Enter your mobile number and GCS ID. We will take you to your tracking page, where you can see where your application stands.",
-    points: [
-      "The current status of your application",
-      "Your file followed from login to sanction and disbursal",
-      "Your GCS ID is the code your expert shared when your application was opened",
-      "No GCS ID yet? Confirm your mobile number and we text it to you",
-    ],
-  },
-  partner: {
-    eyebrow: "For partners",
-    title: "Partner sign in",
-    text: "Enter your registered mobile number and your Partner ID, and we will take you to your partner portal. There you sign in with your password.",
-    points: [
-      "Every client you have referred, in one place",
-      "Where each file stands, from referral to disbursal",
-      "Your commission structure",
-      "Lost your Partner ID? Confirm your mobile number and we text it to you",
-    ],
-  },
-};
-
 function SidePanel({ who }: { who: Who }) {
-  const side = SIDE[who];
+  const t = useTrackText();
+  const side = {
+    eyebrow: t(`${who}.eyebrow`),
+    title: t(`${who}.title`),
+    text: t(`${who}.text`),
+    points: [1, 2, 3, 4].map((n) => t(`${who}.p${n}`)),
+  };
   return (
     <div className="navy-panel relative flex flex-col overflow-hidden p-8 sm:p-11 lg:min-h-[30rem]">
       <div className="float-animation pointer-events-none absolute top-0 right-0 h-60 w-60 rounded-full bg-gold/10 blur-[90px]" />
@@ -418,6 +400,7 @@ function SidePanel({ who }: { who: Who }) {
 function TrackApplicationPage() {
   const [who, setWho] = useState<Who>("client");
   const [recover, setRecover] = useState(false);
+  const t = useTrackText();
 
   return (
     <>
@@ -425,13 +408,12 @@ function TrackApplicationPage() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="text-center">
-              <p className="eyebrow">Track Application</p>
+              <p className="eyebrow">{t("hero.eyebrow")}</p>
               <h1 className="mt-3 font-heading text-3xl font-bold text-navy sm:text-4xl dark:text-white">
-                Where does your loan file stand?
+                {t("hero.title")}
               </h1>
               <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                Follow your application from login to sanction and disbursal. Choose who you are,
-                enter your GCS ID, and we will take you to your tracking page.
+                {t("hero.body")}
               </p>
             </div>
           </Reveal>
@@ -468,11 +450,11 @@ function TrackApplicationPage() {
                       <w.icon className="h-5 w-5" />
                     </span>
                     <span>
-                      <span className="block text-sm font-extrabold">{w.label}</span>
+                      <span className="block text-sm font-extrabold">{t(`who.${w.id}`)}</span>
                       <span
                         className={`block text-xs ${on ? "text-white/70" : "text-muted-foreground"}`}
                       >
-                        {w.blurb}
+                        {t(`who.${w.id}Blurb`)}
                       </span>
                     </span>
                   </button>
@@ -496,15 +478,13 @@ function TrackApplicationPage() {
                         onClick={() => setRecover(true)}
                         className="mt-4 text-[13px] font-semibold text-gold-dark hover:underline"
                       >
-                        {who === "client" ? "Do not have a GCS ID?" : "Do not have a Partner ID?"}
+                        {t(`${who}.noId`)}
                       </button>
                     </>
                   )}
                 </div>
                 <p className="min-h-[6.5rem] border-t border-border pt-5 text-[13px] leading-relaxed text-muted-foreground">
-                  {who === "client"
-                    ? "Need help finding your GCS ID? "
-                    : "Forgot your password, or not a partner yet? "}
+                  {t(`${who}.help`)}{" "}
                   Call {CONTACT.phone} ({CONTACT.hours}) or message us on{" "}
                   <a
                     href={CONTACT.whatsappLink}

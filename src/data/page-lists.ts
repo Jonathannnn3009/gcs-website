@@ -58,6 +58,7 @@ import {
 import { BANK_PARTNERS, CONTACT, PAIN_POINTS, SERVICES } from "@/data/site";
 import { BUREAUS, LAST_PULLED_OPTIONS } from "@/data/cibil";
 import { LOCATIONS } from "@/data/locations";
+import { CALEGAL_STEPS } from "@/data/more-page-text";
 import {
   APPLICANT_CATEGORY_LABELS,
   PRODUCT_GROUPS,
@@ -791,6 +792,14 @@ export const LIST_SPECS: ListSpec[] = [
       T("v3", "Third column"),
     ],
     items: HOME_LENDERS,
+  },
+  {
+    key: "calegal.steps",
+    page: "CA & Legal",
+    label: "Steps beside the enquiry form",
+    hint: "The three short steps shown next to the CA & Legal enquiry form.",
+    fields: [T("title", "Step"), A("body", "Description")],
+    items: CALEGAL_STEPS,
   },
   {
     key: "contact.benefits",

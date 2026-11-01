@@ -19,6 +19,14 @@ import { CONTACT_TEXT, CONTACT_TEXT_SECTIONS } from "../src/data/contact-text";
 import { SERVICES_TEXT, SERVICES_TEXT_SECTIONS } from "../src/data/services-text";
 import { CIBIL_TEXT, CIBIL_TEXT_SECTIONS } from "../src/data/cibil-text";
 import { WHYUS_TEXT, WHYUS_TEXT_SECTIONS } from "../src/data/whyus-text";
+import {
+  CALEGAL_TEXT,
+  CALEGAL_TEXT_SECTIONS,
+  PARTNER_TEXT,
+  PARTNER_TEXT_SECTIONS,
+  TRACK_TEXT,
+  TRACK_TEXT_SECTIONS,
+} from "../src/data/more-page-text";
 
 const out = process.argv[2];
 if (!out) throw new Error("Pass the output file path");
@@ -174,6 +182,12 @@ writeFileSync(
       cibilTextSpec: CIBIL_TEXT_SECTIONS,
       whyusText: WHYUS_TEXT,
       whyusTextSpec: WHYUS_TEXT_SECTIONS,
+      calegalText: CALEGAL_TEXT,
+      calegalTextSpec: CALEGAL_TEXT_SECTIONS,
+      partnerText: PARTNER_TEXT,
+      partnerTextSpec: PARTNER_TEXT_SECTIONS,
+      trackText: TRACK_TEXT,
+      trackTextSpec: TRACK_TEXT_SECTIONS,
       trustNumbers: { "75+": "75+", "25+": "25+", "2017": "2017", "100%": "100%" },
     },
     null,

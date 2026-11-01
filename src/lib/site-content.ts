@@ -21,6 +21,7 @@ import { CONTACT_TEXT } from "@/data/contact-text";
 import { SERVICES_TEXT } from "@/data/services-text";
 import { CIBIL_TEXT } from "@/data/cibil-text";
 import { WHYUS_TEXT } from "@/data/whyus-text";
+import { CALEGAL_TEXT, PARTNER_TEXT, TRACK_TEXT } from "@/data/more-page-text";
 
 type SiteContent = {
   faqs?: Record<string, Faq[]>;
@@ -46,6 +47,10 @@ type SiteContent = {
   cibilText?: Record<string, string>;
   /** Why Us page headings, paragraphs and buttons, by field id (see data/whyus-text.ts). */
   whyusText?: Record<string, string>;
+  /** CA & Legal, Partner and Track Application wording, by field id (see data/more-page-text.ts). */
+  calegalText?: Record<string, string>;
+  partnerText?: Record<string, string>;
+  trackText?: Record<string, string>;
   customPages?: CustomPage[];
   /** Repeated blocks on the pages, keyed by list name (see data/page-lists.ts). */
   lists?: Record<string, Record<string, string>[]>;
@@ -188,6 +193,17 @@ export function useWhyUsText(): (id: string) => string {
     return typeof text === "string" && text.trim() ? text : (WHYUS_TEXT[id] ?? "");
   };
 }
+
+const copyOf = (edits: Record<string, string> | undefined, builtIn: Record<string, string>) => (id: string) => {
+  const text = edits?.[id];
+  return typeof text === "string" && text.trim() ? text : (builtIn[id] ?? "");
+};
+/** CA & Legal page wording: the CRM's text for a field when staff set one, else the built-in text. */
+export const useCalegalText = () => copyOf(useSiteContent().calegalText, CALEGAL_TEXT);
+/** Partner page wording, the same way. */
+export const usePartnerText = () => copyOf(useSiteContent().partnerText, PARTNER_TEXT);
+/** Track Application page wording, the same way. */
+export const useTrackText = () => copyOf(useSiteContent().trackText, TRACK_TEXT);
 
 const nonEmptyList = <T>(v: unknown): v is T[] => Array.isArray(v) && v.length > 0;
 

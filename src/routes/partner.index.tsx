@@ -54,6 +54,7 @@ import {
   PARTNER_STEPS,
 } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
+import { usePartnerText } from "@/lib/site-content";
 import { ThankYouCard } from "@/components/thank-you-card";
 
 export const Route = createFileRoute("/partner/")({
@@ -458,6 +459,7 @@ function PartnerPage() {
   const PARTNER_STATS_LIST = useList("partner.stats", PARTNER_STATS);
   const partnerFaqs = useFaqs("partner", PARTNER_FAQS);
   const commissionRows = useCommissionStructure(COMMISSION_STRUCTURE);
+  const t = usePartnerText();
   return (
     <>
       <ZoneTabs current="/partner" />
@@ -469,16 +471,14 @@ function PartnerPage() {
               <div className="navy-panel relative flex h-full flex-col overflow-hidden rounded-3xl p-8 sm:p-10">
                 <div className="float-animation absolute top-0 right-0 h-72 w-72 rounded-full bg-gold/10 blur-[100px]" />
                 <p className="relative text-xs font-bold tracking-[0.2em] text-gold uppercase">
-                  Agent Partner
+                  {t("hero.eyebrow")}
                 </p>
                 <h1 className="relative mt-3 font-heading text-3xl font-bold text-white sm:text-4xl">
-                  Turn your network into{" "}
-                  <span className="italic text-gold-light">a second income.</span>
+                  {t("hero.title")}{" "}
+                  <span className="italic text-gold-light">{t("hero.gold")}</span>
                 </h1>
                 <p className="relative mt-4 text-sm leading-relaxed text-white/65">
-                  If you're a CA, broker, advisor or consultant whose clients occasionally need a
-                  loan, refer them to us. We handle the lending end to end — you stay the trusted
-                  contact, and earn on every case we disburse.
+                  {t("hero.body")}
                 </p>
 
                 <div className="relative mt-8 grid grid-cols-2 gap-5 sm:grid-cols-4">
@@ -509,8 +509,7 @@ function PartnerPage() {
 
                 <div className="relative mt-auto border-t border-white/10 pt-6">
                   <p className="font-heading text-base italic leading-relaxed text-white/80">
-                    "You bring the introduction. We bring 75+ lenders, a senior expert, and the
-                    paperwork."
+                    {t("hero.quote")}
                   </p>
                 </div>
               </div>
@@ -527,9 +526,9 @@ function PartnerPage() {
 
       <ZoneFeatureGrid
         first
-        eyebrow="What We Do"
-        title="Simple process. Clear payouts. Real earnings."
-        description="We bring banks, NBFCs and independent advisors onto one desk, so families and business owners can find the right loan without going from bank to bank. You make the introduction and we do the rest."
+        eyebrow={t("what.eyebrow")}
+        title={t("what.title")}
+        description={t("what.body")}
         items={WHAT_WE_DO}
       />
 
@@ -537,9 +536,9 @@ function PartnerPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Built For"
-            title="If your clients ask you finance questions, this is for you."
-            description="A second income stream that doesn't cost you anything but a referral."
+            eyebrow={t("builtfor.eyebrow")}
+            title={t("builtfor.title")}
+            description={t("builtfor.body")}
           />
         </Reveal>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -564,16 +563,12 @@ function PartnerPage() {
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <Reveal>
             <SectionHeading
-              eyebrow="How It Works"
-              title="From introduction to payout — four steps."
-              description="You make the introduction. Everything after that is on us."
+              eyebrow={t("how.eyebrow")}
+              title={t("how.title")}
+              description={t("how.body")}
             />
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-              Most referral programs leave you chasing updates or managing paperwork you never
-              signed up for. Ours doesn't. Once you share a lead, a dedicated expert takes ownership
-              of the file end to end — checking eligibility, matching it against our network of 75+
-              banks and NBFCs, and pushing it through to disbursal — while you get scheduled updates
-              at every stage instead of radio silence until the payout.
+              {t("how.paragraph")}
             </p>
           </Reveal>
           <Reveal delay={80}>
@@ -593,9 +588,9 @@ function PartnerPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="Why Partner With GCS"
-            title="What you get."
-            description="No fine print — just the reasons professionals already refer to us."
+            eyebrow={t("why.eyebrow")}
+            title={t("why.title")}
+            description={t("why.body")}
           />
         </Reveal>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -616,9 +611,9 @@ function PartnerPage() {
       </Section>
 
       <ZoneFeatureGrid
-        eyebrow="Why Choose Us"
-        title="A loan partner that is on your side."
-        description="We want partners to be able to serve their clients better and grow their earnings, with nothing hidden."
+        eyebrow={t("choose.eyebrow")}
+        title={t("choose.title")}
+        description={t("choose.body")}
         items={WHY_CHOOSE}
       />
 
@@ -626,9 +621,9 @@ function PartnerPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="What You Earn"
-            title="Referral commission by loan type."
-            description="Indicative earning per successful referral — actual payout depends on the lender, loan amount and your partner tier."
+            eyebrow={t("earn.eyebrow")}
+            title={t("earn.title")}
+            description={t("earn.body")}
           />
         </Reveal>
         <Reveal delay={80}>
@@ -658,8 +653,7 @@ function PartnerPage() {
             </div>
           </div>
           <p className="mt-3 text-xs text-muted-foreground italic">
-            <span className="font-bold text-red-600 not-italic">* </span>Commission rates may vary based on
-            lender, loan amount and partner tier.
+            <span className="font-bold text-red-600 not-italic">* </span>{t("earn.note")}
           </p>
         </Reveal>
       </Section>
@@ -668,9 +662,9 @@ function PartnerPage() {
       <Section className="pt-0">
         <Reveal>
           <SectionHeading
-            eyebrow="What You Could Earn"
-            title="Work out your own numbers."
-            description="Pick a loan type, a typical amount and how many clients you might refer in a month."
+            eyebrow={t("estimate.eyebrow")}
+            title={t("estimate.title")}
+            description={t("estimate.body")}
             align="center"
           />
         </Reveal>
@@ -680,9 +674,9 @@ function PartnerPage() {
       </Section>
 
       <ZoneAssistant
-        eyebrow={`Meet ${ASSISTANT_NAME}`}
-        title="An AI assistant that answers your clients' first questions."
-        intro="Send clients to our site and let the assistant handle the basics: eligibility, EMI, documents and rates, any time of day. When they are ready to talk, it passes them to an expert."
+        eyebrow={t("assistant.eyebrow").replace("{name}", ASSISTANT_NAME)}
+        title={t("assistant.title")}
+        intro={t("assistant.body")}
         points={ASSISTANT_POINTS}
         prompts={[
           {
@@ -695,10 +689,10 @@ function PartnerPage() {
       />
 
       <ZoneGetStarted
-        title="Ready to turn your network into a second income?"
-        description="Three steps, and the first one takes two minutes."
+        title={t("start.title")}
+        description={t("start.body")}
         steps={GET_STARTED}
-        cta="Register as a Partner"
+        cta={t("start.button")}
       />
 
       {/* Reasons to partner — accordion beside an image */}
@@ -712,13 +706,12 @@ function PartnerPage() {
             />
           </Reveal>
           <Reveal delay={80}>
-            <p className="eyebrow">Worth Knowing</p>
+            <p className="eyebrow">{t("reasons.eyebrow")}</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              Reasons to partner with us.
+              {t("reasons.title")}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Beyond the referral fee, most professionals who stick with this partnership for years
-              mention the same handful of reasons. Expand each one below.
+              {t("reasons.body")}
             </p>
             <div className="mt-6">
               <Accordion items={MORE_REASONS} />
@@ -731,12 +724,12 @@ function PartnerPage() {
       <Section className="pt-0">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <Reveal>
-            <p className="eyebrow">Before You Register</p>
+            <p className="eyebrow">{t("faq.eyebrow")}</p>
             <h2 className="mt-2 text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
-              Quick answers.
+              {t("faq.title")}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              The questions that come up most before someone sends their first referral.
+              {t("faq.body")}
             </p>
             <div className="mt-6">
               <Accordion items={partnerFaqs} />
@@ -759,14 +752,14 @@ function PartnerPage() {
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]" />
             <Handshake className="float-animation relative mx-auto h-10 w-10 text-gold-dark" />
             <h3 className="relative mt-4 font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
-              Prefer to talk it through first? <span className="gold-text">Call us.</span>
+              {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
               {CONTACT.phone} · {CONTACT.hours}
             </p>
             <div className="relative mt-6 flex flex-wrap justify-center gap-3">
               <a href={CONTACT.phoneHref} className="gold-btn py-3.5 text-base">
-                Call Us <ArrowRight className="h-4 w-4" />
+                {t("cta.call")} <ArrowRight className="h-4 w-4" />
               </a>
               <a
                 href={CONTACT.whatsappLink}
@@ -774,7 +767,7 @@ function PartnerPage() {
                 rel="noopener noreferrer"
                 className="outline-btn dark:bg-card dark:text-white"
               >
-                WhatsApp Us
+                {t("cta.whatsapp")}
               </a>
             </div>
           </div>
