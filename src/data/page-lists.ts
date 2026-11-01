@@ -600,6 +600,17 @@ export const SERVICES_GROUPS = PRODUCT_GROUPS.map((g) => ({
   description: g.description,
 }));
 
+/** The four steps above the CIBIL request form. The icons stay in the page, one per step. */
+export const CIBIL_STEPS = [
+  { title: "Share your details", text: "PAN, date of birth and address, exactly as on your records." },
+  { title: "Choose your bureau", text: "TransUnion CIBIL, Experian, Equifax or CRIF High Mark." },
+  { title: "Tell us your last report", text: "A quick question so we have the full picture." },
+  {
+    title: "Pay by UPI QR",
+    text: "One flat price for any bureau. We pull your report and send it to you.",
+  },
+];
+
 export const CIBIL_BUREAUS = BUREAUS.map((b) => ({ id: b.id, name: b.name, blurb: b.blurb }));
 
 export const CIBIL_LAST_PULLED = LAST_PULLED_OPTIONS.map((o) => ({
@@ -1016,6 +1027,15 @@ export const LIST_SPECS: ListSpec[] = [
     fixed: true,
     fields: [R("name", "Group"), T("heading", "Heading"), A("description", "Description")],
     items: SERVICES_GROUPS,
+  },
+  {
+    key: "cibil.steps",
+    page: "CIBIL",
+    label: "The four steps",
+    hint: "The four cards above the request form. They follow the form's steps, so they can be reworded and reordered but not added to.",
+    fixed: true,
+    fields: [T("title", "Step"), A("text", "Description")],
+    items: CIBIL_STEPS,
   },
   {
     key: "cibil.bureaus",

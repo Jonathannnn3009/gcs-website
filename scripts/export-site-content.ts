@@ -17,6 +17,7 @@ import { HOME_TEXT, HOME_TEXT_SECTIONS } from "../src/data/home-text";
 import { ABOUT_TEXT, ABOUT_TEXT_SECTIONS } from "../src/data/about-text";
 import { CONTACT_TEXT, CONTACT_TEXT_SECTIONS } from "../src/data/contact-text";
 import { SERVICES_TEXT, SERVICES_TEXT_SECTIONS } from "../src/data/services-text";
+import { CIBIL_TEXT, CIBIL_TEXT_SECTIONS } from "../src/data/cibil-text";
 
 const out = process.argv[2];
 if (!out) throw new Error("Pass the output file path");
@@ -168,6 +169,8 @@ writeFileSync(
       contactTextSpec: CONTACT_TEXT_SECTIONS,
       servicesText: SERVICES_TEXT,
       servicesTextSpec: SERVICES_TEXT_SECTIONS,
+      cibilText: CIBIL_TEXT,
+      cibilTextSpec: CIBIL_TEXT_SECTIONS,
       trustNumbers: { "75+": "75+", "25+": "25+", "2017": "2017", "100%": "100%" },
     },
     null,

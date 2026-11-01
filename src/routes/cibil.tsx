@@ -31,7 +31,9 @@ import {
   type BureauId,
   type LastPulled,
 } from "@/data/cibil";
-import { useBureaus, useLastPulled } from "@/lib/page-lists";
+import { useBureaus, useLastPulled, useList } from "@/lib/page-lists";
+import { CIBIL_STEPS } from "@/data/page-lists";
+import { useCibilText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/cibil")({
   head: () => ({
@@ -621,31 +623,13 @@ function CibilFlow() {
   );
 }
 
-const howItWorks = (): { title: string; text: string; icon: LucideIcon }[] => [
-  {
-    title: "Share your details",
-    text: "PAN, date of birth and address, exactly as on your records.",
-    icon: UserRound,
-  },
-  {
-    title: "Choose your bureau",
-    text: "TransUnion CIBIL, Experian, Equifax or CRIF High Mark.",
-    icon: Gauge,
-  },
-  {
-    title: "Tell us your last report",
-    text: "A quick question so we have the full picture.",
-    icon: FileSearch,
-  },
-  {
-    title: "Pay by UPI QR",
-    text: "One flat price for any bureau. We pull your report and send it to you.",
-    icon: QrCode,
-  },
-];
+// One icon per step, in the same order as the steps.
+const STEP_ICONS: LucideIcon[] = [UserRound, Gauge, FileSearch, QrCode];
+
 
 /** A decorative 300 to 900 score dial for the hero. It shows the scale, not a real score. */
 function ScoreDial() {
+  const t = useCibilText();
   return (
     <div className="relative mx-auto w-full max-w-[320px] rounded-3xl border border-white/15 bg-white/[0.06] p-6 backdrop-blur-sm">
       <div className="pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full bg-gold/20 blur-[60px]" />
@@ -666,17 +650,22 @@ function ScoreDial() {
         <text x="220" y="148" fill="rgba(255,255,255,0.65)" fontSize="11" fontWeight="700" textAnchor="middle">900</text>
       </svg>
       <p className="relative mt-2 text-center text-[11px] font-bold tracking-[0.2em] text-gold-light uppercase">
-        Credit score range
+        {t("dial.label")}
       </p>
       <p className="relative mt-1 text-center text-xs leading-relaxed text-white/65">
-        Know where you stand before you apply for a loan.
+        {t("dial.note")}
       </p>
     </div>
   );
 }
 
 function CibilPage() {
-  const HOW_IT_WORKS = howItWorks();
+  const t = useCibilText();
+  const HOW_IT_WORKS = useList("cibil.steps", CIBIL_STEPS).map((s, i) => ({
+    title: String(s["title"]),
+    text: String(s["text"]),
+    icon: STEP_ICONS[i % STEP_ICONS.length]!,
+  }));
   return (
     <>
       <section className="bg-bg-light py-10 sm:py-14 dark:bg-background">
@@ -687,20 +676,18 @@ function CibilPage() {
               <div className="absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-[#2f5fd0]/20 blur-[90px]" />
               <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,0.8fr)]">
                 <div>
-                  <p className="eyebrow">CIBIL &amp; Credit Reports</p>
+                  <p className="eyebrow">{t("hero.eyebrow")}</p>
                   <h1 style={{ fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }} className="mt-4 text-3xl leading-tight font-extrabold text-white sm:text-5xl">
-                    Get Your Credit Report, <span className="gold-text">Without the Hassle.</span>
+                    {t("hero.title")} <span className="gold-text">{t("hero.gold")}</span>
                   </h1>
                   <p className="mt-4 max-w-2xl text-base text-white/70">
-                    Pick your credit bureau, pay by UPI QR and share a few details. Our team pulls
-                    your TransUnion CIBIL, Experian, Equifax or CRIF High Mark report and sends it
-                    to you.
+                    {t("hero.body")}
                   </p>
                   <ul className="mt-6 flex flex-wrap gap-2.5">
                     {[
-                      { icon: ShieldCheck, text: "Soft enquiry, no score impact" },
-                      { icon: QrCode, text: `Flat ₹${REPORT_PRICE}, paid by UPI` },
-                      { icon: Gauge, text: "4 credit bureaus" },
+                      { icon: ShieldCheck, text: t("hero.chip1") },
+                      { icon: QrCode, text: t("hero.chip2").replace("{price}", String(REPORT_PRICE)) },
+                      { icon: Gauge, text: t("hero.chip3") },
                     ].map((c) => (
                       <li
                         key={c.text}
@@ -716,7 +703,7 @@ function CibilPage() {
                     className="mt-6 inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2.5 text-sm font-bold text-white/85 transition-colors hover:border-gold/40 hover:text-white"
                   >
                     <Gauge className="h-4 w-4 text-gold" />
-                    Not sure where you stand? Try our Credit Score Estimator
+                    {t("hero.estimator")}
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
@@ -762,14 +749,11 @@ function CibilPage() {
                 <FileSearch className="h-5 w-5" />
               </span>
               <h3 className="tracking-normal mt-3 text-sm font-extrabold text-navy dark:text-white">
-                Good to know
+                {t("notes.title")}
               </h3>
               <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted-foreground">
-                <li>Checking your own report is a soft enquiry. It doesn't lower your score.</li>
-                <li>
-                  Growth Capital Services is independent of TransUnion CIBIL, Experian, Equifax and
-                  CRIF High Mark; their names only tell us which report you want.
-                </li>
+                <li>{t("notes.p1")}</li>
+                <li>{t("notes.p2")}</li>
               </ul>
             </div>
             <div className="rounded-2xl border border-blue-soft-border bg-blue-soft p-6 dark:border-gold/15 dark:bg-card">
@@ -777,14 +761,13 @@ function CibilPage() {
                 <Gauge className="h-5 w-5" />
               </span>
               <h3 className="tracking-normal mt-3 text-sm font-extrabold text-navy dark:text-white">
-                Credit Score Estimator
+                {t("estimator.title")}
               </h3>
               <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                Not sure where you stand? Get an indicative score range in a minute, before you
-                request your report.
+                {t("estimator.body")}
               </p>
               <Link to="/credit-score-estimator" className="mt-4 gold-btn px-4 py-2.5">
-                Try the estimator <ArrowRight className="h-3.5 w-3.5" />
+                {t("estimator.button")} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
           </aside>
@@ -794,9 +777,9 @@ function CibilPage() {
 
       <PageCalculators
         ids={["credit-score", "emi", "eligibility"]}
-        eyebrow="Before you request a report"
-        title="Get a feel for your score and what it can borrow"
-        description="An indicative score range, and what that means for your EMI and eligibility. A quick estimate, not a bureau pull."
+        eyebrow={t("calc.eyebrow")}
+        title={t("calc.title")}
+        description={t("calc.body")}
         className="pt-0"
       />
     </>
