@@ -16,6 +16,7 @@ import { LEGAL_DRAFTS } from "../src/data/legal-drafts";
 import { HOME_TEXT, HOME_TEXT_SECTIONS } from "../src/data/home-text";
 import { ABOUT_TEXT, ABOUT_TEXT_SECTIONS } from "../src/data/about-text";
 import { CONTACT_TEXT, CONTACT_TEXT_SECTIONS } from "../src/data/contact-text";
+import { SERVICES_TEXT, SERVICES_TEXT_SECTIONS } from "../src/data/services-text";
 
 const out = process.argv[2];
 if (!out) throw new Error("Pass the output file path");
@@ -165,6 +166,8 @@ writeFileSync(
       aboutTextSpec: ABOUT_TEXT_SECTIONS,
       contactText: CONTACT_TEXT,
       contactTextSpec: CONTACT_TEXT_SECTIONS,
+      servicesText: SERVICES_TEXT,
+      servicesTextSpec: SERVICES_TEXT_SECTIONS,
       trustNumbers: { "75+": "75+", "25+": "25+", "2017": "2017", "100%": "100%" },
     },
     null,

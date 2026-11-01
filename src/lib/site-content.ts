@@ -18,6 +18,7 @@ import { applyCibilInfo } from "@/data/cibil";
 import { HOME_TEXT } from "@/data/home-text";
 import { ABOUT_TEXT } from "@/data/about-text";
 import { CONTACT_TEXT } from "@/data/contact-text";
+import { SERVICES_TEXT } from "@/data/services-text";
 
 type SiteContent = {
   faqs?: Record<string, Faq[]>;
@@ -37,6 +38,8 @@ type SiteContent = {
   aboutText?: Record<string, string>;
   /** Contact page headings, paragraphs and buttons, by field id (see data/contact-text.ts). */
   contactText?: Record<string, string>;
+  /** Services page headings, paragraphs and buttons, by field id (see data/services-text.ts). */
+  servicesText?: Record<string, string>;
   customPages?: CustomPage[];
   /** Repeated blocks on the pages, keyed by list name (see data/page-lists.ts). */
   lists?: Record<string, Record<string, string>[]>;
@@ -150,6 +153,15 @@ export function useContactText(): (id: string) => string {
   return (id) => {
     const text = edits?.[id];
     return typeof text === "string" && text.trim() ? text : (CONTACT_TEXT[id] ?? "");
+  };
+}
+
+/** Services page wording: the CRM's text for a field when staff set one, else the built-in text. */
+export function useServicesText(): (id: string) => string {
+  const edits = useSiteContent().servicesText;
+  return (id) => {
+    const text = edits?.[id];
+    return typeof text === "string" && text.trim() ? text : (SERVICES_TEXT[id] ?? "");
   };
 }
 

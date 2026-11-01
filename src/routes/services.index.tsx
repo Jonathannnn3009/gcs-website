@@ -10,6 +10,7 @@ import { CONTACT } from "@/data/site";
 import { CALCULATORS } from "@/components/page-calculators";
 import { PRODUCT_CALCULATORS } from "@/data/page-calculators";
 import { useProductGroups } from "@/lib/page-lists";
+import { useServicesText } from "@/lib/site-content";
 
 export const Route = createFileRoute("/services/")({
   head: () => ({
@@ -32,6 +33,8 @@ export const Route = createFileRoute("/services/")({
 
 function ServicesPage() {
   const PRODUCT_GROUPS = useProductGroups();
+  const t = useServicesText();
+  const withCount = (text: string) => text.replaceAll("{count}", String(PRODUCTS.length));
   const groupsWithCounts = PRODUCT_GROUPS.map((g) => ({
     ...g,
     count: PRODUCTS.filter((p) => p.group === g.name).length,
@@ -51,15 +54,14 @@ function ServicesPage() {
               <span className="text-gold">/</span>
               <span className="text-navy dark:text-white">Services</span>
             </p>
-            <p className="eyebrow mt-5">Every Product, One Desk</p>
+            <p className="eyebrow mt-5">{t("hero.eyebrow")}</p>
             <h1 className="mt-3 text-3xl font-extrabold text-navy sm:text-5xl dark:text-white">
-              {PRODUCTS.length} loan products,
+              {withCount(t("hero.title"))}
               <br />
-              <span className="gold-text-static italic">matched to your needs.</span>
+              <span className="gold-text-static italic">{t("hero.gold")}</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-              One expert works across our full catalogue of {PRODUCTS.length} products and our 75+
-              lender network to find what actually fits your profile.
+              {withCount(t("hero.body"))}
             </p>
           </Reveal>
 
@@ -85,9 +87,9 @@ function ServicesPage() {
       <Section>
         <Reveal>
           <SectionHeading
-            eyebrow="Start With Your Goal"
-            title="What are you planning?"
-            description="Pick a goal to jump straight to the right loan."
+            eyebrow={t("goal.eyebrow")}
+            title={t("goal.title")}
+            description={t("goal.body")}
           />
         </Reveal>
         <LoanGoals />
@@ -178,7 +180,7 @@ function ServicesPage() {
                           params={{ slug: product.slug }}
                           className="group/link inline-flex items-center gap-2 text-sm font-bold text-navy transition-colors hover:text-gold-dark dark:text-white"
                         >
-                          View full details
+                          {t("cards.details")}
                           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-1" />
                         </Link>
                         {calcId && (
@@ -207,14 +209,14 @@ function ServicesPage() {
           <div className="relative overflow-hidden rounded-2xl border border-gold/25 panel-light p-8 text-center sm:p-12">
             <div className="absolute top-0 right-1/4 h-60 w-60 rounded-full bg-gold/10 blur-[80px]"></div>
             <h3 className="relative font-heading text-2xl font-bold text-navy sm:text-3xl dark:text-white">
-              Not sure which one fits? <span className="gold-text">Let&apos;s talk.</span>
+              {t("cta.title")} <span className="gold-text">{t("cta.gold")}</span>
             </h3>
             <p className="relative mt-3 text-sm text-muted-foreground">
-              Call {CONTACT.phone} · {CONTACT.hours}
+              {t("cta.call").replace("{phone}", CONTACT.phone).replace("{hours}", CONTACT.hours)}
             </p>
             <div className="relative mt-6 flex flex-wrap justify-center gap-3">
               <Link to="/contact" className="gold-btn group py-3.5 text-base">
-                Get Free Consultation
+                {t("cta.primary")}
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
               <a
@@ -223,7 +225,7 @@ function ServicesPage() {
                 rel="noopener noreferrer"
                 className="outline-btn dark:bg-card dark:text-white"
               >
-                WhatsApp Us
+                {t("cta.secondary")}
               </a>
             </div>
           </div>
