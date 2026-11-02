@@ -219,6 +219,111 @@ const creditStep = (
         : "Include car, personal and education loans, and credit-card minimums.",
       showWhen: { key: "hasLoans", values: ["Yes"] },
     },
+    // The biggest running loan in detail, then one more; the monthly total above covers the rest.
+    {
+      key: "loan1Bank",
+      label: "Bank or NBFC of your biggest running loan",
+      kind: "text",
+      placeholder: "e.g. HDFC Bank",
+      showWhen: { key: "hasLoans", values: ["Yes"] },
+    },
+    {
+      key: "loan1Type",
+      label: "What kind of loan is it?",
+      kind: "choice",
+      dropdown: true,
+      options: [
+        "Home Loan",
+        "Loan Against Property",
+        "Business Loan",
+        "Personal Loan",
+        "Vehicle Loan",
+        "Overdraft or Cash Credit",
+        "Credit card",
+        "Other",
+      ],
+      showWhen: { key: "hasLoans", values: ["Yes"] },
+    },
+    {
+      key: "loan1Original",
+      label: "Original loan amount",
+      kind: "amount",
+      placeholder: rupee,
+      showWhen: { key: "hasLoans", values: ["Yes"] },
+    },
+    {
+      key: "loan1Outstanding",
+      label: "Amount still to be repaid",
+      kind: "amount",
+      placeholder: rupee,
+      showWhen: { key: "hasLoans", values: ["Yes"] },
+    },
+    {
+      key: "loan1Emi",
+      label: "Its monthly EMI",
+      kind: "amount",
+      allowZero: true,
+      placeholder: "e.g. 25,000",
+      showWhen: { key: "hasLoans", values: ["Yes"] },
+    },
+    {
+      key: "loan1Roi",
+      label: "Its interest rate",
+      kind: "percent",
+      showWhen: { key: "hasLoans", values: ["Yes"] },
+    },
+    {
+      key: "loan1Left",
+      label: "How much time is left, and since when has it been running?",
+      kind: "text",
+      placeholder: "e.g. 6 years left, running since 2021",
+      showWhen: { key: "hasLoans", values: ["Yes"] },
+    },
+    {
+      key: "hasLoan2",
+      label: "Is there another running loan you would like to tell us about?",
+      kind: "choice",
+      options: YES_NO,
+      showWhen: { key: "hasLoans", values: ["Yes"] },
+    },
+    {
+      key: "loan2Bank",
+      label: "Its bank or NBFC",
+      kind: "text",
+      showWhen: { key: "hasLoan2", values: ["Yes"] },
+    },
+    {
+      key: "loan2Type",
+      label: "What kind of loan is it?",
+      kind: "choice",
+      dropdown: true,
+      options: [
+        "Home Loan",
+        "Loan Against Property",
+        "Business Loan",
+        "Personal Loan",
+        "Vehicle Loan",
+        "Overdraft or Cash Credit",
+        "Credit card",
+        "Other",
+      ],
+      showWhen: { key: "hasLoan2", values: ["Yes"] },
+    },
+    {
+      key: "loan2Outstanding",
+      label: "Amount still to be repaid",
+      kind: "amount",
+      placeholder: rupee,
+      showWhen: { key: "hasLoan2", values: ["Yes"] },
+    },
+    {
+      key: "loan2Emi",
+      label: "Its monthly EMI",
+      kind: "amount",
+      allowZero: true,
+      placeholder: "e.g. 10,000",
+      showWhen: { key: "hasLoan2", values: ["Yes"] },
+    },
     {
       key: "latePayments",
       label: business
@@ -235,6 +340,56 @@ const creditStep = (
         : "Roughly what is your CIBIL score?",
       kind: "choice",
       options: ["750 or above", "700 to 749", "650 to 699", "Below 650", "I don't know"],
+    },
+    {
+      key: "creditConcern",
+      label: "Is there anything on your credit report that worries you?",
+      kind: "choice",
+      dropdown: true,
+      options: [
+        "Nothing that I know of",
+        "EMI delay",
+        "Overdue",
+        "Loan settlement",
+        "Write-off",
+        "Cheque bounce",
+        "Credit card overdue",
+        "A mistake in the credit report",
+        "Other",
+      ],
+    },
+    {
+      key: "creditConcernNote",
+      label: "A line about it, if you can",
+      kind: "text",
+      placeholder: "What happened, and when",
+      showWhen: { key: "creditConcern", values: ["EMI delay", "Overdue", "Loan settlement", "Write-off", "Cheque bounce", "Credit card overdue", "A mistake in the credit report", "Other"] },
+    },
+    {
+      key: "appliedElsewhere",
+      label: `Have you already applied for ${/^[aeiou]/i.test(loan) ? "an" : "a"} ${loan} with another bank or NBFC?`,
+      kind: "choice",
+      options: YES_NO,
+    },
+    {
+      key: "appliedBank",
+      label: "Which bank or NBFC?",
+      kind: "text",
+      showWhen: { key: "appliedElsewhere", values: ["Yes"] },
+    },
+    {
+      key: "appliedStatus",
+      label: "Where does that application stand?",
+      kind: "choice",
+      options: ["Under process", "Approved", "Sanctioned", "Declined", "On hold", "Withdrawn", "Other"],
+      showWhen: { key: "appliedElsewhere", values: ["Yes"] },
+    },
+    {
+      key: "appliedRemarks",
+      label: "Any reason or remark they gave?",
+      kind: "text",
+      placeholder: "If you know it",
+      showWhen: { key: "appliedElsewhere", values: ["Yes"] },
     },
     {
       key: "pastRejection",
@@ -321,6 +476,105 @@ const coApplicantStep = (): QuestionStep => ({
           "Retired, with a pension",
         ],
       },
+    },
+  ],
+});
+
+/**
+ * Asked at the end of every second form: property the applicant already owns, rent they receive, and anyone else
+ * whose income should count. Lenders weigh all three when they decide how much to lend.
+ */
+const profileStep = (): QuestionStep => ({
+  title: "More about your finances",
+  help: "Other property, rent and a second earner can all raise what a lender is willing to give.",
+  fields: [
+    {
+      key: "ownsOtherProperty",
+      label: "Do you own any property today?",
+      kind: "choice",
+      options: YES_NO,
+    },
+    {
+      key: "otherPropertyType",
+      label: "What kind of property is it?",
+      kind: "choice",
+      dropdown: true,
+      options: ["Residential flat", "Shop", "Office", "Commercial", "Industrial", "Other"],
+      showWhen: { key: "ownsOtherProperty", values: ["Yes"] },
+    },
+    {
+      key: "otherPropertyLocation",
+      label: "Where is it?",
+      kind: "text",
+      placeholder: "Area or locality",
+      showWhen: { key: "ownsOtherProperty", values: ["Yes"] },
+    },
+    {
+      key: "otherPropertyUse",
+      label: "Who uses it?",
+      kind: "choice",
+      options: ["I live in it", "It is rented out", "It is empty"],
+      showWhen: { key: "ownsOtherProperty", values: ["Yes"] },
+    },
+    {
+      key: "hasRentalIncome",
+      label: "Do you receive any rent?",
+      kind: "choice",
+      options: YES_NO,
+    },
+    {
+      key: "rentalProperty",
+      label: "Is the rent from a property you already own, or one you plan to buy?",
+      kind: "choice",
+      options: ["One I already own", "One I plan to buy"],
+      showWhen: { key: "hasRentalIncome", values: ["Yes"] },
+    },
+    {
+      key: "rentalMonthly",
+      label: "Rent you receive every month",
+      kind: "amount",
+      placeholder: "e.g. 25,000",
+      showWhen: { key: "hasRentalIncome", values: ["Yes"] },
+    },
+    {
+      key: "extraEarner",
+      label: "Is there another earning member whose income should be counted?",
+      kind: "choice",
+      options: YES_NO,
+    },
+    {
+      key: "extraEarnerRelation",
+      label: "How are they related to you?",
+      kind: "choice",
+      options: ["Spouse", "Father", "Mother", "Son", "Daughter", "Other"],
+      showWhen: { key: "extraEarner", values: ["Yes"] },
+    },
+    {
+      key: "extraEarnerAge",
+      label: "Their age",
+      kind: "text",
+      placeholder: "In years",
+      showWhen: { key: "extraEarner", values: ["Yes"] },
+    },
+    {
+      key: "extraEarnerWork",
+      label: "Are they salaried or self-employed?",
+      kind: "choice",
+      options: ["Salaried", "Self-employed"],
+      showWhen: { key: "extraEarner", values: ["Yes"] },
+    },
+    {
+      key: "extraEarnerEmployer",
+      label: "Their company, or business name",
+      kind: "text",
+      showWhen: { key: "extraEarner", values: ["Yes"] },
+    },
+    {
+      key: "extraEarnerIncome",
+      label: "Their monthly income, or net profit if they run a business",
+      kind: "amount",
+      placeholder: "e.g. 40,000",
+      showWhen: { key: "extraEarner", values: ["Yes"] },
     },
   ],
 });
@@ -3976,7 +4230,9 @@ const withKind = (form: FollowUpForm): FollowUpForm => {
     steps: [{ ...first, fields: [...lead, LOCATION, ...rest] }, ...form.steps.slice(1)],
   };
 };
-const FORMS = FOLLOW_UP_FORMS.map(withKind);
+/** Every second form ends with the same questions about other property, rent and a second earner. */
+const withProfile = (form: FollowUpForm): FollowUpForm => ({ ...form, steps: [...form.steps, profileStep()] });
+const FORMS = FOLLOW_UP_FORMS.map(withKind).map(withProfile);
 
 export const followUpFor = (slug: string | undefined): FollowUpForm | undefined =>
   slug ? FORMS.find((f) => f.slugs.includes(slug)) : undefined;
