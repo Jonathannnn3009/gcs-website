@@ -33,6 +33,9 @@ export const Route = createFileRoute("/api/notify-lead")({
             headers: { "content-type": "application/json" },
           });
         try {
+          // The CRM now sends the team alert and the customer thank-you (one mail system, Zoho), so the
+          // website no longer does. Kept so an older copy of the site still gets a quiet "ok".
+          if (Date.now() > 0) return ok();
           const { notifyConfigured, sendEnquiryMail } = await import("@/lib/notify-email.server");
           if (!notifyConfigured()) return ok();
 

@@ -113,25 +113,10 @@ async function post(payload: CrmPayload): Promise<"sent" | "rejected" | "retry">
   }
 }
 
-/** Also emails the team straight from the website, so an enquiry is never missed while the CRM is not live. */
-function emailTheTeam(payload: CrmPayload) {
-  try {
-    void fetch("/api/notify-lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      keepalive: true,
-    }).catch(() => undefined);
-  } catch {
-    // email is a bonus: never let it affect the visitor
-  }
-}
-
 export async function submitLead(lead: Lead): Promise<void> {
   if (typeof window === "undefined") return;
   const payload = toPayload(lead);
   if (!payload) return;
-  emailTheTeam(payload);
   const outcome = await post(payload);
   if (outcome === "retry") writeQueue([...readQueue(), { payload, queuedAt: Date.now() }]);
 }
@@ -144,7 +129,6 @@ export async function submitLeadForFollowUp(lead: Lead): Promise<FollowUpPass | 
   if (typeof window === "undefined") return null;
   const payload = toPayload(lead);
   if (!payload) return null;
-  emailTheTeam(payload);
   try {
     const captchaToken = await getCaptchaToken();
     const res = await fetch(`${CRM_API}/public/leads`, {
