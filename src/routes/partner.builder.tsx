@@ -21,7 +21,8 @@ import { Reveal } from "@/components/reveal";
 import { BankMarquee } from "@/components/bank-marquee";
 import { ZoneAssistant, ZoneFaq, ZoneForm, ZoneHero, ZoneTabs } from "@/components/partner-zones";
 import { CONTACT } from "@/data/site";
-import { useBuilderText } from "@/lib/site-content";
+import { useFaqs, useBuilderText } from "@/lib/site-content";
+import { BUILDER_FAQS } from "@/data/faqs";
 import { ASSISTANT_NAME } from "@/lib/chat/config";
 
 export const Route = createFileRoute("/partner/builder")({
@@ -49,30 +50,8 @@ export const Route = createFileRoute("/partner/builder")({
 
 
 
-const FAQS = [
-  {
-    q: "How can Growth Capital Services help a builder?",
-    a: "We simplify buyer financing: lender coordination, project approvals, loan processing for each buyer and follow-up with the banks, all through one desk.",
-  },
-  {
-    q: "Which loans can you arrange for my buyers?",
-    a: "Home loans for ready and under-construction flats, plot and construction loans, and loan against property where a buyer is raising funds against another asset. Offers come from 75+ banks and NBFCs.",
-  },
-  {
-    q: "Do you support project approvals with banks?",
-    a: "Yes. We help you prepare and take the project through lender approval so that buyers can be financed against it. Which banks approve a project depends on the project's papers and each lender's own policy.",
-  },
-  {
-    q: "Can you work alongside our sales team and channel partners?",
-    a: "Yes. We coordinate with your sales team and channel partners, and share status on each buyer's file so nobody has to chase.",
-  },
-  {
-    q: "Is there a cost to the builder or the buyer?",
-    a: "There is no advisory fee for buyers. Talk to us about how we work with builders and we will share the arrangement in writing before anything begins.",
-  },
-];
-
 function BuilderPage() {
+  const FAQS = useFaqs("builder", BUILDER_FAQS);
   const ASSISTANT_POINTS = useList("builder.assistant", BUILDER_ASSISTANT);
   const MODELS = useList("builder.models", BUILDER_MODELS);
   const WHY = useList("builder.why", BUILDER_WHY);

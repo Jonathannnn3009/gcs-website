@@ -1,11 +1,7 @@
+import { THANK_YOU_STEPS } from "@/data/page-lists";
+import { useList } from "@/lib/page-lists";
 import { Check, MessageCircle, Phone } from "lucide-react";
 import { CONTACT } from "@/data/site";
-
-const NEXT_STEPS = [
-  { title: "We review", body: "A GCS loan expert reads your details." },
-  { title: "We call you", body: "We contact you to understand your need and suggest next steps." },
-  { title: "We compare", body: "We look at suitable Banks and NBFCs for your profile." },
-];
 
 /**
  * The confirmation shown after any website form is sent. One look everywhere: an animated tick,
@@ -25,6 +21,7 @@ export function ThankYouCard({
   tall?: boolean;
   showSteps?: boolean;
 }) {
+  const NEXT_STEPS = useList("form.thanks", THANK_YOU_STEPS);
   return (
     <div
       id={id}

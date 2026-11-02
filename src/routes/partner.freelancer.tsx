@@ -1,5 +1,8 @@
 import { useList } from "@/lib/page-lists";
-import { FREELANCER_WHO, FREELANCER_STEPS, FREELANCER_PERKS, FREELANCER_ASSISTANT } from "@/data/page-lists";
+import { FREELANCER_WHO, FREELANCER_STEPS, FREELANCER_PERKS, FREELANCER_ASSISTANT,
+  FREELANCER_YOU,
+  FREELANCER_WE,
+} from "@/data/page-lists";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -24,7 +27,8 @@ import { Reveal } from "@/components/reveal";
 import { EarningsEstimator } from "@/components/earnings-estimator";
 import { ZoneAssistant, ZoneFaq, ZoneForm, ZoneHero, ZoneTabs } from "@/components/partner-zones";
 import { CONTACT } from "@/data/site";
-import { useFreelancerText } from "@/lib/site-content";
+import { useFaqs, useFreelancerText } from "@/lib/site-content";
+import { FREELANCER_FAQS } from "@/data/faqs";
 import { ASSISTANT_NAME } from "@/lib/chat/config";
 
 export const Route = createFileRoute("/partner/freelancer")({
@@ -48,51 +52,15 @@ export const Route = createFileRoute("/partner/freelancer")({
 });
 
 
-const YOU_WE: { you: string[]; we: string[] } = {
-  you: [
-    "Mention us when someone needs a loan",
-    "Share their name, number and what they need",
-    "Stay their friendly contact",
-  ],
-  we: [
-    "Call them and check eligibility",
-    "Match them to the right bank or NBFC from 75+",
-    "Collect documents and follow up with the lender",
-    "Keep you updated until disbursal",
-  ],
-};
 
 
-
-
-const FAQS = [
-  {
-    q: "Do I need a licence, experience or any qualification?",
-    a: "No. You only introduce people who need a loan. Our experts do the eligibility checks, bank matching, paperwork and follow-up.",
-  },
-  {
-    q: "Is there any fee to join?",
-    a: "No. Joining and referring are free.",
-  },
-  {
-    q: "Can I do this alongside a job or studies?",
-    a: "Yes. There are no targets, no fixed hours and no minimum, so you refer whenever it suits you.",
-  },
-  {
-    q: "How and when do I get paid?",
-    a: "Your payout is settled once the loan is disbursed. The estimator above shows an indicative range by loan type; the exact figure depends on the lender and loan amount, and we share it with you in writing when you join.",
-  },
-  {
-    q: "What happens if the person I refer does not get a loan?",
-    a: "Nothing is lost on your side. Payouts are for disbursed loans, and our team will explain to the applicant what could improve their chances.",
-  },
-  {
-    q: "How is this different from the Agent partnership?",
-    a: "The Agent route suits professionals who already advise clients (CAs, brokers, consultants) and want a deeper working relationship. The Freelance route is lighter: an easy, individual way to start earning with no business set-up.",
-  },
-];
 
 function FreelancerPage() {
+  const YOU_WE = {
+    you: useList("freelancer.youdo", FREELANCER_YOU).map((r) => r.text),
+    we: useList("freelancer.wedo", FREELANCER_WE).map((r) => r.text),
+  };
+  const FAQS = useFaqs("freelancer", FREELANCER_FAQS);
   const ASSISTANT_POINTS = useList("freelancer.assistant", FREELANCER_ASSISTANT);
   const PERKS = useList("freelancer.perks", FREELANCER_PERKS);
   const STEPS = useList("freelancer.steps", FREELANCER_STEPS);

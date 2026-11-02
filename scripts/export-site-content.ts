@@ -7,7 +7,7 @@ import { ICON_NAMES, iconName } from "../src/lib/icon-map";
 import { REPORT_PRICE, UPI } from "../src/data/cibil";
 import { DEFAULT_RATES } from "../src/data/rates";
 import { CLIENT_STORIES } from "../src/data/testimonials";
-import { CONTACT_FAQS, PARTNER_FAQS } from "../src/data/faqs";
+import { BUILDER_FAQS, CONTACT_FAQS, FREELANCER_FAQS, PARTNER_FAQS } from "../src/data/faqs";
 import { LOCATIONS } from "../src/data/locations";
 import { PRODUCTS } from "../src/data/products";
 import { PROFESSIONAL_SERVICES } from "../src/data/professional-services";
@@ -68,6 +68,8 @@ if (!out) throw new Error("Pass the output file path");
 const faqs: Record<string, { q: string; a: string }[]> = {
   contact: CONTACT_FAQS,
   partner: PARTNER_FAQS,
+  builder: BUILDER_FAQS,
+  freelancer: FREELANCER_FAQS,
 };
 for (const l of LOCATIONS) faqs[l.slug] = l.faqs;
 

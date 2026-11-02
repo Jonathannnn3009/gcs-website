@@ -5,6 +5,13 @@ export const CRM_API: string =
   ((import.meta.env["VITE_CRM_API_URL"] as string | undefined) ?? "").replace(/\/$/, "") ||
   "/crm/api";
 
+/**
+ * Is the CRM running yet? Until it is, the Track Application and Partner login forms say "coming soon" instead of
+ * sending visitors to a page that does not exist. When the CRM goes live, set VITE_CRM_LIVE=true as a build
+ * variable for the website and rebuild it.
+ */
+export const CRM_LIVE: boolean = (import.meta.env["VITE_CRM_LIVE"] as string | undefined) === "true";
+
 /** A picture path: pictures uploaded in the CRM are served by it; anything else is a path on the website. */
 export function crmAsset(path: string): string {
   return path.startsWith("/public/") ? `${CRM_API}${path}` : path;

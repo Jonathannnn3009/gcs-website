@@ -4,7 +4,7 @@ import { ArrowRight, Check, Handshake, UserRound } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { CONTACT } from "@/data/site";
 import { useTrackText } from "@/lib/site-content";
-import { CRM_APP } from "@/lib/crm";
+import { CRM_APP, CRM_LIVE } from "@/lib/crm";
 import { normalizePhone } from "@/lib/lead-dedupe";
 import { confirmIdCode, IdRecoveryError, requestIdCode, type IdKind } from "@/lib/gcs-id-recovery";
 import { leaveHandoff } from "@/lib/track-handoff";
@@ -468,7 +468,14 @@ function TrackApplicationPage() {
               <SidePanel who={who} />
               <div className="flex flex-col justify-between gap-10 p-8 sm:p-11">
                 <div className="my-auto">
-                  {recover ? (
+                  {!CRM_LIVE ? (
+                    <div className="rounded-xl border border-gold/30 bg-gold-pale/30 p-6 text-center dark:bg-gold/10">
+                      <p className="font-heading text-lg font-bold text-navy dark:text-white">Online tracking is coming soon</p>
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                        We are getting this ready. Until then, your loan expert will keep you updated, and you can call or message us any time for the status of your application.
+                      </p>
+                    </div>
+                  ) : recover ? (
                     <GcsIdRecovery key={who} kind={who} onBack={() => setRecover(false)} />
                   ) : (
                     <>

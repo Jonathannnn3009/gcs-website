@@ -1079,6 +1079,24 @@ export const ADVISORY_STEPS: { icon: LucideIcon; title: string; text: string }[]
   { icon: TrendingUp, title: "Track your progress", text: "Keep an eye on your report as you work towards your target score." },
 ];
 
+// The lists below were built into pages and are now editable in the CRM too.
+export const FREELANCER_YOU: { text: string }[] = [
+  { text: "Mention us when someone needs a loan" },
+  { text: "Share their name, number and what they need" },
+  { text: "Stay their friendly contact" },
+];
+export const FREELANCER_WE: { text: string }[] = [
+  { text: "Call them and check eligibility" },
+  { text: "Match them to the right bank or NBFC from 75+" },
+  { text: "Collect documents and follow up with the lender" },
+  { text: "Keep you updated until disbursal" },
+];
+export const THANK_YOU_STEPS: { title: string; body: string }[] = [
+  { title: "We review", body: "A GCS loan expert reads your details." },
+  { title: "We call you", body: "We contact you to understand your need and suggest next steps." },
+  { title: "We compare", body: "We look at suitable Banks and NBFCs for your profile." },
+];
+
 export type ListItem = Record<string, string | LucideIcon>;
 export type ListSpec = {
   key: string;
@@ -1674,5 +1692,29 @@ export const LIST_SPECS: ListSpec[] = [
     hint: "The numbered steps of how it works.",
     fields: [I("icon", "Icon"), T("title", "Heading"), A("text", "Text")],
     items: ADVISORY_STEPS,
+  },
+  {
+    key: "freelancer.youdo",
+    page: "Freelancer Partner",
+    label: "What you do",
+    hint: "The short list of what the freelancer does.",
+    fields: [T("text", "Point")],
+    items: FREELANCER_YOU,
+  },
+  {
+    key: "freelancer.wedo",
+    page: "Freelancer Partner",
+    label: "What we do",
+    hint: "The short list of what GCS does after the referral.",
+    fields: [T("text", "Point")],
+    items: FREELANCER_WE,
+  },
+  {
+    key: "form.thanks",
+    page: "Menu & footer",
+    label: "Thank-you card: what happens next",
+    hint: "The three boxes on the confirmation shown after any website form is sent.",
+    fields: [T("title", "Heading"), A("body", "Text")],
+    items: THANK_YOU_STEPS,
   },
 ];
