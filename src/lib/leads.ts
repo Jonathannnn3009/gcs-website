@@ -166,15 +166,28 @@ export async function submitLeadForFollowUp(lead: Lead): Promise<FollowUpPass | 
 /** Adds the second form's answers to the lead just created. Returns whether the CRM took them. */
 export async function addLeadDetails(
   pass: FollowUpPass,
-  extra: { detail: string; employmentType?: "SALARIED" | "SELF_EMPLOYED"; monthlyIncome?: number },
+  extra: {
+    detail: string;
+    /** One entry per question, so long forms are not cut short by the text limit. */
+    answers?: { key: string; label: string; value: string }[];
+    employmentType?: "SALARIED" | "SELF_EMPLOYED";
+    monthlyIncome?: number;
+  },
 ): Promise<boolean> {
-  try {
+  const send = async (body: object) => {
     const res = await fetch(`${CRM_API}/public/leads/${encodeURIComponent(pass.id)}/details`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: pass.token, ...extra, detail: clip(extra.detail, 2000) }),
+      body: JSON.stringify(body),
     });
     return res.ok;
+  };
+  const { answers, ...plain } = extra;
+  const detail = clip(extra.detail, 2000);
+  try {
+    if (answers?.length && (await send({ token: pass.token, ...plain, answers, detail }))) return true;
+    // An older CRM does not know `answers`: send the same details as text only, which it does.
+    return await send({ token: pass.token, ...plain, detail });
   } catch {
     return false;
   }

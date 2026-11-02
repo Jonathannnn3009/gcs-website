@@ -185,10 +185,18 @@ export function FollowUpFlow({
           `${f.label}: ${f.kind === "amount" ? "₹" : ""}${saidOther(f) ? `Other (${saidOther(f)})` : answers[f.key]}${f.kind === "percent" ? "%" : ""}`,
       );
     const detail = ["Detailed assessment (optional second form)", ...lines].join("\n");
+    const answerRows = all
+      .filter((f) => showing(f) && (answers[f.key] ?? "").trim() !== "")
+      .map((f) => ({
+        key: f.key,
+        label: f.label,
+        value: `${f.kind === "amount" ? "₹" : ""}${saidOther(f) ? `Other (${saidOther(f)})` : answers[f.key]}${f.kind === "percent" ? "%" : ""}`,
+      }));
     const applicant = answers["applicantType"] || answers["applicantCategory"] || basics.category;
     const income = digits(answers["netSalary"]);
     const extras = {
       detail,
+      answers: answerRows,
       ...(applicant === "Salaried"
         ? { employmentType: "SALARIED" as const }
         : applicant === "Self-Employed"
