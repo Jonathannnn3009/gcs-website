@@ -147,7 +147,7 @@ export function ChatGate({
         phone,
         email: email.trim(),
         source: "website-chat",
-        detail: "Confirmed their email with a code to use the website chat.",
+        detail: "Note: Confirmed their email with a code to use the website chat.",
       });
       onSignedIn(pass);
     } catch (e) {

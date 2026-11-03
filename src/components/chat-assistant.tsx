@@ -274,9 +274,14 @@ function CallbackCard({
       name: cleanName,
       phone,
       source: "website-chat",
-      detail: `Website chat with ${ASSISTANT_NAME}. ${reason}${
-        part.req.interest ? ` (Interested in: ${part.req.interest})` : ""
-      }. Chat so far: ${summary()}`,
+      detail: [
+        `Started from: Website chat with ${ASSISTANT_NAME}`,
+        `Reason: ${reason}`,
+        part.req.interest ? `Interested in: ${part.req.interest}` : "",
+        `Chat so far: ${summary()}`,
+      ]
+        .filter(Boolean)
+        .join("\n"),
     });
     onSent(cleanName);
   };

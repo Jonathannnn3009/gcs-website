@@ -90,14 +90,17 @@ export function ServiceEnquiryForm({
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
-    const incomeDetail = values.incomeType
-      ? ` — ${values.incomeType === "Other" ? `Other (${values.incomeOther.trim()})` : values.incomeType}${values.salaryAmount ? `, ₹${values.salaryAmount} (${values.salaryUnit})` : ""}`
+    // One labelled line per answer, so the CRM can show each as its own form answer.
+    const incomeLine = values.incomeType
+      ? `Income: ${values.incomeType === "Other" ? `Other (${values.incomeOther.trim()})` : values.incomeType}${values.salaryAmount ? `, ₹${values.salaryAmount} (${values.salaryUnit})` : ""}`
       : "";
     await submitLead({
       name: values.name.trim(),
       phone: values.phone.trim(),
       source: "ca-legal-enquiry",
-      detail: `${serviceTitle ? serviceTitle + " — " : ""}${values.message.trim()}${incomeDetail}`,
+      detail: [serviceTitle ? `Service: ${serviceTitle}` : "", values.message.trim() ? `Message: ${values.message.trim()}` : "", incomeLine]
+        .filter(Boolean)
+        .join("\n"),
     });
     setValues(empty);
     setSubmitted(true);

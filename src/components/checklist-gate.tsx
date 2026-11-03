@@ -151,9 +151,9 @@ export function ChecklistGate({
     setSubmitting(true);
     const intakeDetail = visibleFields
       .map((f) => `${f.label}: ${said(f.key, intakeValues[f.key]?.trim())}`)
-      .join(", ");
+      .join("\n");
     const detailParts = [
-      category ? `${productTitle} — ${said("category", category)}` : productTitle,
+      `Checklist: ${category ? `${productTitle} — ${said("category", category)}` : productTitle}`,
       intakeDetail,
     ].filter(Boolean);
     await submitLead({
@@ -162,7 +162,7 @@ export function ChecklistGate({
       source: "checklist-download",
       ...(productSlug ? { productSlug } : {}),
       amount: intakeValues["loanAmount"] ?? "",
-      detail: detailParts.join(" | "),
+      detail: detailParts.join("\n"),
     });
     setSubmitting(false);
     setUnlocked(true);
