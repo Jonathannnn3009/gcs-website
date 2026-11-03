@@ -6,7 +6,7 @@ import { CONTACT } from "@/data/site";
 import { useTrackText } from "@/lib/site-content";
 import { CRM_APP, CRM_LIVE } from "@/lib/crm";
 import { normalizePhone } from "@/lib/lead-dedupe";
-import { confirmIdCode, IdRecoveryError, requestIdCode, type IdKind } from "@/lib/gcs-id-recovery";
+import { confirmIdCode, IdRecoveryError, requestIdCode, type IdKind, type Via } from "@/lib/gcs-id-recovery";
 import { leaveHandoff } from "@/lib/track-handoff";
 
 export const Route = createFileRoute("/track-application")({
@@ -190,7 +190,8 @@ function PartnerForm() {
 const RESEND_SECONDS = 30;
 
 /**
- * "Do not have a GCS ID?": confirm the mobile number with a code, and the ID is texted to that number.
+ * "Do not have a GCS ID?": confirm the mobile number with a code, and the ID is sent. By SMS to that number once an
+ * SMS number is set up; until then by email, to the address held on the file.
  * The ID is never shown here, and the page says the same whether or not one is on file for the number.
  */
 function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
@@ -202,6 +203,8 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [wait, setWait] = useState(0);
+  const [via, setVia] = useState<Via>("email");
+  const [noEmail, setNoEmail] = useState(false);
 
   useEffect(() => {
     if (wait <= 0) return;
@@ -220,6 +223,7 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
     try {
       const res = await requestIdCode(kind, digits);
       setWait(res.resendAfterSeconds || RESEND_SECONDS);
+      setVia(res.via === "sms" ? "sms" : "email");
       setCode("");
       setStep("code");
     } catch (err) {
@@ -238,6 +242,8 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
     setError("");
     try {
       const res = await confirmIdCode(kind, digits ?? phone, code);
+      setVia(res.via === "sms" ? "sms" : "email");
+      setNoEmail(res.noEmail === true);
       setStep(res.sent ? "done" : "none");
     } catch (err) {
       setError(
@@ -271,8 +277,12 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           {step === "done"
-            ? `We have sent it by SMS to ${shown}. When it arrives, come back and enter it with your mobile number.`
-            : `Your number ${shown} is confirmed, but no ${idName} is held against it yet. Call ${CONTACT.phone} and an expert will help.`}
+            ? via === "sms"
+              ? `We have sent it by SMS to ${shown}. When it arrives, come back and enter it with your mobile number.`
+              : `We have emailed it to the email address on your file. When it arrives, come back and enter it with your mobile number. Check your spam folder if you do not see it.`
+            : noEmail
+              ? `Your number ${shown} is confirmed, but we have no email address on file to send your ${idName} to. Call ${CONTACT.phone} and an expert will help.`
+              : `Your number ${shown} is confirmed, but no ${idName} is held against it yet. Call ${CONTACT.phone} and an expert will help.`}
         </p>
         {back}
       </div>
@@ -284,8 +294,8 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
       <h2 className="text-lg font-extrabold text-navy dark:text-white">Get your {idName}</h2>
       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
         {kind === "client"
-          ? "Enter the mobile number on your loan file. We will text a code to confirm it is you, then text you your GCS ID."
-          : "Enter the mobile number you joined GCS with. We will text a code to confirm it is you, then text you your Partner ID."}
+          ? "Enter the mobile number on your loan file. We will send a code to confirm it is you, then send you your GCS ID."
+          : "Enter the mobile number you joined GCS with. We will send a code to confirm it is you, then send you your Partner ID."}
       </p>
 
       {step === "phone" ? (
@@ -312,7 +322,7 @@ function GcsIdRecovery({ kind, onBack }: { kind: IdKind; onBack: () => void }) {
       ) : (
         <form onSubmit={verify} noValidate className="mt-5">
           <p className="text-[13px] leading-relaxed text-muted-foreground">
-            If a {idName} is held for {shown}, we have texted it a 6-digit code.{" "}
+            If a {idName} is held for {shown}, we have {via === "sms" ? "texted it" : "emailed the address on file"} a 6-digit code.{" "}
             <button
               type="button"
               onClick={() => {

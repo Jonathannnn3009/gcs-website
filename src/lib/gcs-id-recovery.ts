@@ -1,5 +1,6 @@
 // Browser side of "Do not have a GCS ID?" on the Track Application page. The visitor confirms their mobile
-// number with a code texted to them, and the CRM then texts the GCS ID to that same number. The ID never
+// number with a code, and the CRM then sends the GCS ID. Both go by SMS once an SMS number is set up; until then
+// they go by email, to the address held on the file. The ID never
 // comes back to the page. The CRM answers the same whether or not an ID exists for the number.
 
 import { CRM_API } from "@/lib/crm";
@@ -40,21 +41,24 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return json as T;
 }
 
-/** Texts a six-digit code to the number (when an ID is held against it). */
+/** How the CRM sends codes and IDs: by SMS, or by email while there is no SMS number. */
+export type Via = "sms" | "email";
+
+/** Sends a six-digit code (when an ID is held against the number). */
 export async function requestIdCode(kind: IdKind, rawPhone: string) {
   const phone = normalizePhone(rawPhone);
   if (!phone) throw new IdRecoveryError("Enter a valid 10-digit mobile number.");
   const captchaToken = await getCaptchaToken();
-  return post<{ sent: true; resendAfterSeconds: number; validMinutes: number }>("send", {
+  return post<{ sent: true; resendAfterSeconds: number; validMinutes: number; via?: Via }>("send", {
     kind,
     phone,
     ...(captchaToken ? { captchaToken } : {}),
   });
 }
 
-/** Checks the code. When it is right, the CRM texts the GCS ID; `sent` is false if none is held for the number. */
+/** Checks the code. When it is right, the CRM sends the GCS ID; `sent` is false if none could be sent (`noEmail` when it is only that no email is on file). */
 export async function confirmIdCode(kind: IdKind, rawPhone: string, code: string) {
   const phone = normalizePhone(rawPhone);
   if (!phone) throw new IdRecoveryError("Enter a valid 10-digit mobile number.");
-  return post<{ sent: boolean }>("verify", { kind, phone, code: code.trim() });
+  return post<{ sent: boolean; via?: Via; noEmail?: boolean }>("verify", { kind, phone, code: code.trim() });
 }
