@@ -2,8 +2,8 @@ import { Check, Landmark, ShieldCheck, X } from "lucide-react";
 import { HOME_COMPARE_BANKS, HOME_COMPARE_US } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
 
-// "Banks & Lenders" against Growth Capital Services, side by side. The left card is plain and
-// muted, the right one is a dark gradient card with a gold glow so the eye lands on it. The rows of
+// "Banks & Lenders" against Growth Capital Services, side by side. The left card is filled with the
+// site's soft light blue and kept muted, the right one is a dark gradient card with a gold glow so the eye lands on it. The rows of
 // the two cards line up, so each point can be read straight across, and a round "VS" badge sits
 // between them.
 export function CompareColumns() {
@@ -16,9 +16,9 @@ export function CompareColumns() {
     <div className="relative mx-auto max-w-5xl">
       <div className="grid items-stretch gap-10 md:grid-cols-2 md:gap-8">
         {/* Banks & Lenders */}
-        <div className="flex flex-col overflow-hidden rounded-3xl border border-border bg-white shadow-[var(--shadow-card)] dark:bg-card">
-          <div className="flex items-center gap-3 border-b border-border bg-bg-light/70 px-6 py-5 dark:bg-background/40">
-            <span className="grid h-11 w-11 place-items-center rounded-xl bg-white text-navy/60 shadow-sm ring-1 ring-border dark:bg-card">
+        <div className="flex flex-col overflow-hidden rounded-3xl border border-blue-soft-border bg-blue-soft shadow-[var(--shadow-card)] dark:border-border dark:bg-card">
+          <div className="flex items-center gap-3 border-b border-blue-soft-border bg-blue-soft-border/35 px-6 py-5 dark:border-border dark:bg-background/40">
+            <span className="grid h-11 w-11 place-items-center rounded-xl bg-white text-navy/70 shadow-sm ring-1 ring-blue-soft-border dark:bg-card dark:ring-border">
               <Landmark className="h-5 w-5" />
             </span>
             <p className="text-base font-extrabold text-navy dark:text-white" style={{ letterSpacing: "0" }}>
@@ -29,9 +29,9 @@ export function CompareColumns() {
             {banks.map((b, i) => (
               <li
                 key={i}
-                className="flex items-center gap-3.5 border-b border-border/70 py-4 text-[15px] text-navy/80 last:border-b-0 dark:text-white/75"
+                className="flex items-center gap-3.5 border-b border-blue-soft-border py-4 text-[15px] text-navy/85 last:border-b-0 dark:border-border/70 dark:text-white/75"
               >
-                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-red-50 text-red-500 ring-1 ring-red-100 dark:bg-red-500/10 dark:ring-red-500/20">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white text-navy/55 ring-1 ring-blue-soft-border dark:bg-white/10 dark:text-white/60 dark:ring-white/15">
                   <X className="h-3.5 w-3.5" strokeWidth={3} />
                 </span>
                 <span>{String(b["text"])}</span>

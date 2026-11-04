@@ -19,7 +19,6 @@ export const SITE_PAGES: { path: string; about: string }[] = [
   { path: "/rates", about: "Indicative interest rates by loan" },
   { path: "/tools", about: "The calculators" },
   { path: "/cibil", about: "Credit report request and credit score guidance" },
-  { path: "/insights", about: "Articles and guides" },
   { path: "/case-studies", about: "Client case studies" },
   { path: "/ca-legal-services", about: "CA and legal services" },
   {

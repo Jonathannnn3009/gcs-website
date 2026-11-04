@@ -1,13 +1,24 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { CRM_API } from "@/lib/crm";
 import { formatPageDate, useCustomPages } from "@/lib/site-content";
 import { useInsightsText } from "@/lib/site-content";
 
+/**
+ * Switched off for now: there are no articles yet, so the page is hidden from the site. Anyone who types
+ * the address lands on the home page, and search engines are told to skip it. Set this to true to bring
+ * the page back (then also restore the footer link in data/page-lists.ts and Gia's page list).
+ */
+const INSIGHTS_VISIBLE = false;
+
 export const Route = createFileRoute("/insights")({
+  beforeLoad: () => {
+    if (!INSIGHTS_VISIBLE) throw redirect({ to: "/" });
+  },
   head: () => ({
     meta: [
+      ...(INSIGHTS_VISIBLE ? [] : [{ name: "robots", content: "noindex, nofollow" }]),
       { title: "Insights & Updates | Growth Capital Services" },
       {
         name: "description",

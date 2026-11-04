@@ -585,7 +585,7 @@ function HomePage() {
       </div>
 
       {/* ─── BANKS VS US ──────────────────────────────── */}
-      <div className="bg-gradient-to-b from-bg-light via-[#fbf3dc] to-bg-light dark:bg-none">
+      <div className="bg-bg-light dark:bg-none">
       <Section className="pt-0">
         <Reveal>
           <SectionHeading

@@ -42,7 +42,7 @@ export const LAST_PULLED_OPTIONS: { id: LastPulled; label: string; hint: string 
 ];
 
 /** One flat price for a report from any bureau, in rupees. */
-export let REPORT_PRICE = 500;
+export let REPORT_PRICE = 549;
 
 /**
  * UPI details the payment QR is generated from.

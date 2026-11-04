@@ -47,8 +47,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     icon: Home,
     group: "Home & Property",
     category: "Home Loan · Non-Conventional Income",
-    headline: "₹2.4 crore sanctioned — no salary slip, no problem",
-    amountLabel: "₹2.4 Crore",
+    headline: "₹40 lakhs sanctioned — no salary slip, no problem",
+    amountLabel: "₹40 Lakhs",
     productSlug: "home-loan",
     productLabel: "Home Loan",
     clientProfile:
@@ -58,7 +58,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     structuring:
       "GCS reviewed 18 months of banking activity and client-billing records alongside the applicant's ITRs, and matched the profile with a lender whose underwriting norms specifically accommodate self-employed and professional income assessed on banking turnover rather than salary slips.",
     outcome:
-      "₹2.4 crore home loan sanctioned by the matched lender, against the client's target property in Thane.",
+      "₹40 lakh home loan sanctioned by the matched lender, against the client's target property in Thane.",
   },
   {
     slug: "lap-balance-transfer-business-expansion",

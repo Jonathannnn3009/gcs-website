@@ -61,9 +61,8 @@ function CustomPage() {
           </Link>
           <span className="text-gold">/</span>
           {page.kind === "post" ? (
-            <Link to="/insights" className="hover:text-navy dark:text-white">
-              Insights
-            </Link>
+            // The Insights list is hidden for now, so this is a label, not a link.
+            <span className="text-navy dark:text-white">Insights</span>
           ) : (
             <span className="text-navy dark:text-white">{page.title}</span>
           )}
