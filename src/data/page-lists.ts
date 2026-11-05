@@ -472,6 +472,7 @@ const FORM_LOAN_ORDER = [
   "dlod",
   "project-funding",
   // Business growth
+  "personal-loan",
   "business-loan",
   "micro-business-loan",
   "unsecured-dod",
@@ -487,7 +488,6 @@ const FORM_LOAN_ORDER = [
   "letter-of-credit",
   "bill-discounting",
   // Personal, education, vehicle and other
-  "personal-loan",
   "education-loan",
   "education-infrastructure-loan",
   "new-car-loan",
@@ -550,6 +550,15 @@ export const HOME_GOALS = [
   },
   {
     category: "Business & Cash Flow",
+    slug: "personal-loan",
+    icon: Wallet,
+    goal: "Fund a personal plan",
+    product: "Personal Loan",
+    line: "For a wedding, travel or medical needs. No collateral needed.",
+    featured: "",
+  },
+  {
+    category: "Business & Cash Flow",
     slug: "business-loan",
     icon: Briefcase,
     goal: "Grow your business",
@@ -564,15 +573,6 @@ export const HOME_GOALS = [
     goal: "Keep your cash flowing",
     product: "Working Capital Term Loan",
     line: "Working capital term loans, cash credit, overdraft and bill discounting to match your business cycle.",
-    featured: "",
-  },
-  {
-    category: "Personal Goals",
-    slug: "personal-loan",
-    icon: Wallet,
-    goal: "Fund a personal plan",
-    product: "Personal Loan",
-    line: "For a wedding, travel or medical needs. No collateral needed.",
     featured: "",
   },
   {

@@ -39,6 +39,7 @@ import {
   HOME_TRUST,
 } from "@/data/page-lists";
 import { useList } from "@/lib/page-lists";
+import { BrandLogo } from "@/components/brand-logo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -415,14 +416,8 @@ function HomePage() {
             {/* Full-size lockup, given its own line and generous clearance below so it
                 reads as a deliberate opening statement rather than a cramped corner mark. */}
             <Reveal>
-              <img
-                src="/brand/gcs-lockup.png"
-                alt="Growth Capital Services"
-                width={870}
-                height={545}
-                // A little larger than before, and the lettering is thickened a hair so it holds its own beside the header logo.
-                className="h-24 w-auto [filter:drop-shadow(0_0_0.5px_rgb(11_24_73/0.55))] sm:h-28"
-              />
+              {/* The G mark with the name set as real text (same font as the header), so it stays sharp at any size. */}
+              <BrandLogo size="lg" className="sm:scale-110 sm:origin-left" />
             </Reveal>
 
             <Reveal delay={60}>

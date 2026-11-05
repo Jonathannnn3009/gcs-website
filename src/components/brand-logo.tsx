@@ -38,7 +38,7 @@ export function BrandLogo({
           <span className={cn("font-brand font-bold tracking-[0.02em] whitespace-nowrap text-navy uppercase dark:text-white", s.name)}>
             Growth Capital
           </span>
-          <span className={cn("mt-0.5 flex items-center justify-center gap-1.5 font-brand font-bold whitespace-nowrap text-gold-dark uppercase [-webkit-text-stroke:0.75px_currentColor]", s.sub)}>
+          <span className={cn("mt-0.5 flex items-center justify-center gap-1.5 font-brand font-bold whitespace-nowrap text-gold-dark uppercase [-webkit-text-stroke:0.25px_currentColor]", s.sub)}>
             <span className={cn("h-px bg-gold/70", s.rule)} />
             <span className="-mr-[0.36em] tracking-[0.36em]">Services</span>
             <span className={cn("h-px bg-gold/70", s.rule)} />
@@ -60,7 +60,7 @@ export function BrandLogo({
       />
       <span
         className={cn(
-          "font-brand font-semibold tracking-[0.04em] whitespace-nowrap text-navy uppercase dark:text-white",
+          "font-brand font-bold tracking-[0.04em] whitespace-nowrap text-navy uppercase dark:text-white",
           s.name,
         )}
       >
@@ -68,7 +68,7 @@ export function BrandLogo({
       </span>
       <span
         className={cn(
-          "flex items-center gap-1.5 font-brand font-medium whitespace-nowrap text-gold-dark uppercase",
+          "flex items-center gap-1.5 font-brand font-bold whitespace-nowrap text-gold-dark uppercase",
           s.sub,
         )}
       >
