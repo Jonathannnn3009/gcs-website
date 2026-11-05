@@ -657,14 +657,25 @@ const EDU_INFRA_DOC_CATEGORIES = [
     ],
   },
   {
-    label: "Partnership / Proprietorship",
+    label: "Partnership",
     description:
-      "The school or institute is run by a partnership firm, an LLP or one owner. The lender checks the firm's registration and accounts, and the standing of each partner or the owner. A signed deed that allows borrowing keeps things smooth.",
+      "The school or institute is run by a partnership firm or an LLP. The lender checks the firm's registration and accounts, and the standing of each partner. A signed deed that allows borrowing keeps things smooth.",
     items: [
-      "Partnership deed or LLP agreement, with registration proof, or the proprietor's business proof",
-      "PAN of the firm, and the list of partners",
+      "Partnership deed or LLP agreement, with registration proof",
+      "PAN of the firm, and the list of partners with their KYC",
       "Consent of all partners to the loan, and to the property as security if the loan is secured",
       "Shop Act, Udyam and GST registrations, as applicable",
+    ],
+  },
+  {
+    label: "Proprietorship",
+    description:
+      "The school or institute is run by one owner in their own name. There is no separate company, so the lender looks at the owner and the institution together: the owner's papers, the institution's registrations and its accounts.",
+    items: [
+      "Proprietor's PAN, Aadhaar and address proof",
+      "Shop Act, Udyam and GST registrations, as applicable",
+      "Proof that the proprietor owns and runs the institution",
+      "Property papers in the proprietor's name, if the loan is secured",
     ],
   },
 ];
