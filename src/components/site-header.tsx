@@ -122,7 +122,7 @@ export function SiteHeader() {
                         style={{ top: menuTop }}
                       >
                        <div className="pointer-events-auto pt-2" style={{ animation: "gcs-scale-in 200ms ease both" }}>
-                        <div className="flex max-w-[calc(100vw-2rem)] w-[1200px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card">
+                        <div className="flex max-w-[calc(100vw-2rem)] w-[1290px] overflow-hidden rounded-2xl border border-gold/10 bg-white shadow-[0_20px_60px_-12px_oklch(0.13_0.04_265/0.3)] dark:bg-card">
                           {/* Left: the navy gradient panel */}
                           <div className="navy-panel relative flex w-[250px] shrink-0 flex-col p-7">
                             <div className="pointer-events-none absolute -top-10 -left-10 h-44 w-44 rounded-full bg-gold/15 blur-[60px]" />
@@ -159,11 +159,13 @@ export function SiteHeader() {
                           {/* Right: every product, by category */}
                           <div
                             className="grid min-w-0 flex-1 gap-3 p-5"
-                            style={{ gridTemplateColumns: `repeat(${PRODUCT_GROUPS_LIVE.length}, minmax(0, 1fr))` }}
+                            style={{ gridTemplateColumns: `repeat(${PRODUCT_GROUPS_LIVE.length - 1}, minmax(0, 1fr)) auto` }}
                           >
-                            {PRODUCT_GROUPS_LIVE.map((group) => (
+                            {PRODUCT_GROUPS_LIVE.map((group, groupIndex) => {
+                              const lastColumn = groupIndex === PRODUCT_GROUPS_LIVE.length - 1;
+                              return (
                               <div key={group.name} className="min-w-0">
-                                <p className="border-b border-gold/20 pb-2 text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase">
+                                <p className={`border-b border-gold/20 pb-2 text-[10px] font-bold tracking-[0.14em] text-gold-dark uppercase${lastColumn ? " whitespace-nowrap" : ""}`}>
                                   {group.name}
                                 </p>
                                 <div className="mt-2 space-y-0.5">
@@ -179,7 +181,7 @@ export function SiteHeader() {
                                         <product.icon className="h-3.5 w-3.5" />
                                       </span>
                                       <span className="min-w-0 pt-0.5">
-                                        <span className="block text-[13px] leading-snug font-semibold text-foreground">
+                                        <span className={`block text-[13px] leading-snug font-semibold text-foreground${lastColumn ? " whitespace-nowrap" : ""}`}>
                                           {product.title}
                                         </span>
                                       </span>
@@ -187,7 +189,8 @@ export function SiteHeader() {
                                   ))}
                                 </div>
                               </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         </div>
                        </div>
