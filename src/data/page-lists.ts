@@ -487,7 +487,7 @@ const FORM_LOAN_ORDER = [
   "bank-guarantee",
   "letter-of-credit",
   "bill-discounting",
-  // Personal, education, vehicle and other
+  // Education, vehicle and other
   "education-loan",
   "education-infrastructure-loan",
   "new-car-loan",

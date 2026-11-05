@@ -35,7 +35,7 @@ export type ProductGroup =
   | "Property Finance"
   | "Business Growth"
   | "Cash Flow & Trade"
-  | "Personal, Education, Vehicle & Other Loans";
+  | "Education, Vehicle & Other Loans";
 
 /** Show a question only when another question has one of these answers (and is itself showing). */
 export type ShowWhen = { key: string; values: string[] };
@@ -1868,7 +1868,7 @@ export const PRODUCTS: Product[] = [
     icon: GraduationCap,
     title: "Education Loan",
     tagline: "Invest in the degree, not the worry.",
-    group: "Personal, Education, Vehicle & Other Loans",
+    group: "Education, Vehicle & Other Loans",
     facts: [
       { label: "Loan amount", value: "Up to ₹1.5 Cr" },
       { label: "Interest rate", value: "From 8.15%* p.a." },
@@ -1935,7 +1935,7 @@ export const PRODUCTS: Product[] = [
     icon: School,
     title: "Education Infrastructure Loan",
     tagline: "Funding for schools and institutions to build and grow.",
-    group: "Personal, Education, Vehicle & Other Loans",
+    group: "Education, Vehicle & Other Loans",
     heroNote: "For schools and education institutions",
     facts: [
       { label: "Loan amount", value: "₹10 Lakh to ₹10 Cr*" },
@@ -2080,7 +2080,7 @@ export const PRODUCTS: Product[] = [
     icon: Car,
     title: "New Car Loan",
     tagline: "From showroom to driveway, fully funded.",
-    group: "Personal, Education, Vehicle & Other Loans",
+    group: "Education, Vehicle & Other Loans",
     facts: [
       { label: "Funding", value: "Up to 100% on-road" },
       { label: "Tenure", value: "12 — 84 months" },
@@ -2133,7 +2133,7 @@ export const PRODUCTS: Product[] = [
     icon: CarFront,
     title: "Used Car Loan",
     tagline: "A great pre-owned car, sensibly financed.",
-    group: "Personal, Education, Vehicle & Other Loans",
+    group: "Education, Vehicle & Other Loans",
     facts: [
       { label: "Funding", value: "Up to 90% of valuation" },
       { label: "Vehicle age", value: "Up to 8 years at loan end" },
@@ -2191,7 +2191,7 @@ export const PRODUCTS: Product[] = [
     icon: Repeat,
     title: "Car Refinance",
     tagline: "Your car can fund your next plan.",
-    group: "Personal, Education, Vehicle & Other Loans",
+    group: "Education, Vehicle & Other Loans",
     facts: [
       { label: "Funding", value: "Up to 150% of valuation for strong profiles" },
       { label: "Interest rate", value: "From 12.50%* p.a." },
@@ -2241,7 +2241,7 @@ export const PRODUCTS: Product[] = [
     icon: Truck,
     title: "Commercial Vehicle",
     tagline: "Get the right vehicle for your business.",
-    group: "Personal, Education, Vehicle & Other Loans",
+    group: "Education, Vehicle & Other Loans",
     facts: [
       { label: "Funding", value: "Up to 100%* LTV" },
       { label: "Repayment", value: "Up to 7 years" },
@@ -2284,7 +2284,7 @@ export const PRODUCTS: Product[] = [
     icon: TrendingUp,
     title: "Loan Against Securities",
     tagline: "Borrow on your portfolio, stay invested.",
-    group: "Personal, Education, Vehicle & Other Loans",
+    group: "Education, Vehicle & Other Loans",
     facts: [
       { label: "Pledge", value: "Stocks, ETFs and mutual funds" },
       { label: "Funding", value: "Up to 50% of market value (approved list applies)" },
@@ -2487,7 +2487,7 @@ export const PRODUCT_GROUPS: {
     name: "Business Growth",
     heading: "Funding that keeps pace with your business.",
     description:
-      "Whether it's working capital fast or collateral-free funding to scale, structured for businesses actually moving.",
+      "Personal and business loans, working capital fast, or collateral-free funding to scale, structured for people and businesses actually moving.",
   },
   {
     name: "Cash Flow & Trade",
@@ -2496,10 +2496,10 @@ export const PRODUCT_GROUPS: {
       "The day-to-day financial plumbing — credit lines, guarantees and limits that keep operations from stalling.",
   },
   {
-    name: "Personal, Education, Vehicle & Other Loans",
-    heading: "Personal, education, vehicle and other loans.",
+    name: "Education, Vehicle & Other Loans",
+    heading: "Education, vehicle and other loans.",
     description:
-      "For personal needs, studies, cars and commercial vehicles, or funds against the shares and mutual funds you already hold.",
+      "For studies, cars and commercial vehicles, or funds against the shares and mutual funds you already hold.",
   },
 ];
 

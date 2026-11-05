@@ -3302,7 +3302,7 @@ const BILL_DISCOUNTING: FollowUpForm = {
   ],
 };
 
-// ───────────── Personal, Education, Vehicle & Other Loans ─────────────
+// ───────────── Education, Vehicle & Other Loans ─────────────
 
 const AGE_BANDS = ["Below 21", "21 to 35", "36 to 50", "51 to 60", "Above 60"];
 
