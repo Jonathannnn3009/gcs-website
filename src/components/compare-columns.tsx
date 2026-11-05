@@ -62,7 +62,7 @@ export function CompareColumns() {
           <div className="pointer-events-none absolute -bottom-20 -left-10 h-48 w-48 rounded-full bg-[#2f5fd0]/25 blur-[80px]" />
           <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gold/0 via-gold to-gold/0" />
           <div className="relative flex items-center gap-3 border-b border-white/10 px-6 py-5">
-            <span className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-gold to-gold-light text-navy shadow-[0_6px_16px_rgba(228,176,40,0.35)]">
+            <span className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-gold-light to-gold-light/70 text-navy shadow-[0_4px_12px_rgba(214,181,106,0.14)]">
               <ShieldCheck className="h-6 w-6" />
             </span>
             <p className="text-[15px] font-bold text-gold-light uppercase" style={{ letterSpacing: "0.02em" }}>
@@ -75,7 +75,7 @@ export function CompareColumns() {
                 key={i}
                 className="flex items-center gap-3.5 border-b border-white/10 py-4 text-[15px] font-semibold text-white last:border-b-0"
               >
-                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-gold text-navy shadow-[0_0_14px_rgba(228,176,40,0.45)]">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-gold text-navy">
                   <Check className="h-3.5 w-3.5" strokeWidth={3.5} />
                 </span>
                 <span>{String(u["text"])}</span>
