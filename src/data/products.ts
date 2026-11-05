@@ -632,15 +632,7 @@ const CHARGES_EDUCATION: ChargesInfo = {
 };
 
 // Education Infrastructure Loan: for the school, college or institute itself, so the paperwork follows how it is run.
-const EDU_INFRA_COMMON = [
-  "KYC (PAN, Aadhaar, address proof) of every trustee, director, partner or proprietor",
-  "Recognition and affiliation certificates, and proof of the current student strength",
-  "Last 3 years' audited financial statements and income tax returns of the institution",
-  "Last 12 months' bank statements of the institution",
-  "Fee structure and last 12 months' fee collection records",
-  "Details of existing loans, with EMIs and statements",
-  "For a secured loan: the property papers (title documents, latest tax receipt, approved plans)",
-];
+// Four points for each kind of applicant; the fuller list is in the checklist PDF.
 const EDU_INFRA_DOC_CATEGORIES = [
   {
     label: "Trust / Society",
@@ -649,9 +641,8 @@ const EDU_INFRA_DOC_CATEGORIES = [
     items: [
       "Trust deed or society registration certificate with bye-laws, and PAN of the trust or society",
       "List of trustees or managing committee members, with their KYC",
-      "Resolution of the trustees or managing committee to borrow, and to offer the property as security if the loan is secured",
+      "Resolution of the trustees or committee to borrow, and to offer the property as security if the loan is secured",
       "Registration under the Income Tax Act (12A and 80G), where held",
-      ...EDU_INFRA_COMMON,
     ],
   },
   {
@@ -662,7 +653,7 @@ const EDU_INFRA_DOC_CATEGORIES = [
       "Certificate of incorporation, MOA and AOA, and PAN of the company",
       "List of directors and the shareholding pattern",
       "Board resolution authorising the loan, and the property as security if the loan is secured",
-      ...EDU_INFRA_COMMON,
+      "Section 8 licence and 12A / 80G registration, for a not-for-profit company",
     ],
   },
   {
@@ -673,7 +664,7 @@ const EDU_INFRA_DOC_CATEGORIES = [
       "Partnership deed or LLP agreement, with registration proof, or the proprietor's business proof",
       "PAN of the firm, and the list of partners",
       "Consent of all partners to the loan, and to the property as security if the loan is secured",
-      ...EDU_INFRA_COMMON,
+      "Shop Act, Udyam and GST registrations, as applicable",
     ],
   },
 ];
