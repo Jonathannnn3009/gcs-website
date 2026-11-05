@@ -20,9 +20,11 @@ import { Route as CreditScoreEstimatorRouteImport } from './routes/credit-score-
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as MumbaiRouteImport } from './routes/mumbai'
 import { Route as NaviMumbaiRouteImport } from './routes/navi-mumbai'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PuneRouteImport } from './routes/pune'
 import { Route as RatesRouteImport } from './routes/rates'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ThaneRouteImport } from './routes/thane'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TrackApplicationRouteImport } from './routes/track-application'
@@ -98,6 +100,11 @@ const NaviMumbaiRoute = NaviMumbaiRouteImport.update({
   path: '/navi-mumbai',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PuneRoute = PuneRouteImport.update({
   id: '/pune',
   path: '/pune',
@@ -111,6 +118,11 @@ const RatesRoute = RatesRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ThaneRoute = ThaneRouteImport.update({
@@ -221,9 +233,11 @@ export interface FileRoutesByFullPath {
   '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/pune': typeof PuneRoute
   '/rates': typeof RatesRoute
   '/services': typeof ServicesRouteWithChildren
+  '/terms': typeof TermsRoute
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/track-application': typeof TrackApplicationRoute
@@ -255,8 +269,10 @@ export interface FileRoutesByTo {
   '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/pune': typeof PuneRoute
   '/rates': typeof RatesRoute
+  '/terms': typeof TermsRoute
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/track-application': typeof TrackApplicationRoute
@@ -290,9 +306,11 @@ export interface FileRoutesById {
   '/insights': typeof InsightsRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/pune': typeof PuneRoute
   '/rates': typeof RatesRoute
   '/services': typeof ServicesRouteWithChildren
+  '/terms': typeof TermsRoute
   '/thane': typeof ThaneRoute
   '/tools': typeof ToolsRoute
   '/track-application': typeof TrackApplicationRoute
@@ -327,9 +345,11 @@ export interface FileRouteTypes {
     | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
+    | '/privacy-policy'
     | '/pune'
     | '/rates'
     | '/services'
+    | '/terms'
     | '/thane'
     | '/tools'
     | '/track-application'
@@ -361,8 +381,10 @@ export interface FileRouteTypes {
     | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
+    | '/privacy-policy'
     | '/pune'
     | '/rates'
+    | '/terms'
     | '/thane'
     | '/tools'
     | '/track-application'
@@ -395,9 +417,11 @@ export interface FileRouteTypes {
     | '/insights'
     | '/mumbai'
     | '/navi-mumbai'
+    | '/privacy-policy'
     | '/pune'
     | '/rates'
     | '/services'
+    | '/terms'
     | '/thane'
     | '/tools'
     | '/track-application'
@@ -431,9 +455,11 @@ export interface RootRouteChildren {
   InsightsRoute: typeof InsightsRoute
   MumbaiRoute: typeof MumbaiRoute
   NaviMumbaiRoute: typeof NaviMumbaiRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   PuneRoute: typeof PuneRoute
   RatesRoute: typeof RatesRoute
   ServicesRoute: typeof ServicesRouteWithChildren
+  TermsRoute: typeof TermsRoute
   ThaneRoute: typeof ThaneRoute
   ToolsRoute: typeof ToolsRoute
   TrackApplicationRoute: typeof TrackApplicationRoute
@@ -530,6 +556,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NaviMumbaiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pune': {
       id: '/pune'
       path: '/pune'
@@ -549,6 +582,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/thane': {
@@ -727,9 +767,11 @@ const rootRouteChildren: RootRouteChildren = {
   InsightsRoute: InsightsRoute,
   MumbaiRoute: MumbaiRoute,
   NaviMumbaiRoute: NaviMumbaiRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
   PuneRoute: PuneRoute,
   RatesRoute: RatesRoute,
   ServicesRoute: ServicesRouteWithChildren,
+  TermsRoute: TermsRoute,
   ThaneRoute: ThaneRoute,
   ToolsRoute: ToolsRoute,
   TrackApplicationRoute: TrackApplicationRoute,

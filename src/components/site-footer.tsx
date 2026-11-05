@@ -190,7 +190,13 @@ export function SiteFooter() {
               <span>
                 {t("footer.copyright").replace("{year}", String(new Date().getFullYear()))}
               </span>
-              {legalPages.map((p) => (
+              <Link to="/privacy-policy" className="text-white/70 underline-offset-2 hover:text-gold hover:underline">
+                Privacy Policy
+              </Link>
+              <Link to="/terms" className="text-white/70 underline-offset-2 hover:text-gold hover:underline">
+                Terms &amp; Conditions
+              </Link>
+              {legalPages.filter((p) => p.slug !== "privacy-policy" && p.slug !== "terms-and-conditions").map((p) => (
                 <Link
                   key={p.slug}
                   to="/p/$slug"

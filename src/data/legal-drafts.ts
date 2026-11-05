@@ -38,6 +38,10 @@ ${company} ("we", "us") is a loan advisory and facilitation firm. This policy ex
 
 We share your details with the banks, NBFCs and service providers (for example valuers, legal and technical agencies, and credit bureaus) needed to process your request, and only for that purpose. We do not sell your personal information.
 
+## WhatsApp and phone messages
+
+If you message us on WhatsApp, or ask us to contact you there, we receive your WhatsApp number, name and the messages and files you send. We use them only to reply, to work on your enquiry and application, and to send you updates about your file. WhatsApp is operated by Meta, which processes messages under its own privacy policy. You can stop receiving messages at any time by replying STOP or telling us you no longer wish to be contacted.
+
 ## Credit reports
 
 If you ask us to fetch a credit report, we do so only with your consent and use it only to advise you on your request.
@@ -52,7 +56,7 @@ We use reasonable technical and organisational safeguards to protect your inform
 
 ## Your choices
 
-You may ask to see, correct or delete the personal information we hold about you, or withdraw your consent to marketing, by contacting us below. We will respond within a reasonable time.
+You may ask to see, correct or delete the personal information we hold about you, or withdraw your consent to marketing, by contacting us below. To have your data deleted, email us from the address you used with us, or message us on WhatsApp, and we will delete it within a reasonable time unless the law requires us to keep it.
 
 ## Cookies
 
