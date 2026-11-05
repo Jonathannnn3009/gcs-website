@@ -149,6 +149,12 @@ export const LOAN_KINDS: Record<string, string[]> = {
     "Diploma and Skill Course Loan",
     "Undergraduate, Postgraduate and Doctorate Loan",
   ],
+  "education-infrastructure-loan": [
+    "Unsecured Funding for Schools",
+    "Secured Funding for Schools",
+    "Funding for Higher Education Institutions",
+    "Not sure which suits us",
+  ],
   "new-car-loan": [
     "New Car Loan",
     "Electric Vehicle Loan",
@@ -264,6 +270,14 @@ export function seedsForKind(slug: string, kind: string): Record<string, string>
   }
   if (slug === "education-loan" && is("Diploma and Skill Course Loan"))
     add({ level: "Diploma or certificate" });
+  if (slug === "education-infrastructure-loan") {
+    if (is("Unsecured Funding for Schools"))
+      add({ institutionType: "School", securityOffered: "No, I want it without security" });
+    if (is("Secured Funding for Schools"))
+      add({ institutionType: "School", securityOffered: "Yes, property" });
+    if (is("Funding for Higher Education Institutions"))
+      add({ institutionType: "College or higher education institute", securityOffered: "Yes, property" });
+  }
   if (slug === "new-car-loan" && is("Car Loan for Business Use")) add({ usage: "Business use" });
   if (slug === "used-car-loan") {
     if (/Dealer/.test(kind)) add({ seller: "A dealer" });

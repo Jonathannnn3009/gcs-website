@@ -658,3 +658,78 @@ for _sec in MICRO_BUSINESS_LOAN["sections"]:
 MICRO_LAP = _without_itr_gst(LAP_DLOD, "Micro Loan Against Property (Micro LAP)")
 LOAN_CHECKLISTS["micro-business-loan"] = MICRO_BUSINESS_LOAN
 LOAN_CHECKLISTS["micro-lap"] = MICRO_LAP
+
+
+# ── Education Infrastructure Loan ─────────────────────────────────────────
+# For schools, colleges and institutes: the papers follow how the institution is run, and the property papers
+# are only for the secured programmes.
+EDUCATION_INFRASTRUCTURE_LOAN = dict(
+    title="Education Infrastructure Loan",
+    subtitle="Funding for schools and education institutions.",
+    sections=[
+        {
+            "callout": "<b>Three programmes:</b> unsecured funding for schools, secured funding for schools, and "
+            "secured funding for higher education institutions. Which one applies depends on your student strength, "
+            "years running, affiliation and the property you can offer. Property papers are needed only for the "
+            "secured programmes. Final terms depend on the lender's policy."
+        },
+        {
+            "title": "KYC Documents",
+            "note": "Every trustee, director, partner or proprietor",
+            "items": [
+                "Photo ID — PAN card & Aadhaar card",
+                "Address proof — Electricity bill, Rent agreement (if applicable), Passport",
+                "Passport size photograph",
+                "PAN card of the trust, society, company or firm",
+            ],
+        },
+        {
+            "title": "Institution Proof",
+            "note": "As per how the institution is run",
+            "items": [
+                "Trust deed or Society registration certificate with bye-laws, list of trustees / managing committee "
+                "|| tag:Trust or Society",
+                "Registration under the Income Tax Act (12A, 80G) || If held",
+                "Certificate of Incorporation, MOA & AOA, list of Directors & shareholding || tag:Company",
+                "Partnership Deed or LLP Agreement, list of Partners || tag:Partnership / LLP",
+                "Business registration, GST and Udyam certificates, as applicable || tag:Proprietorship",
+                "Resolution or consent to borrow, and to offer the property as security || Signed by trustees / "
+                "directors / partners",
+            ],
+        },
+        {
+            "title": "Recognition & Student Details",
+            "items": [
+                "Recognition and affiliation certificate — CBSE / ICSE / IB / State Board, or the relevant authority",
+                "Proof of student strength — enrolment register or latest returns",
+                "Fee structure and fee collection records || Last 12 months",
+                "Courses and approvals from the council or university || For higher education institutions",
+            ],
+        },
+        {
+            "title": "Income Documents",
+            "note": "Of the institution",
+            "items": [
+                "Audited financial statements — income & expenditure account and balance sheet || Latest 3 years",
+                "ITR with computation of income || Latest 3 years",
+                "Institution bank account statements (all existing loan EMI reflection account statements) || "
+                "Latest 12 months",
+                "Form 26AS || Latest 2 years",
+            ],
+        },
+        {
+            "title": "Project Details",
+            "items": [
+                "Purpose of the loan and the cost estimate",
+                "Approved plans, quotations or contractor estimates for the work",
+            ],
+        },
+        RENT_AND_EXISTING_LOANS,
+        {
+            "title": "Property Documents",
+            "note": "For the secured programmes",
+            "items": PROPERTY_MORTGAGE_ITEMS,
+        },
+    ],
+)
+LOAN_CHECKLISTS["education-infrastructure-loan"] = EDUCATION_INFRASTRUCTURE_LOAN

@@ -96,6 +96,7 @@ const CODE_OVERRIDES: Record<string, string> = {
   "loan-against-property": "LAP",
   "micro-business-loan": "Micro Business Loan",
   "micro-lap": "Micro LAP",
+  "education-infrastructure-loan": "Education Infrastructure Loan",
   "loan-against-securities": "LAS",
   "balance-transfer": "BT & Top Up",
   dlod: "DL-OD",

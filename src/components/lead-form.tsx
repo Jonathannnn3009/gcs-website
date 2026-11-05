@@ -37,12 +37,18 @@ const YOU_ARE_LOANS = new Set([
   "bill-discounting",
   "personal-loan",
   "education-loan",
+  "education-infrastructure-loan",
   "new-car-loan",
   "used-car-loan",
   "car-refinance",
   "commercial-vehicle",
   "loan-against-securities",
 ]);
+// The institution's applicants are owners and office-bearers, so a loan can offer a shorter "You Are" list.
+// A trust or society picks Other and says which.
+const YOU_ARE_FOR: Record<string, string[]> = {
+  "education-infrastructure-loan": ["Proprietor", "Partner", "Director", "Other"],
+};
 // The second form tells salaried, self-employed and NRI apart: a proprietor, partner or director counts as self-employed there.
 const forSecondForm = (category: string) =>
   ["Proprietor", "Partner", "Director", "Professional"].includes(category) ? "Self-Employed" : category;
@@ -63,6 +69,7 @@ const BUSINESS_SETUP: Record<string, Record<string, string>> = {
   "overdraft-limit": OVERDRAFT_SETUP,
   "overdraft-facility": OVERDRAFT_SETUP,
   "project-funding": { Partner: "Partnership or LLP" },
+  "education-infrastructure-loan": { Proprietor: "Proprietorship", Partner: "Partnership or LLP", Director: "Private limited company" },
   "commercial-vehicle": { Proprietor: "Proprietorship", Partner: "Partnership", Director: "Company" },
 };
 // What the short form's answer already says in the second form. (The type of loan is asked in the second form.)
@@ -183,7 +190,7 @@ export function LeadForm({
     // the home and contact pages' forms ask it too, whichever loan is picked
     if (!product) return source === "home-enquiry" || source === "contact-enquiry" ? YOU_ARE : null;
     const slug = slugFor(title);
-    return slug && YOU_ARE_LOANS.has(slug) ? YOU_ARE : null;
+    return slug && YOU_ARE_LOANS.has(slug) ? (YOU_ARE_FOR[slug] ?? YOU_ARE) : null;
   };
   const compact = !!product && COMPACT_LOANS.has(product.slug);
   const uid = useId();

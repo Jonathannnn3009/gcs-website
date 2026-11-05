@@ -45,16 +45,15 @@ export const LAST_PULLED_OPTIONS: { id: LastPulled; label: string; hint: string 
 export let REPORT_PRICE = 549;
 
 /**
- * UPI details the payment QR is generated from.
- * TODO: replace with the real GCS UPI ID before this goes live.
+ * UPI details the payment QR is generated from. Staff can override these in the CRM.
  */
 export const UPI = {
-  id: "growthcapitalservices@upi",
-  payeeName: "Growth Capital Services",
+  id: "mghadge1979@okhdfcbank",
+  payeeName: "Mahesh Ghadge",
 };
 
-/** Flip to false once the real UPI ID above is in. Only controls the dev-mode warning. */
-export let UPI_IS_PLACEHOLDER = true;
+/** True only while the UPI ID above is a stand-in. Only controls the dev-mode warning. */
+export let UPI_IS_PLACEHOLDER = false;
 
 /** Report price and UPI details staff set in the CRM. Applied once, at load. */
 export function applyCibilInfo(info: { reportPrice?: number; upiId?: string; upiName?: string }) {

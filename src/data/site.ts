@@ -178,6 +178,19 @@ export const SERVICES: Service[] = [
     ],
   },
   {
+    id: "education-infrastructure-loan",
+    title: "Education Infrastructure Loan",
+    tagline: "Funding for schools and institutions to build and grow",
+    description:
+      "Secured and unsecured funding for schools and education institutions, from ₹10 Lakh to ₹10 Cr*, for their infrastructure and growth.",
+    highlights: [
+      "Unsecured funding for schools, ₹10 Lakh to ₹75 Lakh*",
+      "Secured funding for schools, ₹25 Lakh to ₹10 Cr*",
+      "Higher education institutions, ₹50 Lakh to ₹7.5 Cr*",
+      "Tenure up to 15 years on secured programmes*",
+    ],
+  },
+  {
     id: "balance-transfer",
     title: "Balance Transfer & Top-Up",
     tagline: "Same loan, smaller bill",

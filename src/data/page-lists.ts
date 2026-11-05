@@ -489,6 +489,7 @@ const FORM_LOAN_ORDER = [
   // Personal, education, vehicle and other
   "personal-loan",
   "education-loan",
+  "education-infrastructure-loan",
   "new-car-loan",
   "used-car-loan",
   "car-refinance",

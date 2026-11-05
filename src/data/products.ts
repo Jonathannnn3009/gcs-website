@@ -18,6 +18,7 @@ import {
   RefreshCw,
   Repeat,
   PieChart,
+  School,
   ScrollText,
   ShieldCheck,
   Stamp,
@@ -625,6 +626,78 @@ const CHARGES_EDUCATION: ChargesInfo = {
       label: "Foreclosure and part-prepayment",
       value:
         "Many lenders allow early repayment of education loans with little or no charge. Check your lender's terms.",
+    },
+  ],
+  note: CHARGES_NOTE,
+};
+
+// Education Infrastructure Loan: for the school, college or institute itself, so the paperwork follows how it is run.
+const EDU_INFRA_COMMON = [
+  "KYC (PAN, Aadhaar, address proof) of every trustee, director, partner or proprietor",
+  "Recognition and affiliation certificates, and proof of the current student strength",
+  "Last 3 years' audited financial statements and income tax returns of the institution",
+  "Last 12 months' bank statements of the institution",
+  "Fee structure and last 12 months' fee collection records",
+  "Details of existing loans, with EMIs and statements",
+  "For a secured loan: the property papers (title documents, latest tax receipt, approved plans)",
+];
+const EDU_INFRA_DOC_CATEGORIES = [
+  {
+    label: "Trust / Society",
+    description:
+      "The school or institute is run by a public trust or a registered society. The lender checks the trust deed or society registration, who the trustees or members are, and the institution's accounts. A resolution of the trustees or the managing committee that allows the loan is usually needed.",
+    items: [
+      "Trust deed or society registration certificate with bye-laws, and PAN of the trust or society",
+      "List of trustees or managing committee members, with their KYC",
+      "Resolution of the trustees or managing committee to borrow, and to offer the property as security if the loan is secured",
+      "Registration under the Income Tax Act (12A and 80G), where held",
+      ...EDU_INFRA_COMMON,
+    ],
+  },
+  {
+    label: "Company",
+    description:
+      "The school or institute is run by a private limited company or a not-for-profit (Section 8) company. The lender checks the incorporation papers, the directors, the shareholding and the audited accounts. A board resolution that allows the loan is usually needed.",
+    items: [
+      "Certificate of incorporation, MOA and AOA, and PAN of the company",
+      "List of directors and the shareholding pattern",
+      "Board resolution authorising the loan, and the property as security if the loan is secured",
+      ...EDU_INFRA_COMMON,
+    ],
+  },
+  {
+    label: "Partnership / Proprietorship",
+    description:
+      "The school or institute is run by a partnership firm, an LLP or one owner. The lender checks the firm's registration and accounts, and the standing of each partner or the owner. A signed deed that allows borrowing keeps things smooth.",
+    items: [
+      "Partnership deed or LLP agreement, with registration proof, or the proprietor's business proof",
+      "PAN of the firm, and the list of partners",
+      "Consent of all partners to the loan, and to the property as security if the loan is secured",
+      ...EDU_INFRA_COMMON,
+    ],
+  },
+];
+const CHARGES_EDU_INFRA: ChargesInfo = {
+  intro: CHARGES_INTRO,
+  rows: [
+    {
+      label: "Processing fee",
+      value:
+        "A percentage of the loan amount plus GST. It usually costs more for a loan without security than for one backed by property, and it varies by lender and programme.",
+    },
+    {
+      label: "Legal, valuation and inspection",
+      value:
+        "For a secured loan, the lender may charge for a legal check and a valuation of the property. It may also inspect the institution.",
+    },
+    {
+      label: "Documentation and other charges",
+      value: "Some lenders add a small fixed fee for documentation or a statement of account.",
+    },
+    {
+      label: "Foreclosure and part-prepayment",
+      value:
+        "Closing the loan early may carry a charge, usually a percentage of the outstanding amount, and some lenders allow it only after a minimum period. Ask before you prepay.",
     },
   ],
   note: CHARGES_NOTE,
@@ -1854,6 +1927,150 @@ export const PRODUCTS: Product[] = [
     ],
     charges: CHARGES_EDUCATION,
     documentCategories: EDUCATION_DOC_CATEGORIES,
+  },
+  {
+    slug: "education-infrastructure-loan",
+    icon: School,
+    title: "Education Infrastructure Loan",
+    tagline: "Funding for schools and institutions to build and grow.",
+    group: "Personal, Education, Vehicle & Other Loans",
+    heroNote: "For schools and education institutions",
+    facts: [
+      { label: "Loan amount", value: "₹10 Lakh to ₹10 Cr*" },
+      { label: "Tenure", value: "Up to 15 years*" },
+      { label: "Security", value: "With or without property*" },
+      { label: "For", value: "Schools and education institutions" },
+      { label: "Minimum ticket size", value: "₹10 Lakh" },
+    ],
+    glance: [
+      {
+        label: "Purpose",
+        value: "Funding for the infrastructure and growth of schools and education institutions",
+      },
+      { label: "Loan size", value: "₹10 Lakh to ₹10 Cr*, depending on the programme" },
+      {
+        label: "Tenor",
+        value: "Up to 5 years without security, and up to 15 years with property as security*",
+      },
+      { label: "Assessment", value: "Assessed and reported income" },
+      {
+        label: "Student strength",
+        value: "At least 200 to 400 students, depending on the programme",
+      },
+      {
+        label: "Years running",
+        value: "At least 3 to 5 years, depending on the programme",
+      },
+      {
+        label: "Affiliation",
+        value:
+          "CBSE, ICSE, IB or a State Board for schools, and the relevant authorised body for higher education",
+      },
+      { label: "Interest rate", value: "Set by the lender after it assesses your institution" },
+    ],
+    glanceNote:
+      "* These are the usual starting points. Each lender sets its own limits, and the final terms depend on the lender's policy and your institution's profile.",
+    about:
+      "Funding for schools and education institutions that want to build, expand or improve their campus. There are three programmes: unsecured funding for schools, secured funding for schools, and secured funding for institutions that run higher education courses. The one that suits you depends on the size of the institution, how long it has been running, and whether you can offer property as security. We compare the options from our lender partners, prepare your file, and follow it through. Interest rate, loan amount, tenure and approval depend on the lender's policy and the assessment of your institution.",
+    optionTiers: {
+      heading: "Available programmes",
+      intro:
+        "Three programmes, by the kind of institution and whether property is offered as security. The one that applies to you depends on your institution and the lender's policy.",
+      tiers: [
+        {
+          title: "Unsecured funding for schools",
+          points: [
+            { label: "Loan amount", value: "₹10 Lakh to ₹75 Lakh*" },
+            { label: "Tenure", value: "Up to 5 years" },
+            { label: "Security", value: "No property security*" },
+            { label: "Assessment", value: "Assessed and reported income" },
+            { label: "Student strength", value: "At least 400 students" },
+            { label: "Years running", value: "At least 5 years" },
+            { label: "Affiliation", value: "CBSE, State Board, ICSE or IB" },
+          ],
+        },
+        {
+          title: "Secured funding for schools",
+          points: [
+            { label: "Loan amount", value: "₹25 Lakh to ₹10 Cr*" },
+            { label: "Tenure", value: "Up to 15 years" },
+            {
+              label: "Security",
+              value:
+                "Property: a school or college property, or a commercial or residential property",
+            },
+            { label: "Assessment", value: "Assessed and reported income" },
+            { label: "Student strength", value: "At least 300 students" },
+            { label: "Years running", value: "At least 3 years" },
+            { label: "Affiliation", value: "CBSE, ICSE, IB or State Board" },
+          ],
+        },
+        {
+          title: "Higher education institutions (secured)",
+          points: [
+            { label: "Loan amount", value: "₹50 Lakh to ₹7.5 Cr*" },
+            { label: "Tenure", value: "Up to 15 years" },
+            { label: "Security", value: "Property as security" },
+            { label: "Courses covered", value: "B.Ed, Pharmacy, Nursing and Management" },
+            { label: "Student strength", value: "At least 200 students" },
+            { label: "Years running", value: "At least 5 years" },
+            { label: "Affiliation", value: "By the relevant authorised body" },
+          ],
+        },
+      ],
+    },
+    features: [
+      "Three programmes, so there is an option with or without property as security",
+      "Longer repayment, up to 15 years, on the secured programmes",
+      "Assessed on the institution's reported income",
+      "Simple documentation, subject to the lender's policy",
+      "Our team compares lenders, prepares your file and follows it up",
+    ],
+    eligibility: [
+      "A school, college or education institute run by a trust, a society, a company, a firm or an owner",
+      "Affiliation or recognition from the right board or authorised body",
+      "A minimum student strength, from 200 to 400 depending on the programme",
+      "A minimum number of years running, from 3 to 5 depending on the programme",
+      "Income that can be shown on paper, with audited accounts and tax returns",
+      "Property to offer as security, for the secured programmes",
+      "A clean repayment record on the institution's existing loans helps",
+    ],
+    documents: [
+      "KYC of every trustee, director, partner or proprietor",
+      "Affiliation certificate and proof of student strength",
+      "Audited financials and tax returns, and 12 months' bank statements",
+    ],
+    checklistIntake: [
+      {
+        key: "loanAmount",
+        label: "Loan Amount Required",
+        type: "text",
+        placeholder: "e.g. 2,00,00,000",
+        format: "amount",
+      },
+      { key: "institutionName", label: "Name of the Institution", type: "text" },
+      {
+        key: "institutionType",
+        label: "Type of Institution",
+        type: "select",
+        options: ["School", "College or higher education institute", "Other"],
+      },
+      {
+        key: "runBy",
+        label: "How is it run?",
+        type: "select",
+        options: ["Trust", "Society", "Company", "Partnership or LLP", "Proprietorship", "Other"],
+      },
+      { key: "studentStrength", label: "Number of Students", type: "text" },
+      {
+        key: "securityOffered",
+        label: "Will you offer property as security?",
+        type: "select",
+        options: ["Yes", "No", "Not sure"],
+      },
+    ],
+    charges: CHARGES_EDU_INFRA,
+    documentCategories: EDU_INFRA_DOC_CATEGORIES,
   },
 
   {

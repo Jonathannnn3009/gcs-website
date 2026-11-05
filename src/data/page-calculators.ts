@@ -39,6 +39,7 @@ export const PRODUCT_CALCULATORS: Record<string, CalcId[]> = {
   "loan-against-securities": ["emi", "eligibility"],
   "professional-loan": ["emi", "eligibility"],
   "education-loan": ["emi", "prepayment", "eligibility"],
+  "education-infrastructure-loan": ["emi", "loan-comparison", "prepayment", "eligibility"],
   "new-car-loan": ["emi", "eligibility", "loan-comparison"],
   "used-car-loan": ["emi", "eligibility", "loan-comparison"],
   "car-refinance": ["balance-transfer", "emi", "prepayment", "eligibility"],

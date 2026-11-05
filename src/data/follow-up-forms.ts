@@ -3552,6 +3552,224 @@ const EDUCATION_LOAN: FollowUpForm = {
   ],
 };
 
+/** Funding for a school, college or institute: the lender looks at the institution first, then at the property. */
+const EDUCATION_INFRASTRUCTURE_LOAN: FollowUpForm = {
+  ...COMMON,
+  slugs: ["education-infrastructure-loan"],
+  reason:
+    "We ask these extra questions so our experts can read your institution the way a lender does and shortlist the Banks & NBFCs whose programmes fit it best.",
+  steps: [
+    {
+      title: "About your institution",
+      help: "Lenders fund schools and institutes by student strength, years running and affiliation, so these come first.",
+      fields: [
+        {
+          key: "constitution",
+          label: "How is the institution run?",
+          kind: "choice",
+          required: true,
+          options: [
+            "Trust",
+            "Society",
+            "Private limited company",
+            "Section 8 / not-for-profit company",
+            "Partnership or LLP",
+            "Proprietorship",
+            "Other",
+          ],
+        },
+        {
+          key: "institutionType",
+          label: "What kind of institution is it?",
+          kind: "choice",
+          options: ["School", "College or higher education institute", "Other"],
+        },
+        {
+          key: "boardAffiliation",
+          label: "Which board is the school affiliated to?",
+          kind: "choice",
+          options: ["CBSE", "ICSE", "IB", "State Board", "More than one board", "Other"],
+          showWhen: { key: "institutionType", values: ["School"] },
+        },
+        {
+          key: "affiliatedBody",
+          label: "Which university, council or body is it affiliated to?",
+          kind: "text",
+          placeholder: "e.g. Mumbai University, Pharmacy Council of India",
+          showWhen: {
+            key: "institutionType",
+            values: ["College or higher education institute", "Other"],
+          },
+        },
+        {
+          key: "courses",
+          label: "Which courses does it run?",
+          kind: "choice",
+          options: ["B.Ed", "Pharmacy", "Nursing", "Management", "More than one of these", "Other"],
+          showWhen: { key: "institutionType", values: ["College or higher education institute"] },
+        },
+        {
+          key: "studentStrength",
+          label: "How many students does it have?",
+          kind: "choice",
+          options: ["Less than 200", "200 to 300", "300 to 400", "More than 400"],
+          help: "Lenders ask for a minimum, from 200 to 400 depending on the programme. Say it as it is.",
+        },
+        {
+          key: "yearsRunning",
+          label: "How long has it been running?",
+          kind: "choice",
+          options: ["Less than 3 years", "3 to 5 years", "More than 5 years"],
+        },
+        {
+          key: "premises",
+          label: "Who owns the land and building it runs from?",
+          kind: "choice",
+          options: [
+            "The institution owns both",
+            "The institution owns the building on leased land",
+            "Rented premises",
+            "Other",
+          ],
+        },
+      ],
+    },
+    {
+      title: "Income and accounts",
+      help: "The loan is assessed on the institution's reported income, so lenders look at how it can be shown on paper.",
+      fields: [
+        {
+          key: "annualTurnover",
+          label: "Total yearly income of the institution (fees and other receipts)",
+          kind: "amount",
+          placeholder: "e.g. 5,00,00,000",
+          help: "For the last financial year.",
+        },
+        {
+          key: "annualProfit",
+          label: "Surplus after expenses (last financial year)",
+          kind: "amount",
+          allowZero: true,
+          placeholder: "e.g. 60,00,000",
+        },
+        {
+          key: "auditedYears",
+          label: "For how many years are the audited accounts ready?",
+          kind: "choice",
+          options: ["None", "1 year", "2 years", "3 years or more"],
+        },
+        {
+          key: "itrYears",
+          label: "Income tax returns filed for how many years?",
+          kind: "choice",
+          options: ["None", "1 year", "2 years", "3 years or more"],
+        },
+        {
+          key: "bankStatements",
+          label: "Do you have 12 months of the institution's bank statements?",
+          kind: "choice",
+          options: YES_NO,
+        },
+        {
+          key: "feeRecords",
+          label: "Do you keep fee collection records for the last 12 months?",
+          kind: "choice",
+          options: YES_NO,
+        },
+      ],
+    },
+    {
+      title: "The funding you need",
+      fields: [
+        {
+          key: "purpose",
+          label: "What is the funding for?",
+          kind: "choice",
+          options: [
+            "Building a new school or campus",
+            "Adding classrooms, floors or a new wing",
+            "Labs, library, sports or smart-class facilities",
+            "Buying land or a building",
+            "Repairs and renovation",
+            "Repaying an existing loan",
+            "Other",
+          ],
+        },
+        PURPOSE_OTHER,
+        {
+          key: "securityOffered",
+          label: "Can you offer property as security?",
+          kind: "choice",
+          options: ["Yes, property", "No, I want it without security", "Not sure"],
+          help: "A secured loan can be larger and run longer. An unsecured loan is smaller and shorter.",
+        },
+        {
+          key: "propertyKind",
+          label: "What kind of property is it?",
+          kind: "choice",
+          options: [
+            "School or college building or land",
+            "Commercial property",
+            "Residential property",
+            "Other",
+          ],
+          showWhen: { key: "securityOffered", values: ["Yes, property"] },
+        },
+        {
+          key: "propertyOwner",
+          label: "Whose name is the property in?",
+          kind: "choice",
+          options: [
+            "The institution (trust, society, company or firm)",
+            "A trustee, director or partner",
+            "A family member of one of them",
+            "Other",
+          ],
+          showWhen: { key: "securityOffered", values: ["Yes, property"] },
+        },
+        {
+          key: "propertyArea",
+          label: "Where is the property?",
+          kind: "text",
+          placeholder: "Area / locality and city",
+          showWhen: { key: "securityOffered", values: ["Yes, property"] },
+        },
+        {
+          key: "propertyValue",
+          label: "Approximate market value of the property",
+          kind: "amount",
+          placeholder: "e.g. 8,00,00,000",
+          help: "A rough figure is fine.",
+          showWhen: { key: "securityOffered", values: ["Yes, property"] },
+        },
+        {
+          key: "existingMortgage",
+          label: "Is there already a loan on this property?",
+          kind: "choice",
+          options: YES_NO,
+          showWhen: { key: "securityOffered", values: ["Yes, property"] },
+        },
+        {
+          key: "mortgageOutstanding",
+          label: "Amount still to be repaid on it",
+          kind: "amount",
+          allowZero: true,
+          placeholder: rupee,
+          showWhen: { key: "existingMortgage", values: ["Yes"] },
+        },
+        {
+          key: "tenure",
+          label: "Preferred repayment period",
+          kind: "choice",
+          options: ["Up to 5 years", "5 to 10 years", "10 to 15 years", "Not sure"],
+        },
+        { key: "timeline", label: "When do you need the funds?", kind: "choice", options: TIMELINE },
+      ],
+    },
+    creditStep("education infrastructure loan", { business: true }),
+  ],
+};
+
 const carWork = (): QuestionStep[] => [
   workWithType(),
   {
@@ -4182,6 +4400,7 @@ export const FOLLOW_UP_FORMS: FollowUpForm[] = [
   BILL_DISCOUNTING,
   PERSONAL_LOAN,
   EDUCATION_LOAN,
+  EDUCATION_INFRASTRUCTURE_LOAN,
   NEW_CAR_LOAN,
   USED_CAR_LOAN,
   CAR_REFINANCE,

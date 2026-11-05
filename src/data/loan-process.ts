@@ -485,6 +485,32 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
       ),
     ],
   },
+  "education-infrastructure-loan": {
+    intro:
+      "Funding for a school or institute is decided on the institution itself. Here is how we take you from the plan to the funds.",
+    steps: [
+      s(
+        "Tell us about the institution",
+        "Share what you run, how many students you have, how long it has been running and what you want to build or improve.",
+      ),
+      s(
+        "Pick the right programme",
+        "We check whether an unsecured or a secured programme suits you, based on your student strength, years running and the property you can offer.",
+      ),
+      s(
+        "Compare lenders",
+        "We compare lenders on amount, tenure, charges and conditions, and you choose the one that suits you.",
+      ),
+      s(
+        "Submit the papers",
+        "You provide KYC, the affiliation certificate, audited accounts, bank statements and, for a secured loan, the property papers.",
+      ),
+      s(
+        "Checks, sanction and funds",
+        "The lender reviews the institution and the property, then sanctions the loan. After the formalities, the money is released.",
+      ),
+    ],
+  },
   "new-car-loan": {
     intro: "From choosing the car to driving it home, here is how a new car loan goes.",
     steps: [
