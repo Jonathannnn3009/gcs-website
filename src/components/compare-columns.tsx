@@ -65,7 +65,7 @@ export function CompareColumns() {
             <span className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-gold to-gold-light text-navy shadow-[0_6px_16px_rgba(228,176,40,0.35)]">
               <ShieldCheck className="h-6 w-6" />
             </span>
-            <p className="text-base font-extrabold tracking-wide text-gold uppercase" style={{ letterSpacing: "0.04em" }}>
+            <p className="text-[15px] font-bold text-gold-light uppercase" style={{ letterSpacing: "0.02em" }}>
               Growth Capital Services
             </p>
           </div>

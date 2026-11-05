@@ -420,7 +420,8 @@ function HomePage() {
                 alt="Growth Capital Services"
                 width={870}
                 height={545}
-                className="h-20 w-auto sm:h-24"
+                // A little larger than before, and the lettering is thickened a hair so it holds its own beside the header logo.
+                className="h-24 w-auto [filter:drop-shadow(0_0_0.5px_rgb(11_24_73/0.55))] sm:h-28"
               />
             </Reveal>
 
