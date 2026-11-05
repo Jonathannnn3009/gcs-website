@@ -48,7 +48,7 @@ export const LOANPAGE_TEXT_SECTIONS: HomeTextSection[] = [
     fields: [
       f("qualify.title", "Heading", "Do you qualify?"),
       f("qualify.which", "Small line above the kinds of applicant", "Which One Are You"),
-      f("docs.title", "Heading of the documents box", "Documents Required"),
+      f("docs.title", "Heading of the documents box", "Documents Required (Checklist)"),
     ],
   },
   {
