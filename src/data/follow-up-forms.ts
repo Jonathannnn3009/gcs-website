@@ -367,7 +367,7 @@ const creditStep = (
     },
     {
       key: "appliedElsewhere",
-      label: `Have you already applied for ${/^[aeiou]/i.test(loan) ? "an" : "a"} ${loan} with another bank or NBFC?`,
+      label: `Have you applied for ${/^[aeiou]/i.test(loan) ? "an" : "a"} ${loan} with another lender?`,
       kind: "choice",
       options: YES_NO,
     },

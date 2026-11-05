@@ -183,11 +183,13 @@ export async function addLeadDetails(
     return res.ok;
   };
   const { answers, ...plain } = extra;
-  const detail = clip(extra.detail, 2000);
+  const detail = clip(extra.detail, 6000);
   try {
     if (answers?.length && (await send({ token: pass.token, ...plain, answers, detail }))) return true;
     // An older CRM does not know `answers`: send the same details as text only, which it does.
-    return await send({ token: pass.token, ...plain, detail });
+    if (await send({ token: pass.token, ...plain, detail })) return true;
+    // An older CRM also takes at most 2,000 characters of text: send what fits rather than lose the form.
+    return detail.length > 2000 ? await send({ token: pass.token, ...plain, detail: clip(detail, 2000) }) : false;
   } catch {
     return false;
   }

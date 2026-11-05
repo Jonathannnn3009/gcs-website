@@ -187,11 +187,13 @@ export function FollowUpFlow({
     const detail = ["Detailed assessment (optional second form)", ...lines].join("\n");
     const answerRows = all
       .filter((f) => showing(f) && (answers[f.key] ?? "").trim() !== "")
+      // The CRM refuses the whole set if one label runs past 80 characters or one answer past 500, so keep to its limits.
       .map((f) => ({
-        key: f.key,
-        label: f.label,
-        value: `${f.kind === "amount" ? "₹" : ""}${saidOther(f) ? `Other (${saidOther(f)})` : answers[f.key]}${f.kind === "percent" ? "%" : ""}`,
-      }));
+        key: f.key.slice(0, 80),
+        label: f.label.slice(0, 80),
+        value: `${f.kind === "amount" ? "₹" : ""}${saidOther(f) ? `Other (${saidOther(f)})` : answers[f.key]}${f.kind === "percent" ? "%" : ""}`.slice(0, 500),
+      }))
+      .slice(0, 80);
     const applicant = answers["applicantType"] || answers["applicantCategory"] || basics.category;
     const income = digits(answers["netSalary"]);
     const extras = {
