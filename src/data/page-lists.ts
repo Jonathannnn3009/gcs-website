@@ -174,7 +174,7 @@ export const HOME_STEPS = [
 export const ABOUT_STATS = [
   { value: "2017", label: "Established" },
   { value: "75+", label: "Bank & NBFC Partners" },
-  { value: "27+", label: "Loan Products" },
+  { value: "28+", label: "Loan Products" },
   { value: "100%", label: "Transparent Process" },
 ];
 
