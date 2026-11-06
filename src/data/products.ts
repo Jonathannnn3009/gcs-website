@@ -899,7 +899,7 @@ export const PRODUCTS: Product[] = [
     group: "Property Finance",
     facts: [
       { label: "Loan amount", value: "₹20 Lakh to ₹35 Crore*" },
-      { label: "Interest rate", value: "From 7.50%* p.a." },
+      { label: "Interest rate", value: "From 8.40%* p.a." },
       { label: "Tenure", value: "Up to 15 to 20 years*" },
       { label: "Minimum ticket size", value: "₹20 Lakh" },
     ],
@@ -979,7 +979,7 @@ export const PRODUCTS: Product[] = [
     facts: [
       { label: "Loan amount", value: "₹3 Lakh to ₹20 Lakh*" },
       { label: "Tenure", value: "12 to 120 months*" },
-      { label: "Indicative rate", value: "19% to 24% p.a. reducing*" },
+      { label: "Indicative rate", value: "19% to 27% p.a. reducing*" },
       { label: "For", value: "Salaried and self-employed" },
     ],
     glance: [
@@ -1123,14 +1123,14 @@ export const PRODUCTS: Product[] = [
     tagline: "Rent today becomes capital today.",
     group: "Property Finance",
     facts: [
-      { label: "Interest rate", value: "From 7.50%* p.a." },
+      { label: "Interest rate", value: "From 8.75%* p.a." },
       { label: "Loan amount", value: "Based on eligible rental cash flow, property value and assessment*" },
-      { label: "Tenure", value: "Up to 10 years*" },
+      { label: "Tenure", value: "10 to 15 years*" },
     ],
     glance: [
       { label: "Purpose", value: "Raise funds against rental income from an eligible leased property*" },
       { label: "Loan Amount", value: "Based on eligible rental cash flow, property value and assessment*" },
-      { label: "Tenure", value: "Up to 10 Years*" },
+      { label: "Tenure", value: "10 to 15 Years*" },
       { label: "LTV", value: "Up to 70%*" },
       { label: "Property Accepted", value: "Commercial / Specialised Properties*" },
       { label: "Eligible Applicants", value: "Salaried / Self-Employed*" },
@@ -1169,7 +1169,7 @@ export const PRODUCTS: Product[] = [
     facts: [
       { label: "Structure", value: "Secured drop-line overdraft" },
       { label: "LTV", value: "Up to 80% of property value" },
-      { label: "Interest rate", value: "From 9.75%* p.a. on the drawn balance" },
+      { label: "Interest rate", value: "From 9%* p.a. on the drawn balance" },
     ],
     glance: [
       { label: "Purpose", value: "Flexible property-backed funding through an Overdraft facility*" },
