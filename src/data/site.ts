@@ -1,4 +1,5 @@
-let WHATSAPP_NUMBER = "918828001700";
+// The WhatsApp number is the one the assistant answers on (the API number). Calls still go to the office phone below.
+let WHATSAPP_NUMBER = "918828003900";
 
 /** Builds a wa.me link pre-filled with a ready-to-send message, so visitors don't land on a blank chat. */
 export function waLink(message?: string): string {
