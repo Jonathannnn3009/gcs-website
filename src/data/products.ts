@@ -1576,7 +1576,7 @@ export const PRODUCTS: Product[] = [
     facts: [
       { label: "Structure", value: "Term loan with fixed EMIs" },
       { label: "Loan amount", value: "Up to ₹5 Cr" },
-      { label: "Interest rate", value: "From 11.50%* p.a." },
+      { label: "Interest rate", value: "From 9%* p.a." },
       { label: "Tenure", value: "12 — 60 months" },
     ],
     glance: [
@@ -1586,7 +1586,7 @@ export const PRODUCTS: Product[] = [
       },
       { label: "Structure", value: "Term loan with fixed EMIs" },
       { label: "Loan size", value: "Up to ₹5 Cr" },
-      { label: "Interest rate", value: "From 11.50%* p.a." },
+      { label: "Interest rate", value: "From 9%* p.a." },
       { label: "Tenor", value: "12 — 60 months" },
       {
         label: "Who can apply",
@@ -2386,6 +2386,14 @@ export const PRODUCTS: Product[] = [
       { label: "Interest rate", value: "From ~2.70% per month" },
       { label: "Turnaround", value: "24 – 48 hours" },
       { label: "Security", value: "No collateral, post-dated cheques" },
+    ],
+    glance: [
+      { label: "Purpose", value: "Expansion, working capital or a short-term business opportunity" },
+      { label: "Structure", value: "Unsecured funding, repaid through post-dated cheques" },
+      { label: "Loan size", value: "₹1 Cr to ₹50 Cr" },
+      { label: "Interest rate", value: "From ~2.70% per month" },
+      { label: "Tenor", value: "4 – 8 months" },
+      { label: "Who can apply", value: "Self-employed businesses with consistent turnover. Not for salaried individuals" },
     ],
     about:
       "Unsecured private business funding, perfect for expansion, working capital or short-term opportunities. Private credit usually costs more than a bank loan, so we share every rate, fee and repayment term in writing before you decide. Final terms depend on the lender and your business profile.",
