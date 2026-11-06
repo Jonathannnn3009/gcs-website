@@ -35,7 +35,7 @@ const reachMethods = () => [
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "Message us",
+    value: CONTACT.whatsappDisplay,
     href: CONTACT.whatsappLink,
   },
   { icon: Mail, label: "Email", value: "Send a query", href: `mailto:${CONTACT.email}` },

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Clock, Mail, MapPin, Phone, ArrowRight } from "lucide-react";
+import { Clock, Mail, MapPin, MessageCircle, Phone, ArrowRight } from "lucide-react";
 import { CONTACT, SERVICES } from "@/data/site";
 import { PRODUCT_GROUPS, PRODUCTS } from "@/data/products";
 import { useMorePhones } from "@/lib/public-settings";
@@ -138,6 +138,12 @@ export function SiteFooter() {
                   className="text-white transition-colors hover:text-gold"
                 >
                   {CONTACT.phone}
+                </a>
+              </li>
+              <li className="flex gap-3">
+                <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                <a href={CONTACT.whatsappLink} className="text-white transition-colors hover:text-gold">
+                  {CONTACT.whatsappDisplay} <span className="text-white/60">(WhatsApp)</span>
                 </a>
               </li>
               {morePhones.map((ph) => (

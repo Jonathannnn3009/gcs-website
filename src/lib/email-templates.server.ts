@@ -32,6 +32,7 @@ function frame(origin: string, preheader: string, inner: string): string {
 ${esc(CONTACT.address)}<br>
 ${esc(CONTACT.hours)}<br>
 Phone <a href="${CONTACT.phoneHref}" style="color:${GOLD_DARK};text-decoration:none;">${esc(CONTACT.phone)}</a>
+ &nbsp;|&nbsp; WhatsApp <a href="${CONTACT.whatsappLink}" style="color:${GOLD_DARK};text-decoration:none;">${esc(CONTACT.whatsappDisplay)}</a>
  &nbsp;|&nbsp; <a href="mailto:${CONTACT.email}" style="color:${GOLD_DARK};text-decoration:none;">${esc(CONTACT.email)}</a>
 </td></tr></table></td></tr>
 </table></td></tr></table></body></html>`;

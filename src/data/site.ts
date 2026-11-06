@@ -8,10 +8,15 @@ export function waLink(message?: string): string {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message ?? defaultMessage)}`;
 }
 
+/** "918828003900" -> "+91 88280 03900", the way the office number is written. */
+const showNumber = (n: string) => (/^91\d{10}$/.test(n) ? `+91 ${n.slice(2, 7)} ${n.slice(7)}` : `+${n}`);
+
 export const CONTACT = {
   phone: "+91 88280 01700",
   phoneHref: "tel:+918828001700",
   whatsapp: WHATSAPP_NUMBER,
+  /** The WhatsApp number as shown on the page. Calls use `phone`; chats open on this one. */
+  whatsappDisplay: showNumber(WHATSAPP_NUMBER),
   whatsappLink: waLink(),
   email: "connect.gcs@growthcapitalservices.in",
   address:
@@ -52,6 +57,7 @@ export function applyContactInfo(info: SiteInfoContact) {
   if (wa.length >= 10) {
     WHATSAPP_NUMBER = wa.length === 10 ? `91${wa}` : wa;
     CONTACT.whatsapp = WHATSAPP_NUMBER;
+    CONTACT.whatsappDisplay = showNumber(WHATSAPP_NUMBER);
     CONTACT.whatsappLink = waLink();
   }
   for (const k of ["facebook", "instagram", "linkedin", "youtube", "x"] as const) {
