@@ -52,7 +52,7 @@ export const CONTACT_TEXT_SECTIONS: HomeTextSection[] = [
       {
         id: "office.body",
         label: "Paragraph",
-        text: "Our advisory team is based at Avadhoot Chhaya CHS on R. B. Marg, near Jagruti Nagar Metro Station, accessible to clients across the western suburbs. Visit by appointment for a structured file review.",
+        text: "Our advisory team is based at Avadhoot Chhaya CHS on R. B. Kadam Marg, near Jagruti Nagar Metro Station, accessible to clients across the western suburbs. Visit by appointment for a structured file review.",
         long: true,
       },
       { id: "office.addressLabel", label: "Label above the address", text: "Address" },

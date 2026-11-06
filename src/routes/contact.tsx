@@ -196,7 +196,7 @@ function ContactPage() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <a
-                href="https://maps.google.com/?q=Avadhoot+Chhaya+CHS+R+B+Marg+Bhatwadi+Ghatkopar+West+Mumbai"
+                href="https://maps.google.com/?q=Avadhoot+Chhaya+CHS+R+B+Kadam+Marg+Bhatwadi+Ghatkopar+West+Mumbai"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-md bg-navy px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-navy-soft"
@@ -218,7 +218,7 @@ function ContactPage() {
             <div className="overflow-hidden rounded-2xl border border-border">
               <iframe
                 title="Growth Capital Services Office Location"
-                src="https://www.google.com/maps?q=Avadhoot+Chhaya+CHS+R+B+Marg+Bhatwadi+Ghatkopar+West+Mumbai&output=embed"
+                src="https://www.google.com/maps?q=Avadhoot+Chhaya+CHS+R+B+Kadam+Marg+Bhatwadi+Ghatkopar+West+Mumbai&output=embed"
                 width="100%"
                 height="360"
                 style={{ border: 0 }}
