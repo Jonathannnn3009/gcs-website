@@ -1832,7 +1832,7 @@ export const PRODUCTS: Product[] = [
     facts: [
       { label: "Structure", value: "Unsecured drop-line overdraft" },
       { label: "Limit", value: "Up to ₹2 Cr" },
-      { label: "Interest rate", value: "From 13.50%* p.a. on the drawn balance" },
+      { label: "Interest rate", value: "From 17.50%* p.a. on the drawn balance" },
     ],
     glance: [
       {
@@ -1840,7 +1840,7 @@ export const PRODUCTS: Product[] = [
         value: "An overdraft without collateral; the limit reduces over the loan period",
       },
       { label: "Limit", value: "Up to ₹2 Cr" },
-      { label: "Interest rate", value: "From 13.50%* p.a. on the drawn balance" },
+      { label: "Interest rate", value: "From 17.50%* p.a. on the drawn balance" },
       { label: "Security", value: "None" },
       { label: "Who can apply", value: "At least 3 years of business operations" },
     ],
@@ -2338,7 +2338,7 @@ export const PRODUCTS: Product[] = [
     group: "Business Growth",
     facts: [
       { label: "Loan amount", value: "Up to ₹75 lakh" },
-      { label: "Interest rate", value: "From 10.99%* p.a." },
+      { label: "Interest rate", value: "From 13.50%* p.a." },
       { label: "Tenure", value: "12 — 84 months" },
       { label: "Collateral", value: "Usually unsecured" },
     ],
@@ -2349,7 +2349,7 @@ export const PRODUCTS: Product[] = [
       },
       { label: "Loan size", value: "Up to ₹75 lakh" },
       { label: "Tenor", value: "12 — 84 months" },
-      { label: "Interest rate", value: "From 10.99%* p.a." },
+      { label: "Interest rate", value: "From 13.50%* p.a." },
       { label: "Security", value: "Usually unsecured" },
       {
         label: "Who can apply",
