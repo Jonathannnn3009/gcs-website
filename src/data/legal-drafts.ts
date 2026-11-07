@@ -1,3 +1,4 @@
+import { CONSENT_TEXT } from "@/data/consent";
 import { CONTACT } from "@/data/site";
 import type { CustomPage } from "@/lib/site-content";
 
@@ -58,6 +59,10 @@ We use reasonable technical and organisational safeguards to protect your inform
 
 You may ask to see, correct or delete the personal information we hold about you, or withdraw your consent to marketing, by contacting us below. To have your data deleted, email us from the address you used with us, or message us on WhatsApp, and we will delete it within a reasonable time unless the law requires us to keep it.
 
+## Credit information and your consent
+
+With your consent we obtain your credit information from credit information companies, verify your PAN, and share your details with the banks, NBFCs and lenders you choose to explore, who may also fetch KYC details from approved agencies and validate your bank account. We use your details only for assessing your loan options and contacting you about them. Our consent wording is set out in full in our Terms & Conditions. You can withdraw your consent, or ask us to delete your data, at any time by writing to the email address under Contact below. A lender that already holds your application will keep what it needs to under its own policy and the law.
+
 ## Cookies
 
 We use cookies and similar tools to make the site work and to understand how it is used. You can control cookies in your browser settings.
@@ -94,6 +99,12 @@ We do not charge customers an advisory fee for arranging most loans. For some fa
 - Give us accurate and complete information and documents.
 - Tell us promptly if anything changes.
 - Do not misuse the site or attempt to disrupt it.
+
+## Consent for credit information and contact
+
+When you tick the consent box on our forms (enquiries, credit report requests and applications), you give the following consent. It is shown in full on each form, and is repeated here so you can read it at any time.
+
+${CONSENT_TEXT}
 
 ## Third-party content and links
 

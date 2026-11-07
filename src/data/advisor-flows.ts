@@ -501,8 +501,4 @@ export const FLOWS: Flow[] = [
   },
 ];
 
-/** Version of the wording shown next to the consent box. Stored with every enquiry. */
-export const CONSENT_VERSION = "advisor-2026-10-v1";
-
-export const CONSENT_TEXT =
-  "I agree that Growth Capital Services may use the details I have entered, and contact me on the number given, to look into my loan enquiry and share it with relevant lenders for this purpose. I understand this is an enquiry, not a loan approval, and that any lender decides after its own checks.";
+export { CONSENT_TEXT, CONSENT_VERSION } from "@/data/consent";

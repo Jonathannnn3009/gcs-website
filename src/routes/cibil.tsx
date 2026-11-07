@@ -1,3 +1,4 @@
+import { CONSENT_TEXT, CONSENT_VERSION } from "@/data/consent";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useEffect, useId, useState } from "react";
 import QRCode from "qrcode";
@@ -238,7 +239,7 @@ function CibilFlow() {
       phone: details.phone.trim(),
       email: details.email.trim(),
       source: "cibil-report-request",
-      detail: ["Stage: details captured, payment pending", ...detailLines()].join(" | "),
+      detail: ["Stage: details captured, payment pending", `Consent given: yes (wording ${CONSENT_VERSION}, ${new Date().toISOString()})`, ...detailLines()].join(" | "),
     });
     setSubmitting(false);
     setStep(2);
@@ -466,8 +467,7 @@ function CibilFlow() {
               className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]"
             />
             <span>
-              I authorise Growth Capital Services to retrieve my credit report on my behalf and
-              confirm the details above are correct.
+              {CONSENT_TEXT} I also confirm that the details above are correct.
             </span>
           </label>
           {errors["consent"] && (
