@@ -105,6 +105,8 @@ export async function converse(opts: {
   model: string;
   send: (e: ChatEvent) => void;
   signal: AbortSignal;
+  /** The visitor's chat pass, which the loan profile uses to find their lead. */
+  token?: string;
 }): Promise<void> {
   const snapshot = await getSiteSnapshot(opts.origin);
   const messages: OpenAiMessage[] = [
@@ -203,7 +205,7 @@ export async function converse(opts: {
       })),
     });
     for (const call of toolCalls) {
-      const out = await runTool(call.name, call.arguments, snapshot, opts.origin);
+      const out = await runTool(call.name, call.arguments, snapshot, opts.origin, opts.token ?? "");
       if (out.card) opts.send({ t: "card", v: out.card });
       if (out.form) opts.send({ t: "form", v: out.form });
       messages.push({ role: "tool", tool_call_id: call.id, content: JSON.stringify(out.result) });
@@ -330,6 +332,7 @@ export async function handleChat(request: Request): Promise<Response> {
         model,
         send: hold,
         signal: main.signal,
+        token,
       }).then(
         () => null,
         (err: unknown) => err,

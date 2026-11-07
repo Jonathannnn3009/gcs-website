@@ -14,6 +14,7 @@ import { PROFESSIONAL_SERVICES, divisionLabel } from "@/data/professional-servic
 import type { CallbackRequest, ResultCard } from "./config";
 import type { SiteSnapshot } from "./site-data.server";
 import { readSitePage } from "./pages.server";
+import { crmBase } from "./site-data.server";
 
 export type ToolOutput = { result: unknown; card?: ResultCard; form?: CallbackRequest };
 
@@ -290,6 +291,31 @@ export const TOOL_DEFINITIONS = [
           },
         },
         required: ["reason"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "loan_profile_next",
+      description:
+        "Start or resume the Customer Loan Profile: the fixed list of questions GCS needs to understand a loan requirement. Returns the next question to ask, with its allowed answers. Use when the visitor wants to apply, share their loan details, or get a preliminary assessment.",
+      parameters: { type: "object", properties: {}, additionalProperties: false },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "loan_profile_answer",
+      description:
+        "Save the visitor's reply to the question you last asked in the Customer Loan Profile. Pass their words exactly as written; the form reads and checks them. Returns whether it was accepted and the next question. Call it once for every reply that answers a profile question.",
+      parameters: {
+        type: "object",
+        properties: {
+          reply: { type: "string", description: "The visitor's reply, exactly as they wrote it." },
+        },
+        required: ["reply"],
         additionalProperties: false,
       },
     },
@@ -689,14 +715,51 @@ function toolCallback(a: Args): ToolOutput {
   };
 }
 
+/** The loan profile lives in the CRM and is kept on the visitor's own lead, found through their chat pass. */
+async function crmProfile(path: "next" | "answer", body: Record<string, string>, origin: string): Promise<ToolOutput> {
+  try {
+    const res = await fetch(`${crmBase(origin)}/public/chat-auth/profile/${path}`, {
+      method: "POST",
+      headers: { "content-type": "application/json", accept: "application/json" },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(8000),
+    });
+    const json = (await res.json().catch(() => null)) as Record<string, unknown> | null;
+    if (!res.ok || !json || json["available"] === false) {
+      return {
+        result: {
+          error: "The loan profile cannot be saved from this chat right now.",
+          advice: "Do not ask the profile questions. Offer a callback with the callback form instead.",
+        },
+      };
+    }
+    return {
+      result: {
+        ...json,
+        rules:
+          "Ask the question in your own warm words, one at a time, keeping every allowed answer. Never skip a question, never guess an answer, and never say a value was saved unless accepted is true. If accepted is false, explain gently and ask the same question again. When nextKey is null the profile is complete: thank the visitor and say an expert will review it.",
+      },
+    };
+  } catch {
+    return { result: { error: "The loan profile could not be reached.", advice: "Offer a callback with the callback form." } };
+  }
+}
+
 export async function runTool(
   name: string,
   rawArgs: string,
   snap: SiteSnapshot,
   origin: string,
+  chatToken = "",
 ): Promise<ToolOutput> {
   const a = parseArgs(rawArgs);
   try {
+    if (name === "loan_profile_next") return crmProfile("next", { token: chatToken }, origin);
+    if (name === "loan_profile_answer") {
+      const reply = str(a["reply"]).slice(0, 2000);
+      if (!reply) return { result: { error: "No reply to save.", advice: "Ask the question again." } };
+      return crmProfile("answer", { token: chatToken, reply }, origin);
+    }
     if (name === "read_website_page") {
       const page = await readSitePage(str(a["path"]), Number(a["part"]) || 1, origin);
       return {
