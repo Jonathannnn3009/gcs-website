@@ -75,8 +75,8 @@ export function MoneySaverCalculator() {
   );
 
   return (
-    <div className="glass-card p-6 sm:p-8" id="money-saver">
-      <div className="mb-6">
+    <div className="glass-card p-4 sm:p-5" id="money-saver">
+      <div className="mb-4">
         <p className="eyebrow">Money Saver Calculator</p>
         <h3 className="mt-2 text-2xl font-extrabold sm:text-3xl">
           Let your spare cash <span className="gold-text-static">cut your interest</span>
@@ -87,8 +87,8 @@ export function MoneySaverCalculator() {
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
-        <div className="flex flex-col gap-7 lg:justify-evenly">
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-stretch">
+        <div className="flex flex-col gap-4 lg:justify-evenly">
           <SliderField
             label="Sanction limit"
             value={principal}
@@ -145,7 +145,7 @@ export function MoneySaverCalculator() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <div className="relative flex w-full flex-1 flex-col justify-center overflow-hidden rounded-2xl border border-gold/20 panel-light p-8 text-center">
+          <div className="relative flex w-full flex-1 flex-col justify-center overflow-hidden rounded-2xl border border-gold/20 panel-light p-5 text-center">
             <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-[50px]"></div>
             <p className="relative text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
               Total interest saved
@@ -156,8 +156,8 @@ export function MoneySaverCalculator() {
             <p className="relative mt-3 text-4xl font-extrabold text-navy sm:text-5xl dark:text-white">
               {formatINR(result.totalSaving)}
             </p>
-            <div className="relative mt-5 h-px w-full bg-gold/20"></div>
-            <div className="relative mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="relative mt-3 h-px w-full bg-gold/20"></div>
+            <div className="relative mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
               <div className="hero-stat relative overflow-hidden rounded-2xl border border-gold/40 bg-white/60 px-4 py-4 sm:col-span-2 dark:bg-card/60">
                 <p className="text-[11px] font-bold tracking-wider text-gold-dark uppercase">
                   Effective reduced ROI
@@ -194,7 +194,7 @@ export function MoneySaverCalculator() {
                 </p>
               </div>
             </div>
-            <p className="relative mt-5 text-[11px] text-muted-foreground">
+            <p className="relative mt-3 text-[11px] text-muted-foreground">
               Note: Daily interest will be calculated on the principal outstanding minus the excess
               amount. However, if the excess amount is greater than the principal outstanding then
               excess amount will be capped upto the outstanding principal and accordingly the
@@ -206,7 +206,7 @@ export function MoneySaverCalculator() {
         </div>
       </div>
 
-      <details className="group mt-8">
+      <details className="group mt-5">
         <summary className="navy-panel flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-5 py-3.5 text-sm font-bold text-white shadow-[var(--shadow-card)] transition-transform duration-200 hover:-translate-y-0.5 [&::-webkit-details-marker]:hidden">
           <span className="flex items-center gap-2.5">
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-gold text-navy">
