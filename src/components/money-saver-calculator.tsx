@@ -165,7 +165,7 @@ export function MoneySaverCalculator() {
                 <p className="mt-1 text-xl font-extrabold sm:text-2xl">
                   <span className="text-muted-foreground">{rate.toFixed(2)}%</span>{" "}
                   <span className="text-muted-foreground">→</span>{" "}
-                  <span className="hero-stat-text">{result.effectiveRatePct.toFixed(2)}%</span>
+                  <span className="shine-text">{result.effectiveRatePct.toFixed(2)}%</span>
                 </p>
               </div>
               {[
@@ -182,7 +182,7 @@ export function MoneySaverCalculator() {
                   </p>
                   {t.note ? <p className="text-[11px] text-muted-foreground">{t.note}</p> : null}
                   <p key={t.value} className="num-pop mt-1 text-lg font-extrabold">
-                    <span className="hero-stat-text">{t.value}</span>
+                    <span className="shine-text">{t.value}</span>
                   </p>
                 </div>
               ))}
@@ -192,7 +192,7 @@ export function MoneySaverCalculator() {
                   Average Monthly Interest benefit
                 </p>
                 <p key={Math.round(result.avgMonthlySaving)} className="num-pop mt-1 text-lg font-extrabold">
-                  <span className="hero-stat-text">{formatINR(Math.round(result.avgMonthlySaving))}</span>
+                  <span className="shine-text">{formatINR(Math.round(result.avgMonthlySaving))}</span>
                 </p>
               </div>
             </div>

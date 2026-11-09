@@ -987,3 +987,30 @@ input[type="range"]::-moz-range-thumb {
     animation: none;
   }
 }
+
+/* A polished shine for a key figure: gold lettering with a bright sheen that sweeps across it from left to right, then rests
+   for a moment before the next pass. Used on the answer figures of the money saver calculator. */
+@keyframes gcs-sheen {
+  0% {
+    background-position: 100% 0;
+  }
+  55%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+@utility shine-text {
+  background-image: linear-gradient(100deg, #b8860b 0%, #d4a017 32%, #f2c542 44%, #ffe9a0 50%, #f2c542 56%, #d4a017 68%, #b8860b 100%);
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: gcs-sheen 3.4s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    background-position: 100% 0;
+  }
+}
