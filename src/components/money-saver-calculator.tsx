@@ -176,14 +176,12 @@ export function MoneySaverCalculator() {
                   value: formatINR(Math.round(result.avgOutflow)),
                 },
               ].map((t) => (
-                <div key={t.label} className="hero-stat relative overflow-hidden rounded-xl border border-gold/40 bg-white/60 px-4 py-3 dark:bg-card/60">
+                <div key={t.label} className="rounded-xl border border-border bg-white/60 px-4 py-3 dark:bg-card/60">
                   <p className="text-[11px] font-bold tracking-wider text-navy uppercase dark:text-white">
                     {t.label}
                   </p>
                   {t.note ? <p className="text-[11px] text-muted-foreground">{t.note}</p> : null}
-                  <p key={t.value} className="num-pop mt-1 text-lg font-extrabold">
-                    <span className="shine-text">{t.value}</span>
-                  </p>
+                  <p className="mt-1 text-lg font-extrabold text-gold">{t.value}</p>
                 </div>
               ))}
               {/* The answer tile: it breathes with a soft gold glow and its figure pops each time it changes. */}
