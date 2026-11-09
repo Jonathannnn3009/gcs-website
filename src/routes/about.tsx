@@ -293,11 +293,11 @@ function AboutPage() {
               </h2>
             </div>
           </Reveal>
-          {/* A spec-sheet row — no icons or shapes, just a clean divided strip */}
-          <ol className="mt-14 grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-5 sm:divide-x sm:divide-y-0">
+          {/* Five coloured cards: white at the top fading to a soft gold, with a gold edge on top */}
+          <ol className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {PROCESS.map((step, i) => (
-              <Reveal key={i} delay={i * 80}>
-                <li className="p-6 text-center sm:p-5">
+              <Reveal key={i} delay={i * 80} className="h-full">
+                <li className="h-full rounded-2xl border border-t-[3px] border-gold/25 border-t-gold bg-gradient-to-b from-white to-gold-pale/70 p-6 text-center shadow-sm lg:p-5">
                   <span className="text-xs font-bold tracking-[0.2em] text-gold-dark uppercase">
                     Step {i + 1}
                   </span>
