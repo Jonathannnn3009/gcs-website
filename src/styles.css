@@ -953,3 +953,26 @@ input[type="range"]::-moz-range-thumb {
     animation: none;
   }
 }
+
+/* A faint wash of gold and soft blue behind a section of white cards, fading in at the top and out at the bottom
+   (and at the sides), so the cards do not sit on a flat grey page and there is no visible edge. */
+@utility section-wash {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1.5rem 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(55% 60% at 14% 32%, color-mix(in srgb, var(--gold) 17%, transparent), transparent 72%),
+      radial-gradient(50% 55% at 86% 72%, color-mix(in srgb, var(--blue-soft-border) 70%, transparent), transparent 72%),
+      radial-gradient(42% 42% at 50% 50%, color-mix(in srgb, var(--gold-pale) 50%, transparent), transparent 80%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%), linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%), linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+}

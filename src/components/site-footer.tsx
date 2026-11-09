@@ -34,7 +34,19 @@ export function SiteFooter() {
               height={595}
               className="h-28 w-auto rounded-xl bg-white object-contain p-3"
             />
-            <p className="mt-4 text-sm leading-relaxed text-white/70">{t("footer.blurb")}</p>
+            <p className="mt-4 text-sm leading-relaxed text-white/70">
+              {(() => {
+                // The closing sentence (the tagline) sits on a line of its own.
+                const sentences = t("footer.blurb").trim().split(/(?<=\.)\s+/);
+                if (sentences.length < 2) return t("footer.blurb");
+                return (
+                  <>
+                    {sentences.slice(0, -1).join(" ")}
+                    <span className="mt-1.5 block">{sentences[sentences.length - 1]}</span>
+                  </>
+                );
+              })()}
+            </p>
             <div className="mt-5 flex gap-3">
               <a
                 href={CONTACT.whatsappLink}

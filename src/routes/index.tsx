@@ -605,7 +605,7 @@ function HomePage() {
       </div>
 
       {/* ─── HOW IT WORKS (click-through stepper) ─────── */}
-      <Section className="pt-0">
+      <Section className="section-wash pt-0">
         <Reveal>
           <SectionHeading
             eyebrow={t("how.eyebrow")}

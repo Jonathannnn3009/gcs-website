@@ -62,9 +62,9 @@ export function SliderField({
 
   return (
     <div>
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-        <label className="text-sm font-semibold text-foreground">{label}</label>
-        <div className="flex items-center gap-2">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
+        <label className="text-sm font-semibold text-foreground sm:min-w-0">{label}</label>
+        <div className="flex shrink-0 items-center gap-2">
           {format ? <span className="text-xs text-muted-foreground">{format(value)}</span> : null}
           {/* One fixed width for every box (the loan-amount one), so amount, rate and tenure line up. */}
           <div className="flex w-[8.25rem] shrink-0 items-center gap-1 rounded-lg bg-secondary px-2.5 py-1">

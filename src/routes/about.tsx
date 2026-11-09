@@ -284,7 +284,7 @@ function AboutPage() {
 
       {/* How We Work */}
       <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="section-wash mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
               <p className="eyebrow">{t("how.eyebrow")}</p>
