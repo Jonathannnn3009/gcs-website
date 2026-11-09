@@ -741,7 +741,7 @@ function ProductDetailContent() {
             <ol className={`mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 ${cols}`}>
               {guide.steps.map((step, i) => (
                 <Reveal animate={false} key={step.title} delay={i * 70}>
-                  <li className="flex h-full flex-col rounded-2xl border border-gold/25 bg-gradient-to-b from-gold-pale/70 via-white to-blue-soft/50 p-6 text-center shadow-sm dark:bg-card">
+                  <li className="flex h-full flex-col rounded-2xl border border-gold/25 bg-gradient-to-b from-white to-gold-pale/70 p-6 text-center shadow-sm dark:bg-card">
                     <span className="font-heading text-5xl leading-none font-extrabold text-gold-dark">
                       {i + 1}
                     </span>

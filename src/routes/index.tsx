@@ -319,7 +319,7 @@ function ProcessStepper() {
             <span className="relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-gold bg-gold text-sm font-bold text-navy shadow-[var(--shadow-gold)]">
               {i + 1}
             </span>
-            <div className="min-w-0 flex-1 rounded-2xl border border-gold/25 bg-gradient-to-br from-gold-pale/70 via-white to-blue-soft/70 p-4 shadow-[var(--shadow-card)] dark:bg-card">
+            <div className="min-w-0 flex-1 rounded-2xl border border-gold/25 bg-gradient-to-br from-white to-gold-pale/70 p-4 shadow-[var(--shadow-card)] dark:bg-card">
               <div className="flex items-center gap-3">
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-navy to-navy-soft text-gold">
                   <s.icon className="h-5 w-5" />
@@ -371,7 +371,7 @@ function ProcessStepper() {
 
       <div
         key={active}
-        className="rise-in mt-8 flex flex-col items-center gap-5 rounded-2xl border border-gold/25 bg-gradient-to-r from-gold-pale/70 via-white to-blue-soft/70 p-8 text-center shadow-[var(--shadow-card)] sm:flex-row sm:text-left dark:bg-card"
+        className="rise-in mt-8 flex flex-col items-center gap-5 rounded-2xl border border-gold/25 bg-gradient-to-r from-white to-gold-pale/70 p-8 text-center shadow-[var(--shadow-card)] sm:flex-row sm:text-left dark:bg-card"
       >
         <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-navy to-navy-soft text-gold shadow-md">
           <step.icon className="h-7 w-7" />

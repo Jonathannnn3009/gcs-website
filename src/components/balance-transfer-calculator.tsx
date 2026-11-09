@@ -63,6 +63,7 @@ export function BalanceTransferCalculator() {
           <div className="grid gap-6 sm:grid-cols-2">
             <SliderField
               label="Current Rate"
+              headerAlign="start"
               value={currentRate}
               onChange={setCurrentRate}
               min={5}
@@ -73,6 +74,7 @@ export function BalanceTransferCalculator() {
             />
             <SliderField
               label="New Offer Rate"
+              headerAlign="end"
               value={newRate}
               onChange={setNewRate}
               min={5}
@@ -103,11 +105,12 @@ export function BalanceTransferCalculator() {
                 {formatINR(result.oldEmi)}
               </p>
             </div>
-            <div className="rounded-xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-4 text-center">
+            {/* The new EMI is the answer, so its tile breathes with a soft gold glow and its figure pops each time it changes. */}
+            <div className="glow-pulse rounded-xl border border-gold/45 bg-gradient-to-b from-gold/15 to-transparent p-4 text-center">
               <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
                 New EMI
               </p>
-              <p className="mt-1 text-lg font-extrabold text-foreground sm:text-xl">
+              <p key={Math.round(result.newEmi)} className="num-pop mt-1 text-lg font-extrabold text-foreground sm:text-xl">
                 {formatINR(result.newEmi)}
               </p>
             </div>

@@ -20,6 +20,7 @@ export function SliderField({
   ariaLabel,
   presets,
   hardMax,
+  headerAlign,
 }: {
   label: string;
   value: number;
@@ -38,6 +39,8 @@ export function SliderField({
   presets?: { label: string; value: number }[];
   /** The most that may be typed (the box normally has no upper limit). */
   hardMax?: number;
+  /** When two fields sit side by side: pack the heading and its box to the left or the right edge of the field. */
+  headerAlign?: "start" | "end";
 }) {
   // The slider itself stays bounded to [min, max] — sliders need a fixed
   // range to be usable. Typing a number, though, can go past max (someone
@@ -62,7 +65,7 @@ export function SliderField({
 
   return (
     <div>
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
+      <div className={`mb-2 flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap ${headerAlign === "end" ? "sm:flex-col sm:items-end sm:justify-start sm:gap-1.5 sm:text-right" : headerAlign === "start" ? "sm:flex-col sm:items-start sm:justify-start sm:gap-1.5" : ""}`}>
         <label className="text-sm font-semibold text-foreground sm:min-w-0">{label}</label>
         <div className="flex shrink-0 items-center gap-2">
           {format ? <span className="text-xs text-muted-foreground">{format(value)}</span> : null}

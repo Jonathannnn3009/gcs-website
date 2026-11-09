@@ -954,8 +954,8 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
-/* A faint wash of gold and soft blue behind a section of white cards, fading in at the top and out at the bottom
-   (and at the sides), so the cards do not sit on a flat grey page and there is no visible edge. */
+/* A clean, soft gold panel behind a section of white cards: no fade and no blue, just a calm cream-gold surface with a thin
+   gold edge, so the cards stand out against it. */
 @utility section-wash {
   position: relative;
   isolation: isolate;
@@ -963,16 +963,45 @@ input[type="range"]::-moz-range-thumb {
   &::before {
     content: "";
     position: absolute;
-    inset: -1.5rem 0;
+    inset: 0;
     z-index: -1;
     pointer-events: none;
-    background:
-      radial-gradient(55% 60% at 14% 32%, color-mix(in srgb, var(--gold) 17%, transparent), transparent 72%),
-      radial-gradient(50% 55% at 86% 72%, color-mix(in srgb, var(--blue-soft-border) 70%, transparent), transparent 72%),
-      radial-gradient(42% 42% at 50% 50%, color-mix(in srgb, var(--gold-pale) 50%, transparent), transparent 80%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%), linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%), linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
+    border-radius: 1.5rem;
+    border: 1px solid color-mix(in srgb, var(--gold) 22%, transparent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--gold-pale) 62%, white), color-mix(in srgb, var(--gold-pale) 30%, white));
+  }
+}
+
+/* A soft gold glow that breathes in and out, for the one figure on a calculator that is the answer. */
+@utility glow-pulse {
+  animation: gcs-hero-glow 2.6s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/* A figure that gives a quick pop each time it is replaced (the element is re-created when the number changes). */
+@keyframes gcs-num-pop {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.55;
+    color: var(--gold-dark);
+  }
+  55% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@utility num-pop {
+  display: inline-block;
+  animation: gcs-num-pop 0.55s ease-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
   }
 }
