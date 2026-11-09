@@ -56,6 +56,10 @@ export function EmiCalculator() {
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
   const principalArc = (principalPercent / 100) * circumference;
+  // The ring's centre is small, so a big EMI is shown short (₹1.25 L, ₹1.02 Cr) and the type shrinks to fit what is shown.
+  const centreAmount =
+    result.emi >= 10_000_000 ? `₹${(result.emi / 10_000_000).toFixed(2)} Cr` : result.emi >= 100_000 ? `₹${(result.emi / 100_000).toFixed(2)} L` : formatINR(result.emi);
+  const centreSize = centreAmount.length <= 7 ? "text-base" : centreAmount.length <= 8 ? "text-sm" : "text-xs";
   const interestArc = (interestPercent / 100) * circumference;
 
   return (
@@ -188,8 +192,8 @@ export function EmiCalculator() {
               {/* Center text */}
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-xs font-bold text-muted-foreground uppercase">EMI</span>
-                <span className="text-lg font-extrabold text-foreground">
-                  {formatINR(result.emi)}
+                <span className={`${centreSize} max-w-[5.2rem] text-center leading-tight font-extrabold whitespace-nowrap text-foreground`}>
+                  {centreAmount}
                 </span>
                 <span className="text-[10px] text-muted-foreground">per month</span>
               </div>
