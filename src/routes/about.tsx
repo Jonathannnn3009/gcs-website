@@ -246,8 +246,13 @@ function AboutPage() {
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-0 origin-left scale-x-0 bg-[linear-gradient(90deg,var(--blue-soft-border)_0%,var(--blue-soft)_55%,transparent_100%)] transition-transform duration-500 ease-out group-hover:scale-x-100 dark:hidden"
                       />
-                      <span className="relative text-[14px] font-bold text-foreground transition-transform duration-300 group-hover:translate-x-1">
-                        {p.title}
+                      <span className="relative flex min-w-0 items-center gap-3">
+                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gold-pale/70 text-gold-dark ring-1 ring-gold/25 transition-colors duration-300 group-hover:bg-gold group-hover:text-navy">
+                          <p.icon className="h-[18px] w-[18px]" />
+                        </span>
+                        <span className="text-[14px] leading-snug font-bold text-foreground transition-transform duration-300 group-hover:translate-x-1">
+                          {p.title}
+                        </span>
                       </span>
                       <ArrowUpRight className="relative h-4 w-4 shrink-0 text-gold/60 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-125 group-hover:text-gold-dark" />
                     </Link>

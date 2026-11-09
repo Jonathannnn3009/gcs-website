@@ -888,3 +888,34 @@ input[type="range"]::-moz-range-thumb {
     animation: none;
   }
 }
+
+/* Phone and tablet only: when a visitor picks another calculator, the new one fades up with a short gold glow,
+   so the change is noticed. Laptops and desktops are untouched. */
+@keyframes gcs-calc-switch {
+  0% {
+    opacity: 0.3;
+    transform: translateY(10px);
+    box-shadow: 0 0 0 0 oklch(0.78 0.14 85 / 0.55), 0 0 0 0 oklch(0.78 0.14 85 / 0);
+  }
+  45% {
+    opacity: 1;
+    transform: none;
+    box-shadow: 0 0 0 3px oklch(0.78 0.14 85 / 0.4), 0 0 26px 6px oklch(0.78 0.14 85 / 0.45);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    box-shadow: 0 0 0 0 oklch(0.78 0.14 85 / 0), 0 0 0 0 oklch(0.78 0.14 85 / 0);
+  }
+}
+@media (max-width: 1023.98px) {
+  .calc-switch > * {
+    animation: gcs-calc-switch 1.1s ease-out;
+    border-radius: var(--radius-xl);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .calc-switch > * {
+    animation: none;
+  }
+}

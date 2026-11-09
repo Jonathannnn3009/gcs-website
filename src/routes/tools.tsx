@@ -77,6 +77,8 @@ function useHashTool(defaultId: string) {
   // Starts at defaultId so the first client render matches the server's; the mount effect then
   // picks up a #hash (links such as /tools#eligibility) without a hydration mismatch.
   const [activeId, setActiveId] = useState<string>(defaultId);
+  // True once the visitor has picked a calculator themselves, so the switch effect never plays on first load.
+  const [switched, setSwitched] = useState(false);
 
   useEffect(() => {
     const onHashChange = () => {
@@ -90,10 +92,11 @@ function useHashTool(defaultId: string) {
 
   const select = (id: string) => {
     setActiveId(id);
+    setSwitched(true);
     if (typeof window !== "undefined") window.history.replaceState(null, "", `#${id}`);
   };
 
-  return [activeId, select] as const;
+  return [activeId, select, switched] as const;
 }
 
 function ToolsPage() {
@@ -105,7 +108,7 @@ function ToolsPage() {
     })
     .filter((t): t is Tool => t !== null)
     .sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
-  const [activeId, select] = useHashTool("emi");
+  const [activeId, select, switched] = useHashTool("emi");
   const active = tools.find((t) => t.id === activeId) ?? tools[0];
 
   return (
@@ -194,7 +197,9 @@ function ToolsPage() {
           </nav>
 
           <div className="min-w-0" id={active?.id}>
-            <div key={active?.id}>{active?.render()}</div>
+            <div key={active?.id} className={switched ? "calc-switch" : undefined}>
+              {active?.render()}
+            </div>
             <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
               {t("note")}
             </p>

@@ -59,8 +59,8 @@ export function EmiCalculator() {
   const interestArc = (interestPercent / 100) * circumference;
 
   return (
-    <div className="glass-card p-5 sm:p-6" id="emi-calculator">
-      <div className="mb-5">
+    <div className="glass-card p-4 sm:p-5" id="emi-calculator">
+      <div className="mb-4">
         <p className="eyebrow">EMI Calculator</p>
         <h3 className="mt-2 text-2xl font-extrabold sm:text-3xl">
           Plan your loan <span className="gold-text-static">payments</span>
@@ -70,9 +70,9 @@ export function EmiCalculator() {
         </p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-stretch">
         {/* Sliders */}
-        <div className="flex flex-col gap-6 lg:justify-evenly">
+        <div className="flex flex-col gap-4 lg:justify-evenly">
           <SliderField
             label="Loan Amount"
             value={principal}
@@ -115,8 +115,8 @@ export function EmiCalculator() {
         </div>
 
         {/* Results: the figures lead, then the split, then the call to action */}
-        <div className="flex flex-col rounded-2xl border border-gold/25 bg-gold-pale/25 p-4 sm:p-5">
-          <dl className="space-y-2.5 border-b border-gold/25 pb-4">
+        <div className="flex flex-col rounded-2xl border border-gold/25 bg-gold-pale/25 p-3.5 sm:p-4">
+          <dl className="space-y-2 border-b border-gold/25 pb-3">
             <div className="flex items-baseline justify-between gap-3">
               <dt className="text-sm text-muted-foreground">Monthly EMI</dt>
               <dd className="text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
@@ -137,9 +137,9 @@ export function EmiCalculator() {
             </div>
           </dl>
 
-          <div className="flex flex-1 flex-col items-center justify-center py-2">
+          <div className="flex flex-1 flex-col items-center justify-center py-1">
             <div className="relative">
-              <svg width="150" height="150" viewBox="0 0 200 200" className="drop-shadow-lg">
+              <svg width="136" height="136" viewBox="0 0 200 200" className="drop-shadow-lg">
                 {/* Background circle */}
                 <circle
                   cx="100"
@@ -196,7 +196,7 @@ export function EmiCalculator() {
             </div>
 
             {/* Legend */}
-            <div className="mt-4 flex gap-6">
+            <div className="mt-3 flex gap-6">
               <div className="flex items-center gap-2">
                 <span
                   className="h-3 w-3 rounded-full"
@@ -216,7 +216,7 @@ export function EmiCalculator() {
           </div>
 
           {/* the button closes the results, below the chart */}
-          <Link to="/contact" className="gold-btn group w-full justify-center py-3.5">
+          <Link to="/contact" className="gold-btn group w-full justify-center py-3">
             Talk to an Expert
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
