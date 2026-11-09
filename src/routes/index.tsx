@@ -550,6 +550,7 @@ function HomePage() {
             eyebrow={t("services.eyebrow")}
             title={t("services.title")}
             description={t("services.body")}
+            accentWords={2}
           />
         </Reveal>
         <LoanGoals />
