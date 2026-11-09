@@ -695,7 +695,7 @@ function ProductDetailContent() {
         const guide = LOAN_PROCESS[product.slug];
         if (!guide) {
           return (
-            <Section className="section-wash pt-0">
+            <Section className="pt-0">
               <Reveal animate={false}>
                 <SectionHeading
                   eyebrow={t("process.eyebrow")}
@@ -729,7 +729,7 @@ function ProductDetailContent() {
         }
         const cols = guide.steps.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-5";
         return (
-          <Section className="section-wash pt-0">
+          <Section className="pt-0">
             <Reveal animate={false}>
               <SectionHeading
                 eyebrow={t("guide.eyebrow")}

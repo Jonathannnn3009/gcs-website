@@ -954,24 +954,6 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
-/* A clean, soft gold panel behind a section of white cards: no fade and no blue, just a calm cream-gold surface with a thin
-   gold edge, so the cards stand out against it. */
-@utility section-wash {
-  position: relative;
-  isolation: isolate;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    border-radius: 1.5rem;
-    border: 1px solid color-mix(in srgb, var(--gold) 22%, transparent);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--gold-pale) 62%, white), color-mix(in srgb, var(--gold-pale) 30%, white));
-  }
-}
-
 /* A soft gold glow that breathes in and out, for the one figure on a calculator that is the answer. */
 @utility glow-pulse {
   animation: gcs-hero-glow 2.6s ease-in-out infinite;
