@@ -230,7 +230,7 @@ function FreelancerPage() {
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {PERKS.map((p, i) => (
             <Reveal key={p.title} delay={i * 60}>
-              <div className="group h-full rounded-2xl border border-t-[3px] border-gold/25 border-t-gold bg-gradient-to-b from-white to-gold-pale/70 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-[var(--shadow-lift)]">
+              <div className="group h-full rounded-2xl border border-gold/25 bg-gold-pale/20 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-[var(--shadow-lift)]">
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-navy text-gold shadow-sm transition-colors duration-300 group-hover:bg-gold group-hover:text-navy group-hover:animate-[gcs-wiggle_600ms_ease-in-out]">
                   <p.icon className="h-5 w-5" />
                 </span>
