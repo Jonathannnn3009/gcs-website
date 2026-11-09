@@ -88,7 +88,7 @@ export function MoneySaverCalculator() {
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2 lg:items-stretch">
-        <div className="flex flex-col gap-4 lg:justify-evenly">
+        <div className="flex flex-col gap-5 lg:justify-start">
           <SliderField
             label="Sanction limit"
             value={principal}
@@ -162,7 +162,7 @@ export function MoneySaverCalculator() {
                 <p className="text-[11px] font-bold tracking-wider text-gold-dark uppercase">
                   Effective reduced ROI
                 </p>
-                <p className="mt-1 text-2xl font-extrabold sm:text-3xl">
+                <p className="mt-1 text-xl font-extrabold sm:text-2xl">
                   <span className="text-muted-foreground">{rate.toFixed(2)}%</span>{" "}
                   <span className="text-muted-foreground">→</span>{" "}
                   <span className="hero-stat-text">{result.effectiveRatePct.toFixed(2)}%</span>
@@ -176,21 +176,23 @@ export function MoneySaverCalculator() {
                   value: formatINR(Math.round(result.avgOutflow)),
                 },
               ].map((t) => (
-                <div key={t.label} className="rounded-xl border border-border bg-white/60 px-4 py-3 dark:bg-card/60">
+                <div key={t.label} className="hero-stat relative overflow-hidden rounded-xl border border-gold/40 bg-white/60 px-4 py-3 dark:bg-card/60">
                   <p className="text-[11px] font-bold tracking-wider text-navy uppercase dark:text-white">
                     {t.label}
                   </p>
                   {t.note ? <p className="text-[11px] text-muted-foreground">{t.note}</p> : null}
-                  <p className="mt-1 text-lg font-extrabold text-gold">{t.value}</p>
+                  <p key={t.value} className="num-pop mt-1 text-lg font-extrabold">
+                    <span className="hero-stat-text">{t.value}</span>
+                  </p>
                 </div>
               ))}
               {/* The answer tile: it breathes with a soft gold glow and its figure pops each time it changes. */}
-              <div className="glow-pulse rounded-xl border border-gold/45 bg-gradient-to-b from-gold/15 to-transparent px-4 py-3 sm:col-span-2">
+              <div className="hero-stat relative overflow-hidden rounded-xl border border-gold/40 bg-white/60 px-4 py-3 sm:col-span-2 dark:bg-card/60">
                 <p className="text-[11px] font-bold tracking-wider text-navy uppercase dark:text-white">
                   Average Monthly Interest benefit
                 </p>
-                <p key={Math.round(result.avgMonthlySaving)} className="num-pop mt-1 text-lg font-extrabold text-gold">
-                  {formatINR(Math.round(result.avgMonthlySaving))}
+                <p key={Math.round(result.avgMonthlySaving)} className="num-pop mt-1 text-lg font-extrabold">
+                  <span className="hero-stat-text">{formatINR(Math.round(result.avgMonthlySaving))}</span>
                 </p>
               </div>
             </div>
