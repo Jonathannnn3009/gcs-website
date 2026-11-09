@@ -192,7 +192,7 @@ export function EmiCalculator() {
               {/* Center text */}
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-xs font-bold text-muted-foreground uppercase">EMI</span>
-                <span className={`${centreSize} max-w-[5.2rem] text-center leading-tight font-extrabold whitespace-nowrap text-foreground`}>
+                <span title={formatINR(result.emi)} className={`${centreSize} max-w-[5.2rem] text-center leading-tight font-extrabold whitespace-nowrap text-foreground`}>
                   {centreAmount}
                 </span>
                 <span className="text-[10px] text-muted-foreground">per month</span>
