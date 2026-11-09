@@ -390,6 +390,14 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-navy);
+  /* The site's golden flow: a gold glint that sweeps across the label every few seconds. The text stays navy the rest of
+     the time, so it is always easy to read. */
+  background-image: linear-gradient(100deg, var(--color-navy) 0%, var(--color-navy) 40%, #e4b028 50%, var(--color-navy) 60%, var(--color-navy) 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gcs-shimmer 5s linear infinite;
 
   &::before {
     content: "";
@@ -398,12 +406,31 @@
     height: 1.3em;
     flex-shrink: 0;
     border-radius: 2px;
+    /* the bar itself flows gold, top to bottom, without end */
     background-color: var(--color-gold);
+    background-image: linear-gradient(180deg, #e4b028 0%, #fff0b0 25%, #e4b028 50%, #fff0b0 75%, #e4b028 100%);
+    background-size: 100% 200%;
+    animation: gcs-bar-flow 2.4s linear infinite;
   }
 
   :is(.navy-panel, .glass-dark, [class*="bg-navy"], [class*="from-navy"], [class*="via-navy"]) & {
-    color: #fff;
+    background-image: linear-gradient(100deg, #fff 0%, #fff 40%, #e4b028 50%, #fff 60%, #fff 100%);
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+
+    &::before {
+      animation: none;
+    }
+  }
+}
+
+@keyframes gcs-bar-flow {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
 }
 
 @utility gold-text {
