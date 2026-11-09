@@ -66,7 +66,8 @@ export function SliderField({
         <label className="text-sm font-semibold text-foreground">{label}</label>
         <div className="flex items-center gap-2">
           {format ? <span className="text-xs text-muted-foreground">{format(value)}</span> : null}
-          <div className="flex items-center gap-1 rounded-lg bg-secondary px-2.5 py-1">
+          {/* One fixed width for every box (the loan-amount one), so amount, rate and tenure line up. */}
+          <div className="flex w-[8.25rem] shrink-0 items-center gap-1 rounded-lg bg-secondary px-2.5 py-1">
             <input
               type="number"
               value={draft ?? String(value)}
@@ -79,11 +80,11 @@ export function SliderField({
                 if (text.trim() !== "" && Number.isFinite(n) && n >= min && (hardMax === undefined || n <= hardMax)) onChange(n);
               }}
               onBlur={() => setDraft(null)}
-              className="w-28 bg-transparent text-right text-sm font-bold text-gold-dark outline-none"
+              className="min-w-0 flex-1 bg-transparent text-right text-[15px] font-bold text-gold-dark outline-none"
               aria-label={`${ariaLabel} — type a value, no upper limit`}
               aria-invalid={invalid}
             />
-            {suffix ? <span className="text-sm font-bold text-gold-dark">{suffix}</span> : null}
+            {suffix ? <span className="text-[15px] font-bold text-gold-dark">{suffix}</span> : null}
           </div>
         </div>
       </div>

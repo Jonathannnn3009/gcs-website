@@ -59,8 +59,8 @@ export function EmiCalculator() {
   const interestArc = (interestPercent / 100) * circumference;
 
   return (
-    <div className="glass-card p-6 sm:p-8" id="emi-calculator">
-      <div className="mb-6">
+    <div className="glass-card p-5 sm:p-6" id="emi-calculator">
+      <div className="mb-5">
         <p className="eyebrow">EMI Calculator</p>
         <h3 className="mt-2 text-2xl font-extrabold sm:text-3xl">
           Plan your loan <span className="gold-text-static">payments</span>
@@ -70,9 +70,9 @@ export function EmiCalculator() {
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
         {/* Sliders */}
-        <div className="flex flex-col gap-7 lg:justify-evenly">
+        <div className="flex flex-col gap-6 lg:justify-evenly">
           <SliderField
             label="Loan Amount"
             value={principal}
@@ -91,11 +91,11 @@ export function EmiCalculator() {
             label="Interest Rate (p.a.)"
             value={rate}
             onChange={setRate}
-            min={5}
+            min={1}
             max={24}
             step={0.1}
             suffix="%"
-            minLabel="5%"
+            minLabel="1%"
             maxLabel="24%"
             ariaLabel="Interest rate"
           />
@@ -115,8 +115,8 @@ export function EmiCalculator() {
         </div>
 
         {/* Results: the figures lead, then the split, then the call to action */}
-        <div className="flex flex-col rounded-2xl border border-gold/25 bg-gold-pale/25 p-5 sm:p-6">
-          <dl className="space-y-3 border-b border-gold/25 pb-5">
+        <div className="flex flex-col rounded-2xl border border-gold/25 bg-gold-pale/25 p-4 sm:p-5">
+          <dl className="space-y-2.5 border-b border-gold/25 pb-4">
             <div className="flex items-baseline justify-between gap-3">
               <dt className="text-sm text-muted-foreground">Monthly EMI</dt>
               <dd className="text-2xl font-extrabold text-navy sm:text-3xl dark:text-white">
@@ -137,7 +137,7 @@ export function EmiCalculator() {
             </div>
           </dl>
 
-          <div className="flex flex-1 flex-col items-center justify-center py-3">
+          <div className="flex flex-1 flex-col items-center justify-center py-2">
             <div className="relative">
               <svg width="150" height="150" viewBox="0 0 200 200" className="drop-shadow-lg">
                 {/* Background circle */}
@@ -179,8 +179,9 @@ export function EmiCalculator() {
                 />
                 <defs>
                   <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="oklch(0.70 0.14 68)" />
-                    <stop offset="100%" stopColor="oklch(0.82 0.12 80)" />
+                    <stop offset="0%" stopColor="color-mix(in srgb, var(--gold) 86%, white)" />
+                    <stop offset="50%" stopColor="color-mix(in srgb, var(--gold-light) 86%, white)" />
+                    <stop offset="100%" stopColor="color-mix(in srgb, var(--gold) 86%, white)" />
                   </linearGradient>
                 </defs>
               </svg>
@@ -199,7 +200,7 @@ export function EmiCalculator() {
               <div className="flex items-center gap-2">
                 <span
                   className="h-3 w-3 rounded-full"
-                  style={{ background: "var(--gradient-gold)" }}
+                  style={{ background: "color-mix(in srgb, var(--gold) 86%, white)" }}
                 ></span>
                 <span className="text-xs font-semibold">
                   Principal ({principalPercent.toFixed(0)}%)
