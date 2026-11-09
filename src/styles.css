@@ -379,23 +379,30 @@
 
 /* ─── Text Utilities ───────────────────────────────── */
 
+/* The small label above a section heading: a bold navy label with a gold bar on its left, a little larger than
+   before so it is noticed. On a navy panel it turns white so it stays readable. */
 @utility eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  gap: 0.7rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-gold-dark);
+  color: var(--color-navy);
 
   &::before {
     content: "";
     display: inline-block;
-    width: 0.5rem;
-    height: 0.5rem;
+    width: 4px;
+    height: 1.3em;
     flex-shrink: 0;
+    border-radius: 2px;
     background-color: var(--color-gold);
+  }
+
+  :is(.navy-panel, .glass-dark, [class*="bg-navy"], [class*="from-navy"], [class*="via-navy"]) & {
+    color: #fff;
   }
 }
 
