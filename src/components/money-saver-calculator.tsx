@@ -162,7 +162,7 @@ export function MoneySaverCalculator() {
                 <p className="text-[11px] font-bold tracking-wider text-gold-dark uppercase">
                   Effective reduced ROI
                 </p>
-                <p className="mt-1 text-3xl font-extrabold sm:text-4xl">
+                <p className="mt-1 text-2xl font-extrabold sm:text-3xl">
                   <span className="text-muted-foreground">{rate.toFixed(2)}%</span>{" "}
                   <span className="text-muted-foreground">→</span>{" "}
                   <span className="hero-stat-text">{result.effectiveRatePct.toFixed(2)}%</span>
@@ -184,11 +184,12 @@ export function MoneySaverCalculator() {
                   <p className="mt-1 text-lg font-extrabold text-gold">{t.value}</p>
                 </div>
               ))}
-              <div className="rounded-xl border border-border bg-white/60 px-4 py-3 sm:col-span-2 dark:bg-card/60">
+              {/* The answer tile: it breathes with a soft gold glow and its figure pops each time it changes. */}
+              <div className="glow-pulse rounded-xl border border-gold/45 bg-gradient-to-b from-gold/15 to-transparent px-4 py-3 sm:col-span-2">
                 <p className="text-[11px] font-bold tracking-wider text-navy uppercase dark:text-white">
                   Average Monthly Interest benefit
                 </p>
-                <p className="mt-1 text-lg font-extrabold text-gold">
+                <p key={Math.round(result.avgMonthlySaving)} className="num-pop mt-1 text-lg font-extrabold text-gold">
                   {formatINR(Math.round(result.avgMonthlySaving))}
                 </p>
               </div>
