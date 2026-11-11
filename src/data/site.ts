@@ -293,6 +293,7 @@ export const BANK_PARTNERS: BankPartner[] = [
   { name: "Godrej Capital", logo: "/banks/network/godrej-capital.png" },
   { name: "DCB Bank", logo: "/banks/network/dcb-bank.png" },
   { name: "Jana Small Finance Bank", logo: "/banks/network/jana-small-finance-bank.png" },
+  { name: "Manba Finance", logo: "/banks/network/manba-finance.png" },
   { name: "Yes Bank", logo: "/banks/network/yes-bank.png" },
   { name: "HSBC", logo: "/banks/network/hsbc.png" },
   { name: "Axis Finance", logo: "/banks/network/axis-finance.png" },
