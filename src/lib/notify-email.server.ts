@@ -19,6 +19,9 @@ export type EnquiryMail = {
   detail?: string | undefined;
 };
 
+/** The team's alert for every new enquiry goes to this one shared mailbox, whatever LEAD_NOTIFY_TO says. */
+const TEAM_ALERT_TO = "connect.gcs@growthcapitalservices.in";
+
 let cached: { token: string; until: number } | null = null;
 
 const clean = (s: unknown, max: number) =>
@@ -60,8 +63,7 @@ export function notifyConfigured(): boolean {
     serverEnv("ZOHO_CLIENT_SECRET") &&
     serverEnv("ZOHO_REFRESH_TOKEN") &&
     serverEnv("ZOHO_ACCOUNT_ID") &&
-    serverEnv("ZOHO_FROM_ADDRESS") &&
-    serverEnv("LEAD_NOTIFY_TO"),
+    serverEnv("ZOHO_FROM_ADDRESS"),
   );
 }
 
@@ -92,7 +94,7 @@ export async function sendEnquiryMail(lead: EnquiryMail, origin: string): Promis
     const sent = await deliver(
       region,
       token,
-      serverEnv("LEAD_NOTIFY_TO"),
+      TEAM_ALERT_TO,
       `New enquiry: ${name}${lead.productSlug ? ` (${clean(lead.productSlug, 40)})` : ""}`,
       teamAlert(
         origin,
