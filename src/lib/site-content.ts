@@ -114,7 +114,7 @@ export type ServiceText = Pick<
 /** The product fields staff may change. Icons, grouping and checklist forms stay in the code. */
 export type ProductText = Pick<
   Product,
-  "tagline" | "about" | "features" | "eligibility" | "documents" | "facts"
+  "tagline" | "about" | "features" | "eligibility" | "documents" | "facts" | "glance" | "glanceNote"
 >;
 
 export type CaseStudyText = Omit<CaseStudy, "icon"> & { visible?: boolean };
@@ -269,6 +269,9 @@ export function useProduct(product: Product | undefined): Product | undefined {
     ...(nonEmptyList<string>(text.eligibility) ? { eligibility: text.eligibility } : {}),
     ...(nonEmptyList<string>(text.documents) ? { documents: text.documents } : {}),
     ...(nonEmptyList<Product["facts"][number]>(text.facts) ? { facts: text.facts } : {}),
+    // the "At a glance" rows and their note; clearing every row in the CRM returns the page to its built-in box
+    ...(nonEmptyList<{ label: string; value: string }>(text.glance) ? { glance: text.glance.filter((g) => g.label?.trim() && g.value?.trim()) } : {}),
+    ...(typeof text.glanceNote === "string" && text.glanceNote.trim() ? { glanceNote: text.glanceNote } : {}),
   };
 }
 

@@ -84,6 +84,9 @@ const products = Object.fromEntries(
       eligibility: p.eligibility,
       documents: p.documents,
       facts: p.facts,
+      // the "At a glance" box: its own rows and the small note under it (empty when the page uses the standard box)
+      glance: p.glance ?? [],
+      glanceNote: p.glanceNote ?? "",
     },
   ]),
 );
