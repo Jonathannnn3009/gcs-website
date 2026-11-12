@@ -990,7 +990,7 @@ export const PRODUCTS: Product[] = [
       },
       {
         label: "Share of property value",
-        value: "Up to 55% for a self-occupied home and 50% for other property, with insurance",
+        value: "Up to 70% for a self-occupied home and 50% for other property, with insurance",
       },
       {
         label: "Property location",
