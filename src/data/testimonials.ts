@@ -4,6 +4,10 @@ export type ClientStory = {
   product: string;
   rating: number;
   quote: string;
+  /** What the client does, e.g. "Shop owner". Optional. */
+  role?: string;
+  /** A CRM-uploaded picture (a /public/site-images/... path). Only present when the client agreed to its use. */
+  photo?: string;
 };
 
 /** Illustrative client experiences — anonymized composites, not verbatim testimonials. */

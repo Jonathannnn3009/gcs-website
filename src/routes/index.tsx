@@ -32,6 +32,7 @@ import { ConsultationBackdrop } from "@/components/consultation-backdrop";
 import { CONTACT } from "@/data/site";
 import { CLIENT_STORIES, type ClientStory } from "@/data/testimonials";
 import { useHomeText, useTestimonials } from "@/lib/site-content";
+import { crmAsset } from "@/lib/crm";
 import {
   HOME_HERO_POINTS,
   HOME_PERSONAS,
@@ -199,13 +200,24 @@ function StoryCard({ story }: { story: ClientStory }) {
     <div className="relative flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl bg-white p-7 shadow-[var(--shadow-card)] sm:w-[350px] dark:bg-card">
       <Quote className="absolute top-6 right-6 h-9 w-9 text-gold-pale/70" />
       <div className="flex items-center gap-3">
-        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-navy text-xs font-bold text-gold-light">
-          {initials}
-        </span>
+        {story.photo ? (
+          <img
+            src={crmAsset(story.photo)}
+            alt={`${story.name}`}
+            loading="lazy"
+            width={44}
+            height={44}
+            className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-gold-pale"
+          />
+        ) : (
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-navy text-xs font-bold text-gold-light">
+            {initials}
+          </span>
+        )}
         <div className="min-w-0">
           <p className="truncate text-sm font-bold text-navy dark:text-white">{story.name}</p>
           <p className="truncate text-xs text-muted-foreground">
-            {story.city} · {story.product}
+            {[story.role, story.city, story.product].filter(Boolean).join(" · ")}
           </p>
         </div>
       </div>
