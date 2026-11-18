@@ -8,6 +8,9 @@ import type { Faq } from "@/data/faqs";
 import type { Product } from "@/data/products";
 import type { CaseStudy } from "@/data/case-studies";
 import type { ProfessionalService } from "@/data/professional-services";
+import { caLegalIcon } from "@/data/ca-legal-icons";
+import { mergeMenu, mergeServices, type CaLegalContent, type CaLegalCustomService } from "@/data/ca-legal-merge";
+import type { CaLegalMenuGroup } from "@/data/ca-legal-menu";
 import type { ImageMap, PageTextMap } from "@/lib/page-text";
 import { DEFAULT_RATES, type RatesContent } from "@/data/rates";
 import type { SeoMap } from "@/lib/seo";
@@ -34,6 +37,8 @@ type SiteContent = {
   products?: Record<string, Partial<ProductText>>;
   caseStudies?: CaseStudyText[];
   services?: Record<string, Partial<ServiceText>>;
+  /** CA & Legal module: services staff added or hid, and the menu's category lines (see data/ca-legal-merge.ts). */
+  caLegal?: CaLegalContent;
   siteInfo?: SiteInfo;
   pageText?: PageTextMap;
   images?: ImageMap;
@@ -313,10 +318,39 @@ export function useProfessionalService(
   return service ? mergeService(service, text) : service;
 }
 
-/** The whole CA & legal list, each service with the CRM's text laid over it. */
+function customToService(c: CaLegalCustomService): ProfessionalService {
+  return {
+    slug: c.slug,
+    icon: caLegalIcon(c.icon),
+    division: c.division,
+    category: c.category,
+    title: c.title,
+    summary: c.summary,
+    whoNeedsIt: c.whoNeedsIt ?? "",
+    process: c.process ?? [],
+    documents: c.documents ?? [],
+  };
+}
+
+/**
+ * The CA & legal services now showing: each built-in one with the CRM's text laid over it, minus the ones staff hid
+ * in the CRM, plus the ones they added there. With nothing set in the CRM this is the built-in list.
+ */
 export function useProfessionalServices(list: ProfessionalService[]): ProfessionalService[] {
-  const services = useSiteContent().services;
-  return services ? list.map((s) => mergeService(s, services[s.slug])) : list;
+  const { services, caLegal } = useSiteContent();
+  const withText = services ? list.map((s) => mergeService(s, services[s.slug])) : list;
+  if (!caLegal) return withText;
+  return mergeServices(withText, (caLegal.custom ?? []).map(customToService), caLegal.hidden);
+}
+
+/** The header menu's categories: only those with a service showing, with staff's own line under each. */
+export function useCaLegalMenu(
+  groups: CaLegalMenuGroup[],
+  builtIn: ProfessionalService[],
+): CaLegalMenuGroup[] {
+  const services = useProfessionalServices(builtIn);
+  const blurbs = useSiteContent().caLegal?.blurbs;
+  return mergeMenu(groups, services, blurbs);
 }
 
 let appliedInfo = false;

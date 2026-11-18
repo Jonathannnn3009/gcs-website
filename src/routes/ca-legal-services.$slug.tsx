@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronDown, FileText, ShieldCheck, Users } from "lucide-react";
 import { Section } from "@/components/section";
@@ -11,7 +12,7 @@ import {
   getProfessionalService,
   type ServiceDetail,
 } from "@/data/professional-services";
-import { useProfessionalService } from "@/lib/site-content";
+import { useProfessionalServices } from "@/lib/site-content";
 import { FactsStrip } from "@/components/facts-strip";
 import { useServicePageText } from "@/lib/site-content";
 
@@ -214,10 +215,17 @@ function ProfessionalServiceDetailPage() {
 function ProfessionalServiceDetailContent() {
   const t = useServicePageText();
   const { slug } = Route.useParams();
-  const service = useProfessionalService(getProfessionalService(slug));
+  // The services now showing: the built-in ones (with the CRM's text), minus any staff hid, plus any they added.
+  const all = useProfessionalServices(PROFESSIONAL_SERVICES);
+  const service = all.find((s) => s.slug === slug);
+  // A service added in the CRM has no built-in page entry, so the tab title is set here, not in the route's head.
+  const addedInCrm = !getProfessionalService(slug);
+  useEffect(() => {
+    if (service && addedInCrm) document.title = `${service.title} | Growth Capital Services`;
+  }, [service, addedInCrm]);
   if (!service) return <NotFoundBlock />;
 
-  const similar = PROFESSIONAL_SERVICES.filter(
+  const similar = all.filter(
     (s) => s.category === service.category && s.slug !== service.slug,
   ).slice(0, 3);
 
