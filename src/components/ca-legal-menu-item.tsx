@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { ChevronDown, type LucideIcon } from "lucide-react";
 import { categoryAnchor } from "@/data/ca-legal-menu";
 import { PROFESSIONAL_SERVICES } from "@/data/professional-services";
+import { useProfessionalServices } from "@/lib/site-content";
 
 const rowClass =
   "group/ca flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left transition-colors hover:bg-gold/5";
@@ -56,7 +57,7 @@ export function CaLegalMenuItem({
   useEffect(() => {
     if (open) box.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [open]);
-  const services = PROFESSIONAL_SERVICES.filter((s) => s.category === category);
+  const services = useProfessionalServices(PROFESSIONAL_SERVICES).filter((s) => s.category === category);
 
   const text = (
     <span className="min-w-0 flex-1">

@@ -8,12 +8,14 @@ import { PRODUCTS, PRODUCT_GROUPS } from "@/data/products";
 import { NAV_CIBIL, NAV_HEADER, NAV_PARTNER, NAV_TOOLS } from "@/data/page-lists";
 import { useList, useProductGroups } from "@/lib/page-lists";
 import { CA_LEGAL_MENU } from "@/data/ca-legal-menu";
+import { PROFESSIONAL_SERVICES } from "@/data/professional-services";
 import { CaLegalMenuItem } from "@/components/ca-legal-menu-item";
-import { useSiteText } from "@/lib/site-content";
+import { useCaLegalMenu, useSiteText } from "@/lib/site-content";
 
 
 
 export function SiteHeader() {
+  const caMenu = useCaLegalMenu(CA_LEGAL_MENU, PROFESSIONAL_SERVICES);
   const t = useSiteText();
   // The contact page has its own button, and Case Studies sits under About Us as a tab, so neither is listed again here.
   const NAV = useList("nav.header", NAV_HEADER)
@@ -360,7 +362,7 @@ export function SiteHeader() {
 
                             {/* Right: the two teams and what each covers */}
                             <div className="grid min-w-0 flex-1 grid-cols-2 content-start gap-x-3 overflow-y-auto overscroll-contain p-5">
-                              {CA_LEGAL_MENU.map((group) => (
+                              {caMenu.map((group) => (
                                 <div key={group.anchor} className="min-w-0">
                                   <Link
                                     to="/ca-legal-services"
@@ -535,7 +537,7 @@ export function SiteHeader() {
                     </Link>
                   ))}
                 {link.dropdown === "ca" &&
-                  CA_LEGAL_MENU.map((group) => (
+                  caMenu.map((group) => (
                     <Link
                       key={group.anchor}
                       to="/ca-legal-services"
