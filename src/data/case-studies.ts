@@ -83,12 +83,12 @@ export const CASE_STUDIES: CaseStudy[] = [
     icon: ArrowLeftRight,
     group: "Home & Property",
     category: "Home Loan Balance Transfer · Existing Customer Loan Review",
-    headline: "₹4,200 shaved off every EMI in Powai — one question nobody had asked in 5 years",
+    headline: "₹4,200 shaved off every EMI in Hiranandani Powai — one question nobody had asked in 5 years",
     amountLabel: "₹4,200/mo saved",
     productSlug: "balance-transfer",
     productLabel: "Balance Transfer",
     clientProfile:
-      "A salaried couple living in Powai, Mumbai, five years into a home loan taken with their salary-account bank at the time, who had never checked whether a better rate was available elsewhere.",
+      "A salaried couple living in Hiranandani Gardens, Powai, Mumbai, five years into a home loan taken with their salary-account bank at the time, who had never checked whether a better rate was available elsewhere.",
     challenge:
       "The couple weren't aware their current rate had fallen behind what new-to-bank customers were being offered elsewhere for a similar profile — a common blind spot, since most borrowers only revisit a home loan when something goes wrong.",
     structuring:
