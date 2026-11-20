@@ -58,6 +58,16 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // While the mobile menu is open, only the menu scrolls, not the page behind it.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [mobileOpen]);
+
   const openDropdown = (id: string) => {
     if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
     setActiveDropdown(id);
@@ -510,7 +520,9 @@ export function SiteHeader() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div
-          className="border-t bg-white min-[1360px]:hidden dark:bg-card"
+          // Its own scroll area, capped to the screen under the header, so the bar is as long as the menu
+          // and reaches the last items in one scroll (the page behind is locked while the menu is open).
+          className="max-h-[calc(100dvh-4.75rem)] overflow-y-auto overscroll-contain border-t bg-white [scrollbar-color:var(--gold,#d4a017)_transparent] [scrollbar-width:thin] min-[1360px]:hidden dark:bg-card [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gold/60 [&::-webkit-scrollbar-track]:bg-transparent"
           style={{ animation: "gcs-slide-up 300ms ease both" }}
         >
           <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
