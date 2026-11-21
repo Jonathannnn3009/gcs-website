@@ -15,6 +15,7 @@ import { Route as AiLoanAdvisorRouteImport } from './routes/ai-loan-advisor'
 import { Route as CaseStudiesRouteImport } from './routes/case-studies'
 import { Route as CibilRouteImport } from './routes/cibil'
 import { Route as CibilAdvisoryRouteImport } from './routes/cibil-advisory'
+import { Route as CompareFacilitiesRouteImport } from './routes/compare-facilities'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CreditScoreEstimatorRouteImport } from './routes/credit-score-estimator'
 import { Route as InsightsRouteImport } from './routes/insights'
@@ -73,6 +74,11 @@ const CibilRoute = CibilRouteImport.update({
 const CibilAdvisoryRoute = CibilAdvisoryRouteImport.update({
   id: '/cibil-advisory',
   path: '/cibil-advisory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareFacilitiesRoute = CompareFacilitiesRouteImport.update({
+  id: '/compare-facilities',
+  path: '/compare-facilities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -228,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/case-studies': typeof CaseStudiesRouteWithChildren
   '/cibil': typeof CibilRoute
   '/cibil-advisory': typeof CibilAdvisoryRoute
+  '/compare-facilities': typeof CompareFacilitiesRoute
   '/contact': typeof ContactRoute
   '/credit-score-estimator': typeof CreditScoreEstimatorRoute
   '/insights': typeof InsightsRoute
@@ -264,6 +271,7 @@ export interface FileRoutesByTo {
   '/ai-loan-advisor': typeof AiLoanAdvisorRoute
   '/cibil': typeof CibilRoute
   '/cibil-advisory': typeof CibilAdvisoryRoute
+  '/compare-facilities': typeof CompareFacilitiesRoute
   '/contact': typeof ContactRoute
   '/credit-score-estimator': typeof CreditScoreEstimatorRoute
   '/insights': typeof InsightsRoute
@@ -301,6 +309,7 @@ export interface FileRoutesById {
   '/case-studies': typeof CaseStudiesRouteWithChildren
   '/cibil': typeof CibilRoute
   '/cibil-advisory': typeof CibilAdvisoryRoute
+  '/compare-facilities': typeof CompareFacilitiesRoute
   '/contact': typeof ContactRoute
   '/credit-score-estimator': typeof CreditScoreEstimatorRoute
   '/insights': typeof InsightsRoute
@@ -340,6 +349,7 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/cibil'
     | '/cibil-advisory'
+    | '/compare-facilities'
     | '/contact'
     | '/credit-score-estimator'
     | '/insights'
@@ -376,6 +386,7 @@ export interface FileRouteTypes {
     | '/ai-loan-advisor'
     | '/cibil'
     | '/cibil-advisory'
+    | '/compare-facilities'
     | '/contact'
     | '/credit-score-estimator'
     | '/insights'
@@ -412,6 +423,7 @@ export interface FileRouteTypes {
     | '/case-studies'
     | '/cibil'
     | '/cibil-advisory'
+    | '/compare-facilities'
     | '/contact'
     | '/credit-score-estimator'
     | '/insights'
@@ -450,6 +462,7 @@ export interface RootRouteChildren {
   CaseStudiesRoute: typeof CaseStudiesRouteWithChildren
   CibilRoute: typeof CibilRoute
   CibilAdvisoryRoute: typeof CibilAdvisoryRoute
+  CompareFacilitiesRoute: typeof CompareFacilitiesRoute
   ContactRoute: typeof ContactRoute
   CreditScoreEstimatorRoute: typeof CreditScoreEstimatorRoute
   InsightsRoute: typeof InsightsRoute
@@ -519,6 +532,13 @@ declare module '@tanstack/react-router' {
       path: '/cibil-advisory'
       fullPath: '/cibil-advisory'
       preLoaderRoute: typeof CibilAdvisoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare-facilities': {
+      id: '/compare-facilities'
+      path: '/compare-facilities'
+      fullPath: '/compare-facilities'
+      preLoaderRoute: typeof CompareFacilitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -762,6 +782,7 @@ const rootRouteChildren: RootRouteChildren = {
   CaseStudiesRoute: CaseStudiesRouteWithChildren,
   CibilRoute: CibilRoute,
   CibilAdvisoryRoute: CibilAdvisoryRoute,
+  CompareFacilitiesRoute: CompareFacilitiesRoute,
   ContactRoute: ContactRoute,
   CreditScoreEstimatorRoute: CreditScoreEstimatorRoute,
   InsightsRoute: InsightsRoute,
