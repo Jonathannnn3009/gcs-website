@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// /api/whatsapp: the webhook Meta calls for Gia on WhatsApp.
+// /api/whatsapp: the webhook Meta calls for Ria on WhatsApp.
 //   GET  Meta's one-time handshake when the address is saved in the developer app.
 //   POST every customer message. The body is checked against Meta's signature first, so nobody else
-//        can make Gia answer (or spend OpenAI credit) by calling this address.
+//        can make Ria answer (or spend OpenAI credit) by calling this address.
 // It runs on the server only and does nothing unless WHATSAPP_ENABLED is "1". See
 // src/lib/whatsapp/whatsapp.server.ts for the settings it needs.
 export const Route = createFileRoute("/api/whatsapp")({

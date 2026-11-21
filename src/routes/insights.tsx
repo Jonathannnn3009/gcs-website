@@ -8,7 +8,7 @@ import { useInsightsText } from "@/lib/site-content";
 /**
  * Switched off for now: there are no articles yet, so the page is hidden from the site. Anyone who types
  * the address lands on the home page, and search engines are told to skip it. Set this to true to bring
- * the page back (then also restore the footer link in data/page-lists.ts and Gia's page list).
+ * the page back (then also restore the footer link in data/page-lists.ts and Ria's page list).
  */
 const INSIGHTS_VISIBLE = false;
 

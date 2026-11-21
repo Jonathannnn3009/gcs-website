@@ -50,7 +50,7 @@ npm i
 npm run dev
 ```
 
-## AI assistant ("Gia")
+## AI assistant ("Ria")
 
 A chat button in the corner of every page opens an AI assistant that answers loan questions, runs
 EMI / eligibility / stamp-duty / balance-transfer / prepayment numbers with the same maths as the
