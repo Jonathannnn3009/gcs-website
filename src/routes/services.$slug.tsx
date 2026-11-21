@@ -821,6 +821,13 @@ function ProductDetailContent() {
               >
                 {t("cta.secondary")}
               </a>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent("gcs:open-chat", { detail: { message: `I would like to apply for a ${product.title}.` } }))}
+                className="outline-btn dark:bg-card dark:text-white"
+              >
+                Apply with Ria
+              </button>
             </div>
           </div>
         </Reveal>
