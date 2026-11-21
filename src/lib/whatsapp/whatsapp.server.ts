@@ -1,5 +1,5 @@
-// Server only. Gia on WhatsApp: receives a customer's message from Meta's WhatsApp Cloud API
-// (webhook), asks Gia for the answer (the same instructions, tools and topic check as the website
+// Server only. Ria on WhatsApp: receives a customer's message from Meta's WhatsApp Cloud API
+// (webhook), asks Ria for the answer (the same instructions, tools and topic check as the website
 // chat) and sends it back through Meta's API. Nothing here runs unless WHATSAPP_ENABLED is on.
 //
 // Server settings (Cloudflare secrets, or .env locally):
@@ -191,9 +191,9 @@ function recall(number: string): ChatTurn[] {
   return row && Date.now() - row.last < DAY_MS ? row.turns : [];
 }
 
-// ── turning Gia's answer into a WhatsApp message ────────────────────────────
+// ── turning Ria's answer into a WhatsApp message ────────────────────────────
 
-/** Gia writes the website's markdown. WhatsApp wants *bold* and full links, and has no cards. */
+/** Ria writes the website's markdown. WhatsApp wants *bold* and full links, and has no cards. */
 export function toWhatsAppText(raw: string, origin: string): string {
   return raw
     .replace(

@@ -673,7 +673,7 @@ export function ChatAssistant() {
       .join(" | ")
       .slice(0, 700);
 
-  // Gia's flame follows the chat: a flare when a reply finishes (or the visitor says thanks),
+  // Ria's flame follows the chat: a flare when a reply finishes (or the visitor says thanks),
   // a swirl while thinking, a pulse while writing, a dim ember if something went wrong.
   const [flare, setFlare] = useState(false);
   const wasBusy = useRef(false);
@@ -718,11 +718,11 @@ export function ChatAssistant() {
           type="button"
           onClick={() => setOpen(true)}
           aria-label={`Chat with ${ASSISTANT_NAME}, our AI assistant`}
-          className="fixed right-[5.5rem] bottom-5 z-50 flex h-[72px] items-center gap-2.5 rounded-full bg-navy px-2 text-white shadow-[0_6px_24px_oklch(0.13_0.04_265/0.35)] ring-1 ring-gold/50 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_32px_oklch(0.13_0.04_265/0.45)] active:scale-95 sm:pr-5"
+          className="fixed right-[5.5rem] bottom-5 z-50 flex h-[60px] items-center gap-2.5 rounded-full bg-navy px-2 text-white shadow-[0_6px_24px_oklch(0.13_0.04_265/0.35)] ring-1 ring-gold/50 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_32px_oklch(0.13_0.04_265/0.45)] active:scale-95 sm:pr-5"
           style={{ animation: "gcs-whatsapp-pop 600ms cubic-bezier(0.22,1,0.36,1) both" }}
         >
           <span className="relative">
-            <GiaOrb mood={mood} tone="dark" className="h-16 w-16" />
+            <GiaOrb mood={mood} tone="dark" className="h-[52px] w-[52px]" />
           </span>
           <span className="hidden text-left sm:block">
             <span className="block text-sm leading-tight font-bold">Ask {ASSISTANT_NAME}</span>

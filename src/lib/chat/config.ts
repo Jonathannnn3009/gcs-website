@@ -1,7 +1,7 @@
 // Shared by the chat widget (browser) and the /api/chat route (server). Nothing secret lives here.
 
 /** The assistant's temporary name. Change it here and it changes everywhere (widget, greeting, prompt). */
-export const ASSISTANT_NAME = "Gia";
+export const ASSISTANT_NAME = "Ria";
 export const ASSISTANT_ROLE = "GCS AI assistant";
 
 export type ChatRole = "user" | "assistant";
