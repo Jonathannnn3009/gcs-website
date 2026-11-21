@@ -4569,7 +4569,110 @@ const withKind = (form: FollowUpForm): FollowUpForm => {
 };
 /** Every second form ends with the same questions about other property, rent and a second earner. */
 const withProfile = (form: FollowUpForm): FollowUpForm => ({ ...form, steps: [...form.steps, profileStep()] });
-const FORMS = FOLLOW_UP_FORMS.map(withKind).map(withProfile);
+/**
+ * Questions the assistant plan asks that a product's form did not: each is placed straight after an existing question of
+ * the same form, so the order still reads naturally. Kept as data so a missing anchor is a warning, not a broken form.
+ */
+type Gap = { slug: string; after: string; fields: QuestionField[] };
+const ABC = ["Yes", "No", "Not sure"];
+const GAPS: Gap[] = [
+  { slug: "lease-rental-discounting", after: "propertyArea", fields: [{ key: "lrdPropertyValue", label: "Approximate market value of the property", kind: "amount", placeholder: rupee }] },
+  {
+    slug: "project-funding",
+    after: "projectCost",
+    fields: [
+      { key: "titleClear", label: "Are the title documents for the land clear?", kind: "choice", options: ["Yes", "Some documents are missing", "Not sure"] },
+      { key: "completionBy", label: "When do you expect the project to be complete?", kind: "text", placeholder: "e.g. December 2027" },
+    ],
+  },
+  {
+    slug: "private-funding",
+    after: "pdc",
+    fields: [{ key: "securityOffered", label: "Can you offer any security or a guarantee?", kind: "choice", options: ["Yes, a property", "Yes, a personal or company guarantee", "Both", "No"] }],
+  },
+  {
+    slug: "machine-loan",
+    after: "ownContribution",
+    fields: [
+      { key: "machineOrigin", label: "Will the machine be bought in India or imported?", kind: "choice", options: ["Bought in India", "Imported"] },
+      { key: "machineHypothecated", label: "Is the machine already financed or hypothecated to anyone?", kind: "choice", options: ["No", "Yes", "Not sure"] },
+    ],
+  },
+  {
+    slug: "bank-guarantee",
+    after: "validity",
+    fields: [
+      { key: "bgTenderValue", label: "Value of the contract or tender", kind: "amount", placeholder: rupee },
+      { key: "bgClaimPeriod", label: "Does the guarantee need a claim period after it expires?", kind: "choice", options: ABC },
+    ],
+  },
+  {
+    slug: "bill-discounting",
+    after: "overdueInvoices",
+    fields: [
+      { key: "billPO", label: "Are the invoices raised against confirmed purchase orders?", kind: "choice", options: ["Yes, all", "Some", "No"] },
+      { key: "billAccepted", label: "Do your buyers formally accept the invoices?", kind: "choice", options: ["Yes, all", "Some", "No"] },
+      { key: "billKind", label: "Are the receivables domestic or export?", kind: "choice", options: ["Domestic", "Export", "Both"] },
+    ],
+  },
+  { slug: "education-loan", after: "destination", fields: [{ key: "studentAge", label: "Student's age", kind: "choice", options: ["Below 18", "18 to 22", "23 to 27", "28 and above"] }] },
+  { slug: "education-infrastructure-loan", after: "purpose", fields: [{ key: "infraProjectCost", label: "Total cost of the project", kind: "amount", placeholder: rupee }] },
+  { slug: "used-car-loan", after: "papers", fields: [{ key: "carHasLoan", label: "Is there a loan running on this car?", kind: "choice", options: ["No", "Yes"] }] },
+  {
+    slug: "car-refinance",
+    after: "carLoanLender",
+    fields: [
+      { key: "carEmi", label: "Present EMI on the car loan", kind: "amount", placeholder: "e.g. 18,000", showWhen: { key: "carLoan", values: ["Yes"] } },
+      { key: "carRate", label: "Interest rate on the car loan", kind: "percent", showWhen: { key: "carLoan", values: ["Yes"] } },
+    ],
+  },
+  {
+    slug: "loan-against-securities",
+    after: "holding",
+    fields: [
+      { key: "lasPlatform", label: "Which bank, demat account or fund house holds them?", kind: "text", placeholder: "e.g. HDFC demat, Zerodha, a fund house" },
+      { key: "lasStatement", label: "Do you have a recent portfolio statement?", kind: "choice", options: ["Yes", "No"] },
+    ],
+  },
+  { slug: "cgtmse", after: "structure", fields: [{ key: "cgtCollateral", label: "Is any collateral already given to another lender for this business?", kind: "choice", options: ["No", "Yes", "Not sure"] }] },
+];
+
+const withGaps = (form: FollowUpForm): FollowUpForm => {
+  const mine = GAPS.filter((g) => form.slugs.includes(g.slug));
+  if (!mine.length) return form;
+  let steps = form.steps;
+  for (const g of mine) {
+    const at = steps.findIndex((st) => st.fields.some((f) => f.key === g.after));
+    if (at < 0) {
+      console.warn(`follow-up-forms: no "${g.after}" question in ${g.slug}, so its new questions were not added`);
+      continue;
+    }
+    steps = steps.map((st, i) => {
+      if (i !== at) return st;
+      const idx = st.fields.findIndex((f) => f.key === g.after);
+      const already = new Set(st.fields.map((f) => f.key));
+      return { ...st, fields: [...st.fields.slice(0, idx + 1), ...g.fields.filter((f) => !already.has(f.key)), ...st.fields.slice(idx + 1)] };
+    });
+  }
+  return { ...form, steps };
+};
+
+/**
+ * Three things every adviser wants and no form asked: the applicant's age, who they work for, and when to ring. Last in every
+ * form, optional like the rest. A form that already asks its own age keeps it; institutions and projects are not asked an age.
+ */
+const NO_AGE = ["education-infrastructure-loan", "project-funding"];
+const withCommon = (form: FollowUpForm): FollowUpForm => {
+  const keys = new Set(form.steps.flatMap((st) => st.fields.map((f) => f.key)));
+  const fields: QuestionField[] = [];
+  if (!keys.has("age") && !form.slugs.some((sl) => NO_AGE.includes(sl))) {
+    fields.push({ key: "age", label: "Your age", kind: "choice", options: ["Below 25", "25 to 40", "41 to 55", "56 to 65", "Above 65"], help: "Lenders set age limits, so it helps us pick the right ones." });
+  }
+  if (!form.slugs.some((sl) => NO_AGE.includes(sl))) fields.push({ key: "employerName", label: "Name of your employer or business", kind: "text", placeholder: "As on your papers" });
+  fields.push({ key: "callTime", label: "Best time for our expert to call you", kind: "choice", options: ["Morning (9 am to 12 noon)", "Afternoon (12 noon to 4 pm)", "Evening (4 pm to 8 pm)", "Any time"] });
+  return { ...form, steps: [...form.steps, { title: "A few last details", fields }] };
+};
+const FORMS = FOLLOW_UP_FORMS.map(withKind).map(withGaps).map(withProfile).map(withCommon);
 
 export const followUpFor = (slug: string | undefined): FollowUpForm | undefined =>
   slug ? FORMS.find((f) => f.slugs.includes(slug)) : undefined;
