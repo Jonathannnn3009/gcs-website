@@ -1243,6 +1243,8 @@ const BT_TYPES = [
   "Drop-Line Overdraft Balance Transfer",
 ];
 const BT_TOP_UP = BT_TYPES.filter((t) => t.includes("Top-Up"));
+// An overdraft is judged on its limit, how much is drawn and how the limit comes down, not only on an EMI.
+const BT_OD = ["Drop-Line Overdraft Balance Transfer"];
 // Home loans are asked no property type; the others are secured on a property.
 const BT_PROPERTY = BT_TYPES.filter((t) => !t.startsWith("Home Loan"));
 
@@ -1342,6 +1344,28 @@ const BALANCE_TRANSFER: FollowUpForm = {
       ],
     },
     {
+      title: "Your present overdraft facility",
+      help: "A lender taking over an overdraft looks at the limit, how much of it is used and how the limit comes down.",
+      fields: [
+        { key: "odSanctioned", label: "Original sanctioned limit", kind: "amount", placeholder: rupee, showWhen: { key: "loanType", values: BT_OD } },
+        { key: "odCurrentLimit", label: "Current sanctioned limit, after any reductions", kind: "amount", placeholder: rupee, showWhen: { key: "loanType", values: BT_OD } },
+        { key: "odDrawing", label: "Drawing power or unused limit available today", kind: "amount", allowZero: true, placeholder: rupee, showWhen: { key: "loanType", values: BT_OD } },
+        { key: "odRateType", label: "Is the interest rate fixed or floating?", kind: "choice", options: ["Floating", "Fixed", "Not sure"], showWhen: { key: "loanType", values: BT_OD } },
+        {
+          key: "odRepayment",
+          label: "How is your monthly payment structured?",
+          kind: "choice",
+          options: ["Interest plus principal", "Interest only", "Not sure"],
+          showWhen: { key: "loanType", values: BT_OD },
+        },
+        { key: "odInterestDebit", label: "Interest debited to the account each month", kind: "amount", allowZero: true, placeholder: "e.g. 1,20,000", showWhen: { key: "loanType", values: BT_OD } },
+        { key: "odReduction", label: "How does the limit come down?", kind: "text", placeholder: "e.g. reduces by 1 lakh every month", showWhen: { key: "loanType", values: BT_OD } },
+        { key: "odRenewal", label: "Renewal or maturity date of the facility", kind: "text", placeholder: "e.g. March 2031", showWhen: { key: "loanType", values: BT_OD } },
+        { key: "odOverdue", label: "Is any amount overdue right now?", kind: "choice", options: ["No", "Yes"], showWhen: { key: "loanType", values: BT_OD } },
+        { key: "odOverdueAmount", label: "How much is overdue?", kind: "amount", placeholder: "e.g. 1,55,000", showWhen: { key: "odOverdue", values: ["Yes"] } },
+      ],
+    },
+    {
       title: "The top-up you would like",
       fields: [
         {
@@ -1400,6 +1424,19 @@ const BALANCE_TRANSFER: FollowUpForm = {
             "A parent or family member",
             "My company or firm",
           ],
+        },
+        {
+          key: "ownerSign",
+          label: "Will the property owner(s) sign the application and the mortgage papers?",
+          kind: "choice",
+          options: ["Yes", "No", "Not sure"],
+          showWhen: { key: "ownership", values: ["Jointly with spouse or family", "A parent or family member", "My company or firm"] },
+        },
+        {
+          key: "docsReady",
+          label: "Do you have the latest loan statement and the sanction letter?",
+          kind: "choice",
+          options: ["Yes, both", "Only one of them", "Not yet"],
         },
       ],
     },
@@ -1465,6 +1502,47 @@ const limitStep = (): QuestionStep => ({
       key: "btRate",
       label: "Interest rate you pay now",
       kind: "percent",
+      showWhen: {
+        key: "requirement",
+        values: ["Move my present overdraft or loan", "Move it and add more funding"],
+      },
+    },
+    {
+      key: "btSanctioned",
+      label: "Current sanctioned limit",
+      kind: "amount",
+      placeholder: rupee,
+      showWhen: {
+        key: "requirement",
+        values: ["Move my present overdraft or loan", "Move it and add more funding"],
+      },
+    },
+    {
+      key: "btDrawing",
+      label: "Unused limit or drawing power available today",
+      kind: "amount",
+      allowZero: true,
+      placeholder: rupee,
+      showWhen: {
+        key: "requirement",
+        values: ["Move my present overdraft or loan", "Move it and add more funding"],
+      },
+    },
+    {
+      key: "btRenewal",
+      label: "Renewal or maturity date of the present facility",
+      kind: "text",
+      placeholder: "e.g. March 2031",
+      showWhen: {
+        key: "requirement",
+        values: ["Move my present overdraft or loan", "Move it and add more funding"],
+      },
+    },
+    {
+      key: "btOverdue",
+      label: "Is any amount overdue on it right now?",
+      kind: "choice",
+      options: ["No", "Yes"],
       showWhen: {
         key: "requirement",
         values: ["Move my present overdraft or loan", "Move it and add more funding"],
