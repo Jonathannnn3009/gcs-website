@@ -139,7 +139,7 @@ export const LOAN_KINDS: Record<string, string[]> = {
     "Travel Loan",
     "Medical Loan",
     "Home Renovation Loan",
-    "Debt Consolidation Loan",
+    "Loan Consolidation",
     "Personal Loan Balance Transfer",
   ],
   "education-loan": [
@@ -266,7 +266,7 @@ export function seedsForKind(slug: string, kind: string): Record<string, string>
     if (is("Travel Loan")) add({ purpose: "Travel" });
     if (is("Medical Loan")) add({ purpose: "Medical need" });
     if (is("Home Renovation Loan")) add({ purpose: "Home renovation" });
-    if (is("Debt Consolidation Loan")) add({ purpose: "Repaying other loans" });
+    if (is("Loan Consolidation")) add({ purpose: "Repaying other loans" });
   }
   if (slug === "education-loan" && is("Diploma and Skill Course Loan"))
     add({ level: "Diploma or certificate" });

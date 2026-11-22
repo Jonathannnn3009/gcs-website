@@ -24,6 +24,7 @@ import { LoanComparisonCalculator } from "@/components/loan-comparison-calculato
 import { WorkingCapitalCalculator } from "@/components/working-capital-calculator";
 import { CgtmseCalculator } from "@/components/cgtmse-calculator";
 import { LapLtvCalculator } from "@/components/lap-ltv-calculator";
+import { ConsolidationCalculator } from "@/components/consolidation-calculator";
 import { TOOLS_CARDS } from "@/data/page-lists";
 import { useFixedList } from "@/lib/page-lists";
 import { useToolsText } from "@/lib/site-content";
@@ -66,10 +67,11 @@ const TOOLS: Tool[] = [
   { id: "working-capital", icon: Building2, label: "Working Capital Estimator", sub: "MSME limit — exclusive to GCS", render: () => <WorkingCapitalCalculator /> },
   { id: "cgtmse", icon: Landmark, label: "CGTMSE Guarantee Fee", sub: "Fee on a collateral-free business loan", render: () => <CgtmseCalculator /> },
   { id: "lap-ltv", icon: FileText, label: "Loan Against Property LTV", sub: "What your property can unlock", render: () => <LapLtvCalculator /> },
+  { id: "loan-consolidation", icon: ArrowLeftRight, label: "Loan Consolidation", sub: "Combine EMIs and cards: is it worth it", render: () => <ConsolidationCalculator /> },
 ];
 
 // The order the calculators are listed in, whatever order the CRM list is saved in.
-const ORDER = ["emi", "eligibility", "balance-transfer", "loan-comparison", "prepayment", "money-saver", "lap-ltv", "working-capital", "cgtmse", "stamp-duty"];
+const ORDER = ["emi", "eligibility", "balance-transfer", "loan-consolidation", "loan-comparison", "prepayment", "money-saver", "lap-ltv", "working-capital", "cgtmse", "stamp-duty"];
 
 const TOOL_IDS = TOOLS.map((t) => t.id);
 

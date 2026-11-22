@@ -3,6 +3,7 @@ import { ArrowRight, Check, MessageCircle, X } from "lucide-react";
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { ConsolidationCalculator } from "@/components/consolidation-calculator";
+import { ChecklistGate } from "@/components/checklist-gate";
 import { CONTACT } from "@/data/site";
 
 export const Route = createFileRoute("/loan-consolidation")({
@@ -158,6 +159,18 @@ function LoanConsolidationPage() {
                 <p className="mt-3 text-sm text-muted-foreground">{f.a}</p>
               </details>
             ))}
+          </div>
+        </Reveal>
+      </Section>
+
+      <Section className="pt-0">
+        <Reveal animate={false}>
+          <div className="mx-auto max-w-2xl rounded-2xl bg-navy p-6 sm:p-8">
+            <h3 className="text-lg font-extrabold text-white">Documents for a consolidation</h3>
+            <p className="mt-2 mb-4 text-sm text-white/70">
+              The papers for every loan and card you want to combine, with your KYC and income documents, sent as a PDF you can save or print.
+            </p>
+            <ChecklistGate pdfHref="/checklists/loan-consolidation-checklist.pdf" productTitle="Loan Consolidation" productSlug="personal-loan" />
           </div>
         </Reveal>
       </Section>

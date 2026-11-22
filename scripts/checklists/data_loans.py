@@ -733,3 +733,39 @@ EDUCATION_INFRASTRUCTURE_LOAN = dict(
     ],
 )
 LOAN_CHECKLISTS["education-infrastructure-loan"] = EDUCATION_INFRASTRUCTURE_LOAN
+
+
+# Loan Consolidation: one of the Personal Loan types. Papers for every loan and card being combined, as well as the usual KYC and income.
+LOAN_CONSOLIDATION = dict(
+    title="Loan Consolidation",
+    sections=[
+        KYC_INDIVIDUAL,
+        employment_income(4),
+        {
+            "title": "For Every Loan Being Combined",
+            "note": "One set for each loan",
+            "items": [
+                "Sanction letter or loan agreement",
+                "Loan SOA — Statement of Account from beginning till date",
+                "Foreclosure letter || Showing the amount to close the loan today and any charges",
+                "Repayment schedule || Showing the EMI, rate and months left",
+            ],
+        },
+        {
+            "title": "For Every Credit Card Being Cleared",
+            "items": [
+                "Credit-card statements || Latest 3 months",
+                "Outstanding balance letter || From the card issuer, if you have it",
+            ],
+        },
+        {
+            "title": "Credit History",
+            "items": [
+                "Settlement or No-Dues letters || For any loan or card you have settled or closed",
+                "Restructuring letter || If any loan has been restructured",
+            ],
+        },
+    ],
+)
+
+LOAN_CHECKLISTS["loan-consolidation"] = LOAN_CONSOLIDATION

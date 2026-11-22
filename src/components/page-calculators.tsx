@@ -24,6 +24,7 @@ import { LoanComparisonCalculator } from "@/components/loan-comparison-calculato
 import { WorkingCapitalCalculator } from "@/components/working-capital-calculator";
 import { CgtmseCalculator } from "@/components/cgtmse-calculator";
 import { LapLtvCalculator } from "@/components/lap-ltv-calculator";
+import { ConsolidationCalculator } from "@/components/consolidation-calculator";
 import { CreditScoreEstimator } from "@/components/credit-score-estimator";
 import type { CalcId } from "@/data/page-calculators";
 
@@ -38,6 +39,7 @@ export const CALCULATORS: Record<CalcId, { label: string; icon: LucideIcon; rend
   "working-capital": { label: "Working capital", icon: Building2, render: () => <WorkingCapitalCalculator /> },
   cgtmse: { label: "CGTMSE fee", icon: Landmark, render: () => <CgtmseCalculator /> },
   "lap-ltv": { label: "Property LTV", icon: FileText, render: () => <LapLtvCalculator /> },
+  "loan-consolidation": { label: "Loan consolidation", icon: ArrowLeftRight, render: () => <ConsolidationCalculator /> },
   "credit-score": { label: "Credit score", icon: Gauge, render: () => <CreditScoreEstimator /> },
 };
 
