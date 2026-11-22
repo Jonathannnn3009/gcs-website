@@ -10,6 +10,7 @@ export type CalcId =
   | "working-capital"
   | "cgtmse"
   | "lap-ltv"
+  | "loan-consolidation"
   | "credit-score";
 
 /**
@@ -35,7 +36,7 @@ export const PRODUCT_CALCULATORS: Record<string, CalcId[]> = {
   "letter-of-credit": ["working-capital", "emi", "eligibility"],
   "bill-discounting": ["working-capital", "emi", "eligibility"],
   "working-capital-term-loan": ["working-capital", "emi", "loan-comparison", "eligibility"],
-  "personal-loan": ["emi", "eligibility", "prepayment"],
+  "personal-loan": ["loan-consolidation", "emi", "eligibility", "prepayment"],
   "loan-against-securities": ["emi", "eligibility"],
   "professional-loan": ["emi", "eligibility"],
   "education-loan": ["emi", "prepayment", "eligibility"],
