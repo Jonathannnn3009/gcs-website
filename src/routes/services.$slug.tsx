@@ -798,6 +798,29 @@ function ProductDetailContent() {
         </Reveal>
       </Section>
 
+      {/* Personal Loan: a clear way into Loan Consolidation, for people who owe on several loans or cards. */}
+      {product.slug === "personal-loan" && (
+        <Section className="pt-0">
+          <Reveal animate={false}>
+            <Link
+              to="/loan-consolidation"
+              className="group flex flex-col gap-4 rounded-2xl border border-gold/30 panel-light p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-lg sm:flex-row sm:items-center sm:justify-between sm:p-8"
+            >
+              <span>
+                <span className="eyebrow">Loan Consolidation</span>
+                <span className="mt-2 block text-xl font-extrabold text-navy sm:text-2xl dark:text-white">Many EMIs or card dues to track?</span>
+                <span className="mt-1.5 block max-w-2xl text-sm text-muted-foreground">
+                  See what combining them into one repayment may cost and when it may not help, with a calculator that shows the total, not just the monthly payment.
+                </span>
+              </span>
+              <span className="gold-btn shrink-0 py-3">
+                Explore Loan Consolidation <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </Link>
+          </Reveal>
+        </Section>
+      )}
+
       {/* Final CTA */}
       <Section className="pt-0">
         <Reveal animate={false}>
