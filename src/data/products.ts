@@ -1312,7 +1312,6 @@ export const PRODUCTS: Product[] = [
     title: "Loan Consolidation",
     tagline: "Many EMIs, one repayment: only if it truly suits you.",
     group: "Business Growth",
-    heroNote: "For people paying several personal loans or credit cards",
     facts: [
       { label: "What it is", value: "One new loan that repays several old dues" },
       { label: "Security", value: "Usually none, subject to lender policy" },
