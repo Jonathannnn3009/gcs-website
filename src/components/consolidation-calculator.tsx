@@ -68,17 +68,17 @@ export function ConsolidationCalculator() {
                     )}
                   </div>
                   <div className="mt-2 grid grid-cols-3 gap-2">
-                    <label className="text-[11px] font-semibold text-muted-foreground">
+                    <label className="flex flex-col justify-between gap-1 text-[11px] font-semibold text-muted-foreground">
                       Still to pay (₹)
-                      <input inputMode="numeric" className={`${FIELD} mt-1`} value={r.outstanding} onChange={(e) => set(i, { outstanding: e.target.value })} />
+                      <input inputMode="numeric" className={FIELD} value={r.outstanding} onChange={(e) => set(i, { outstanding: e.target.value })} />
                     </label>
-                    <label className="text-[11px] font-semibold text-muted-foreground">
+                    <label className="flex flex-col justify-between gap-1 text-[11px] font-semibold text-muted-foreground">
                       {r.kind === "Credit card" ? "Usual monthly payment (₹)" : "EMI each month (₹)"}
-                      <input inputMode="numeric" className={`${FIELD} mt-1`} value={r.monthly} onChange={(e) => set(i, { monthly: e.target.value })} />
+                      <input inputMode="numeric" className={FIELD} value={r.monthly} onChange={(e) => set(i, { monthly: e.target.value })} />
                     </label>
-                    <label className="text-[11px] font-semibold text-muted-foreground">
+                    <label className="flex flex-col justify-between gap-1 text-[11px] font-semibold text-muted-foreground">
                       Months left
-                      <input inputMode="numeric" className={`${FIELD} mt-1`} value={r.monthsLeft} onChange={(e) => set(i, { monthsLeft: e.target.value })} />
+                      <input inputMode="numeric" className={FIELD} value={r.monthsLeft} onChange={(e) => set(i, { monthsLeft: e.target.value })} />
                     </label>
                   </div>
                 </div>
@@ -94,21 +94,21 @@ export function ConsolidationCalculator() {
           <div>
             <p className="text-sm font-bold text-navy dark:text-white">The new loan you are thinking of (your own assumptions)</p>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-              <label className="text-[11px] font-semibold text-muted-foreground">
+              <label className="flex flex-col justify-between gap-1 text-[11px] font-semibold text-muted-foreground">
                 Interest rate (% a year)
-                <input inputMode="decimal" className={`${FIELD} mt-1`} value={rate} onChange={(e) => setRate(e.target.value)} />
+                <input inputMode="decimal" className={FIELD} value={rate} onChange={(e) => setRate(e.target.value)} />
               </label>
-              <label className="text-[11px] font-semibold text-muted-foreground">
+              <label className="flex flex-col justify-between gap-1 text-[11px] font-semibold text-muted-foreground">
                 Years to repay
-                <input inputMode="decimal" className={`${FIELD} mt-1`} value={years} onChange={(e) => setYears(e.target.value)} />
+                <input inputMode="decimal" className={FIELD} value={years} onChange={(e) => setYears(e.target.value)} />
               </label>
-              <label className="text-[11px] font-semibold text-muted-foreground">
+              <label className="flex flex-col justify-between gap-1 text-[11px] font-semibold text-muted-foreground">
                 Processing fee (%)
-                <input inputMode="decimal" className={`${FIELD} mt-1`} value={feePct} onChange={(e) => setFeePct(e.target.value)} />
+                <input inputMode="decimal" className={FIELD} value={feePct} onChange={(e) => setFeePct(e.target.value)} />
               </label>
-              <label className="text-[11px] font-semibold text-muted-foreground">
+              <label className="flex flex-col justify-between gap-1 text-[11px] font-semibold text-muted-foreground">
                 Charges to close old loans (₹)
-                <input inputMode="numeric" className={`${FIELD} mt-1`} value={closing} onChange={(e) => setClosing(e.target.value)} />
+                <input inputMode="numeric" className={FIELD} value={closing} onChange={(e) => setClosing(e.target.value)} />
               </label>
             </div>
             <p className="mt-2 text-[11px] text-muted-foreground">
