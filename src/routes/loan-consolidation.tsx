@@ -170,7 +170,7 @@ function LoanConsolidationPage() {
             <p className="mt-2 mb-4 text-sm text-white/70">
               The papers for every loan and card you want to combine, with your KYC and income documents, sent as a PDF you can save or print.
             </p>
-            <ChecklistGate pdfHref="/checklists/loan-consolidation-checklist.pdf" productTitle="Loan Consolidation" productSlug="personal-loan" />
+            <ChecklistGate pdfHref="/checklists/loan-consolidation-checklist.pdf" productTitle="Loan Consolidation" productSlug="loan-consolidation" />
           </div>
         </Reveal>
       </Section>

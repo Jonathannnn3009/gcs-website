@@ -803,7 +803,8 @@ function ProductDetailContent() {
         <Section className="pt-0">
           <Reveal animate={false}>
             <Link
-              to="/loan-consolidation"
+              to="/services/$slug"
+              params={{ slug: "loan-consolidation" }}
               className="group flex flex-col gap-4 rounded-2xl border border-gold/30 panel-light p-6 transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-lg sm:flex-row sm:items-center sm:justify-between sm:p-8"
             >
               <span>

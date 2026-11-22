@@ -562,6 +562,15 @@ export const HOME_GOALS = [
   },
   {
     category: "Business & Cash Flow",
+    slug: "loan-consolidation",
+    icon: Wallet,
+    goal: "Combine your EMIs",
+    product: "Loan Consolidation",
+    line: "Bring several personal loans and credit-card dues together and see if one repayment suits you.",
+    featured: "",
+  },
+  {
+    category: "Business & Cash Flow",
     slug: "business-loan",
     icon: Briefcase,
     goal: "Grow your business",

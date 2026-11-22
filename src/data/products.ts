@@ -1307,6 +1307,68 @@ export const PRODUCTS: Product[] = [
     documentCategories: RESIDENT_DOC_CATEGORIES,
   },
   {
+    slug: "loan-consolidation",
+    icon: Wallet,
+    title: "Loan Consolidation",
+    tagline: "Many EMIs, one repayment: only if it truly suits you.",
+    group: "Business Growth",
+    heroNote: "For people paying several personal loans or credit cards",
+    facts: [
+      { label: "What it is", value: "One new loan that repays several old dues" },
+      { label: "Security", value: "Usually none, subject to lender policy" },
+      { label: "Can include", value: "Personal loans and credit-card dues" },
+      { label: "Extra funds", value: "A top-up may be possible" },
+    ],
+    glance: [
+      { label: "Purpose", value: "Combining several personal loans and credit-card dues into one repayment" },
+      { label: "What we compare", value: "EMI, interest, tenure, fees, early-closure charges and total repayment" },
+      { label: "Loan amount", value: "Decided by the lender, from your income, existing EMIs and credit record" },
+      { label: "Interest rate and tenure", value: "Set by each Bank or NBFC for your profile" },
+      { label: "Security", value: "Usually none for unsecured consolidation; a secured option may be possible" },
+      { label: "Who can apply", value: "Salaried and self-employed people, within lender age and income limits" },
+    ],
+    glanceNote: "All facilities are subject to the lender's eligibility, credit assessment and approval. Amount, rate and tenure are not fixed by us.",
+    about:
+      "Loan consolidation means taking one new loan and using it to repay several existing personal loans and credit-card dues, so you make a single monthly payment instead of many. For some people this makes repayment simpler to manage. It does not automatically cost less: a lower monthly EMI is often the result of a longer repayment period, which can mean more interest in total. So before we suggest anything, we add up what you owe today, compare it with the options and show you the whole cost, not just the monthly figure.",
+    uses: {
+      heading: "What can be combined?",
+      items: [
+        "Personal loans from different banks or NBFCs",
+        "Credit-card outstanding, including amounts you pay only the minimum on",
+        "Other unsecured dues you are repaying every month",
+        "A small extra amount (top-up) for a genuine need, where the lender allows it",
+      ],
+    },
+    features: [
+      "We list every loan and card with you: the lender, what is outstanding, the EMI, the rate and the time left",
+      "Your repayment capacity is checked first: income, total EMIs, repayment record and credit score",
+      "We check which Banks and NBFCs may take your case, under their own policies",
+      "We compare your current payments with each option: EMI, interest, fees, early-closure charges and total repayment",
+      "We tell you plainly when consolidation will not help, and what else may suit you, such as a balance transfer or a top-up",
+      "Help with documents, the application, closing the old loans and the final payment to each lender",
+    ],
+    eligibility: [
+      "Between roughly 21 and 60 years of age, subject to the lender",
+      "A steady income: salaried, or self-employed with income shown in your returns and bank statements",
+      "Existing EMIs that leave room to repay the new loan; lenders look at this as a share of your income",
+      "A clean recent repayment record: overdue EMIs, recent settlements or restructuring can limit the options or need a different approach",
+      "A CIBIL score around 700 or above may help; lower scores are reviewed case by case",
+      "Resident Indian",
+    ],
+    documents: [
+      KYC,
+      "Salary slips and bank statements, or ITR and business bank statements if self-employed",
+      "Sanction letter and statement of account for each loan you want to repay",
+      "Foreclosure letter for each loan, showing what it costs to close today",
+      "Credit-card statements for any card you want to clear",
+    ],
+    whyGcs:
+      "We work with a network of 75+ Banks and NBFCs and are not tied to one lender. We look at your loans as a whole, compare the full cost and tell you honestly if consolidating is not the right step. Growth Capital Services is a loan consultant and does not lend money itself.",
+    importantNote:
+      "Loan consolidation does not automatically reduce your interest or total repayment. A lower EMI may come from a longer tenure. Amount, interest rate, tenure, fees, foreclosure charges, eligibility, approval and disbursal depend on the policy of the respective Bank or NBFC, your profile and credit assessment. Please keep paying your existing EMIs and card dues on time until the old loans are closed. The details on this page are for general information.",
+    charges: CHARGES_UNSECURED,
+  },
+  {
     slug: "business-loan",
     icon: Briefcase,
     title: "Business Loan",
