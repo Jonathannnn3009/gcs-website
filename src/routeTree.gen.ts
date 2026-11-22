@@ -19,6 +19,7 @@ import { Route as CompareFacilitiesRouteImport } from './routes/compare-faciliti
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CreditScoreEstimatorRouteImport } from './routes/credit-score-estimator'
 import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as LoanConsolidationRouteImport } from './routes/loan-consolidation'
 import { Route as MumbaiRouteImport } from './routes/mumbai'
 import { Route as NaviMumbaiRouteImport } from './routes/navi-mumbai'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
@@ -94,6 +95,11 @@ const CreditScoreEstimatorRoute = CreditScoreEstimatorRouteImport.update({
 const InsightsRoute = InsightsRouteImport.update({
   id: '/insights',
   path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoanConsolidationRoute = LoanConsolidationRouteImport.update({
+  id: '/loan-consolidation',
+  path: '/loan-consolidation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MumbaiRoute = MumbaiRouteImport.update({
@@ -238,6 +244,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/credit-score-estimator': typeof CreditScoreEstimatorRoute
   '/insights': typeof InsightsRoute
+  '/loan-consolidation': typeof LoanConsolidationRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -275,6 +282,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/credit-score-estimator': typeof CreditScoreEstimatorRoute
   '/insights': typeof InsightsRoute
+  '/loan-consolidation': typeof LoanConsolidationRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -313,6 +321,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/credit-score-estimator': typeof CreditScoreEstimatorRoute
   '/insights': typeof InsightsRoute
+  '/loan-consolidation': typeof LoanConsolidationRoute
   '/mumbai': typeof MumbaiRoute
   '/navi-mumbai': typeof NaviMumbaiRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -353,6 +362,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/credit-score-estimator'
     | '/insights'
+    | '/loan-consolidation'
     | '/mumbai'
     | '/navi-mumbai'
     | '/privacy-policy'
@@ -390,6 +400,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/credit-score-estimator'
     | '/insights'
+    | '/loan-consolidation'
     | '/mumbai'
     | '/navi-mumbai'
     | '/privacy-policy'
@@ -427,6 +438,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/credit-score-estimator'
     | '/insights'
+    | '/loan-consolidation'
     | '/mumbai'
     | '/navi-mumbai'
     | '/privacy-policy'
@@ -466,6 +478,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CreditScoreEstimatorRoute: typeof CreditScoreEstimatorRoute
   InsightsRoute: typeof InsightsRoute
+  LoanConsolidationRoute: typeof LoanConsolidationRoute
   MumbaiRoute: typeof MumbaiRoute
   NaviMumbaiRoute: typeof NaviMumbaiRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
@@ -560,6 +573,13 @@ declare module '@tanstack/react-router' {
       path: '/insights'
       fullPath: '/insights'
       preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loan-consolidation': {
+      id: '/loan-consolidation'
+      path: '/loan-consolidation'
+      fullPath: '/loan-consolidation'
+      preLoaderRoute: typeof LoanConsolidationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mumbai': {
@@ -786,6 +806,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CreditScoreEstimatorRoute: CreditScoreEstimatorRoute,
   InsightsRoute: InsightsRoute,
+  LoanConsolidationRoute: LoanConsolidationRoute,
   MumbaiRoute: MumbaiRoute,
   NaviMumbaiRoute: NaviMumbaiRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,

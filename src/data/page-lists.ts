@@ -448,6 +448,7 @@ export const FOOTER_EXPLORE = [
   { label: "EMI Calculator", to: "/tools" },
   { label: "Interest Rates", to: "/rates" },
   { label: "Compare Facilities", to: "/compare-facilities" },
+  { label: "Loan Consolidation", to: "/loan-consolidation" },
   { label: "CIBIL Report", to: "/cibil" },
   { label: "Case Studies", to: "/case-studies" },
   { label: "CA & Legal Services", to: "/ca-legal-services" },
