@@ -1,6 +1,6 @@
 import { emi } from "@/lib/finance";
 
-export type DebtKind = "Personal loan" | "Credit card" | "Other loan";
+export type DebtKind = "Personal loan" | "Credit card" | "Home loan" | "Business loan" | "Machine loan" | "Loan against property" | "Other loan";
 
 /** One thing the customer owes today. `monthsLeft` is optional but needed for the whole-loan comparison. */
 export type Debt = { kind: DebtKind; outstanding: number; monthly: number; monthsLeft?: number };
