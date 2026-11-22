@@ -4,11 +4,11 @@ import { CalcExpertButton } from "@/components/calc-expert-button";
 import { consolidate, type Debt, type DebtKind } from "@/lib/consolidation";
 import { formatCurrency, formatINR } from "@/lib/finance";
 
-const KINDS: DebtKind[] = ["Personal loan", "Credit card", "Other loan"];
+const KINDS: DebtKind[] = ["Personal loan", "Credit card", "Home loan", "Business loan", "Machine loan", "Loan against property", "Other loan"];
 const MAX_ROWS = 8;
 const FIELD = "w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-foreground dark:bg-card";
 
-type Row = { kind: DebtKind; outstanding: string; monthly: string; monthsLeft: string };
+type Row = { kind: DebtKind; outstanding: string; monthly: string; monthsLeft: string; other?: string };
 const blank = (kind: DebtKind = "Personal loan"): Row => ({ kind, outstanding: "", monthly: "", monthsLeft: "" });
 const num = (s: string) => {
   const n = Number(s.replace(/[^0-9.]/g, ""));
@@ -67,6 +67,9 @@ export function ConsolidationCalculator() {
                       </button>
                     )}
                   </div>
+                  {r.kind === "Other loan" && (
+                    <input aria-label={`Name of the other loan ${i + 1}`} placeholder="Which loan is it? e.g. gold loan, vehicle loan" className={`${FIELD} mt-2`} value={r.other ?? ""} onChange={(e) => set(i, { other: e.target.value })} />
+                  )}
                   <div className="mt-2 grid grid-cols-3 gap-2">
                     <label className="flex flex-col justify-between gap-1 text-[11px] font-semibold text-muted-foreground">
                       Still to pay (₹)
