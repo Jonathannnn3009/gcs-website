@@ -61,6 +61,7 @@ export const LOAN_MINIMUMS: Record<string, number> = {
   "letter-of-credit": 5 * LAKH,
   "bill-discounting": 5 * LAKH,
   "personal-loan": 2 * LAKH,
+  "loan-consolidation": 2 * LAKH,
   "education-loan": 8 * LAKH,
   "education-infrastructure-loan": 10 * LAKH,
   "new-car-loan": 1 * LAKH,

@@ -3424,29 +3424,26 @@ const BILL_DISCOUNTING: FollowUpForm = {
 
 const AGE_BANDS = ["Below 21", "21 to 35", "36 to 50", "51 to 60", "Above 60"];
 
-/** Loan Consolidation is one of the Personal Loan types; its questions are shown only for it. */
-const CONSOLIDATION = "Loan Consolidation";
-const CONSOLIDATION_OTHER_KINDS = ["Personal Loan", "Wedding Loan", "Travel Loan", "Medical Loan", "Home Renovation Loan", "Personal Loan Balance Transfer"];
-const onConsolidation = { key: "loanKind", values: [CONSOLIDATION] };
+/** The questions behind a loan consolidation (from the credit manager's plan). */
 const consolidationStep = (): QuestionStep => ({
   title: "Your loans and cards to consolidate",
   help: "Consolidation does not always reduce what you pay in total, so we look at every loan and card before suggesting anything.",
   fields: [
-    { key: "consolLoanCount", label: "How many active loans do you have?", kind: "choice", options: ["1", "2", "3", "4", "5 or more"], showWhen: onConsolidation },
-    { key: "consolOutstanding", label: "Total outstanding on all these loans", kind: "amount", placeholder: "e.g. 8,00,000", showWhen: onConsolidation },
-    { key: "consolEmi", label: "What is your total existing EMI every month?", kind: "amount", allowZero: true, placeholder: "e.g. 26,000", help: "Add up the EMIs of every loan. Leave out credit cards, they come next.", showWhen: onConsolidation },
-    { key: "consolRate", label: "Roughly what interest rate are you paying now?", kind: "choice", options: ["Below 12%", "12% to 16%", "16% to 20%", "Above 20%", "Not sure"], showWhen: onConsolidation },
-    { key: "consolRemaining", label: "How much time is left on these loans?", kind: "choice", options: ["Less than 1 year", "1 to 2 years", "2 to 3 years", "3 to 5 years", "More than 5 years", "Not sure"], showWhen: onConsolidation },
-    { key: "consolForeclosure", label: "Will the current lenders charge anything to close these loans early?", kind: "choice", options: ["Yes", "No", "Not sure"], showWhen: onConsolidation },
-    { key: "consolCards", label: "Do you have credit-card dues you want to include?", kind: "choice", options: YES_NO, showWhen: onConsolidation },
+    { key: "consolLoanCount", label: "How many active loans do you have?", kind: "choice", options: ["1", "2", "3", "4", "5 or more"] },
+    { key: "consolOutstanding", label: "Total outstanding on all these loans", kind: "amount", placeholder: "e.g. 8,00,000" },
+    { key: "consolEmi", label: "What is your total existing EMI every month?", kind: "amount", allowZero: true, placeholder: "e.g. 26,000", help: "Add up the EMIs of every loan. Leave out credit cards, they come next." },
+    { key: "consolRate", label: "Roughly what interest rate are you paying now?", kind: "choice", options: ["Below 12%", "12% to 16%", "16% to 20%", "Above 20%", "Not sure"] },
+    { key: "consolRemaining", label: "How much time is left on these loans?", kind: "choice", options: ["Less than 1 year", "1 to 2 years", "2 to 3 years", "3 to 5 years", "More than 5 years", "Not sure"] },
+    { key: "consolForeclosure", label: "Will the current lenders charge anything to close these loans early?", kind: "choice", options: ["Yes", "No", "Not sure"] },
+    { key: "consolCards", label: "Do you have credit-card dues you want to include?", kind: "choice", options: YES_NO },
     { key: "consolCardCount", label: "How many credit cards have an outstanding amount?", kind: "choice", options: ["1", "2", "3", "4 or more"], showWhen: { key: "consolCards", values: ["Yes"] } },
     { key: "consolCardOutstanding", label: "Total outstanding on these credit cards", kind: "amount", placeholder: "e.g. 2,00,000", showWhen: { key: "consolCards", values: ["Yes"] } },
     { key: "consolCardMinimum", label: "Total minimum payment due on these cards every month", kind: "amount", allowZero: true, placeholder: "e.g. 8,000", showWhen: { key: "consolCards", values: ["Yes"] } },
     { key: "consolMinimumOnly", label: "Are you paying only the minimum due on your credit cards?", kind: "choice", options: ["Yes", "No"], showWhen: { key: "consolCards", values: ["Yes"] } },
-    { key: "consolOverdue", label: "Are any EMIs overdue?", kind: "choice", options: YES_NO, showWhen: onConsolidation },
-    { key: "consolSettled", label: "Have you settled or restructured any loan?", kind: "choice", options: YES_NO, help: "Please answer honestly: it changes which lenders can look at your case.", showWhen: onConsolidation },
-    { key: "consolReason", label: "What is the reason for consolidation?", kind: "choice", options: ["Too many EMIs to manage", "Lower the monthly outgo", "Lower the interest rate", "Clear credit-card dues", "Other"], showWhen: onConsolidation },
-    { key: "consolExtraFunds", label: "Do you need additional funds as well?", kind: "choice", options: YES_NO, showWhen: onConsolidation },
+    { key: "consolOverdue", label: "Are any EMIs overdue?", kind: "choice", options: YES_NO },
+    { key: "consolSettled", label: "Have you settled or restructured any loan?", kind: "choice", options: YES_NO, help: "Please answer honestly: it changes which lenders can look at your case." },
+    { key: "consolReason", label: "What is the reason for consolidation?", kind: "choice", options: ["Too many EMIs to manage", "Lower the monthly outgo", "Lower the interest rate", "Clear credit-card dues", "Other"] },
+    { key: "consolExtraFunds", label: "Do you need additional funds as well?", kind: "choice", options: YES_NO },
     { key: "consolExtraAmount", label: "How much additional money do you need?", kind: "amount", placeholder: "e.g. 1,00,000", showWhen: { key: "consolExtraFunds", values: ["Yes"] } },
   ],
 });
@@ -3521,12 +3518,27 @@ const PERSONAL_LOAN: FollowUpForm = {
         },
       ],
     },
-    // The ordinary "running loans" questions do not apply to a consolidation: it has its own, below.
-    (() => {
-      const step = creditStep("personal loan");
-      return { ...step, fields: step.fields.map((f) => (f.key === "hasLoans" ? { ...f, showWhen: { key: "loanKind", values: CONSOLIDATION_OTHER_KINDS } } : f)) };
-    })(),
+    creditStep("personal loan"),
+  ],
+};
+
+/** Loan Consolidation is a service of its own, listed under Personal Loan: its questions are about the loans and cards to combine. */
+const LOAN_CONSOLIDATION: FollowUpForm = {
+  ...COMMON,
+  slugs: ["loan-consolidation"],
+  reason:
+    "We ask these extra questions so our experts can compare what you pay today with the options, and shortlist the Banks & NBFCs that may suit you.",
+  steps: [
+    PERSONAL_LOAN.steps[0]!,
+    workWithType(),
     consolidationStep(),
+    {
+      title: "Your repayment plan",
+      fields: [
+        { key: "tenure", label: "Preferred repayment period", kind: "choice", options: ["Up to 1 year", "1 to 2 years", "2 to 3 years", "3 to 5 years", "Not sure"] },
+        { key: "timeline", label: "When do you need the money?", kind: "choice", options: TIMELINE },
+      ],
+    },
   ],
 };
 
@@ -4549,6 +4561,7 @@ export const FOLLOW_UP_FORMS: FollowUpForm[] = [
   LETTER_OF_CREDIT,
   BILL_DISCOUNTING,
   PERSONAL_LOAN,
+  LOAN_CONSOLIDATION,
   EDUCATION_LOAN,
   EDUCATION_INFRASTRUCTURE_LOAN,
   NEW_CAR_LOAN,

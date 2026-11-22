@@ -36,6 +36,7 @@ const YOU_ARE_LOANS = new Set([
   "letter-of-credit",
   "bill-discounting",
   "personal-loan",
+  "loan-consolidation",
   "education-loan",
   "education-infrastructure-loan",
   "new-car-loan",

@@ -402,6 +402,17 @@ export const LOAN_PROCESS: Record<string, LoanProcess> = {
       ),
     ],
   },
+  "loan-consolidation": {
+    intro:
+      "Consolidation only helps when the whole picture works out. Here is how we check it with you, from your first message to closing your old loans.",
+    steps: [
+      s("List what you owe", "Share each loan and card: who it is with, what is outstanding, the EMI, the rate and the time left."),
+      s("Check your repayment capacity", "We look at your income, your total EMIs and your repayment record."),
+      s("Match lenders", "We check which Banks and NBFCs may take your case, under their own policies."),
+      s("Compare the whole cost", "We compare EMI, interest, fees, early-closure charges and total repayment, not only the monthly payment."),
+      s("Apply and close the old loans", "After sanction, the old loans and card dues are paid off and you repay one loan."),
+    ],
+  },
   "loan-against-securities": {
     intro: "You borrow against your stocks, ETFs or mutual funds while staying invested. Here is how it works.",
     steps: [
